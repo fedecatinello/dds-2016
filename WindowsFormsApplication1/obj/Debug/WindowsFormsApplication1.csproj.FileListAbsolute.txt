@@ -1,0 +1,9 @@
+c:\users\matias\documents\visual studio 2012\Projects\MercadoEnvio\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe.config
+C:\Users\Pc\Documents\Visual Studio 2012\Projects\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe.config
+C:\Users\Pc\Documents\Visual Studio 2012\Projects\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe
+C:\Users\Pc\Documents\Visual Studio 2012\Projects\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.pdb
+C:\Users\Pc\Documents\Visual Studio 2012\Projects\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csprojResolveAssemblyReference.cache
+C:\Users\Pc\Documents\Visual Studio 2012\Projects\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Properties.Resources.resources
+C:\Users\Pc\Documents\Visual Studio 2012\Projects\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csproj.GenerateResource.Cache
+C:\Users\Pc\Documents\Visual Studio 2012\Projects\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
+C:\Users\Pc\Documents\Visual Studio 2012\Projects\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
