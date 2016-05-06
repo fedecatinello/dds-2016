@@ -16,5 +16,12 @@ namespace WindowsFormsApplication1.ABM_Rol
         {
             InitializeComponent();
         }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        
     }
 }
