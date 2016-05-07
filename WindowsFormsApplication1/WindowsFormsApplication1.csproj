@@ -62,17 +62,17 @@
     <Compile Include="ABM Usuario\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="ABM Usuario\Alta.cs">
+    <Compile Include="Common\Alta.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ABM Usuario\Alta.Designer.cs">
+    <Compile Include="Common\Alta.Designer.cs">
       <DependentUpon>Alta.cs</DependentUpon>
     </Compile>
-    <Compile Include="ABM Usuario\Form3.cs">
+    <Compile Include="Common\Listado.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ABM Usuario\Form3.Designer.cs">
-      <DependentUpon>Form3.cs</DependentUpon>
+    <Compile Include="Common\Listado.Designer.cs">
+      <DependentUpon>Listado.cs</DependentUpon>
     </Compile>
     <Compile Include="ABM Visibilidad\Form1.cs">
       <SubType>Form</SubType>
@@ -127,11 +127,11 @@
     <EmbeddedResource Include="ABM Rol\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ABM Usuario\Alta.resx">
+    <EmbeddedResource Include="Common\Alta.resx">
       <DependentUpon>Alta.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ABM Usuario\Form3.resx">
-      <DependentUpon>Form3.cs</DependentUpon>
+    <EmbeddedResource Include="Common\Listado.resx">
+      <DependentUpon>Listado.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
