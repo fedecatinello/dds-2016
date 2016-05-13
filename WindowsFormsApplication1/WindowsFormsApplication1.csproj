@@ -80,6 +80,7 @@
     <Compile Include="Common\Baja.Designer.cs">
       <DependentUpon>Baja.cs</DependentUpon>
     </Compile>
+    <Compile Include="Common\Utils.cs" />
     <Compile Include="Common\Listado.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -110,7 +111,8 @@
     <Compile Include="ComprarOfertar\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="DataProvider\Connection.cs" />
+    <Compile Include="DataProvider\ConnectionManager.cs" />
+    <Compile Include="DataProvider\QueryHelper.cs" />
     <Compile Include="Facturas\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
