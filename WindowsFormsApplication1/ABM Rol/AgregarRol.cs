@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Data.SqlClient;
 using System.Windows.Forms;
+using MercadoEnvio.DataProvider;
 
 namespace MercadoEnvio.ABM_Rol
 {
@@ -14,7 +15,6 @@ namespace MercadoEnvio.ABM_Rol
     {
         private SqlCommand command { get; set; }
         private IList<SqlParameter> parametros = new List<SqlParameter>();
-        private BuilderDeComandos builderDeComandos = new BuilderDeComandos();
         
         public AgregarRol()
         {
@@ -31,7 +31,7 @@ namespace MercadoEnvio.ABM_Rol
             DataSet funcionalidades = new DataSet();
             SqlDataAdapter adapter = new SqlDataAdapter();
             parametros = new List<SqlParameter>();
-            command = builderDeComandos.Crear("SELECT DISTINCT nombre FROM NET_A_CERO.Funcionalidades", parametros);
+            command = QueryBuilder.Instance.build("SELECT DISTINCT nombre FROM NET_A_CERO.Funcionalidades", parametros);
             adapter.SelectCommand = command;
             adapter.Fill(funcionalidades);
             checkedListBoxFuncionalidades.DataSource = funcionalidades.Tables[0].DefaultView;
@@ -51,7 +51,7 @@ namespace MercadoEnvio.ABM_Rol
             String nombreRol = this.textBoxRol.Text;
             parametros.Clear();
             parametros.Add(new SqlParameter("@rol", nombreRol));
-            builderDeComandos.Crear(sql, parametros).ExecuteNonQuery();
+            QueryBuilder.Instance.build(sql, parametros).ExecuteNonQuery();
 
             foreach (DataRowView funcionalidad in this.checkedListBoxFuncionalidades.CheckedItems)
             {
@@ -62,7 +62,7 @@ namespace MercadoEnvio.ABM_Rol
 
                 String sql2 = "INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(func_id, rol_id) VALUES ((SELECT id FROM NET_A_CERO.Funcionalidades WHERE func_nombre = @funcionalidad), (SELECT  id FROM NET_A_CERO.Roles WHERE rol_nombre = @rol))";
                                 
-                builderDeComandos.Crear(sql2, parametros).ExecuteNonQuery();                                
+                QueryBuilder.Instance.build(sql2, parametros).ExecuteNonQuery();                                
             }
             MessageBox.Show("Se creo el rol " + nombreRol);
             BorrarDatosIngresados();

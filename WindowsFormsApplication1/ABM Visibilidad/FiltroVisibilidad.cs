@@ -7,12 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using MercadoEnvio.DataProvider;
 
-namespace FWindowsFormsApplication1.ABM_Visibilidad
+namespace MercadoEnvio.ABM_Visibilidad
 {
     public partial class FiltroVisibilidad : Form
     {
-        private ComunicadorConBaseDeDatos comunicador = new ComunicadorConBaseDeDatos();
+        private DBCommunicator comunicador = new DBCommunicator();
 
         public FiltroVisibilidad()
         {

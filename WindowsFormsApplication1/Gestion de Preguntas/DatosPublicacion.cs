@@ -7,12 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Data.SqlClient;
 using System.Windows.Forms;
+using MercadoEnvio.DataProvider;
 
 namespace MercadoEnvio.Gestion_de_Preguntas
 {
     public partial class DatosPublicacion : Form
     {
-        private BuilderDeComandos builderDeComandos = new BuilderDeComandos();        
         private IList<SqlParameter> parametros = new List<SqlParameter>();        
         private int publicacionId;
 
@@ -36,7 +36,7 @@ namespace MercadoEnvio.Gestion_de_Preguntas
             parametros.Add(new SqlParameter("@id", publicacionId));
 
             String query = "SELECT * FROM LOS_SUPER_AMIGOS.Publicacion WHERE id = @id";
-            SqlDataReader reader = builderDeComandos.Crear(query, parametros).ExecuteReader();
+            SqlDataReader reader = QueryBuilder.Instance.build(query, parametros).ExecuteReader();
             reader.Read();
             
             labelPublicacionDatos.Text = (String)reader["descripcion"];
@@ -50,7 +50,7 @@ namespace MercadoEnvio.Gestion_de_Preguntas
             parametros.Add(new SqlParameter("@id", publicacionId));
 
             String query = "SELECT * FROM LOS_SUPER_AMIGOS.Publicacion WHERE id = @id";
-            SqlDataReader reader = builderDeComandos.Crear(query, parametros).ExecuteReader();
+            SqlDataReader reader = QueryBuilder.Instance.build(query, parametros).ExecuteReader();
             reader.Read();
 
             labelVencimientoDatos.Text = ((DateTime)reader["fecha_vencimiento"]).ToString();            
@@ -64,7 +64,7 @@ namespace MercadoEnvio.Gestion_de_Preguntas
             if (labelTipoDatos.Text == "Subasta")
             {
                 String querySubasta = "SELECT * FROM LOS_SUPER_AMIGOS.Publicacion WHERE id = @id";
-                SqlDataReader readerSubasta = builderDeComandos.Crear(querySubasta, parametros).ExecuteReader();
+                SqlDataReader readerSubasta = QueryBuilder.Instance.build(querySubasta, parametros).ExecuteReader();
                 readerSubasta.Read();
 
                 labelStockDatos.Text = ((Decimal)readerSubasta["stock"]).ToString();
@@ -72,14 +72,14 @@ namespace MercadoEnvio.Gestion_de_Preguntas
             else
             {
                 String queryCompra = "SELECT * FROM LOS_SUPER_AMIGOS.Publicacion WHERE id = @id";
-                SqlDataReader readerCompra = builderDeComandos.Crear(queryCompra, parametros).ExecuteReader();
+                SqlDataReader readerCompra = QueryBuilder.Instance.build(queryCompra, parametros).ExecuteReader();
                 readerCompra.Read();
                 Decimal stockInicial = (Decimal)readerCompra["stock"];
 
                 parametros.Clear();
                 parametros.Add(new SqlParameter("@id", publicacionId));
                 String queryVista = "SELECT * FROM LOS_SUPER_AMIGOS.VistaCantidadVendida WHERE publicacion_id = @id";
-                SqlDataReader readerVista = builderDeComandos.Crear(queryVista, parametros).ExecuteReader();
+                SqlDataReader readerVista = QueryBuilder.Instance.build(queryVista, parametros).ExecuteReader();
 
                 if (readerVista.Read())
                 {
@@ -100,7 +100,7 @@ namespace MercadoEnvio.Gestion_de_Preguntas
             if (labelTipoDatos.Text == "Compra Inmediata")
             {
                 String queryCompra = "SELECT * FROM LOS_SUPER_AMIGOS.Publicacion WHERE id = @id";
-                SqlDataReader readerCompra = builderDeComandos.Crear(queryCompra, parametros).ExecuteReader();
+                SqlDataReader readerCompra = QueryBuilder.Instance.build(queryCompra, parametros).ExecuteReader();
                 readerCompra.Read();
 
                 labelPrecioDatos.Text = ((Decimal)readerCompra["precio"]).ToString();
@@ -108,7 +108,7 @@ namespace MercadoEnvio.Gestion_de_Preguntas
             else
             {
                 String queryVista = "SELECT * FROM LOS_SUPER_AMIGOS.VistaOfertaMax WHERE publicacion_id = @id";
-                SqlDataReader readerVista = builderDeComandos.Crear(queryVista, parametros).ExecuteReader();
+                SqlDataReader readerVista = QueryBuilder.Instance.build(queryVista, parametros).ExecuteReader();
                 
                 if (readerVista.Read())
                 {
@@ -119,7 +119,7 @@ namespace MercadoEnvio.Gestion_de_Preguntas
                     parametros.Clear();
                     parametros.Add(new SqlParameter("@id", publicacionId));
                     String queryOferta = "SELECT * FROM LOS_SUPER_AMIGOS.Publicacion WHERE id = @id";
-                    SqlDataReader readerOferta = builderDeComandos.Crear(queryOferta, parametros).ExecuteReader();
+                    SqlDataReader readerOferta = QueryBuilder.Instance.build(queryOferta, parametros).ExecuteReader();
                     readerOferta.Read();
                     labelPrecioDatos.Text = ((Decimal)readerOferta["precio"]).ToString();
                 }

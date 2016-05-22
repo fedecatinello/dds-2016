@@ -7,12 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using MercadoEnvio.DataProvider;
 
 namespace MercadoEnvio.ABM_Rubro
 {
     public partial class RubroForm : Form
     {
-        private BuilderDeComandos builderDeComandos = new BuilderDeComandos();
         private String query;
         private SqlCommand command;
         private IList<SqlParameter> parametros = new List<SqlParameter>();
@@ -31,7 +31,7 @@ namespace MercadoEnvio.ABM_Rubro
 
         private void CargarRubro()
         {
-            command = builderDeComandos.Crear("SELECT * FROM Rubro", parametros);
+            command = QueryBuilder.Instance.build("SELECT * FROM Rubro", parametros);
 
             DataSet rubros = new DataSet();
             SqlDataAdapter adapter = new SqlDataAdapter();
@@ -74,7 +74,7 @@ namespace MercadoEnvio.ABM_Rubro
 
             query = "SELECT * FROM Rubro WHERE " + filtro;
 
-            command = builderDeComandos.Crear(query, parametros);
+            command = QueryBuilder.Instance.build(query, parametros);
 
             DataSet rubros = new DataSet();
             SqlDataAdapter adapter = new SqlDataAdapter();

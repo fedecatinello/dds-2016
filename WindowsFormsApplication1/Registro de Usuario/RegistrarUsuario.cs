@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Data.SqlClient;
 using System.Windows.Forms;
+using MercadoEnvio.DataProvider;
 
 namespace MercadoEnvio.Registro_de_Usuario
 {
@@ -14,7 +15,6 @@ namespace MercadoEnvio.Registro_de_Usuario
     {
         private SqlCommand command { get; set; }
         private IList<SqlParameter> parametros = new List<SqlParameter>();
-        private BuilderDeComandos builderDeComandos = new BuilderDeComandos();
         private ComunicadorConBaseDeDatos comunicador = new ComunicadorConBaseDeDatos();
 
         public Object SelectedItem { get; set; }
@@ -34,7 +34,7 @@ namespace MercadoEnvio.Registro_de_Usuario
             DataSet roles = new DataSet();
             SqlDataAdapter adapter = new SqlDataAdapter();
             parametros = new List<SqlParameter>();
-            command = builderDeComandos.Crear("SELECT DISTINCT nombre FROM NET_A_CERO.Roles WHERE rol_activo = 1 AND rol_nombre != 'Administrador'", parametros);
+            command = QueryBuilder.Instance.build("SELECT DISTINCT nombre FROM NET_A_CERO.Roles WHERE rol_activo = 1 AND rol_nombre != 'Administrador'", parametros);
             adapter.SelectCommand = command;
             adapter.Fill(roles, "Rol");
             comboBoxRol.DataSource = roles.Tables[0].DefaultView;
@@ -84,7 +84,7 @@ namespace MercadoEnvio.Registro_de_Usuario
             // Buscamos si el username ya se encuentra registrado
             String consulta = "SELECT id FROM LOS_SUPER_AMIGOS.Usuario WHERE username = @username";
 
-            SqlDataReader reader = builderDeComandos.Crear(consulta, parametros).ExecuteReader();
+            SqlDataReader reader = QueryBuilder.Instance.build(consulta, parametros).ExecuteReader();
 
             if (reader.Read())
             {
@@ -106,7 +106,7 @@ namespace MercadoEnvio.Registro_de_Usuario
                                 + " from NET_A_CERO.Usuarios"
                                 + " order by id DESC";
                     parametros.Clear();
-                    Decimal idC = (Decimal)builderDeComandos.Crear(idUsuario,parametros).ExecuteScalar();
+                    Decimal idC = (Decimal)QueryBuilder.Instance.build(idUsuario,parametros).ExecuteScalar();
 
                     UsuarioSesion.Usuario.id = idC;
                 }

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Data.SqlClient;
 using System.Windows.Forms;
+using MercadoEnvio.DataProvider;
 
 namespace MercadoEnvio.ABM_Rol
 {
@@ -14,8 +15,7 @@ namespace MercadoEnvio.ABM_Rol
     {
         private SqlCommand command { get; set; }
         private IList<SqlParameter> parametros = new List<SqlParameter>();
-        private BuilderDeComandos builderDeComandos = new BuilderDeComandos();
-
+        
         public Object SelectedItem { get; set; }      
 
         public ListadoEditarRol()
@@ -43,7 +43,7 @@ namespace MercadoEnvio.ABM_Rol
             parametros.Clear();
             parametros.Add(new SqlParameter("@habilitado", estadoRol));
 
-            command = builderDeComandos.Crear("SELECT DISTINCT * FROM LOS_SUPER_AMIGOS.Rol WHERE habilitado = @habilitado", parametros);
+            command = QueryBuilder.Instance.build("SELECT DISTINCT * FROM LOS_SUPER_AMIGOS.Rol WHERE habilitado = @habilitado", parametros);
             adapter.SelectCommand = command;
             adapter.Fill(roles);
             dataGridViewResultadosBusqueda.DataSource = roles.Tables[0].DefaultView;

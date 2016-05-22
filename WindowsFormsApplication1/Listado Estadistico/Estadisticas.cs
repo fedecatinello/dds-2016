@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using MercadoEnvio.DataProvider;
 
 
 namespace MercadoEnvio.Listado_Estadistico
@@ -15,7 +16,6 @@ namespace MercadoEnvio.Listado_Estadistico
     {
         private ComunicadorConBaseDeDatos comunicador = new ComunicadorConBaseDeDatos();
         private IList<SqlParameter> parametros = new List<SqlParameter>();
-        private BuilderDeComandos builderDeComandos = new BuilderDeComandos();
         private SqlCommand command;
 
         public Estadisticas()
@@ -75,7 +75,7 @@ namespace MercadoEnvio.Listado_Estadistico
                 String borrar = "IF OBJECT_ID('LOS_SUPER_AMIGOS.usuarios_por_visibilidad', 'U') IS NOT NULL"
                             + " DROP TABLE LOS_SUPER_AMIGOS.usuarios_por_visibilidad";
                 parametros.Clear();
-                builderDeComandos.Crear(borrar, parametros).ExecuteNonQuery();
+                QueryBuilder.Instance.build(borrar, parametros).ExecuteNonQuery();
 
                 String crearTabla = "CREATE TABLE LOS_SUPER_AMIGOS.usuarios_por_visibilidad"
                                     + " (mes int,"
@@ -84,7 +84,7 @@ namespace MercadoEnvio.Listado_Estadistico
                                     + " cantidad numeric(18,0),"
                                     + " PRIMARY KEY(mes, visibilidad, usuario))";
                 parametros.Clear();
-                builderDeComandos.Crear(crearTabla, parametros).ExecuteNonQuery();
+                QueryBuilder.Instance.build(crearTabla, parametros).ExecuteNonQuery();
                 progressBar.Value = 500;
                 String llenarTabla = "DECLARE mi_cursor CURSOR FOR"
                                 + " SELECT DATEPART(month, fecha) Mes, visibilidad.descripcion "
@@ -107,12 +107,12 @@ namespace MercadoEnvio.Listado_Estadistico
                 parametros.Add(new SqlParameter("@fechaini", Convert.ToDateTime(fechaDeInicio)));
                 parametros.Add(new SqlParameter("@fechamed", Convert.ToDateTime(fechaMedia)));
                 parametros.Add(new SqlParameter("@fechafin", Convert.ToDateTime(fechaDeFin)));
-                command = builderDeComandos.Crear(llenarTabla, parametros);
+                command = QueryBuilder.Instance.build(llenarTabla, parametros);
                 command.CommandTimeout = 0;
                 command.ExecuteNonQuery();
                 progressBar.Value = 1000;
                 parametros.Clear();
-                command = builderDeComandos.Crear("SELECT  u.mes, u.visibilidad, u.usuario, u.cantidad  FROM LOS_SUPER_AMIGOS.usuarios_por_visibilidad u, LOS_SUPER_AMIGOS.Visibilidad visibilidad WHERE u.visibilidad = visibilidad.descripcion ORDER BY u.mes, visibilidad.precio DESC, u.cantidad DESC", parametros);
+                command = QueryBuilder.Instance.build("SELECT  u.mes, u.visibilidad, u.usuario, u.cantidad  FROM LOS_SUPER_AMIGOS.usuarios_por_visibilidad u, LOS_SUPER_AMIGOS.Visibilidad visibilidad WHERE u.visibilidad = visibilidad.descripcion ORDER BY u.mes, visibilidad.precio DESC, u.cantidad DESC", parametros);
                 DataSet datos = new DataSet();
                 SqlDataAdapter adapter = new SqlDataAdapter();
                 adapter.SelectCommand = command;

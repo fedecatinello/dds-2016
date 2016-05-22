@@ -7,12 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Data.SqlClient;
 using System.Windows.Forms;
+using MercadoEnvio.DataProvider;
 
 namespace MercadoEnvio.Gestion_de_Preguntas
 {
     public partial class VerRespuestas : Form
     {
-        private BuilderDeComandos builderDeComandos = new BuilderDeComandos();
         private SqlCommand command;
         private IList<SqlParameter> parametros = new List<SqlParameter>();
         decimal idUsuarioActual = UsuarioSesion.Usuario.id;
@@ -37,7 +37,7 @@ namespace MercadoEnvio.Gestion_de_Preguntas
             parametros.Clear();
             parametros.Add(new SqlParameter("@usuario", idUsuarioActual));
 
-            command = builderDeComandos.Crear("SELECT publicacion_id, descripcion, respuesta FROM LOS_SUPER_AMIGOS.Pregunta WHERE usuario_id = @usuario and respuesta != ''", parametros);
+            command = QueryBuilder.Instance.build("SELECT publicacion_id, descripcion, respuesta FROM LOS_SUPER_AMIGOS.Pregunta WHERE usuario_id = @usuario and respuesta != ''", parametros);
             adapter.SelectCommand = command;
             adapter.Fill(preguntas);
             dataGridView1.DataSource = preguntas.Tables[0].DefaultView;

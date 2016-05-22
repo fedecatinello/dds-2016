@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Data.SqlClient;
 using System.Windows.Forms;
+using MercadoEnvio.DataProvider;
 
 namespace MercadoEnvio.Comprar_Ofertar
 {
@@ -14,7 +15,6 @@ namespace MercadoEnvio.Comprar_Ofertar
     {
         private SqlCommand command { get; set; }
         private IList<SqlParameter> parametros = new List<SqlParameter>();
-        private BuilderDeComandos builderDeComandos = new BuilderDeComandos();
         decimal idUsuarioActual = UsuarioSesion.Usuario.id;
         private int ofertaMax;
         private int publicacionId;
@@ -57,7 +57,7 @@ namespace MercadoEnvio.Comprar_Ofertar
                 parametros.Add(new SqlParameter("@fecha", fecha));
                 parametros.Add(new SqlParameter("@usuario", idUsuarioActual));
                 parametros.Add(new SqlParameter("@publicacion", publicacionId));
-                builderDeComandos.Crear(sql, parametros).ExecuteNonQuery();                
+                QueryBuilder.Instance.build(sql, parametros).ExecuteNonQuery();                
                 MessageBox.Show("Su oferta fue registrada");
                 this.Hide();
                 new VerPublicacion(publicacionId).ShowDialog();

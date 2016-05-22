@@ -170,7 +170,6 @@
     <Compile Include="Calificar\Listado.Designer.cs">
       <DependentUpon>Listado.cs</DependentUpon>
     </Compile>
-    <Compile Include="Config.cs" />
     <Compile Include="ComprarOfertar\BuscadorPublicaciones.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -211,7 +210,6 @@
     <Compile Include="DataProvider\FetchConfig.cs" />
     <Compile Include="DataProvider\FetchCondition.cs" />
     <Compile Include="DataProvider\EntityManager.cs" />
-    <Compile Include="DataProvider\ConnectionBuilder.cs" />
     <Compile Include="Gestion de Preguntas\Respuesta.cs">
       <SubType>Form</SubType>
     </Compile>

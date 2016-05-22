@@ -7,13 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using MercadoEnvio.DataProvider;
 
 namespace MercadoEnvio.ABM_Rubro
 {
     public partial class EditarRubro : Form
     {
         private String idRubro;
-        private BuilderDeComandos builderDeComandos = new BuilderDeComandos();
         private String query;
         private SqlCommand command;
         private IList<SqlParameter> parametros = new List<SqlParameter>();
@@ -34,7 +34,7 @@ namespace MercadoEnvio.ABM_Rubro
             query = "SELECT * FROM Rubro WHERE id = @idRubro";
             parametros.Clear();
             parametros.Add(new SqlParameter("@idRubro", idRubro));
-            SqlDataReader reader = builderDeComandos.Crear(query, parametros).ExecuteReader();
+            SqlDataReader reader = QueryBuilder.Instance.build(query, parametros).ExecuteReader();
             // Si no se pudo leer, tira excepcion
             if (!reader.Read()) throw new Exception("No se puede leer rubro");
             // Si se puede leer, lo muestra en pantalla

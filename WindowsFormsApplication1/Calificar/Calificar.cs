@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using MercadoEnvio.DataProvider;
 
 namespace MercadoEnvio.Calificar_Vendedor
 {
@@ -14,8 +15,7 @@ namespace MercadoEnvio.Calificar_Vendedor
     {
         private SqlCommand command { get; set; }
         private IList<SqlParameter> parametros = new List<SqlParameter>();
-        private BuilderDeComandos builderDeComandos = new BuilderDeComandos();
-
+       
         private Decimal id;
         private String tipo;
         private int calificacion { get; set; }
@@ -91,13 +91,13 @@ namespace MercadoEnvio.Calificar_Vendedor
             String nuevaCalificacion = "insert LOS_SUPER_AMIGOS.Calificacion"
                                 + " (cantidad_estrellas, descripcion)"
                                 + " values(@estrellas,@descripcion)";
-            builderDeComandos.Crear(nuevaCalificacion, parametros).ExecuteNonQuery();
+            QueryBuilder.Instance.build(nuevaCalificacion, parametros).ExecuteNonQuery();
 
             parametros.Clear();
             String idCalificacion = "select top 1 id"
                                 + " from LOS_SUPER_AMIGOS.Calificacion"
                                 + " order by id DESC";
-            Decimal elId = (Decimal)builderDeComandos.Crear(idCalificacion, parametros).ExecuteScalar();
+            Decimal elId = (Decimal)QueryBuilder.Instance.build(idCalificacion, parametros).ExecuteScalar();
 
             parametros.Clear();
             parametros.Add(new SqlParameter("@idCalif", elId));
@@ -108,7 +108,7 @@ namespace MercadoEnvio.Calificar_Vendedor
             String compraAct = "update LOS_SUPER_AMIGOS.Compra"
                              + " set calificacion_id = @idCalif"
                              + " where id = @id";
-            builderDeComandos.Crear(compraAct, parametros).ExecuteNonQuery();
+            QueryBuilder.Instance.build(compraAct, parametros).ExecuteNonQuery();
 
 
             MessageBox.Show("Calificacion hecha correctamente");

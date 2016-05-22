@@ -5,6 +5,8 @@ using System.Text;
 using System.Data.SqlClient;
 using MercadoEnvio.Objetos;
 using MercadoEnvio.Exceptions;
+using MercadoEnvio.DataProvider;
+using MercadoEnvio.Utils;
 using System.Data;
 
 namespace MercadoEnvio
@@ -15,8 +17,7 @@ namespace MercadoEnvio
         private IList<SqlParameter> parametros = new List<SqlParameter>();
         private SqlParameter parametroOutput;
         private SqlCommand command;
-        private BuilderDeComandos builderDeComandos = new BuilderDeComandos();
-
+        
         public Decimal CrearUsuario()
         {
             query = "NET_A_CERO.crear_usuario";
@@ -24,7 +25,7 @@ namespace MercadoEnvio
             parametroOutput = new SqlParameter("@usuario_id", SqlDbType.Decimal);
             parametroOutput.Direction = ParameterDirection.Output;
             parametros.Add(parametroOutput);
-            command = builderDeComandos.Crear(query, parametros);
+            command = QueryBuilder.Instance.build(query, parametros);
             command.CommandType = CommandType.StoredProcedure;
             command.ExecuteNonQuery();
             return (Decimal)parametroOutput.Value;
@@ -39,7 +40,7 @@ namespace MercadoEnvio
             parametros.Add(new SqlParameter("@username", username));
             parametros.Add(new SqlParameter("@password", HashSha256.getHash(password)));
             parametros.Add(parametroOutput);
-            command = builderDeComandos.Crear(query, parametros);
+            command = QueryBuilder.Instance.build(query, parametros);
             command.CommandType = CommandType.StoredProcedure;
             command.ExecuteNonQuery();
             return (Decimal)parametroOutput.Value;
@@ -51,7 +52,7 @@ namespace MercadoEnvio
             parametros.Clear();
             parametros.Add(new SqlParameter("@idUsuario", idUsuario));
             parametros.Add(new SqlParameter("@idCliente", idCliente));
-            command = builderDeComandos.Crear(query, parametros);
+            command = QueryBuilder.Instance.build(query, parametros);
             int filasAfectadas = command.ExecuteNonQuery();
             if (filasAfectadas == 1) return true;
             return false;
@@ -62,7 +63,7 @@ namespace MercadoEnvio
             parametros.Clear();
             parametros.Add(new SqlParameter("@idUsuario", idUsuario));
             parametros.Add(new SqlParameter("@idEmpresa", idEmpresa));
-            command = builderDeComandos.Crear(query, parametros);
+            command = QueryBuilder.Instance.build(query, parametros);
             int filasAfectadas = command.ExecuteNonQuery();
             if (filasAfectadas == 1) return true;
             return false;
@@ -76,7 +77,7 @@ namespace MercadoEnvio
             parametros.Clear();
             parametros.Add(new SqlParameter("@usuario_id", idUsuario));
             parametros.Add(new SqlParameter("@rol_id", idRol));
-            command = builderDeComandos.Crear(query, parametros);
+            command = QueryBuilder.Instance.build(query, parametros);
             command.CommandType = CommandType.StoredProcedure;
             int filasAfectadas = command.ExecuteNonQuery();
             if (filasAfectadas == 1) return true;
@@ -91,7 +92,7 @@ namespace MercadoEnvio
             parametroOutput = new SqlParameter("@id", SqlDbType.Decimal);
             parametroOutput.Direction = ParameterDirection.Output;
             parametros.Add(parametroOutput);
-            command = builderDeComandos.Crear(query, parametros);
+            command = QueryBuilder.Instance.build(query, parametros);
             command.CommandType = CommandType.StoredProcedure;
             command.ExecuteNonQuery();
             return (Decimal)parametroOutput.Value;
@@ -103,7 +104,7 @@ namespace MercadoEnvio
             parametros.Clear();
             parametros = objeto.GetParametros();
             parametros.Add(new SqlParameter("@id", id));
-            int filasAfectadas = builderDeComandos.Crear(query, parametros).ExecuteNonQuery();
+            int filasAfectadas = QueryBuilder.Instance.build(query, parametros).ExecuteNonQuery();
             if (filasAfectadas == 1) return true;
             return false;
         }
@@ -114,7 +115,7 @@ namespace MercadoEnvio
             query = objeto.GetQueryObtener();
             parametros.Clear();
             parametros.Add(new SqlParameter("@id", id));
-            SqlDataReader reader = builderDeComandos.Crear(query, parametros).ExecuteReader();
+            SqlDataReader reader = QueryBuilder.Instance.build(query, parametros).ExecuteReader();
             if (reader.Read())
             {
                 objeto.CargarInformacion(reader);
@@ -128,7 +129,7 @@ namespace MercadoEnvio
             query = "UPDATE NET_A_CERO." + enDonde + " SET dado_de_baja = 1 WHERE id = @id";
             parametros.Clear();
             parametros.Add(new SqlParameter("@id", id));
-            int filasAfectadas = builderDeComandos.Crear(query, parametros).ExecuteNonQuery();
+            int filasAfectadas = QueryBuilder.Instance.build(query, parametros).ExecuteNonQuery();
             if (filasAfectadas == 1) return true;
             return false;
         }
@@ -216,7 +217,7 @@ namespace MercadoEnvio
             query = "SELECT " + que + " FROM NET_A_CERO." + deDonde + " WHERE " + param1 + " = @" + param1;
             parametros.Clear();
             parametros.Add(new SqlParameter("@" + param1, param2));
-            return builderDeComandos.Crear(query, parametros).ExecuteScalar();
+            return QueryBuilder.Instance.build(query, parametros).ExecuteScalar();
         }
 
         public Object SelectFromWhere(String que, String deDonde, String param1, Decimal param2)
@@ -224,13 +225,13 @@ namespace MercadoEnvio
             query = "SELECT " + que + " FROM NET_A_CERO." + deDonde + " WHERE " + param1 + " = @" + param1;
             parametros.Clear();
             parametros.Add(new SqlParameter("@" + param1, param2));
-            return builderDeComandos.Crear(query, parametros).ExecuteScalar();
+            return QueryBuilder.Instance.build(query, parametros).ExecuteScalar();
         }
 
         public DataTable SelectDataTable(String que, String deDonde)
         {
             parametros.Clear();
-            command = builderDeComandos.Crear("SELECT " + que + " FROM " + deDonde, parametros);
+            command = QueryBuilder.Instance.build("SELECT " + que + " FROM " + deDonde, parametros);
             DataSet datos = new DataSet();
             SqlDataAdapter adapter = new SqlDataAdapter();
             adapter.SelectCommand = command;
@@ -246,8 +247,8 @@ namespace MercadoEnvio
         public DataTable SelectDataTableConUsuario(String que, String deDonde, String condiciones)
         {
             parametros.Clear();
-            parametros.Add(new SqlParameter("@idUsuario", UsuarioSesion.Usuarios.usr_id));
-            command = builderDeComandos.Crear("SELECT " + que + " FROM " + deDonde + " WHERE " + condiciones, parametros);
+            parametros.Add(new SqlParameter("@idUsuario", UsuarioSesion.Usuario.id));
+            command = QueryBuilder.Instance.build("SELECT " + que + " FROM " + deDonde + " WHERE " + condiciones, parametros);
             command.CommandTimeout = 0;
             DataSet datos = new DataSet();
             SqlDataAdapter adapter = new SqlDataAdapter();
@@ -308,7 +309,7 @@ namespace MercadoEnvio
 
         private bool ControlDeUnicidad(String query, IList<SqlParameter> parametros)
         {
-            int cantidad = (int)builderDeComandos.Crear(query, parametros).ExecuteScalar();
+            int cantidad = (int)QueryBuilder.Instance.build(query, parametros).ExecuteScalar();
             if (cantidad > 0)
             {
                 return false;

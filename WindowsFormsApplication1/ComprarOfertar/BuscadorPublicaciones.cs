@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Data.SqlClient;
 using System.Windows.Forms;
+using MercadoEnvio.DataProvider;
 
 namespace MercadoEnvio.Comprar_Ofertar
 {
@@ -14,7 +15,6 @@ namespace MercadoEnvio.Comprar_Ofertar
     {
         private SqlCommand command { get; set; }
         private IList<SqlParameter> parametros = new List<SqlParameter>();
-        private BuilderDeComandos builderDeComandos = new BuilderDeComandos();
         public Object SelectedItem { get; set; }
         decimal idUsuarioActual = UsuarioSesion.Usuario.id;
         private ComunicadorConBaseDeDatos comunicador = new ComunicadorConBaseDeDatos();
@@ -76,7 +76,7 @@ namespace MercadoEnvio.Comprar_Ofertar
                            "WHERE publicacion.tipo_id = tipo.id AND publicacion.visibilidad_id = visibilidad.id AND (publicacion.estado_id = (SELECT id FROM LOS_SUPER_AMIGOS.Estado WHERE descripcion = 'Publicada') or publicacion.estado_id = (SELECT id FROM LOS_SUPER_AMIGOS.Estado WHERE descripcion = 'Pausada')) " 
                            + filtro + " ORDER BY visibilidad.precio DESC";
             
-            command = builderDeComandos.Crear(query, parametros);
+            command = QueryBuilder.Instance.build(query, parametros);
             adapter.SelectCommand = command;            
             adapter.Fill(busquedaTemporal);
 

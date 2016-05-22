@@ -12,7 +12,6 @@ namespace MercadoEnvio.Historial_Cliente
 {
     public partial class Historial : Form
     {
-        private BuilderDeComandos builderDeComandos = new BuilderDeComandos();
         private String query;
         private SqlCommand command;
         private IList<SqlParameter> parametros = new List<SqlParameter>();

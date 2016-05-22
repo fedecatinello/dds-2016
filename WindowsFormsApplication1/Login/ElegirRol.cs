@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Data.SqlClient;
 using System.Windows.Forms;
+using MercadoEnvio.DataProvider;
 
 namespace MercadoEnvio.Login
 {
@@ -14,8 +15,7 @@ namespace MercadoEnvio.Login
     {
         private SqlCommand command { get; set; }
         private IList<SqlParameter> parametros = new List<SqlParameter>();
-        private BuilderDeComandos builderDeComandos = new BuilderDeComandos();
-
+        
         public Object SelectedItem { get; set; }
 
         public ElegirRol()
@@ -35,7 +35,7 @@ namespace MercadoEnvio.Login
             SqlDataAdapter adapter = new SqlDataAdapter();
             parametros = new List<SqlParameter>();
             parametros.Add(new SqlParameter("@username", UsuarioSesion.usuario.nombre));
-            command = builderDeComandos.Crear("SELECT r.nombre from NET_A_CERO.Rol r, NET_A_CERO.Usuarios_x_Rol ru WHERE r.habilitado = 1 AND ru.habilitado = 1 AND (SELECT id FROM NET_A_CERO.Usuarios WHERE usr_usuario = @username) = ru.usr_id and r.id = ru.rol_id ", parametros);
+            command = QueryBuilder.Instance.build("SELECT r.nombre from NET_A_CERO.Rol r, NET_A_CERO.Usuarios_x_Rol ru WHERE r.habilitado = 1 AND ru.habilitado = 1 AND (SELECT id FROM NET_A_CERO.Usuarios WHERE usr_usuario = @username) = ru.usr_id and r.id = ru.rol_id ", parametros);
             adapter.SelectCommand = command;
             adapter.Fill(roles, "Rol");
             comboBoxRol.DataSource = roles.Tables[0].DefaultView;

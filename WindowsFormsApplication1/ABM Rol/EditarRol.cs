@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Data.SqlClient;
 using System.Windows.Forms;
+using MercadoEnvio.DataProvider;
 
 namespace MercadoEnvio.ABM_Rol
 {
@@ -14,8 +15,7 @@ namespace MercadoEnvio.ABM_Rol
     {
         private SqlCommand command { get; set; }
         private IList<SqlParameter> parametros = new List<SqlParameter>();
-        private BuilderDeComandos builderDeComandos = new BuilderDeComandos();
-
+        
         public Object SelectedItem { get; set; }
         private String rolElegido;
         private int estabaDeshabilitado;
@@ -100,7 +100,7 @@ namespace MercadoEnvio.ABM_Rol
             parametros.Add(new SqlParameter("@rol", rolElegido));
 
             String consulta = "SELECT COUNT(DISTINCT nombre) FROM NET_A_CERO.Roles WHERE rol_nombre = @rol and rol_activo = 1";
-            int estadoRol = (int)builderDeComandos.Crear(consulta, parametros).ExecuteScalar();
+            int estadoRol = (int)QueryBuilder.Instance.build(consulta, parametros).ExecuteScalar();
 
             if (estadoRol == 1)
             {
@@ -117,7 +117,7 @@ namespace MercadoEnvio.ABM_Rol
             DataSet funcionalidades = new DataSet();
             SqlDataAdapter adapter = new SqlDataAdapter();
             parametros = new List<SqlParameter>();
-            command = builderDeComandos.Crear("SELECT DISTINCT nombre FROM NET_A_CERO.Funcionalidades", parametros);
+            command = QueryBuilder.Instance.build("SELECT DISTINCT nombre FROM NET_A_CERO.Funcionalidades", parametros);
             adapter.SelectCommand = command;
             adapter.Fill(funcionalidades);
             checkedListBoxFuncionalidades.DataSource = funcionalidades.Tables[0].DefaultView;
@@ -169,7 +169,7 @@ namespace MercadoEnvio.ABM_Rol
             parametros.Add(new SqlParameter("@nombre_nuevo", nuevoNombreRol));
 
             String sql = "UPDATE NET_A_CERO.Roles SET rol_nombre = @nombre_nuevo WHERE rol_nombre = @nombre_viejo";
-            builderDeComandos.Crear(sql, parametros).ExecuteNonQuery();
+            QueryBuilder.Instance.build(sql, parametros).ExecuteNonQuery();
             
             MessageBox.Show("El rol " + rolElegido + " fue renombrado como " + nuevoNombreRol);            
         }
@@ -191,7 +191,7 @@ namespace MercadoEnvio.ABM_Rol
 
                     String sql1 = "INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(func_id, rol_id) VALUES ((SELECT id FROM NET_A_CERO.Funcionalidades WHERE func_nombre = @funcionalidad), (SELECT id FROM NET_A_CERO.Roles WHERE rol_nombre = @rol))";
 
-                    builderDeComandos.Crear(sql1, parametros).ExecuteNonQuery();
+                    QueryBuilder.Instance.build(sql1, parametros).ExecuteNonQuery();
                 }
             }
         }
@@ -203,7 +203,7 @@ namespace MercadoEnvio.ABM_Rol
             parametros.Add(new SqlParameter("@funcionalidad", funcionalidad));
 
             String consulta = "SELECT COUNT(*) FROM NET_A_CERO.Rol_x_Funcionalidad WHERE func_id = (SELECT id FROM NET_A_CERO.Funcionalidades WHERE func_nombre = @funcionalidad) and rol_id = (SELECT  id FROM NET_A_CERO.Roles WHERE rol_nombre = @rol)";
-            int tieneLaFuncionalidad = (int)builderDeComandos.Crear(consulta, parametros).ExecuteScalar();
+            int tieneLaFuncionalidad = (int)QueryBuilder.Instance.build(consulta, parametros).ExecuteScalar();
 
                 if (tieneLaFuncionalidad == 1)
                 {
@@ -231,7 +231,7 @@ namespace MercadoEnvio.ABM_Rol
 
                     String sql2 = "DELETE NET_A_CERO.Rol_x_Funcionalidad WHERE func_id = (SELECT id FROM NET_A_CERO.Funcionalidades WHERE func_nombre = @funcionalidad) and rol_id = (SELECT  id FROM NET_A_CERO.Roles WHERE rol_nombre = @rol)";
 
-                    builderDeComandos.Crear(sql2, parametros).ExecuteNonQuery();
+                    QueryBuilder.Instance.build(sql2, parametros).ExecuteNonQuery();
                 }
             }
         }
@@ -243,7 +243,7 @@ namespace MercadoEnvio.ABM_Rol
 
             String sql = "UPDATE NET_A_CERO.Roles SET rol_activo = 1 WHERE rol_nombre = @nombre";
 
-            builderDeComandos.Crear(sql, parametros).ExecuteNonQuery();
+            QueryBuilder.Instance.build(sql, parametros).ExecuteNonQuery();
         }
                
         

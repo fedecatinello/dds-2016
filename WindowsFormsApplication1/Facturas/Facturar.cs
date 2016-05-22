@@ -7,12 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using MercadoEnvio.DataProvider;
 
 namespace MercadoEnvio.Facturar_Publicaciones
 {
     public partial class Facturar : Form
     {
-        private BuilderDeComandos builderDeComandos = new BuilderDeComandos();
         private IList<SqlParameter> parametros = new List<SqlParameter>();
         int cantidadMin;
         int cantidadMax;
@@ -63,14 +63,14 @@ namespace MercadoEnvio.Facturar_Publicaciones
                         + " from LOS_SUPER_AMIGOS.Publicacion p, LOS_SUPER_AMIGOS.Visibilidad v, LOS_SUPER_AMIGOS.Usuario u"
                         + " where p.costo_pagado = 0 and p.visibilidad_id = v.id and p.usuario_id = u.id and u.id = @id"
                         + " and p.estado_id = (select e.id from LOS_SUPER_AMIGOS.Estado e where e.descripcion = 'Finalizada')),0))";
-            Double montoCalculado = Convert.ToDouble(builderDeComandos.Crear(monto, parametros).ExecuteScalar());
+            Double montoCalculado = Convert.ToDouble(QueryBuilder.Instance.build(monto, parametros).ExecuteScalar());
             labelMontoCalculado.Text = montoCalculado.ToString();
 
 
             // Borro tabla temporal con monto
             String borroTablaTemporal = "drop table LOS_SUPER_AMIGOS.Compra_Comision";
             parametros.Clear();
-            builderDeComandos.Crear(borroTablaTemporal, parametros).ExecuteNonQuery();
+            QueryBuilder.Instance.build(borroTablaTemporal, parametros).ExecuteNonQuery();
         }
 
         private void CargarCostosPublicacionPorFacturar()
@@ -83,7 +83,7 @@ namespace MercadoEnvio.Facturar_Publicaciones
             + " where p.usuario_id = u.id and u.id = @id and p.visibilidad_id = v.id"
             + " and p.costo_pagado = 0 and p.estado_id = (select id from LOS_SUPER_AMIGOS.Estado where descripcion = 'Finalizada')";
 
-            int cantidad  = (int)builderDeComandos.Crear(cantidadCostos, parametros).ExecuteScalar();
+            int cantidad  = (int)QueryBuilder.Instance.build(cantidadCostos, parametros).ExecuteScalar();
 
             labelCantidadCostos.Text = cantidad.ToString();
         }
@@ -98,7 +98,7 @@ namespace MercadoEnvio.Facturar_Publicaciones
              + " where u.id = @id and p.usuario_id = u.id and c.publicacion_id = p.id"
              + " and c.facturada = 0 and p.estado_id = (select id from LOS_SUPER_AMIGOS.Estado where descripcion = 'Finalizada')";
 
-            cantidadMin = (int)builderDeComandos.Crear(cantidadMinimaComisiones, parametros).ExecuteScalar();
+            cantidadMin = (int)QueryBuilder.Instance.build(cantidadMinimaComisiones, parametros).ExecuteScalar();
 
             parametros.Clear();
             parametros.Add(new SqlParameter("@id", UsuarioSesion.Usuario.id));
@@ -108,7 +108,7 @@ namespace MercadoEnvio.Facturar_Publicaciones
              + " where u.id = @id and p.usuario_id = u.id and c.publicacion_id = p.id"
              + " and c.facturada = 0";
 
-            cantidadMax = (int)builderDeComandos.Crear(cantidadMaximaComisiones, parametros).ExecuteScalar();
+            cantidadMax = (int)QueryBuilder.Instance.build(cantidadMaximaComisiones, parametros).ExecuteScalar();
 
             dropDownFacturar.Text = cantidadMin.ToString();
             labelMinimo.Text = cantidadMin.ToString();
@@ -145,12 +145,12 @@ namespace MercadoEnvio.Facturar_Publicaciones
                                 + "(fecha) values(@fecha)";
             parametros.Clear();
             parametros.Add(new SqlParameter("@fecha", Convert.ToDateTime(System.Configuration.ConfigurationManager.AppSettings["DateKey"])));
-            builderDeComandos.Crear(creoFactura, parametros).ExecuteNonQuery();
+            QueryBuilder.Instance.build(creoFactura, parametros).ExecuteNonQuery();
 
             // Obtengo el id de la nueva factura
             String idFactura = "select top 1 f.nro from LOS_SUPER_AMIGOS.Factura f order by f.nro DESC";
             parametros.Clear();
-            Decimal idFact = (Decimal)builderDeComandos.Crear(idFactura,parametros).ExecuteScalar();
+            Decimal idFact = (Decimal)QueryBuilder.Instance.build(idFactura,parametros).ExecuteScalar();
 
             // Inserto los items factura de costos por publicacion 
             String consulta = "LOS_SUPER_AMIGOS.facturar_costos_publicacion";
@@ -163,7 +163,7 @@ namespace MercadoEnvio.Facturar_Publicaciones
             SqlParameter parametroMonto = new SqlParameter("@monto_descontado", SqlDbType.Decimal);
             parametroMonto.Direction = ParameterDirection.Output;
             parametros.Add(parametroMonto);
-            command = builderDeComandos.Crear(consulta, parametros);
+            command = QueryBuilder.Instance.build(consulta, parametros);
             command.CommandType = CommandType.StoredProcedure;
             command.ExecuteNonQuery();
 
@@ -190,7 +190,7 @@ namespace MercadoEnvio.Facturar_Publicaciones
                             + " deallocate publ_cursor";
             parametros.Clear();
             parametros.Add(new SqlParameter("@id", UsuarioSesion.Usuario.id));
-            builderDeComandos.Crear(costoPagado, parametros).ExecuteNonQuery();
+            QueryBuilder.Instance.build(costoPagado, parametros).ExecuteNonQuery();
 
             int valor;
             Int32.TryParse(dropDownFacturar.Text, out valor);
@@ -198,7 +198,7 @@ namespace MercadoEnvio.Facturar_Publicaciones
             // Borro tabla temporal con ventas que se facturan pagando comision
             String borroTabla = "IF OBJECT_ID('LOS_SUPER_AMIGOS.Compra_Comision', 'U') IS NOT NULL drop table LOS_SUPER_AMIGOS.Compra_Comision";
             parametros.Clear();
-            builderDeComandos.Crear(borroTabla, parametros).ExecuteNonQuery();
+            QueryBuilder.Instance.build(borroTabla, parametros).ExecuteNonQuery();
 
             parametros.Clear();
             parametros.Add(new SqlParameter("@id", UsuarioSesion.Usuario.id));
@@ -216,14 +216,14 @@ namespace MercadoEnvio.Facturar_Publicaciones
                                     + " from LOS_SUPER_AMIGOS.Usuario u, LOS_SUPER_AMIGOS.Compra c, LOS_SUPER_AMIGOS.Publicacion p"
                                     + " where u.id = @id and p.usuario_id = u.id and c.publicacion_id = p.id and c.facturada = 0"
                                     + " order by c.fecha";
-            builderDeComandos.Crear(totalidadVentasFacturar, parametros).ExecuteNonQuery();
+            QueryBuilder.Instance.build(totalidadVentasFacturar, parametros).ExecuteNonQuery();
 
             // Inserto los items factura de ventas
             String consulta2 = "LOS_SUPER_AMIGOS.facturar_ventas";
             parametros.Clear();
             parametros.Add(new SqlParameter("@id", UsuarioSesion.Usuario.id));
             parametros.Add(new SqlParameter("@idF", idFact));
-            command = builderDeComandos.Crear(consulta2, parametros);
+            command = QueryBuilder.Instance.build(consulta2, parametros);
             command.CommandType = CommandType.StoredProcedure;
             command.ExecuteNonQuery();
 
@@ -246,7 +246,7 @@ namespace MercadoEnvio.Facturar_Publicaciones
                                 + " close compra_cursor"
                                 + " deallocate compra_cursor";
             parametros.Clear();
-            builderDeComandos.Crear(ventaFacturada,parametros).ExecuteNonQuery();
+            QueryBuilder.Instance.build(ventaFacturada,parametros).ExecuteNonQuery();
 
             // Inserto el total en la factura
             String actualizoTotal = "update LOS_SUPER_AMIGOS.Factura"
@@ -255,7 +255,7 @@ namespace MercadoEnvio.Facturar_Publicaciones
                                + " where i.factura_nro = nro) where nro = @idF";
             parametros.Clear();
             parametros.Add(new SqlParameter("@idF", idFact));
-            builderDeComandos.Crear(actualizoTotal, parametros).ExecuteNonQuery();
+            QueryBuilder.Instance.build(actualizoTotal, parametros).ExecuteNonQuery();
 
             // Inserto la forma de pago en la factura
             String formaPago = "update LOS_SUPER_AMIGOS.Factura"
@@ -264,12 +264,12 @@ namespace MercadoEnvio.Facturar_Publicaciones
             parametros.Clear();
             parametros.Add(new SqlParameter("@idF", idFact));
             parametros.Add(new SqlParameter("@pago", formaDePago));
-            builderDeComandos.Crear(formaPago, parametros).ExecuteNonQuery();
+            QueryBuilder.Instance.build(formaPago, parametros).ExecuteNonQuery();
 
             // Borro tabla temporal con ventas que se facturan pagando comision
             String borroTablaTemporal = "IF OBJECT_ID('LOS_SUPER_AMIGOS.Compra_Comision', 'U') IS NOT NULL drop table LOS_SUPER_AMIGOS.Compra_Comision";
             parametros.Clear();
-            builderDeComandos.Crear(borroTablaTemporal, parametros).ExecuteNonQuery();
+            QueryBuilder.Instance.build(borroTablaTemporal, parametros).ExecuteNonQuery();
 
             
                 MessageBox.Show("Factura realizada. Por bonificaciones se desconto: $" + montoDescontadoBonificaciones);

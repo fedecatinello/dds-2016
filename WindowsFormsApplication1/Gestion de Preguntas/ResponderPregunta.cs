@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Data.SqlClient;
 using System.Windows.Forms;
+using MercadoEnvio.DataProvider;
 
 namespace MercadoEnvio.Gestion_de_Preguntas
 {
@@ -14,7 +15,6 @@ namespace MercadoEnvio.Gestion_de_Preguntas
     {
         private SqlCommand command { get; set; }
         private IList<SqlParameter> parametros = new List<SqlParameter>();
-        private BuilderDeComandos builderDeComandos = new BuilderDeComandos();
         decimal idUsuarioActual = UsuarioSesion.Usuario.id;
         private int preguntaId;        
 
@@ -45,7 +45,7 @@ namespace MercadoEnvio.Gestion_de_Preguntas
             parametros.Add(new SqlParameter("@respuesta", this.textBoxRespuesta.Text));            
             parametros.Add(new SqlParameter("@id", preguntaId));
             parametros.Add(new SqlParameter("@fecha", fecha));
-            builderDeComandos.Crear(sql, parametros).ExecuteNonQuery();
+            QueryBuilder.Instance.build(sql, parametros).ExecuteNonQuery();
             MessageBox.Show("Respuesta enviada");
             this.Hide();
             new VerPreguntas().ShowDialog();

@@ -7,13 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using MercadoEnvio.Utils;
+using MercadoEnvio.DataProvider;
 
 namespace MercadoEnvio.Login
 {
     public partial class CambiarContrasena : Form
     {
-        private BuilderDeComandos builderDeComandos = new BuilderDeComandos();
-
+       
         public CambiarContrasena()
         {
             InitializeComponent();
@@ -38,14 +39,14 @@ namespace MercadoEnvio.Login
             parametros.Add(new SqlParameter("@username", UsuarioSesion.Usuario.nombre));
             parametros.Add(new SqlParameter("@pass", HashSha256.getHash(textBoxContraseña.Text)));
             String nuevaPass = "UPDATE NET_A_CERO.Usuarios SET usr_password = @pass WHERE username = @username";
-            builderDeComandos.Crear(nuevaPass, parametros).ExecuteNonQuery();
+            QueryBuilder.Instance.build(nuevaPass, parametros).ExecuteNonQuery();
 
             // Asigna rol
             parametros.Clear();
             parametros.Add(new SqlParameter("@username", UsuarioSesion.Usuarios.nombre));
 
             String consultaRoles = "SELECT COUNT(rol_id) from NET_A_CERO.Usuarios_x_Rol WHERE (SELECT id FROM NET_A_CERO.Usuarios WHERE usr_usuario = @username) = usr_id";
-            int cantidadDeRoles = (int)builderDeComandos.Crear(consultaRoles, parametros).ExecuteScalar();
+            int cantidadDeRoles = (int)QueryBuilder.Instance.build(consultaRoles, parametros).ExecuteScalar();
 
             if (cantidadDeRoles > 1)
             {
@@ -58,7 +59,7 @@ namespace MercadoEnvio.Login
                 parametros.Clear();
                 parametros.Add(new SqlParameter("@username", UsuarioSesion.Usuario.nombre));
                 String rolDeUsuario = "SELECT r.nombre FROM NET_A_CERO.Roles r, NET_A_CERO.Usuarios_x_Rol ru, NET_A_CERO.Usuarios u WHERE r.id = ru.rol_id and ru.usr_id = u.id and u.username = @username";
-                String rolUser = (String)builderDeComandos.Crear(rolDeUsuario, parametros).ExecuteScalar();
+                String rolUser = (String)QueryBuilder.Instance.build(rolDeUsuario, parametros).ExecuteScalar();
 
                 UsuarioSesion.Usuario.rol = rolUser;
 
