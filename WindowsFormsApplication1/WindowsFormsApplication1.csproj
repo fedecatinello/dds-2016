@@ -7,8 +7,8 @@
     <ProjectGuid>{DC2F8B5F-0A5A-49AA-A29A-D0DEB02B45E0}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WindowsFormsApplication1</RootNamespace>
-    <AssemblyName>WindowsFormsApplication1</AssemblyName>
+    <RootNamespace>MercadoEnvio</RootNamespace>
+    <AssemblyName>MercadoEnvio</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -44,120 +44,395 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ABM Rol\Form1.cs">
+    <Compile Include="ABM Cliente\AgregarCliente.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ABM Rol\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="ABM Cliente\AgregarCliente.Designer.cs">
+      <DependentUpon>AgregarCliente.cs</DependentUpon>
     </Compile>
-    <Compile Include="ABM Rubro\Form1.cs">
+    <Compile Include="ABM Cliente\EditarCliente.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ABM Rubro\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="ABM Cliente\EditarCliente.Designer.cs">
+      <DependentUpon>EditarCliente.cs</DependentUpon>
     </Compile>
-    <Compile Include="ABM Usuario\Form1.cs">
+    <Compile Include="ABM Cliente\FiltroCliente.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ABM Usuario\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="ABM Cliente\FiltroCliente.Designer.cs">
+      <DependentUpon>FiltroCliente.cs</DependentUpon>
     </Compile>
-    <Compile Include="ABM Usuario\Form4.cs">
+    <Compile Include="ABM Empresa\AgregarEmpresa.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ABM Usuario\Form4.Designer.cs">
-      <DependentUpon>Form4.cs</DependentUpon>
+    <Compile Include="ABM Empresa\AgregarEmpresa.Designer.cs">
+      <DependentUpon>AgregarEmpresa.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\Alta.cs">
+    <Compile Include="ABM Empresa\EditarEmpresa.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Common\Alta.Designer.cs">
-      <DependentUpon>Alta.cs</DependentUpon>
+    <Compile Include="ABM Empresa\EditarEmpresa.Designer.cs">
+      <DependentUpon>EditarEmpresa.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\Baja.cs">
+    <Compile Include="ABM Empresa\FiltroEmpresa.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Common\Baja.Designer.cs">
-      <DependentUpon>Baja.cs</DependentUpon>
+    <Compile Include="ABM Empresa\FiltroEmpresa.Designer.cs">
+      <DependentUpon>FiltroEmpresa.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\Utils.cs" />
-    <Compile Include="Common\Listado.cs">
+    <Compile Include="ABM Rol\AgregarRol.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Common\Listado.Designer.cs">
+    <Compile Include="ABM Rol\AgregarRol.Designer.cs">
+      <DependentUpon>AgregarRol.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Rol\BajaRol.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Rol\BajaRol.Designer.cs">
+      <DependentUpon>BajaRol.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Rol\EditarRol.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Rol\EditarRol.Designer.cs">
+      <DependentUpon>EditarRol.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Rol\ListadoEditarRol.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Rol\ListadoEditarRol.Designer.cs">
+      <DependentUpon>ListadoEditarRol.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Rol\RolForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Rol\RolForm.Designer.cs">
+      <DependentUpon>RolForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Rubro\AgregarRubro.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Rubro\AgregarRubro.Designer.cs">
+      <DependentUpon>AgregarRubro.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Rubro\BajaRubro.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Rubro\BajaRubro.Designer.cs">
+      <DependentUpon>BajaRubro.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Rubro\EditarRubro.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Rubro\EditarRubro.Designer.cs">
+      <DependentUpon>EditarRubro.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Rubro\FiltroRubros.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Rubro\FiltroRubros.Designer.cs">
+      <DependentUpon>FiltroRubros.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Rubro\RubroForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Rubro\RubroForm.Designer.cs">
+      <DependentUpon>RubroForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Visibilidad\AgregarVisibilidad.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Visibilidad\AgregarVisibilidad.Designer.cs">
+      <DependentUpon>AgregarVisibilidad.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Visibilidad\EditarVisibilidad.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Visibilidad\EditarVisibilidad.Designer.cs">
+      <DependentUpon>EditarVisibilidad.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Visibilidad\FiltroVisibilidad.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Visibilidad\FiltroVisibilidad.Designer.cs">
+      <DependentUpon>FiltroVisibilidad.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Calificar\Calificar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Calificar\Calificar.Designer.cs">
+      <DependentUpon>Calificar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Calificar\Listado.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Calificar\Listado.Designer.cs">
       <DependentUpon>Listado.cs</DependentUpon>
     </Compile>
-    <Compile Include="ABM Visibilidad\Form1.cs">
+    <Compile Include="ComprarOfertar\BuscadorPublicaciones.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ABM Visibilidad\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="ComprarOfertar\BuscadorPublicaciones.Designer.cs">
+      <DependentUpon>BuscadorPublicaciones.cs</DependentUpon>
     </Compile>
-    <Compile Include="Calificar\Form1.cs">
+    <Compile Include="ComprarOfertar\Comprar.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Calificar\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="ComprarOfertar\Comprar.Designer.cs">
+      <DependentUpon>Comprar.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\Modificacion.cs">
+    <Compile Include="ComprarOfertar\Ofertar.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Common\Modificacion.Designer.cs">
-      <DependentUpon>Modificacion.cs</DependentUpon>
+    <Compile Include="ComprarOfertar\Ofertar.Designer.cs">
+      <DependentUpon>Ofertar.cs</DependentUpon>
     </Compile>
-    <Compile Include="ComprarOfertar\Form1.cs">
+    <Compile Include="ComprarOfertar\Preguntar.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ComprarOfertar\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="ComprarOfertar\Preguntar.designer.cs">
+      <DependentUpon>Preguntar.cs</DependentUpon>
     </Compile>
+    <Compile Include="ComprarOfertar\VerPublicacion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComprarOfertar\VerPublicacion.Designer.cs">
+      <DependentUpon>VerPublicacion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gestion de Preguntas\Respuesta.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gestion de Preguntas\Respuesta.Designer.cs">
+      <DependentUpon>Respuesta.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gestion de Preguntas\DatosPublicacion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gestion de Preguntas\DatosPublicacion.designer.cs">
+      <DependentUpon>DatosPublicacion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gestion de Preguntas\ResponderPregunta.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gestion de Preguntas\ResponderPregunta.designer.cs">
+      <DependentUpon>ResponderPregunta.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gestion de Preguntas\VerPreguntas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gestion de Preguntas\VerPreguntas.designer.cs">
+      <DependentUpon>VerPreguntas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gestion de Preguntas\VerRespuestas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gestion de Preguntas\VerRespuestas.designer.cs">
+      <DependentUpon>VerRespuestas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Editar Publicacion\EditarPublicacion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Editar Publicacion\EditarPublicacion.Designer.cs">
+      <DependentUpon>EditarPublicacion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Editar Publicacion\FiltrarPublicacion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Editar Publicacion\FiltrarPublicacion.Designer.cs">
+      <DependentUpon>FiltrarPublicacion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Facturas\Facturar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Facturas\Facturar.Designer.cs">
+      <DependentUpon>Facturar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Generar Publicacion\GenerarPublicacion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Generar Publicacion\GenerarPublicacion.Designer.cs">
+      <DependentUpon>GenerarPublicacion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Historial Cliente\Historial.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Historial Cliente\Historial.Designer.cs">
+      <DependentUpon>Historial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Listado Estadistico\Estadisticas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Listado Estadistico\Estadisticas.Designer.cs">
+      <DependentUpon>Estadisticas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Login\CambiarContrasena.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login\CambiarContrasena.Designer.cs">
+      <DependentUpon>CambiarContrasena.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Login\ElegirRol.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login\ElegirRol.Designer.cs">
+      <DependentUpon>ElegirRol.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Login\LoginForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login\LoginForm.Designer.cs">
+      <DependentUpon>LoginForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MenuPrincipal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MenuPrincipal.Designer.cs">
+      <DependentUpon>MenuPrincipal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Exceptions\CampoVacioException.cs" />
+    <Compile Include="Exceptions\ClienteYaExisteException.cs" />
+    <Compile Include="Exceptions\CuitYaExisteException.cs" />
+    <Compile Include="Exceptions\FechaPasadaException.cs" />
+    <Compile Include="Exceptions\FormatoInvalidoException.cs" />
+    <Compile Include="Exceptions\RazonSocialYaExisteException.cs" />
+    <Compile Include="Exceptions\TelefonoYaExisteException.cs" />
+    <Compile Include="Exceptions\VisibilidadYaExisteException.cs" />
+    <Compile Include="Exceptions\FaltanDefinirAtributosException.cs" />
+    <Compile Include="DataProvider\DBCommunicator.cs" />
+    <Compile Include="DataProvider\QueryBuilder.cs" />
     <Compile Include="DataProvider\ConnectionManager.cs" />
     <Compile Include="DataProvider\QueryHelper.cs" />
-    <Compile Include="Facturas\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Facturas\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Generar Publicación\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Generar Publicación\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Historial Cliente\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Historial Cliente\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Listado Estadistico\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Listado Estadistico\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Utils\HashSha256.cs" />
+    <Compile Include="Utils\Utils.cs" />
+    <Compile Include="Objetos\Empresa.cs" />
+    <Compile Include="Objetos\Publicacion.cs" />
+    <Compile Include="Objetos\Usuario.cs" />
+    <Compile Include="Objetos\Visibilidad.cs" />
+    <Compile Include="Objetos\Objeto.cs" />
+    <Compile Include="Objetos\Cliente.cs" />
+    <Compile Include="Objetos\Comunicable.cs" />
+    <Compile Include="Objetos\Direccion.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="ABM Rol\Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="ABM Cliente\AgregarCliente.resx">
+      <DependentUpon>AgregarCliente.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Common\Alta.resx">
-      <DependentUpon>Alta.cs</DependentUpon>
+    <EmbeddedResource Include="ABM Cliente\EditarCliente.resx">
+      <DependentUpon>EditarCliente.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Common\Listado.resx">
+    <EmbeddedResource Include="ABM Cliente\FiltroCliente.resx">
+      <DependentUpon>FiltroCliente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Empresa\AgregarEmpresa.resx">
+      <DependentUpon>AgregarEmpresa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Empresa\EditarEmpresa.resx">
+      <DependentUpon>EditarEmpresa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Empresa\FiltroEmpresa.resx">
+      <DependentUpon>FiltroEmpresa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Rol\AgregarRol.resx">
+      <DependentUpon>AgregarRol.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Rol\BajaRol.resx">
+      <DependentUpon>BajaRol.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Rol\EditarRol.resx">
+      <DependentUpon>EditarRol.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Rol\ListadoEditarRol.resx">
+      <DependentUpon>ListadoEditarRol.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Rol\RolForm.resx">
+      <DependentUpon>RolForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Rubro\AgregarRubro.resx">
+      <DependentUpon>AgregarRubro.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Rubro\EditarRubro.resx">
+      <DependentUpon>EditarRubro.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Rubro\FiltroRubros.resx">
+      <DependentUpon>FiltroRubros.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Visibilidad\AgregarVisibilidad.resx">
+      <DependentUpon>AgregarVisibilidad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Visibilidad\EditarVisibilidad.resx">
+      <DependentUpon>EditarVisibilidad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Visibilidad\FiltroVisibilidad.resx">
+      <DependentUpon>FiltroVisibilidad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Calificar\Calificar.resx">
+      <DependentUpon>Calificar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Calificar\Listado.resx">
       <DependentUpon>Listado.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ComprarOfertar\BuscadorPublicaciones.resx">
+      <DependentUpon>BuscadorPublicaciones.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ComprarOfertar\Comprar.resx">
+      <DependentUpon>Comprar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ComprarOfertar\Ofertar.resx">
+      <DependentUpon>Ofertar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ComprarOfertar\Preguntar.resx">
+      <DependentUpon>Preguntar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ComprarOfertar\VerPublicacion.resx">
+      <DependentUpon>VerPublicacion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editar Publicacion\EditarPublicacion.resx">
+      <DependentUpon>EditarPublicacion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editar Publicacion\FiltrarPublicacion.resx">
+      <DependentUpon>FiltrarPublicacion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Facturas\Facturar.resx">
+      <DependentUpon>Facturar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Generar Publicacion\GenerarPublicacion.resx">
+      <DependentUpon>GenerarPublicacion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gestion de Preguntas\Respuesta.resx">
+      <DependentUpon>Respuesta.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gestion de Preguntas\VerRespuestas.resx">
+      <DependentUpon>VerRespuestas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Listado Estadistico\Estadisticas.resx">
+      <DependentUpon>Estadisticas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gestion de Preguntas\ResponderPregunta.resx">
+      <DependentUpon>ResponderPregunta.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gestion de Preguntas\VerPreguntas.resx">
+      <DependentUpon>VerPreguntas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login\CambiarContrasena.resx">
+      <DependentUpon>CambiarContrasena.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login\ElegirRol.resx">
+      <DependentUpon>ElegirRol.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login\LoginForm.resx">
+      <DependentUpon>LoginForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MenuPrincipal.resx">
+      <DependentUpon>MenuPrincipal.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Registro de Usuario\RegistrarUsuario.resx">
+      <DependentUpon>RegistrarUsuario.cs</DependentUpon>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -172,6 +447,13 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Registro de Usuario\RegistrarUsuario.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Registro de Usuario\RegistrarUsuario.Designer.cs">
+      <DependentUpon>RegistrarUsuario.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UsuarioSesion.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

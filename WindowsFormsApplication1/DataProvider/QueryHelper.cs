@@ -15,6 +15,8 @@ namespace WindowsFormsApplication1.DataProvider
         /// </summary>
         private static QueryHelper instance;
 
+        private QueryBuilder builder = new QueryBuilder();
+
         public static QueryHelper Instance
         {
             get
@@ -35,7 +37,7 @@ namespace WindowsFormsApplication1.DataProvider
         /// <returns>Returns the reader with the results of the query</returns>
         public SqlDataReader exec(String query)
         {
-            SqlCommand command = new SqlCommand(query, ConnectionManager.Instance.getConnection());
+            SqlCommand command = builder.build();
             reader = command.ExecuteReader();
             return reader;
         }
