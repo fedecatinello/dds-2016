@@ -7,3 +7,45 @@ C:\Users\Pc\Documents\Visual Studio 2012\Projects\WindowsFormsApplication1\obj\D
 C:\Users\Pc\Documents\Visual Studio 2012\Projects\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csproj.GenerateResource.Cache
 C:\Users\Pc\Documents\Visual Studio 2012\Projects\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
 C:\Users\Pc\Documents\Visual Studio 2012\Projects\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\bin\Debug\MercadoEnvio.exe.config
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csprojResolveAssemblyReference.cache
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.ABM_Cliente.AgregarCliente.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.ABM_Cliente.EditarCliente.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.ABM_Cliente.FiltroCliente.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.ABM_Empresa.AgregarEmpresa.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\FrbaCommerce.ABM_Empresa.EditarEmpresa.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.ABM_Empresa.FiltroEmpresa.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.ABM_Rol.AgregarRol.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.ABM_Rol.BajaRol.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.ABM_Rol.EditarRol.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.ABM_Rol.ListadoEditarRol.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.ABM_Rol.RolForm.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.ABM_Rubro.AgregarRubro.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.ABM_Rubro.EditarRubro.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.ABM_Rubro.FiltroRubros.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.ABM_Visibilidad.AgregarVisibilidad.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.ABM_Visibilidad.EditarVisibilidad.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\FWindowsFormsApplication1.ABM_Visibilidad.FiltroVisibilidad.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Calificar_Vendedor.Calificar.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Calificar_Vendedor.Listado.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Comprar_Ofertar.BuscadorPublicaciones.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Comprar_Ofertar.Comprar.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Comprar_Ofertar.Ofertar.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Comprar_Ofertar.Preguntar.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Comprar_Ofertar.VerPublicacion.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Editar_Publicacion.EditarPublicacion.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Editar_Publicacion.FiltrarPublicacion.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Facturar_Publicaciones.Facturar.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Generar_Publicacion.GenerarPublicacion.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Gestion_de_Preguntas.Respuesta.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Gestion_de_Preguntas.VerRespuestas.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Listado_Estadistico.Estadisticas.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Gestion_de_Preguntas.ResponderPregunta.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Gestion_de_Preguntas.VerPreguntas.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Login.CambiarContrasena.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Login.ElegirRol.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Login.LoginForm.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\FrbaCommerce.MenuPrincipal.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\MercadoEnvio.Properties.Resources.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Registro_de_Usuario.RegistrarUsuario.resources
+C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csproj.GenerateResource.Cache
