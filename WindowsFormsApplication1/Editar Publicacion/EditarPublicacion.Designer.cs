@@ -1,4 +1,4 @@
-namespace WindowsFormsApplication1.Editar_Publicacion
+namespace MercadoEnvio.Editar_Publicacion
 {
     partial class EditarPublicacion
     {

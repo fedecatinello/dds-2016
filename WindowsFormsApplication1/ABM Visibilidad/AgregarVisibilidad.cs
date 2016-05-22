@@ -7,10 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
-using WindowsFormsApplication1.Objetos;
-using WindowsFormsApplication1.Exceptions;
+using MercadoEnvio.Objetos;
+using MercadoEnvio.Exceptions;
 
-namespace WindowsFormsApplication1.ABM_Visibilidad
+namespace MercadoEnvio.ABM_Visibilidad
 {
     public partial class AgregarVisibilidad : Form
     {

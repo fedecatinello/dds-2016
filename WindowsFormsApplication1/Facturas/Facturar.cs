@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 
-namespace WindowsFormsApplication1.Facturar_Publicaciones
+namespace MercadoEnvio.Facturar_Publicaciones
 {
     public partial class Facturar : Form
     {

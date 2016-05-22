@@ -1,4 +1,4 @@
-namespace WindowsFormsApplication1.ABM_Empresa
+namespace MercadoEnvio.ABM_Empresa
 {
     partial class EditarEmpresa
     {

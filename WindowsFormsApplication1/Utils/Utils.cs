@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using WindowsFormsApplication1.DataProvider;
+using MercadoEnvio.DataProvider;
 
-namespace WindowsFormsApplication1.Common
+namespace MercadoEnvio.Common
 {
     class Utils
     {

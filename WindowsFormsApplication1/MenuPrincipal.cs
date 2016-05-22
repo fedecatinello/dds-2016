@@ -7,15 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using MercadoEnvio.DataProvider;
 
-namespace FrbaCommerce
+namespace MercadoEnvio
 {
     public partial class MenuPrincipal : Form
     {
         private SqlCommand comando { get; set; }
         private Dictionary<String, Form> funcionalidades = new Dictionary<String, Form>();
-        private BuilderDeComandos builderDeComandos = new BuilderDeComandos();
-    
+     
         public MenuPrincipal()
         {
             InitializeComponent();
@@ -45,10 +45,10 @@ namespace FrbaCommerce
             DataSet acciones = new DataSet();
             SqlDataAdapter adapter = new SqlDataAdapter();
             
-            String funcionalidadesUsuario = "select f.nombre from NET_A_CERO.Roles r, NET_A_CERO.Rol_x_Funcionalidad fr,NET_A_CERO.Funcionalidades f where r.rol_id = fr.rol_id and f.func_id = fr.func_id and r.rol_nombre = @unRol";
+            String funcionalidadesUsuario = "select f.func_nombre from NET_A_CERO.Roles r, NET_A_CERO.Rol_x_Funcionalidad fr,NET_A_CERO.Funcionalidades f where r.rol_id = fr.rol_id and f.func_id = fr.func_id and r.rol_nombre = @unRol";
             IList<SqlParameter> parametros = new List<SqlParameter>();
             parametros.Add(new SqlParameter("@unRol", UsuarioSesion.Usuario.rol));
-            comando = builderDeComandos.Crear(funcionalidadesUsuario, parametros);
+            comando = QueryBuilder.Instance.build(funcionalidadesUsuario, parametros);
 
             adapter.SelectCommand = comando;
             adapter.Fill(acciones, "Funcionalidades");

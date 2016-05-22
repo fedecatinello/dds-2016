@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 
-namespace WindowsFormsApplication1.Historial_Cliente
+namespace MercadoEnvio.Historial_Cliente
 {
     public partial class Historial : Form
     {

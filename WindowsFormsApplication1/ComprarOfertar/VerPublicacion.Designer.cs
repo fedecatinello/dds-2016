@@ -1,4 +1,4 @@
-namespace WindowsFormsApplication1.Comprar_Ofertar
+namespace MercadoEnvio.Comprar_Ofertar
 {
     partial class VerPublicacion
     {

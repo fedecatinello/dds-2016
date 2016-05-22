@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using System.Data.SqlClient;
 
 
-namespace WindowsFormsApplication1.Listado_Estadistico
+namespace MercadoEnvio.Listado_Estadistico
 {
     public partial class Estadisticas : Form
     {

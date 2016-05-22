@@ -8,7 +8,7 @@ using System.Text;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 
-namespace WindowsFormsApplication1.Login
+namespace MercadoEnvio.Login
 {
     public partial class ElegirRol : Form
     {

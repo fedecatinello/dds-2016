@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using WindowsFormsApplication1.Exceptions;
+using MercadoEnvio.Exceptions;
 using System.Data.SqlClient;
 
-namespace WindowsFormsApplication1.Objetos
+namespace MercadoEnvio.Objetos
 {
     class Cliente : Objeto, Comunicable
     {

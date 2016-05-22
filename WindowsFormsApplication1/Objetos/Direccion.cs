@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Data.SqlClient;
 using System.Data;
-using WindowsFormsApplication1.Exceptions;
-using WindowsFormsApplication1.Objetos;
+using MercadoEnvio.Exceptions;
+using MercadoEnvio.Objetos;
 
-namespace WindowsFormsApplication1
+namespace MercadoEnvio
 {
     class Direccion : Objeto, Comunicable
     {

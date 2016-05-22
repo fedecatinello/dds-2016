@@ -4,7 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace WindowsFormsApplication1.Utils
+namespace MercadoEnvio.Utils
 {
     class HashSha256
     {

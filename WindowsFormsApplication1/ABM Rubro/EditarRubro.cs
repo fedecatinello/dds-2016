@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 
-namespace WindowsFormsApplication1.ABM_Rubro
+namespace MercadoEnvio.ABM_Rubro
 {
     public partial class EditarRubro : Form
     {

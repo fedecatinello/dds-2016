@@ -8,7 +8,7 @@ using System.Text;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 
-namespace WindowsFormsApplication1.ABM_Rol
+namespace MercadoEnvio.ABM_Rol
 {
 
     public partial class BajaRol : Form

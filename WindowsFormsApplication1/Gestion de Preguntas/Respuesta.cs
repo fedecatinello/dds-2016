@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace WindowsFormsApplication1.Gestion_de_Preguntas
+namespace MercadoEnvio.Gestion_de_Preguntas
 {
     public partial class Respuesta : Form
     {

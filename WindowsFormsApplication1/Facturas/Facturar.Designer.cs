@@ -1,4 +1,4 @@
-namespace WindowsFormsApplication1.Facturar_Publicaciones
+namespace MercadoEnvio.Facturar_Publicaciones
 {
     partial class Facturar
     {

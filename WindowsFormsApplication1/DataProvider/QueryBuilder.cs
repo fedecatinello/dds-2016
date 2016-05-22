@@ -4,10 +4,28 @@ using System.Linq;
 using System.Text;
 using System.Data.SqlClient;
 
-namespace WindowsFormsApplication1.DataProvider
+namespace MercadoEnvio.DataProvider
 {
     class QueryBuilder
     {
+
+        /// <summary>
+        /// Singleton attribute
+        /// </summary>
+        private static QueryBuilder instance;
+
+        public static QueryBuilder Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new QueryBuilder();
+                }
+                return instance;
+            }
+        }
+
         private SqlCommand command { get; set; }
 
         public SqlCommand build(string sqlText, IList<SqlParameter> parameters)

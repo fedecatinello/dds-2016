@@ -1,4 +1,4 @@
-﻿namespace FrbaCommerce
+﻿namespace MercadoEnvio
 {
     partial class MenuPrincipal
     {

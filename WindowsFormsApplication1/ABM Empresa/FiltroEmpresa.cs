@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 
-namespace WindowsFormsApplication1.ABM_Empresa
+namespace MercadoEnvio.ABM_Empresa
 {
     public partial class FiltroEmpresa : Form
     {

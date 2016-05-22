@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 
-namespace WindowsFormsApplication1.Login
+namespace MercadoEnvio.Login
 {
     public partial class CambiarContrasena : Form
     {

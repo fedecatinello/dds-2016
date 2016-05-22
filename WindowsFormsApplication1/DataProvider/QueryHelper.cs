@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WindowsFormsApplication1.DataProvider
+namespace MercadoEnvio.DataProvider
 {
     class QueryHelper
     {
@@ -14,8 +14,6 @@ namespace WindowsFormsApplication1.DataProvider
         /// Singleton attribute
         /// </summary>
         private static QueryHelper instance;
-
-        private QueryBuilder builder = new QueryBuilder();
 
         public static QueryHelper Instance
         {
@@ -35,9 +33,9 @@ namespace WindowsFormsApplication1.DataProvider
         /// <summary>Execute a query with a return value (functions or selects)</summary>
         /// <param name="query">Query to be executed</param>
         /// <returns>Returns the reader with the results of the query</returns>
-        public SqlDataReader exec(String query)
+        public SqlDataReader exec(String query, IList<SqlParameter> parameters)
         {
-            SqlCommand command = builder.build();
+            SqlCommand command = QueryBuilder.Instance.build(query, parameters);
             reader = command.ExecuteReader();
             return reader;
         }

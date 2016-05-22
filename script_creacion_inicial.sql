@@ -110,7 +110,7 @@ CREATE TABLE [NET_A_CERO].[Publicaciones] (
     [publi_fec_vencimiento] [datetime],
     [publi_fec_inicio] [datetime] NOT NULL,
     [publi_precio] [NUMERIC](18, 2) NOT NULL,
-    [publi_costo] [NUMERIC](18, 2) NOT NULL,                                 -- No existe en la maestra
+    [publi_costo] [NUMERIC](18, 2),                                 -- No existe en la maestra
     [publi_preguntas] [bit] DEFAULT 1,
     [publi_envio] [bit] DEFAULT 0,
     [publi_calificacion] [NUMERIC](18, 0),     
@@ -403,10 +403,10 @@ INSERT INTO NET_A_CERO.Roles(rol_nombre, rol_activo)
 
 /** Migracion de Usuarios_x_Rol **/
 
-INSERT INTO NET_A_CERO.Usuarios_x_Rol(usr_id, rol_id)
+INSERT INTO NET_A_CERO.Usuarios_x_Rol(rol_id, usr_id)
     SELECT (SELECT rol_id FROM NET_A_CERO.Roles WHERE rol_nombre = 'Empresa'), emp_usr_id FROM NET_A_CERO.Empresas
     
-INSERT INTO NET_A_CERO.Usuarios_x_Rol(usr_id, rol_id)
+INSERT INTO NET_A_CERO.Usuarios_x_Rol(rol_id, usr_id)
     SELECT (SELECT rol_id FROM NET_A_CERO.Roles WHERE rol_nombre = 'Cliente'), cli_usr_id FROM NET_A_CERO.Clientes
 
 
@@ -462,7 +462,7 @@ BEGIN TRANSACTION
         WHILE((SELECT COUNT(*) FROM NET_A_CERO.Funcionalidades) > @cont)
         BEGIN
                 SET @cont = @cont + 1;
-                INSERT INTO NET_A_CERO.Rol_x_Funcionalidad (rol_id, func_id)
+                INSERT INTO NET_A_CERO.Rol_x_Funcionalidad (func_id, rol_id)
                     VALUES (@cont, (SELECT rol_id FROM NET_A_CERO.Roles WHERE rol_nombre = 'Administrativo'))
         END
 COMMIT
@@ -471,36 +471,36 @@ COMMIT
 
 /** Migracion de Rol_x_Funcionalidad **/
 
-INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(rol_id, func_id)   
+INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(func_id, rol_id)   
     VALUES(1,2);
     
-INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(rol_id, func_id)   
+INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(func_id, rol_id)   
     VALUES(2,2);
 
-INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(rol_id, func_id)   
+INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(func_id, rol_id)   
     VALUES(3,2);
 
-INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(rol_id, func_id) 
+INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(func_id, rol_id) 
     VALUES(4,2);
     
-INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(rol_id, func_id) 
+INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(func_id, rol_id) 
     VALUES(5,2);
     
-INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(rol_id, func_id) 
+INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(func_id, rol_id) 
     VALUES(13,2);
 
-INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(rol_id, func_id) 
+INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(func_id, rol_id) 
     VALUES(3,3);
 
-INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(rol_id, func_id) 
+INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(func_id, rol_id) 
     VALUES(13,3);
 
 
 
 /** Migración de Visibilidad **/  --Falta ver que onda el grado de la visibilidad
 
-INSERT INTO NET_A_CERO.Visibilidad(visib_id, visib_desc, visib_precio, visib_porcentaje)
-        SELECT DISTINCT Publicacion_Visibilidad_Cod, Publicacion_Visibilidad_Desc, Publicacion_Visibilidad_Precio, Publicacion_Visibilidad_Porcentaje 
+INSERT INTO NET_A_CERO.Visibilidad(visib_id, visib_desc, visib_grado, visib_precio, visib_porcentaje)
+        SELECT DISTINCT Publicacion_Visibilidad_Cod, Publicacion_Visibilidad_Desc, 'Comisión por tipo de publicación', Publicacion_Visibilidad_Precio, Publicacion_Visibilidad_Porcentaje 
     FROM gd_esquema.Maestra
 GO
 
@@ -548,11 +548,36 @@ GO
 
 -- Migración de publicaciones  --FIJARSE CON QUE DATOS COMPLETAR EL COSTO
 
+IF (OBJECT_ID('NET_A_CERO.fc_estado_publicacion') IS NOT NULL)
+    DROP FUNCTION NET_A_CERO.fc_estado_publicacion
+GO
+
+CREATE FUNCTION NET_A_CERO.fc_estado_publicacion 
+(
+	@estado nvarchar(255)
+)
+RETURNS nvarchar(255)
+AS
+BEGIN
+    DECLARE @estado_publi nvarchar(255)
+    IF @estado = 'Publicada'
+        BEGIN
+            SET @estado_publi = 'Activa'
+        END
+    ELSE
+        BEGIN
+            SET @estado_publi = 'Borrador'
+        END
+    RETURN @estado_publi
+END
+GO
+
+
 SET IDENTITY_INSERT NET_A_CERO.Publicaciones ON;
 GO
 
 INSERT INTO NET_A_CERO.Publicaciones (publi_id, publi_tipo, publi_descripcion, publi_estado, publi_stock, publi_fec_vencimiento, publi_fec_inicio, publi_precio, publi_calificacion, publi_calificacion_detalle, publi_usr_id, publi_visib_id, publi_rubro_id) 
-    SELECT DISTINCT Publicacion_Cod, Publicacion_Tipo, Publicacion_Descripcion, Publicacion_Estado, Publicacion_Stock, Publicacion_Fecha_Venc, Publicacion_Fecha, 
+    SELECT DISTINCT Publicacion_Cod, Publicacion_Tipo, Publicacion_Descripcion, NET_A_CERO.fc_estado_publicacion(Publicacion_Estado), Publicacion_Stock, Publicacion_Fecha_Venc, Publicacion_Fecha, 
                     Publicacion_Precio, Calificacion_Cant_Estrellas/2, Calificacion_Descripcion, NET_A_CERO.generar_id_publicacion(Publ_Cli_Dni, Publ_Empresa_Razon_Social), Publicacion_Visibilidad_Cod, (SELECT rubro_id FROM NET_A_CERO.Rubros r WHERE Publicacion_Rubro_Descripcion = r.rubro_desc_larga) 
     FROM gd_esquema.Maestra
     WHERE Publicacion_Rubro_Descripcion IS NOT NULL
@@ -563,21 +588,17 @@ GO
 
 /** Migracion de Compras **/
 INSERT INTO NET_A_CERO.Compras(comp_cli_id, comp_publi_id, comp_fecha, comp_cantidad)
-    SELECT (SELECT cli_id FROM NET_A_CERO.Clientes WHERE cli_dni = Cli_Dni), Publicacion_Cod, Compra_Fecha, Compra_Cantidad
+    SELECT (SELECT cli_id FROM NET_A_CERO.Clientes c WHERE c.cli_dni = Cli_Dni), Publicacion_Cod, Compra_Fecha, Compra_Cantidad
     FROM gd_esquema.Maestra
     WHERE Compra_Cantidad IS NOT NULL
-	AND Cli_Dni IS NOT NULL
-	AND Publicacion_Cod IS NOT NULL
     
 
 
 /** Migracion de Ofertas_x_Subasta **/
 INSERT INTO NET_A_CERO.Ofertas_x_Subasta(sub_usr_id, sub_monto, sub_fecha, sub_publi_id)
-    SELECT (SELECT cli_usr_id FROM NET_A_CERO.Clientes WHERE cli_dni = Cli_Dni), Oferta_Monto, Oferta_Fecha, Publicacion_Cod
+    SELECT (SELECT cli_usr_id FROM NET_A_CERO.Clientes c WHERE c.cli_dni = Cli_Dni), Oferta_Monto, Oferta_Fecha, Publicacion_Cod
     FROM gd_esquema.Maestra
-    WHERE Publicacion_Cod IS NOT NULL
-	AND Cli_Dni IS NOT NULL
-	AND Oferta_Monto IS NOT NULL
+    WHERE Oferta_Monto IS NOT NULL
 
 
 
@@ -622,3 +643,4 @@ INSERT INTO NET_A_CERO.Facturas(fact_id, fact_fecha, fact_monto, fact_destinatar
     SELECT DISTINCT Factura_Nro, Factura_Fecha, Factura_Total, NET_A_CERO.factura_cliente_empresa(Publ_Cli_Dni, Publ_Empresa_Razon_Social), Forma_Pago_Desc, Publicacion_Cod
     FROM gd_esquema.Maestra 
     WHERE Factura_Nro IS NOT NULL
+	AND Publicacion_Cod IS NOT NULL

@@ -1,4 +1,4 @@
-namespace WindowsFormsApplication1.Calificar_Vendedor
+namespace MercadoEnvio.Calificar_Vendedor
 {
     partial class Listado
     {

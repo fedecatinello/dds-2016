@@ -7,10 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
-using WindowsFormsApplication1.Exceptions;
-using WindowsFormsApplication1.Objetos;
+using MercadoEnvio.Exceptions;
+using MercadoEnvio.Objetos;
 
-namespace WindowsFormsApplication1.Generar_Publicacion
+namespace MercadoEnvio.Generar_Publicacion
 {
     public partial class GenerarPublicacion : Form
     {

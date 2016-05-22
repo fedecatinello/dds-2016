@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 
-namespace WindowsFormsApplication1.Editar_Publicacion
+namespace MercadoEnvio.Editar_Publicacion
 {
     public partial class FiltrarPublicacion : Form
     {

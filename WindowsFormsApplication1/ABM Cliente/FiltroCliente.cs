@@ -7,13 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
-using FrbaCommerce.Objetos;
+using MercadoEnvio.Objetos;
 
-namespace WindowsFormsApplication1.ABM_Cliente
+namespace MercadoEnvio.ABM_Cliente
 {
     public partial class FiltroCliente : Form
     {
-        private ComunicadorConBaseDeDatos comunicador = new ComunicadorConBaseDeDatos();
+        //private ComunicadorConBaseDeDatos comunicador = new ComunicadorConBaseDeDatos();
 
         public FiltroCliente()
         {

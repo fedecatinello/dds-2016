@@ -1,5 +1,5 @@
 using System.Windows.Forms;
-namespace WindowsFormsApplication1.ABM_Cliente
+namespace MercadoEnvio.ABM_Cliente
 {
     partial class FiltroCliente
     {

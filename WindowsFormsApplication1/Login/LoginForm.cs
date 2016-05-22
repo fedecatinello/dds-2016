@@ -7,14 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using MercadoEnvio.Utils;
+using MercadoEnvio.DataProvider;
 
-namespace WindowsFormsApplication1.Login
+namespace MercadoEnvio.Login
 {
     public partial class LoginForm : Form
     {
-
-        private BuilderDeComandos builderDeComandos = new BuilderDeComandos();
-
+        
         public LoginForm()
         {
             InitializeComponent();
@@ -42,7 +42,7 @@ namespace WindowsFormsApplication1.Login
 
 
             // Nos fijamos si el usuario y contraseña existen y esta habilitado
-            String query = "SELECT * FROM NET_A_CERO.Usuarios WHERE usr_usuario = @username AND usr_password = @password AND habilitado = 1";
+            String query = "SELECT * FROM NET_A_CERO.Usuarios WHERE usr_usuario = @username AND usr_password = @password AND usr_activo = 1";
 
             String usuario = this.textBoxUsuario.Text;
             // encripta contraseña
@@ -52,27 +52,27 @@ namespace WindowsFormsApplication1.Login
             parametros.Add(new SqlParameter("@username", usuario));
             parametros.Add(new SqlParameter("@password", contraseña));
 
-            SqlDataReader reader = builderDeComandos.Crear(query, parametros).ExecuteReader();
+            SqlDataReader reader = QueryHelper.Instance.exec(query, parametros);
 
-            if (reader.Read())
+            if (QueryHelper.Instance.readFrom(reader))
             {
                 MessageBox.Show("Bienvenido " + reader["username"] + "!");
 
                 UsuarioSesion.Usuario.nombre = (String)reader["username"];
                 UsuarioSesion.Usuario.id = (Decimal)reader["id"];
 
-                // Setea fallidos de login de usuario a 0
+                // Usuario logueado correctamente (intentos fallidos = 0)
                 parametros.Clear();
                 parametros.Add(new SqlParameter("@username", usuario));
-                String sumaFallido = "UPDATE NET_A_CERO.Usuarios SET usr_intentos = 0 WHERE usr_usuario = @username";
-                builderDeComandos.Crear(sumaFallido, parametros).ExecuteNonQuery();
+                String clearIntentosFallidos = "UPDATE NET_A_CERO.Usuarios SET usr_intentos = 0 WHERE usr_usuario = @username";
+                QueryBuilder.Instance.build(clearIntentosFallidos, parametros).ExecuteNonQuery();
 
                 // Se fija si es el primer inicio de sesion del usuario
                 parametros.Clear();
                 parametros.Add(new SqlParameter("@username", usuario));
                 String sesion = "SELECT password FROM NET_A_CERO.Usuarios WHERE usr_usuario = @username";
-                String primerInicio = (String)builderDeComandos.Crear(sesion, parametros).ExecuteScalar();
-                if (primerInicio == "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd")
+                String primerInicio = (String)QueryBuilder.Instance.build(sesion, parametros).ExecuteScalar();
+                if (primerInicio == "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd") //El primer inicio la contraseña es fija
                 {
                     this.Hide();
                     new CambiarContrasena().ShowDialog();
@@ -83,7 +83,7 @@ namespace WindowsFormsApplication1.Login
                 parametros.Add(new SqlParameter("@username", usuario));
 
                 String consultaRoles = "SELECT COUNT(rol_id) FROM NET_A_CERO.Usuario_x_Rol WHERE (SELECT id FROM NET_A_CERO.Usuarios WHERE usr_usuario = @username) = usuario_id";
-                int cantidadDeRoles = (int)builderDeComandos.Crear(consultaRoles, parametros).ExecuteScalar();
+                int cantidadDeRoles = (int)QueryBuilder.Instance.build(consultaRoles, parametros).ExecuteScalar();
 
                 if(cantidadDeRoles > 1)
                 {
@@ -96,7 +96,7 @@ namespace WindowsFormsApplication1.Login
                     parametros.Clear();
                     parametros.Add(new SqlParameter("@username", usuario));
                     String rolDeUsuario = "SELECT r.nombre FROM NET_A_CERO.Roles r, NET_A_CERO.Usuario_x_Rol ru, NET_A_CERO.Usuarios u WHERE r.usr_id = ru.id AND ru.usr_id = u.usr_id AND u.usr_usuario = @username";
-                    String rolUser = (String)builderDeComandos.Crear(rolDeUsuario, parametros).ExecuteScalar();
+                    String rolUser = (String)QueryBuilder.Instance.build(rolDeUsuario, parametros).ExecuteScalar();
 
                     UsuarioSesion.Usuario.rol = rolUser;
                     if(UsuarioSesion.Usuario.rol == null)
@@ -118,7 +118,7 @@ namespace WindowsFormsApplication1.Login
                 parametros.Clear();
                 parametros.Add(new SqlParameter("@username", usuario));
                 String buscaUsuario = "SELECT * FROM NET_A_CERO.Usuarios WHERE usr_usuario = @username";
-                SqlDataReader lector = builderDeComandos.Crear(buscaUsuario, parametros).ExecuteReader();
+                SqlDataReader lector = QueryBuilder.Instance.build(buscaUsuario, parametros).ExecuteReader();
 
                 if (lector.Read())
                 {
@@ -129,7 +129,7 @@ namespace WindowsFormsApplication1.Login
                     parametros.Add(new SqlParameter("@password", contraseña));
                     String estaDeshabilitado = "SELECT * FROM NET_A_CERO.Usuarios WHERE usr_usuario = @username AND usr_activo = 0";
 
-                    SqlDataReader leeDeshabilitado = builderDeComandos.Crear(estaDeshabilitado, parametros).ExecuteReader();
+                    SqlDataReader leeDeshabilitado = QueryBuilder.Instance.build(estaDeshabilitado, parametros).ExecuteReader();
 
                     if (leeDeshabilitado.Read())
                     {
@@ -141,21 +141,21 @@ namespace WindowsFormsApplication1.Login
                     parametros.Clear();
                     parametros.Add(new SqlParameter("@username", usuario));
                     String sumaFallido = "UPDATE NET_A_CERO.Usuarios SET usr_intentos = usr_intentos + 1 WHERE usr_usuario = @username";
-                    builderDeComandos.Crear(sumaFallido, parametros).ExecuteNonQuery();
+                    QueryBuilder.Instance.build(sumaFallido, parametros).ExecuteNonQuery();
 
 
                     // Si es el tercer fallido se deshabilita al usuario
                     parametros.Clear();
                     parametros.Add(new SqlParameter("@username", usuario));
                     String cantidadFallidos = "SELECT login_fallidos FROM NET_A_CERO.Usuarios WHERE usr_usuario = @username";
-                    int intentosFallidos = (int)builderDeComandos.Crear(cantidadFallidos, parametros).ExecuteScalar();
+                    int intentosFallidos = (int)QueryBuilder.Instance.build(cantidadFallidos, parametros).ExecuteScalar();
 
                     if (intentosFallidos == 3)
                     {
                         parametros.Clear();
                         parametros.Add(new SqlParameter("@username", usuario));
                         String deshabilitar = "UPDATE NET_A_CERO.Usuarios SET usr_activo = 0 WHERE usr_usuario = @username";
-                        builderDeComandos.Crear(deshabilitar, parametros).ExecuteNonQuery();
+                        QueryBuilder.Instance.build(deshabilitar, parametros).ExecuteNonQuery();
                     }
                     MessageBox.Show("Contraseña incorrecta." + '\n' + "La contrseña distingue mayusculas y minusculas." + '\n' + "Fallidos del usuario: " + intentosFallidos);
                 }

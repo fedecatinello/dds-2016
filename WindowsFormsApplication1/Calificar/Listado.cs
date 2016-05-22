@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 
-namespace WindowsFormsApplication1.Calificar_Vendedor
+namespace MercadoEnvio.Calificar_Vendedor
 {
     public partial class Listado : Form
     {

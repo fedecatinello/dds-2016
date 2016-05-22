@@ -10,7 +10,7 @@ using System.Data.SqlClient;
 using FrbaCommerce.Objetos;
 using FrbaCommerce.Exceptions;
 
-namespace WindowsFormsApplication1.ABM_Empresa
+namespace MercadoEnvio.ABM_Empresa
 {
     public partial class AgregarEmpresa : Form
     {

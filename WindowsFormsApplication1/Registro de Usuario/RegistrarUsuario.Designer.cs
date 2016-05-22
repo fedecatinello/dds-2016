@@ -1,4 +1,4 @@
-namespace WindowsFormsApplication1.Registro_de_Usuario
+namespace MercadoEnvio.Registro_de_Usuario
 {
     partial class RegistrarUsuario
     {

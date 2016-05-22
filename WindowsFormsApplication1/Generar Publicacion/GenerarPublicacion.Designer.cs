@@ -1,4 +1,4 @@
-namespace WindowsFormsApplication1.Generar_Publicacion
+namespace MercadoEnvio.Generar_Publicacion
 {
     partial class GenerarPublicacion
     {

@@ -1,4 +1,4 @@
-namespace WindowsFormsApplication1.Gestion_de_Preguntas
+namespace MercadoEnvio.Gestion_de_Preguntas
 {
     partial class Respuesta
     {

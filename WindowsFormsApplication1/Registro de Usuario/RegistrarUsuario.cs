@@ -8,7 +8,7 @@ using System.Text;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 
-namespace WindowsFormsApplication1.Registro_de_Usuario
+namespace MercadoEnvio.Registro_de_Usuario
 {
     public partial class RegistrarUsuario : Form
     {

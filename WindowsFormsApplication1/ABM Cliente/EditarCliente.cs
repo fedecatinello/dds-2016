@@ -7,10 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
-using FrbaCommerce.Objetos;
-using FrbaCommerce.Exceptions;
+using MercadoEnvio.Objetos;
+using MercadoEnvio.Exceptions;
 
-namespace WindowsFormsApplication1.ABM_Cliente
+namespace MercadoEnvio.ABM_Cliente
 {
     public partial class EditarCliente : Form
     {
