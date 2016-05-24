@@ -16,7 +16,7 @@ namespace MercadoEnvio.ABM_Empresa
     {
         private String username;
         private String contrasena;
-        private ComunicadorConBaseDeDatos comunicador = new ComunicadorConBaseDeDatos();
+        private DBCommunicator comunicador = new DBCommunicator();
         private Decimal idDireccion;
         private Decimal idUsuario;
         private Decimal idEmpresa;

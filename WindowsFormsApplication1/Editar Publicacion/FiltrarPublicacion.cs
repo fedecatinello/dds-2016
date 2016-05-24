@@ -12,7 +12,7 @@ namespace MercadoEnvio.Editar_Publicacion
 {
     public partial class FiltrarPublicacion : Form
     {
-        private ComunicadorConBaseDeDatos comunicador = new ComunicadorConBaseDeDatos();
+        private DBCommunicator comunicador = new DBCommunicator();
         
         public FiltrarPublicacion()
         {

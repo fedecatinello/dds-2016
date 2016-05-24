@@ -16,7 +16,7 @@ namespace MercadoEnvio.ABM_Empresa
     {
         private Decimal idEmpresa;
         private Decimal idDireccion;
-        private ComunicadorConBaseDeDatos comunicador = new ComunicadorConBaseDeDatos();
+        private DBCommunicator comunicador = new DBCommunicator();
 
         public EditarEmpresa(String idEmpresa)
         {

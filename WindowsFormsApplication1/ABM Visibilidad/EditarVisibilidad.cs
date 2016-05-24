@@ -15,7 +15,7 @@ namespace MercadoEnvio.ABM_Visibilidad
     public partial class EditarVisibilidad : Form
     {
         private Decimal idVisibilidad;
-        private ComunicadorConBaseDeDatos comunicador = new ComunicadorConBaseDeDatos();
+        private DBCommunicator comunicador = new DBCommunicator();
 
         public EditarVisibilidad(String idVisibilidad)
         {

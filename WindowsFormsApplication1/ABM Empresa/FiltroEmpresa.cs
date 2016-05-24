@@ -12,7 +12,7 @@ namespace MercadoEnvio.ABM_Empresa
 {
     public partial class FiltroEmpresa : Form
     {
-        private ComunicadorConBaseDeDatos comunicador = new ComunicadorConBaseDeDatos();
+        private DBCommunicator comunicador = new DBCommunicator();
 
         public FiltroEmpresa()
         {

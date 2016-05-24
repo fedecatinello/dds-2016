@@ -28,6 +28,7 @@ namespace MercadoEnvio.Login
 
         private void botonIngresar_Click(object sender, EventArgs e)
         {
+            //Validamos que ingrese usuario y contraseña
             if (this.textBoxUsuario.Text == "")
             {
                 MessageBox.Show("Debe ingresar un usuario");
@@ -54,6 +55,7 @@ namespace MercadoEnvio.Login
 
             SqlDataReader reader = QueryHelper.Instance.exec(query, parametros);
 
+            //Chequea el ingreso
             if (QueryHelper.Instance.readFrom(reader))
             {
                 MessageBox.Show("Bienvenido " + reader["username"] + "!");
@@ -70,7 +72,7 @@ namespace MercadoEnvio.Login
                 // Se fija si es el primer inicio de sesion del usuario
                 parametros.Clear();
                 parametros.Add(new SqlParameter("@username", usuario));
-                String sesion = "SELECT password FROM NET_A_CERO.Usuarios WHERE usr_usuario = @username";
+                String sesion = "SELECT usr_password FROM NET_A_CERO.Usuarios WHERE usr_usuario = @username"; 
                 String primerInicio = (String)QueryBuilder.Instance.build(sesion, parametros).ExecuteScalar();
                 if (primerInicio == "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd") //El primer inicio la contraseña es fija
                 {
@@ -82,7 +84,7 @@ namespace MercadoEnvio.Login
                 parametros.Clear();
                 parametros.Add(new SqlParameter("@username", usuario));
 
-                String consultaRoles = "SELECT COUNT(rol_id) FROM NET_A_CERO.Usuario_x_Rol WHERE (SELECT id FROM NET_A_CERO.Usuarios WHERE usr_usuario = @username) = usuario_id";
+                String consultaRoles = "SELECT COUNT(rol_id) FROM NET_A_CERO.Usuario_x_Rol WHERE (SELECT usr_id FROM NET_A_CERO.Usuarios WHERE usr_usuario = @username) = usuario_id";
                 int cantidadDeRoles = (int)QueryBuilder.Instance.build(consultaRoles, parametros).ExecuteScalar();
 
                 if(cantidadDeRoles > 1)

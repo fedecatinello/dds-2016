@@ -200,16 +200,6 @@
     <Compile Include="ComprarOfertar\VerPublicacion.Designer.cs">
       <DependentUpon>VerPublicacion.cs</DependentUpon>
     </Compile>
-    <Compile Include="DataProvider\ActiveRecord.cs" />
-    <Compile Include="DataProvider\UpdateQuery.cs" />
-    <Compile Include="DataProvider\SelectQuery.cs" />
-    <Compile Include="DataProvider\Query.cs" />
-    <Compile Include="DataProvider\InsertQuery.cs" />
-    <Compile Include="DataProvider\DeleteQuery.cs" />
-    <Compile Include="DataProvider\FillerHelper.cs" />
-    <Compile Include="DataProvider\FetchConfig.cs" />
-    <Compile Include="DataProvider\FetchCondition.cs" />
-    <Compile Include="DataProvider\EntityManager.cs" />
     <Compile Include="Gestion de Preguntas\Respuesta.cs">
       <SubType>Form</SubType>
     </Compile>

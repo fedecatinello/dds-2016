@@ -11,7 +11,7 @@ using System.Data;
 
 namespace MercadoEnvio
 {
-    class ComunicadorConBaseDeDatos
+    class DBCommunicator
     {
         private String query;
         private IList<SqlParameter> parametros = new List<SqlParameter>();

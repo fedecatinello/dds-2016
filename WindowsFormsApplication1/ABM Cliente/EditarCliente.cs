@@ -16,7 +16,7 @@ namespace MercadoEnvio.ABM_Cliente
     {
         private Decimal idCliente;
         private Decimal idDireccion;
-        private ComunicadorConBaseDeDatos comunicador = new ComunicadorConBaseDeDatos();
+        private DBCommunicator comunicador = new DBCommunicator();
 
         public EditarCliente(String idCliente)
         {
