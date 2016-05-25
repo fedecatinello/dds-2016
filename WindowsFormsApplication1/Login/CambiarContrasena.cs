@@ -43,9 +43,9 @@ namespace MercadoEnvio.Login
 
             // Asigna rol
             parametros.Clear();
-            parametros.Add(new SqlParameter("@username", UsuarioSesion.Usuarios.nombre));
+            parametros.Add(new SqlParameter("@username", UsuarioSesion.Usuario.nombre));
 
-            String consultaRoles = "SELECT COUNT(rol_id) from NET_A_CERO.Usuarios_x_Rol WHERE (SELECT id FROM NET_A_CERO.Usuarios WHERE usr_usuario = @username) = usr_id";
+            String consultaRoles = "SELECT COUNT(rol_id) from NET_A_CERO.Usuarios_x_Rol WHERE (SELECT usr_id FROM NET_A_CERO.Usuarios WHERE usr_usuario = @username) = usr_id";
             int cantidadDeRoles = (int)QueryBuilder.Instance.build(consultaRoles, parametros).ExecuteScalar();
 
             if (cantidadDeRoles > 1)
@@ -58,7 +58,7 @@ namespace MercadoEnvio.Login
             {
                 parametros.Clear();
                 parametros.Add(new SqlParameter("@username", UsuarioSesion.Usuario.nombre));
-                String rolDeUsuario = "SELECT r.nombre FROM NET_A_CERO.Roles r, NET_A_CERO.Usuarios_x_Rol ru, NET_A_CERO.Usuarios u WHERE r.id = ru.rol_id and ru.usr_id = u.id and u.username = @username";
+                String rolDeUsuario = "SELECT r.rol_nombre FROM NET_A_CERO.Roles r, NET_A_CERO.Usuarios_x_Rol ru, NET_A_CERO.Usuarios u WHERE r.rol_id = ru.rol_id and ru.usr_id = u.usr_id and u.usr_usuario = @username";
                 String rolUser = (String)QueryBuilder.Instance.build(rolDeUsuario, parametros).ExecuteScalar();
 
                 UsuarioSesion.Usuario.rol = rolUser;

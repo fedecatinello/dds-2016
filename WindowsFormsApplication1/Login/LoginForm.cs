@@ -84,7 +84,7 @@ namespace MercadoEnvio.Login
                 parametros.Clear();
                 parametros.Add(new SqlParameter("@username", usuario));
 
-                String consultaRoles = "SELECT COUNT(rol_id) FROM NET_A_CERO.Usuario_x_Rol WHERE (SELECT usr_id FROM NET_A_CERO.Usuarios WHERE usr_usuario = @username) = usuario_id";
+                String consultaRoles = "SELECT COUNT(rol_id) FROM NET_A_CERO.Usuario_x_Rol WHERE (SELECT usr_id FROM NET_A_CERO.Usuarios WHERE usr_usuario = @username) = usr_id";
                 int cantidadDeRoles = (int)QueryBuilder.Instance.build(consultaRoles, parametros).ExecuteScalar();
 
                 if(cantidadDeRoles > 1)
@@ -165,7 +165,7 @@ namespace MercadoEnvio.Login
                 {
                     MessageBox.Show("El usuario no existe");
                 }
-                
+       
                 
             }
         }
