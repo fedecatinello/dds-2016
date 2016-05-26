@@ -33,6 +33,17 @@ namespace MercadoEnvio.Login
                 MessageBox.Show("La contraseña no se repite correctamente");
                 return;
             }
+            if (textBoxContraseña.Text == "")
+            {
+                MessageBox.Show("Debe ingresar una nueva contraseña");
+                return;
+            }
+
+            if (textBoxRepetirContraseña.Text == "")
+            {
+                MessageBox.Show("Debe ingresar una nuevamenta la contraseña");
+                return;
+            }
 
             // Acualiza contraseña
             IList<SqlParameter> parametros = new List<SqlParameter>();
