@@ -41,7 +41,7 @@ namespace MercadoEnvio.Login
 
             if (textBoxRepetirContraseña.Text == "")
             {
-                MessageBox.Show("Debe ingresar una nuevamenta la contraseña");
+                MessageBox.Show("Debe ingresar nuevamenta la contraseña");
                 return;
             }
 

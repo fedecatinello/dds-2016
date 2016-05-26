@@ -8,12 +8,14 @@ using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using MercadoEnvio.Objetos;
+using MercadoEnvio.DataProvider;
 
 namespace MercadoEnvio.ABM_Cliente
 {
     public partial class FiltroCliente : Form
     {
-        //private ComunicadorConBaseDeDatos comunicador = new ComunicadorConBaseDeDatos();
+        //private ComunicadorConBaseDeDatos comunicador = new ComunicadorConBaseDeDatos();     TP ANTERIOR
+        private DBCommunicator comunicador = new DBCommunicator();
 
         public FiltroCliente()
         {
