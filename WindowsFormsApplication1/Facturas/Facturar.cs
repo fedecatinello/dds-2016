@@ -126,14 +126,14 @@ namespace MercadoEnvio.Facturar_Publicaciones
             {
                 if (textBoxNumero.Text == "" || textBoxBanco.Text == "")
                 {
-                    MessageBox.Show("Para pagar con tarjeta de credito debe completar el numero de tarjeta y el Banco");
+                    MessageBox.Show("Para pagar con tarjeta de credito debe completar el numeroCalle de tarjeta y el Banco");
                     return;
                 }
 
                 long number1 = 0;
                 if (!long.TryParse(textBoxNumero.Text, out number1))
                 {
-                    MessageBox.Show("El campo numero de tarjeta solo permite numeros");
+                    MessageBox.Show("El campo numeroCalle de tarjeta solo permite numeros");
                     return;
                 }
             }

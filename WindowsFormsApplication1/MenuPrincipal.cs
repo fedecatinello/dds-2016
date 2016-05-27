@@ -32,6 +32,7 @@ namespace MercadoEnvio
             funcionalidades.Add("Editar empresa", new ABM_Empresa.FiltroEmpresa());
             funcionalidades.Add("Crear cliente", new ABM_Cliente.AgregarCliente("clienteCreadoPorAdmin", "password"));
             funcionalidades.Add("Editar cliente", new ABM_Cliente.FiltroCliente());
+            funcionalidades.Add("Cambiar contraseña", new Login.CambiarContrasena()); //Chequear funcionalidad!
             funcionalidades.Add("Agregar visibilidad", new ABM_Visibilidad.AgregarVisibilidad());
             funcionalidades.Add("Editar visibilidad", new ABM_Visibilidad.FiltroVisibilidad());
             funcionalidades.Add("Agregar rubro", new ABM_Rubro.AgregarRubro());

@@ -22,17 +22,6 @@ namespace MercadoEnvio.Login
 
         private void botonContinuar_Click(object sender, EventArgs e)
         {
-            if (textBoxContraseña.Text.Length < 8)
-            {
-                MessageBox.Show("La contraseña debe tener por lo menos 8 caracteres");
-                return;
-            }
-
-            if (textBoxContraseña.Text != textBoxRepetirContraseña.Text)
-            {
-                MessageBox.Show("La contraseña no se repite correctamente");
-                return;
-            }
             if (textBoxContraseña.Text == "")
             {
                 MessageBox.Show("Debe ingresar una nueva contraseña");
@@ -44,6 +33,18 @@ namespace MercadoEnvio.Login
                 MessageBox.Show("Debe ingresar nuevamenta la contraseña");
                 return;
             }
+            if (textBoxContraseña.Text.Length < 8)
+            {
+                MessageBox.Show("La contraseña debe tener por lo menos 8 caracteres");
+                return;
+            }
+
+            if (textBoxContraseña.Text != textBoxRepetirContraseña.Text)
+            {
+                MessageBox.Show("La contraseña no se repite correctamente");
+                return;
+            }
+            
 
             // Acualiza contraseña
             IList<SqlParameter> parametros = new List<SqlParameter>();

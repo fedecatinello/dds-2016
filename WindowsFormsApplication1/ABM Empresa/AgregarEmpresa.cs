@@ -53,8 +53,8 @@ namespace MercadoEnvio.ABM_Empresa
             String codigoPostal = textBox_CodigoPostal.Text;
             String localidad = textBox_Localidad.Text;
 
-            // Crea una direccion y se guarda su id
-            Direccion direccion = new Direccion();
+            // Crea una contacto y se guarda su id
+            Contacto direccion = new Contacto();
             try
             {
                 direccion.SetCalle(calle);
@@ -74,7 +74,7 @@ namespace MercadoEnvio.ABM_Empresa
                 MessageBox.Show("Datos mal ingresados en: " + exception.Message);
                 return;
             }
-            // Controla que no se haya creado ya la direccion
+            // Controla que no se haya creado ya la contacto
             if (this.idDireccion == 0)
             {
                 this.idDireccion = comunicador.CrearDireccion(direccion);

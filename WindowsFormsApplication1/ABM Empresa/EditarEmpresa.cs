@@ -47,7 +47,7 @@ namespace MercadoEnvio.ABM_Empresa
 
         private void CargarDireccion(Decimal idDireccion)
         {
-            Direccion direccion = comunicador.ObtenerDireccion(idDireccion);
+            Contacto direccion = comunicador.ObtenerDireccion(idDireccion);
 
             textBox_Calle.Text = direccion.GetCalle();
             textBox_Numero.Text = direccion.GetNumero();
@@ -78,8 +78,8 @@ namespace MercadoEnvio.ABM_Empresa
 
             Boolean pudoModificar;
 
-            // Update direccion
-            Direccion direccion = new Direccion();
+            // Update contacto
+            Contacto direccion = new Contacto();
             try
             {
                 direccion.SetCalle(calle);

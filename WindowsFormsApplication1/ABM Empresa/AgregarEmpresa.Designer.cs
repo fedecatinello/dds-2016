@@ -240,7 +240,7 @@ namespace MercadoEnvio.ABM_Empresa
             this.groupBox2.Size = new System.Drawing.Size(368, 181);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Direccion";
+            this.groupBox2.Text = "Contacto";
             // 
             // label12
             // 

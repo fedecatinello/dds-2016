@@ -61,7 +61,7 @@ namespace MercadoEnvio.Objetos
                 throw new CampoVacioException("CUIT");
 
             if (!esCuit(cuit))
-                throw new FormatoInvalidoException("CUIT. Usar el siguiente formato: XX-XXXXXXXX-XX donde X es numero");
+                throw new FormatoInvalidoException("CUIT. Usar el siguiente formato: XX-XXXXXXXX-XX donde X es numeroCalle");
             this.cuit = cuit;
         }
 

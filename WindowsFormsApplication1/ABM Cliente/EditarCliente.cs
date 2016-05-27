@@ -59,7 +59,7 @@ namespace MercadoEnvio.ABM_Cliente
 
         private void CargarDireccion(Decimal idDireccion)
         {
-            Direccion direccion = comunicador.ObtenerDireccion(idDireccion);
+            Contacto direccion = comunicador.ObtenerDireccion(idDireccion);
             textBox_Calle.Text = direccion.GetCalle();
             textBox_Numero.Text = direccion.GetNumero();
             textBox_Piso.Text = direccion.GetPiso();
@@ -91,10 +91,10 @@ namespace MercadoEnvio.ABM_Cliente
 
             Decimal idTipoDeDocumento = (Decimal) comunicador.SelectFromWhere("id", "TipoDeDocumento", "nombre", tipoDeDocumento);
 
-            // Update direccion
+            // Update contacto
             try
             {
-                Direccion direccion = new Direccion();
+                Contacto direccion = new Contacto();
                 direccion.SetCalle(calle);
                 direccion.SetNumero(numero);
                 direccion.SetPiso(piso);

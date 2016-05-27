@@ -159,7 +159,7 @@ namespace MercadoEnvio
             return this.Crear(empresa);
         }
 
-        public Decimal CrearDireccion(Direccion direccion)
+        public Decimal CrearDireccion(Contacto direccion)
         {
             return this.Crear(direccion);
         }
@@ -191,11 +191,11 @@ namespace MercadoEnvio
             return (Empresa)this.Obtener(idEmpresa, clase);
         }
 
-        public Direccion ObtenerDireccion(Decimal idDireccion)
+        public Contacto ObtenerDireccion(Decimal idDireccion)
         {
-            Direccion objeto = new Direccion();
+            Contacto objeto = new Contacto();
             Type clase = objeto.GetType();
-            return (Direccion)this.Obtener(idDireccion, clase);
+            return (Contacto)this.Obtener(idDireccion, clase);
         }
 
         public Visibilidad ObtenerVisibilidad(Decimal idVisibilidad)

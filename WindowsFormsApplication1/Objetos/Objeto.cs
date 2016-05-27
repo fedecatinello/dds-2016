@@ -10,13 +10,13 @@ namespace MercadoEnvio.Objetos
         public Boolean esNumero(String numString)
         {
             long number1 = 0;
-            return long.TryParse(numString, out number1); // devuelve true si pudo convertirlo, es decir, es numero
+            return long.TryParse(numString, out number1); // devuelve true si pudo convertirlo, es decir, es numeroCalle
         }
 
         public Boolean esDouble(String numString)
         {
             Double number1 = 0;
-            return Double.TryParse(numString, out number1); // devuelve true si pudo convertirlo, es decir, es numero
+            return Double.TryParse(numString, out number1); // devuelve true si pudo convertirlo, es decir, es numeroCalle
         }
 
         public Boolean esFechaPasada(DateTime dateTime)

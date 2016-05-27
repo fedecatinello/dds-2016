@@ -47,6 +47,7 @@ namespace MercadoEnvio.Registro_de_Usuario
             String rolElegido = this.comboBoxRol.Text;
             String usuario = this.textBoxUsuario.Text;
             String contraseña = this.textBoxPass.Text;
+            String repetirContraseña = this.textBoxPass2.Text;
 
             if (usuario == "")
             {
@@ -57,6 +58,11 @@ namespace MercadoEnvio.Registro_de_Usuario
             if (contraseña == "")
             {
                 MessageBox.Show("Debe completarse el campo Contraseña");
+                return;
+            }
+            if (repetirContraseña == "")
+            {
+                MessageBox.Show("Debe completarse el campo Repetir contraseña");
                 return;
             }
 

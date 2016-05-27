@@ -9,15 +9,33 @@ using MercadoEnvio.Objetos;
 
 namespace MercadoEnvio
 {
-    class Direccion : Objeto, Comunicable
+    class Contacto : Objeto, Comunicable
     {
-        private Decimal id;
+        private int id;
+        private String mail;
+        private String telefono;
         private String calle;
-        private String numero;
+        private String numeroCalle;
         private String piso;
         private String departamento;
-        private String codigoPostal;
         private String localidad;
+        private String codigoPostal;
+        private int usr_id;
+
+
+        public void setMail(String mail)
+        {
+            if (mail == "")
+                throw new CampoVacioException("Mail");
+            this.mail = mail;
+        }
+        
+        public void setTelefono(String telefono)
+        {
+            if (telefono == "")
+                throw new CampoVacioException("Telefono");
+            this.telefono = telefono;
+        }
 
         public void SetCalle(String calle)
         {
@@ -26,15 +44,15 @@ namespace MercadoEnvio
             this.calle = calle;
         }
 
-        public void SetNumero(String numero)
+        public void SetNumero(String numeroCalle)
         {
-            if (numero == "")
+            if (numeroCalle == "")
                 throw new CampoVacioException("Numero");
 
-            if (!esNumero(numero))
+            if (!esNumero(numeroCalle))
                 throw new FormatoInvalidoException("Numero");
 
-            this.numero = numero;
+            this.numeroCalle = numeroCalle;
         }
 
         public void SetPiso(String piso)
@@ -68,7 +86,7 @@ namespace MercadoEnvio
             this.localidad = localidad;
         }
 
-        public void SetId(Decimal id)
+        public void SetId(int id)
         {
             this.id = id;
         }
@@ -80,7 +98,7 @@ namespace MercadoEnvio
 
         public String GetNumero()
         {
-            return this.numero;
+            return this.numeroCalle;
         }
 
         public String GetPiso()
@@ -112,24 +130,26 @@ namespace MercadoEnvio
 
         string Comunicable.GetQueryCrear()
         {
-            return "LOS_SUPER_AMIGOS.crear_direccion";
+            return "NET_A_CERO.crear_contacto";
         }
 
         string Comunicable.GetQueryModificar()
         {
-            return "UPDATE LOS_SUPER_AMIGOS.Direccion SET calle = @calle, numero = @numero, piso = @piso, depto = @depto, cod_postal = @cod_postal, localidad = @localidad WHERE id = @id";
+            return "UPDATE NET_A_CERO.Contacto SET mail=@mail, telefono=@telefono, calle = @calle, numeroCalle = @numeroCalle, piso = @piso, depto = @depto, cod_postal = @cod_postal, localidad = @localidad WHERE id = @id";
         }
 
         string Comunicable.GetQueryObtener()
         {
-            return "SELECT * FROM LOS_SUPER_AMIGOS.Direccion WHERE id = @id";
+            return "SELECT * FROM NET_A_CERO.Contacto WHERE id = @id";
         }
 
         IList<SqlParameter> Comunicable.GetParametros()
         {
             IList<SqlParameter> parametros = new List<SqlParameter>();
+            parametros.Add(new SqlParameter("@mail", this.mail));
+            parametros.Add(new SqlParameter("@telefono", this.telefono));
             parametros.Add(new SqlParameter("@calle", this.calle));
-            parametros.Add(new SqlParameter("@numero", this.numero));
+            parametros.Add(new SqlParameter("@numeroCalle", this.numeroCalle));
             parametros.Add(new SqlParameter("@piso", this.siEsNuloDevolverDBNull(piso)));
             parametros.Add(new SqlParameter("@depto", this.siEsNuloDevolverDBNull(departamento)));
             parametros.Add(new SqlParameter("@cod_postal", this.codigoPostal));
@@ -139,8 +159,10 @@ namespace MercadoEnvio
 
         void Comunicable.CargarInformacion(SqlDataReader reader)
         {
+            this.mail = Convert.ToString(reader["mail"]);
+            this.telefono = Convert.ToString(reader["telefono"]);
             this.calle = Convert.ToString(reader["calle"]);
-            this.numero = Convert.ToString(reader["numero"]);
+            this.numeroCalle = Convert.ToString(reader["numeroCalle"]);
             this.piso = Convert.ToString(reader["piso"]);
             this.departamento = Convert.ToString(reader["depto"]);
             this.codigoPostal = Convert.ToString(reader["cod_postal"]);

@@ -109,7 +109,7 @@ namespace MercadoEnvio.ABM_Cliente
             // 
             // monthCalendar_FechaDeNacimiento
             // 
-            this.monthCalendar_FechaDeNacimiento.Location = new System.Drawing.Point(198, 18);
+            this.monthCalendar_FechaDeNacimiento.Location = new System.Drawing.Point(135, 11);
             this.monthCalendar_FechaDeNacimiento.Name = "monthCalendar_FechaDeNacimiento";
             this.monthCalendar_FechaDeNacimiento.TabIndex = 13;
             this.monthCalendar_FechaDeNacimiento.Visible = false;
@@ -241,7 +241,7 @@ namespace MercadoEnvio.ABM_Cliente
             this.groupBox2.Size = new System.Drawing.Size(368, 181);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Direccion";
+            this.groupBox2.Text = "Contacto";
             // 
             // label13
             // 

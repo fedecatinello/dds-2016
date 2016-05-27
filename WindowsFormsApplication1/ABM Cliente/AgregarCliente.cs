@@ -38,8 +38,10 @@ namespace MercadoEnvio.ABM_Cliente
 
         private void CargarTipoDeDocumentos()
         {
-            comboBox_TipoDeDocumento.DataSource = comunicador.SelectDataTable("nombre", "LOS_SUPER_AMIGOS.TipoDeDocumento");
-            comboBox_TipoDeDocumento.ValueMember = "nombre";
+            comboBox_TipoDeDocumento.Items.Add("DNI - Documento Nacional de Identidad");
+            comboBox_TipoDeDocumento.Items.Add("Pasaporte");
+            comboBox_TipoDeDocumento.Items.Add("LC - Libreta Civica");
+            comboBox_TipoDeDocumento.Items.Add("LE - Libreta de Enrolamiento");
         }
 
         private void button_Guardar_Click(object sender, EventArgs e)
@@ -54,7 +56,7 @@ namespace MercadoEnvio.ABM_Cliente
             String mail = textBox_Mail.Text;
             String telefono = textBox_Telefono.Text;
             String calle = textBox_Calle.Text;
-            String numero = textBox_Numero.Text;
+            String numeroCalle = textBox_Numero.Text;
             String piso = textBox_Piso.Text;
             String departamento = textBox_Departamento.Text;
             String codigoPostal = textBox_CodigoPostal.Text;
@@ -62,16 +64,18 @@ namespace MercadoEnvio.ABM_Cliente
 
             Decimal idTipoDeDocumento = (Decimal) comunicador.SelectFromWhere("id", "TipoDeDocumento", "nombre", tipoDeDocumento);
 
-            // Crea una direccion y se guarda su id
-            Direccion direccion = new Direccion();
+            // Crea una contacto y se guarda su id
+            Contacto contacto = new Contacto();
             try
             {
-                direccion.SetCalle(calle);
-                direccion.SetNumero(numero);
-                direccion.SetPiso(piso);
-                direccion.SetDepartamento(departamento);
-                direccion.SetCodigoPostal(codigoPostal);
-                direccion.SetLocalidad(localidad);
+                contacto.setMail(mail);
+                contacto.setTelefono(telefono);
+                contacto.SetCalle(calle);
+                contacto.SetNumero(numeroCalle);
+                contacto.SetPiso(piso);
+                contacto.SetDepartamento(departamento);
+                contacto.SetCodigoPostal(codigoPostal);
+                contacto.SetLocalidad(localidad);
             }
             catch (CampoVacioException exception)
             {
@@ -83,10 +87,10 @@ namespace MercadoEnvio.ABM_Cliente
                 MessageBox.Show("Datos mal ingresados en: " + exception.Message);
                 return;
             }
-            // Controla que no se haya creado ya la direccion
+            // Controla que no se haya creado ya el contacto
             if (this.idDireccion == 0)
             {
-                this.idDireccion = comunicador.CrearDireccion(direccion);
+                this.idDireccion = comunicador.CrearDireccion(contacto);
             } 
 
             // Crear cliente
@@ -95,14 +99,12 @@ namespace MercadoEnvio.ABM_Cliente
                 Cliente cliente = new Cliente();
                 cliente.SetNombre(nombre);
                 cliente.SetApellido(apellido);
-                cliente.SetFechaDeNacimiento(fechaDeNacimiento);
-                cliente.SetMail(mail);
-                cliente.SetTelefono(telefono);
-                cliente.SetIdTipoDeDocumento(idTipoDeDocumento);
                 cliente.SetNumeroDeDocumento(numeroDeDocumento);
-                cliente.SetIdDireccion(idDireccion);
+                cliente.SetTipoDeDocumento(tipoDeDocumento);
+                cliente.SetFechaDeNacimiento(fechaDeNacimiento);
+                cliente.SetFechaDeAlta(Config.getInstance().getCurrentDate());
                 cliente.SetIdUsuario(idUsuario);
-                cliente.SetHabilitado(true);
+                
                 idCliente = comunicador.CrearCliente(cliente);
                 if (idCliente > 0) MessageBox.Show("Se agrego el cliente correctamente");
             }
@@ -135,23 +137,28 @@ namespace MercadoEnvio.ABM_Cliente
             // Si el cliente lo crea el admin, crea un nuevo usuario predeterminado. Si lo crea un nuevo registro de usuario, usa el que viene por parametro
             if (idUsuario == 0)
             {
-                idUsuario = CrearUsuario();
+                //idUsuario = CrearUsuario();
+                idUsuario = comunicador.CrearUsuarioConValores(username, contrasena);
                 Boolean seCreoBien = comunicador.AsignarUsuarioACliente(idCliente, idUsuario);
                 if (seCreoBien) MessageBox.Show("Se creo el usuario correctamente");
             }
 
-            if (UsuarioSesion.Usuario.rol != "Administrador")
+            /*
+             ------------- SOLO LOS ADMINISTRADORES PUEDEN CREAR USUARIOS-----------------
+             if (UsuarioSesion.Usuario.rol != "Administrador")
             {
                 UsuarioSesion.Usuario.rol = "Cliente";
                 UsuarioSesion.Usuario.nombre = username;
                 UsuarioSesion.Usuario.id = idUsuario;
             }
+             */
 
             comunicador.AsignarRolAUsuario(this.idUsuario, "Cliente");
 
             VolverAlMenuPrincial();
         }
-
+        /*
+             ------------- SOLO LOS ADMINISTRADORES PUEDEN CREAR USUARIOS-----------------
         private Decimal CrearUsuario()
         {
             if (username == "clienteCreadoPorAdmin")
@@ -163,6 +170,7 @@ namespace MercadoEnvio.ABM_Cliente
                 return comunicador.CrearUsuarioConValores(username, contrasena);
             }
         }
+         */
 
         private void button_Limpiar_Click(object sender, EventArgs e)
         {

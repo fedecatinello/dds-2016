@@ -12,14 +12,11 @@ namespace MercadoEnvio.Objetos
         private Decimal id;
         private String nombre;
         private String apellido;
-        private Decimal idTipoDeDocumento;
-        private String numeroDeDocumento;
+        private String numeroDeDocumento; 
+        private String tipoDeDocumento;
         private DateTime fechaDeNacimiento;
-        private String mail;
-        private String telefono;
-        private Decimal idDireccion;
+        private DateTime fechaDeAlta;
         private Decimal idUsuario;
-        private Boolean habilitado;
 
         public void SetId(Decimal id)
         {
@@ -55,14 +52,14 @@ namespace MercadoEnvio.Objetos
             return this.apellido;
         }
 
-        public void SetIdTipoDeDocumento(Decimal idTipoDeDocumento)
+        public void SetTipoDeDocumento(String tipoDeDocumento)
         {
-            this.idTipoDeDocumento = idTipoDeDocumento;
+            this.tipoDeDocumento = tipoDeDocumento;
         }
 
-        public Decimal GetIdTipoDeDocumento()
+        public String GetTipoDeDocumento()
         {
-            return this.idTipoDeDocumento;
+            return this.tipoDeDocumento;
         }
 
         public void SetNumeroDeDocumento(String numeroDeDocumento)
@@ -97,43 +94,14 @@ namespace MercadoEnvio.Objetos
             return this.fechaDeNacimiento;
         }
 
-        public void SetMail(String mail)
+        public void SetFechaDeAlta (DateTime fechaDeAlta)
         {
-            if (mail == "")
-                throw new CampoVacioException("Mail");
-            this.mail = mail;
+            this.fechaDeAlta = fechaDeAlta;
         }
 
-        public String GetMail()
+        public DateTime GetFechaDeAlta()
         {
-            return this.mail;
-        }
-
-        public void SetTelefono(String telefono)
-        {
-            if (telefono == "")
-                throw new CampoVacioException("Telefono");
-
-            if (!esNumero(telefono))
-                throw new FormatoInvalidoException("Telefono");
-
-            this.telefono = telefono;
-        }
-
-        public String GetTelefono()
-        {
-            return this.telefono;
-        }
-
-        public void SetIdDireccion(Decimal idDireccion)
-        {
-            this.idDireccion = idDireccion;
-        }
-
-        public Decimal GetIdDireccion()
-        {
-
-            return this.idDireccion;
+            return this.fechaDeAlta;
         }
 
         public void SetIdUsuario(Decimal idUsuario)
@@ -146,31 +114,21 @@ namespace MercadoEnvio.Objetos
             return this.idUsuario;
         }
 
-        public void SetHabilitado(Boolean habilitado)
-        {
-            this.habilitado = habilitado;
-        }
-
-        public Boolean GetHabilitado()
-        {
-            return this.habilitado;
-        }
-
         #region Miembros de Comunicable
 
         string Comunicable.GetQueryCrear()
         {
-            return "LOS_SUPER_AMIGOS.crear_cliente";
+            return "NET_A_CERO.crear_cliente";
         }
 
         string Comunicable.GetQueryModificar()
         {
-            return "UPDATE LOS_SUPER_AMIGOS.Cliente SET nombre = @nombre, apellido = @apellido, tipo_de_documento_id = @tipo_de_documento_id, documento = @documento, fecha_nacimiento = @fecha_nacimiento, mail = @mail, telefono = @telefono, habilitado = @habilitado WHERE id = @id";
+            return "UPDATE NET_A_CERO.Cliente SET nombre = @nombre, apellido = @apellido, documento = @documento, tipo_de_documento = @tipo_de_documento, fecha_nacimiento = @fecha_nacimiento, fecha_Alta = @fecha_Alta WHERE id = @id";
         }
 
         string Comunicable.GetQueryObtener()
         {
-            return "SELECT * FROM LOS_SUPER_AMIGOS.Cliente WHERE id = @id";
+            return "SELECT * FROM NET_A_CERO.Cliente WHERE id = @id";
         }
 
         IList<System.Data.SqlClient.SqlParameter> Comunicable.GetParametros()
@@ -179,13 +137,10 @@ namespace MercadoEnvio.Objetos
             parametros.Clear();
             parametros.Add(new SqlParameter("@nombre", this.nombre));
             parametros.Add(new SqlParameter("@apellido", this.apellido));
-            parametros.Add(new SqlParameter("@tipo_de_documento_id", this.idTipoDeDocumento));
             parametros.Add(new SqlParameter("@documento", this.numeroDeDocumento));
+            parametros.Add(new SqlParameter("@tipo_de_documento", this.tipoDeDocumento));
             parametros.Add(new SqlParameter("@fecha_nacimiento", this.fechaDeNacimiento));
-            parametros.Add(new SqlParameter("@mail", this.mail));
-            parametros.Add(new SqlParameter("@telefono", this.telefono));
-            parametros.Add(new SqlParameter("@direccion_id", this.idDireccion));
-            parametros.Add(new SqlParameter("@habilitado", this.habilitado));
+            parametros.Add(new SqlParameter("@fecha_alta", this.fechaDeAlta));
             return parametros;
         }
 
@@ -193,12 +148,9 @@ namespace MercadoEnvio.Objetos
         {
             this.nombre = Convert.ToString(reader["nombre"]);
             this.apellido = Convert.ToString(reader["apellido"]);
-            this.fechaDeNacimiento = Convert.ToDateTime(reader["fecha_nacimiento"]);
-            this.mail = Convert.ToString(reader["mail"]);
-            this.telefono = Convert.ToString(reader["telefono"]);
-            this.idTipoDeDocumento = Convert.ToDecimal(reader["tipo_de_documento_id"]);
             this.numeroDeDocumento = Convert.ToString(reader["documento"]);
-            this.idDireccion = Convert.ToDecimal(reader["direccion_id"]);
+            this.tipoDeDocumento = Convert.ToString(reader["tipo_de_documento"]);
+            this.fechaDeNacimiento = Convert.ToDateTime(reader["fecha_nacimiento"]);
             this.idUsuario = Convert.ToDecimal(reader["usuario_id"]);
         }
 

@@ -81,11 +81,11 @@ namespace MercadoEnvio.Comprar_Ofertar
             parametros.Clear();
             parametros.Add(new SqlParameter("@usuario", vendedorId));
 
-            String queryDireccion = "SELECT * FROM LOS_SUPER_AMIGOS.Direccion WHERE id = @usuario";
+            String queryDireccion = "SELECT * FROM LOS_SUPER_AMIGOS.Contacto WHERE id = @usuario";
             SqlDataReader readerDireccion = QueryBuilder.Instance.build(queryDireccion, parametros).ExecuteReader();
             readerDireccion.Read();
 
-            labelCalle.Text = (String)readerDireccion["calle"] + " " + (Decimal)readerDireccion["numero"];
+            labelCalle.Text = (String)readerDireccion["calle"] + " " + (Decimal)readerDireccion["numeroCalle"];
             labelDepartamento.Text = "Departamento " + (Decimal)readerDireccion["piso"] + "-" + (String)readerDireccion["depto"];
             labelPostal.Text = ((String)readerDireccion["cod_postal"]).ToString();
             if ((String)readerDireccion["localidad"] == "localidadMigrada")
