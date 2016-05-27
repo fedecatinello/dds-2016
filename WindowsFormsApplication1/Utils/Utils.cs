@@ -33,7 +33,11 @@ namespace MercadoEnvio.Common
         /// <param name="entidad">Name of the table</param>
         /// <param name="atributo">Name of the field to select</param>
         /// <param name="comboBox">Name of the combo box to insert the results</param>
-        public void loadComboBox(String entity, String attribute, ComboBox comboBox)
+        /// 
+        
+        /*-------------Comento LoadComboBox, no se usa------------------------*/
+        /*
+         public void loadComboBox(String entity, String attribute, ComboBox comboBox)
         {       
             String queryCombo = "SELECT DISTINCT " + attribute + 
                                 " FROM " + ConnectionManager.Instance.getSchema() + " ." + entity + " AS " + entity;
@@ -47,13 +51,16 @@ namespace MercadoEnvio.Common
             
             QueryHelper.Instance.closeReader();
         }
-
+        */
 
         /// <summary>Load the combobox executing a query with the given parameters, using a where statement</summary>
         /// <param name="entidad">Name of the table</param>
         /// <param name="atributo">Name of the field to select</param>
         /// <param name="comboBox">Name of the combo box to insert the results</param>
         /// <param name="where">Condition to include in the query</param>
+        /// 
+        /*-------------Comento cargarComboBoxWhere, no se usa------------------------*/
+        /*
         public void cargarComboBoxWhere(String entity, String attribute, ComboBox comboBox, String whereCondition)
         {
             String queryCombo = "SELECT DISTINCT " + attribute + 
@@ -69,12 +76,15 @@ namespace MercadoEnvio.Common
 
             QueryHelper.Instance.closeReader();
         }
-
+        */
 
         /// <summary>Load the combobox executing a query with the given parameters, using the order by statement</summary>
         /// <param name="entidad">Name of the table</param>
         /// <param name="atributo">Name of the field to select</param>
         /// <param name="comboBox">Name of the combo box to insert the results</param>
+        /// 
+        /*-------------Comento cargarComboBoxOrderBy, no se usa------------------------*/
+        /*
         public void cargarComboBoxOrderBy(String entity, String attribute, ComboBox comboBox)
         {         
             String queryCombo = "SELECT DISTINCT " + attribute + 
@@ -90,12 +100,16 @@ namespace MercadoEnvio.Common
 
             QueryHelper.Instance.closeReader();
         }
+        */
 
 
         /// <summary>Select an ID from a table of a specific attribute</summary>
         /// <param name="function">The SQL function to execute</param>
         /// <param name="atributo">Name of the field to get the ID</param>
         /// <returns>The id of the given field in the table<returns>
+        /// 
+        /*-------------Comento getIDFrom, no se usa------------------------*/
+        /*
         public int getIDFrom(String function, String attribute)
         {
             String query = "SELECT " + ConnectionManager.Instance.getSchema() + "." + function + "('%" + attribute + "%') AS id";
@@ -110,6 +124,7 @@ namespace MercadoEnvio.Common
             
             return id;
         }
+        */
 
 
         /// <summary>Get the selected row in a DataGridView</summary>
