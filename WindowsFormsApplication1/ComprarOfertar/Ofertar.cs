@@ -51,7 +51,8 @@ namespace MercadoEnvio.Comprar_Ofertar
             if (Convert.ToInt32(this.textBoxMonto.Text) > ofertaMax)
             {
                 String sql = "INSERT INTO LOS_SUPER_AMIGOS.Oferta(monto, fecha, usuario_id, publicacion_id) VALUES (@monto, @fecha, @usuario, @publicacion)";
-                DateTime fecha = Convert.ToDateTime(System.Configuration.ConfigurationManager.AppSettings["DateKey"]);
+                //DateTime fecha = Convert.ToDateTime(System.Configuration.ConfigurationManager.AppSettings["DateKey"]);
+                DateTime fecha = Config.getInstance().getCurrentDate();
                 parametros.Clear();
                 parametros.Add(new SqlParameter("@monto", this.textBoxMonto.Text));
                 parametros.Add(new SqlParameter("@fecha", fecha));

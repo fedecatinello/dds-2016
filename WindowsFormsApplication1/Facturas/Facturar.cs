@@ -144,7 +144,8 @@ namespace MercadoEnvio.Facturar_Publicaciones
             String creoFactura = "insert LOS_SUPER_AMIGOS.Factura"
                                 + "(fecha) values(@fecha)";
             parametros.Clear();
-            parametros.Add(new SqlParameter("@fecha", Convert.ToDateTime(System.Configuration.ConfigurationManager.AppSettings["DateKey"])));
+            //parametros.Add(new SqlParameter("@fecha", Convert.ToDateTime(System.Configuration.ConfigurationManager.AppSettings["DateKey"]))); TP ANTERIOR
+            parametros.Add(new SqlParameter("@fecha", Config.getInstance().getCurrentDate()));
             QueryBuilder.Instance.build(creoFactura, parametros).ExecuteNonQuery();
 
             // Obtengo el id de la nueva factura
