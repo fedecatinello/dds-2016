@@ -44,7 +44,7 @@ namespace MercadoEnvio
             this.calle = calle;
         }
 
-        public void SetNumero(String numeroCalle)
+        public void SetNumeroCalle(String numeroCalle)
         {
             if (numeroCalle == "")
                 throw new CampoVacioException("Numero");
@@ -86,9 +86,18 @@ namespace MercadoEnvio
             this.localidad = localidad;
         }
 
-        public void SetId(int id)
+        public int GetId()
         {
-            this.id = id;
+            return this.id;
+        }
+        public String GetMail()
+        {
+            return this.mail;
+        }
+
+        public String GetTelefono()
+        {
+            return this.telefono;
         }
 
         public String GetCalle()
@@ -96,7 +105,7 @@ namespace MercadoEnvio
             return this.calle;
         }
 
-        public String GetNumero()
+        public String GetNumeroCalle()
         {
             return this.numeroCalle;
         }
@@ -120,11 +129,11 @@ namespace MercadoEnvio
         {
             return this.localidad;
         }
-
-        public Decimal GetId()
+        public int GetUsr_id()
         {
-            return this.id;
+            return this.usr_id;
         }
+      
 
         #region Miembros de Comunicable
 

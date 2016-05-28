@@ -36,7 +36,7 @@ namespace MercadoEnvio.ABM_Cliente
             CargarTipoDeDocumentos();
         }
 
-        private void CargarTipoDeDocumentos()
+        public void CargarTipoDeDocumentos()
         {
             comboBox_TipoDeDocumento.Items.Add("DNI - Documento Nacional de Identidad");
             comboBox_TipoDeDocumento.Items.Add("Pasaporte");

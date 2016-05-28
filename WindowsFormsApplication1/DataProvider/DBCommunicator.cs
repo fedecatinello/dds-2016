@@ -191,11 +191,11 @@ namespace MercadoEnvio
             return (Empresa)this.Obtener(idEmpresa, clase);
         }
 
-        public Contacto ObtenerDireccion(Decimal idDireccion)
+        public Contacto ObtenerContacto(Decimal idContacto)
         {
             Contacto objeto = new Contacto();
             Type clase = objeto.GetType();
-            return (Contacto)this.Obtener(idDireccion, clase);
+            return (Contacto)this.Obtener(idContacto, clase);
         }
 
         public Visibilidad ObtenerVisibilidad(Decimal idVisibilidad)

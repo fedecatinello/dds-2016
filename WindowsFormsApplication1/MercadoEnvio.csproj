@@ -308,7 +308,7 @@
     <Compile Include="Utils\Utils.cs" />
     <Compile Include="Objetos\Empresa.cs" />
     <Compile Include="Objetos\Publicacion.cs" />
-    <Compile Include="Objetos\Usuario.cs" />
+    <Compile Include="Objetos\Usuarios.cs" />
     <Compile Include="Objetos\Visibilidad.cs" />
     <Compile Include="Objetos\Objeto.cs" />
     <Compile Include="Objetos\Cliente.cs" />

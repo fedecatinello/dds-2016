@@ -9,13 +9,14 @@ using System.Windows.Forms;
 using System.Data.SqlClient;
 using MercadoEnvio.Objetos;
 using MercadoEnvio.Exceptions;
+using MercadoEnvio.ABM_Cliente;
 
 namespace MercadoEnvio.ABM_Cliente
 {
     public partial class EditarCliente : Form
     {
         private Decimal idCliente;
-        private Decimal idDireccion;
+        private Decimal idContacto;
         private DBCommunicator comunicador = new DBCommunicator();
 
         public EditarCliente(String idCliente)
@@ -30,43 +31,54 @@ namespace MercadoEnvio.ABM_Cliente
             CargarDatos();
         }
 
-        private void CargarTipoDeDocumentos()
+        private void CargarTipoDeDocumentos() //Chequear como hacer para que se sincronice con el de agregarCliente
         {
-            comboBox_TipoDeDocumento.DataSource = comunicador.SelectDataTable("nombre", "LOS_SUPER_AMIGOS.TipoDeDocumento");
-            comboBox_TipoDeDocumento.ValueMember = "nombre";
+            comboBox_TipoDeDocumento.Items.Add("DNI - Documento Nacional de Identidad");
+            comboBox_TipoDeDocumento.Items.Add("Pasaporte");
+            comboBox_TipoDeDocumento.Items.Add("LC - Libreta Civica");
+            comboBox_TipoDeDocumento.Items.Add("LE - Libreta de Enrolamiento");
         }
 
         private void CargarDatos()
         {
             Cliente cliente = comunicador.ObtenerCliente(idCliente);
+            Contacto contacto = comunicador.ObtenerContacto(idContacto);
 
-            this.idDireccion = cliente.GetIdDireccion();
             textBox_Nombre.Text = cliente.GetNombre();
             textBox_Apellido.Text = cliente.GetApellido();
             textBox_NumeroDeDoc.Text = cliente.GetNumeroDeDocumento();
+            comboBox_TipoDeDocumento.Text = cliente.GetTipoDeDocumento();
             textBox_FechaDeNacimiento.Text = Convert.ToString(cliente.GetFechaDeNacimiento());
-            textBox_Mail.Text = cliente.GetMail();
-            textBox_Telefono.Text = cliente.GetTelefono();
-            CargarDireccion(idDireccion);
-            CargarTipoDeDocumento(cliente.GetIdTipoDeDocumento());
-            checkBox_Habilitado.Checked = Convert.ToBoolean(comunicador.SelectFromWhere("habilitado", "Cliente", "id", idCliente));
+            textBox_Mail.Text = contacto.GetMail();
+            textBox_Telefono.Text = contacto.GetTelefono();
+            textBox_Calle.Text = contacto.GetCalle();
+            textBox_Numero.Text = contacto.GetNumeroCalle();
+            textBox_Piso.Text = contacto.GetPiso();
+            textBox_Departamento.Text = contacto.GetDepartamento();
+            textBox_Localidad.Text = contacto.GetLocalidad();
+            textBox_CodigoPostal.Text = contacto.GetCodigoPostal();
+
+            checkBox_Habilitado.Checked = Convert.ToBoolean(comunicador.SelectFromWhere("usr_activo", "Usuarios", "id", idCliente));
         }
 
-        private void CargarTipoDeDocumento(Decimal idTipoDeDocumento)
+/*-------------------NO SE USA PORQUE LO IMPLEMENTAMOS DE OTRA MANERA------------------------------*/
+
+/*      private void CargarTipoDeDocumento(Decimal idTipoDeDocumento)
         {
             comboBox_TipoDeDocumento.SelectedValue = (String) comunicador.SelectFromWhere("nombre", "TipoDeDocumento", "id", idTipoDeDocumento);
         }
 
         private void CargarDireccion(Decimal idDireccion)
         {
-            Contacto direccion = comunicador.ObtenerDireccion(idDireccion);
-            textBox_Calle.Text = direccion.GetCalle();
-            textBox_Numero.Text = direccion.GetNumero();
-            textBox_Piso.Text = direccion.GetPiso();
-            textBox_Departamento.Text = direccion.GetDepartamento();
-            textBox_CodigoPostal.Text = direccion.GetCodigoPostal();
-            textBox_Localidad.Text = direccion.GetLocalidad();
+            Contacto contacto = comunicador.ObtenerDireccion(idDireccion);
+            textBox_Calle.Text = contacto.GetCalle();
+            textBox_Numero.Text = contacto.GetNumero();
+            textBox_Piso.Text = contacto.GetPiso();
+            textBox_Departamento.Text = contacto.GetDepartamento();
+            textBox_CodigoPostal.Text = contacto.GetCodigoPostal();
+            textBox_Localidad.Text = contacto.GetLocalidad();
         }
+        */
 
         private void button_Guardar_Click(object sender, EventArgs e)
         {
@@ -80,28 +92,28 @@ namespace MercadoEnvio.ABM_Cliente
             String mail = textBox_Mail.Text;
             String telefono = textBox_Telefono.Text;
             String calle = textBox_Calle.Text;
-            String numero = textBox_Numero.Text;
+            String numeroCalle = textBox_Numero.Text;
             String piso = textBox_Piso.Text;
             String departamento = textBox_Departamento.Text;
             String codigoPostal = textBox_CodigoPostal.Text;
             String localidad = textBox_Localidad.Text;
-            Boolean habilitado = checkBox_Habilitado.Checked;
+            Boolean activo = checkBox_Habilitado.Checked;
 
             Boolean pudoModificar;
-
-            Decimal idTipoDeDocumento = (Decimal) comunicador.SelectFromWhere("id", "TipoDeDocumento", "nombre", tipoDeDocumento);
 
             // Update contacto
             try
             {
-                Contacto direccion = new Contacto();
-                direccion.SetCalle(calle);
-                direccion.SetNumero(numero);
-                direccion.SetPiso(piso);
-                direccion.SetDepartamento(departamento);
-                direccion.SetCodigoPostal(codigoPostal);
-                direccion.SetLocalidad(localidad);
-                comunicador.Modificar(idDireccion, direccion);
+                Contacto contacto = new Contacto();
+                contacto.setMail(mail);
+                contacto.setTelefono(telefono);
+                contacto.SetCalle(calle);
+                contacto.SetNumeroCalle(numeroCalle);
+                contacto.SetPiso(piso);
+                contacto.SetDepartamento(departamento);
+                contacto.SetCodigoPostal(codigoPostal);
+                contacto.SetLocalidad(localidad);
+                comunicador.Modificar(idContacto, contacto);
             }
             catch (CampoVacioException exception)
             {
@@ -118,15 +130,15 @@ namespace MercadoEnvio.ABM_Cliente
             try
             {
                 Cliente cliente = new Cliente();
+                Usuarios usuario = new Usuarios();
+
                 cliente.SetNombre(nombre);
                 cliente.SetApellido(apellido);
-                cliente.SetFechaDeNacimiento(fechaDeNacimiento);
-                cliente.SetMail(mail);
-                cliente.SetTelefono(telefono);
-                cliente.SetIdTipoDeDocumento(idTipoDeDocumento);
                 cliente.SetNumeroDeDocumento(numeroDeDocumento);
-                cliente.SetIdDireccion(idDireccion);
-                cliente.SetHabilitado(habilitado);
+                cliente.SetTipoDeDocumento(tipoDeDocumento);
+                cliente.SetFechaDeNacimiento(fechaDeNacimiento);
+                usuario.SetActivo(activo);
+
                 pudoModificar = comunicador.Modificar(idCliente, cliente);
                 if (pudoModificar) MessageBox.Show("El cliente se modifico correctamente");
             }

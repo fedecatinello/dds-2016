@@ -5,11 +5,12 @@ using System.Text;
 
 namespace MercadoEnvio.Objetos
 {
-    class Usuario
+    class Usuarios
     {
         private Decimal id;
         private String username;
         private String password;
+        private Boolean activo;
 
         public void SetId(Decimal id)
         {
@@ -40,5 +41,16 @@ namespace MercadoEnvio.Objetos
         {
             return this.password;
         }
+
+        public void SetActivo(Boolean activo)
+        {
+            this.activo = activo;
+        }
+
+        public Boolean GetActivo()
+        {
+            return this.activo;
+        }
+
     }
 }
