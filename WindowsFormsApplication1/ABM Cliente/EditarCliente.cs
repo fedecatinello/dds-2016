@@ -17,6 +17,7 @@ namespace MercadoEnvio.ABM_Cliente
     {
         private Decimal idCliente;
         private Decimal idContacto;
+        private Decimal idUsuario;
         private DBCommunicator comunicador = new DBCommunicator();
 
         public EditarCliente(String idCliente)
@@ -43,6 +44,7 @@ namespace MercadoEnvio.ABM_Cliente
         {
             Clientes cliente = comunicador.ObtenerCliente(idCliente);
             Contacto contacto = comunicador.ObtenerContacto(idContacto);
+            Usuarios usuario = comunicador.ObtenerUsuario(idUsuario);
 
             textBox_Nombre.Text = cliente.GetNombre();
             textBox_Apellido.Text = cliente.GetApellido();
@@ -105,6 +107,8 @@ namespace MercadoEnvio.ABM_Cliente
             try
             {
                 Contacto contacto = new Contacto();
+                Usuarios usuario = new Usuarios();
+
                 contacto.setMail(mail);
                 contacto.setTelefono(telefono);
                 contacto.SetCalle(calle);
@@ -113,7 +117,9 @@ namespace MercadoEnvio.ABM_Cliente
                 contacto.SetDepartamento(departamento);
                 contacto.SetCodigoPostal(codigoPostal);
                 contacto.SetLocalidad(localidad);
+                usuario.SetActivo(activo);
                 comunicador.Modificar(idContacto, contacto);
+
             }
             catch (CampoVacioException exception)
             {

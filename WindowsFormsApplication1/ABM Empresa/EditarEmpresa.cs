@@ -15,13 +15,13 @@ namespace MercadoEnvio.ABM_Empresa
     public partial class EditarEmpresa : Form
     {
         private Decimal idEmpresa;
-        private Decimal idDireccion;
+        private Decimal idContacto;
+        private Decimal idUsuario;
         private DBCommunicator comunicador = new DBCommunicator();
 
         public EditarEmpresa(String idEmpresa)
         {
             InitializeComponent();
-            this.idEmpresa = Convert.ToDecimal(idEmpresa);
         }
 
         private void EditarEmpresa_Load(object sender, EventArgs e)
@@ -32,64 +32,61 @@ namespace MercadoEnvio.ABM_Empresa
         private void CargarDatos()
         {
             Empresas empresa = comunicador.ObtenerEmpresa(idEmpresa);
+            Contacto contacto = comunicador.ObtenerContacto(idContacto);
+            Usuarios usuario = comunicador.ObtenerUsuario(idUsuario);
 
-            this.idDireccion = empresa.GetIdDireccion();
             textBox_RazonSocial.Text = empresa.GetRazonSocial();
-            textBox_NombreDeContacto.Text = empresa.GetNombreDeContacto();
-            textBox_CUIT.Text = empresa.GetCuit();
-            textBox_FechaDeCreacion.Text = Convert.ToString(empresa.GetFechaDeCreacion());
-            textBox_Mail.Text = empresa.GetMail();
-            textBox_Telefono.Text = empresa.GetTelefono();
             textBox_Ciudad.Text = empresa.GetCiudad();
-            CargarDireccion(idDireccion);
-            checkBox_Habilitado.Checked = Convert.ToBoolean(comunicador.SelectFromWhere("habilitado", "Empresa", "id", idEmpresa));
-        }
-
-        private void CargarDireccion(Decimal idDireccion)
-        {
-            Contacto direccion = comunicador.ObtenerDireccion(idDireccion);
-
-            textBox_Calle.Text = direccion.GetCalle();
-            textBox_Numero.Text = direccion.GetNumero();
-            textBox_Piso.Text = direccion.GetPiso();
-            textBox_Departamento.Text = direccion.GetDepartamento();
-            textBox_CodigoPostal.Text = direccion.GetCodigoPostal();
-            textBox_Localidad.Text = direccion.GetLocalidad();
-                   
+            textBox_CUIT.Text = empresa.GetCuit();
+            textBox_NombreDeContacto.Text = empresa.GetNombreDeContacto();
+            textBox_Rubro.Text = empresa.GetRubro();
+            textBox_FechaDeCreacion.Text = Convert.ToString(empresa.GetFechaDeCreacion());
+            textBox_Mail.Text = contacto.GetMail();
+            textBox_Telefono.Text = contacto.GetTelefono();
+            checkBox_Habilitado.Checked = Convert.ToBoolean(comunicador.SelectFromWhere("usr_activo", "Usuarios", "id", idEmpresa));
+            textBox_Calle.Text = contacto.GetCalle();
+            textBox_Numero.Text = contacto.GetNumeroCalle();
+            textBox_Piso.Text = contacto.GetPiso();
+            textBox_Departamento.Text = contacto.GetDepartamento();
+            textBox_Localidad.Text = contacto.GetLocalidad();
+            textBox_CodigoPostal.Text = contacto.GetCodigoPostal();
+                              
             }
 
         private void button_Guardar_Click(object sender, EventArgs e)
         {
             // Guarda en variables todos los campos de entrada
             String razonSocial = textBox_RazonSocial.Text;
-            String nombreDeContacto = textBox_NombreDeContacto.Text;
+            String ciudad = textBox_Ciudad.Text;
             String cuit = textBox_CUIT.Text;
+            String nombreDeContacto = textBox_NombreDeContacto.Text;
+            String rubro = textBox_Rubro.Text;
             DateTime fechaDeCreacion;
             DateTime.TryParse(textBox_FechaDeCreacion.Text, out fechaDeCreacion);
             String mail = textBox_Mail.Text;
             String telefono = textBox_Telefono.Text;
-            String ciudad = textBox_Ciudad.Text;
             String calle = textBox_Calle.Text;
             String numero = textBox_Numero.Text;
             String piso = textBox_Piso.Text;
             String departamento = textBox_Departamento.Text;
-            String codigoPostal = textBox_CodigoPostal.Text;
             String localidad = textBox_Localidad.Text;
-            Boolean habilitado = checkBox_Habilitado.Checked;
-
+            String codigoPostal = textBox_CodigoPostal.Text;
+            Boolean activo = checkBox_Habilitado.Checked;
             Boolean pudoModificar;
 
             // Update contacto
-            Contacto direccion = new Contacto();
+            Contacto contacto = new Contacto();
             try
             {
-                direccion.SetCalle(calle);
-                direccion.SetNumeroCalle(numero);
-                direccion.SetPiso(piso);
-                direccion.SetDepartamento(departamento);
-                direccion.SetCodigoPostal(codigoPostal);
-                direccion.SetLocalidad(localidad);
-                comunicador.Modificar(idDireccion, direccion);
+                contacto.setMail(mail);
+                contacto.setTelefono(telefono);
+                contacto.SetCalle(calle);
+                contacto.SetNumeroCalle(numero);
+                contacto.SetPiso(piso);
+                contacto.SetDepartamento(departamento);
+                contacto.SetLocalidad(localidad);
+                contacto.SetCodigoPostal(codigoPostal);
+                comunicador.Modificar(idContacto, contacto);
             }
             catch (CampoVacioException exception)
             {
@@ -106,14 +103,15 @@ namespace MercadoEnvio.ABM_Empresa
             try
             {
                 Empresas empresa = new Empresas();
+                Usuarios usuario = new Usuarios();
+
                 empresa.SetRazonSocial(razonSocial);
-                empresa.SetNombreDeContacto(nombreDeContacto);
-                empresa.SetCuit(cuit);
-                empresa.SetFechaDeCreacion(fechaDeCreacion);
-                empresa.SetMail(mail);
-                empresa.SetTelefono(telefono);
                 empresa.SetCiudad(ciudad);
-                empresa.SetHabilitado(habilitado);
+                empresa.SetCuit(cuit);
+                empresa.SetNombreDeContacto(nombreDeContacto);
+                empresa.SetRubro(rubro);
+                empresa.SetFechaDeCreacion(fechaDeCreacion);
+                usuario.SetActivo(activo);
                 pudoModificar = comunicador.Modificar(idEmpresa, empresa);
                 if (pudoModificar) MessageBox.Show("La empresa se modifico correctamente");
             }

@@ -30,7 +30,6 @@ namespace MercadoEnvio.ABM_Cliente
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label11 = new System.Windows.Forms.Label();
-            this.comboBox_TipoDeDocumento = new System.Windows.Forms.ComboBox();
             this.monthCalendar_FechaDeNacimiento = new System.Windows.Forms.MonthCalendar();
             this.label4 = new System.Windows.Forms.Label();
             this.button_FechaDeNacimiento = new System.Windows.Forms.Button();
@@ -41,6 +40,7 @@ namespace MercadoEnvio.ABM_Cliente
             this.label2 = new System.Windows.Forms.Label();
             this.textBox_Nombre = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.comboBox_TipoDeDocumento = new System.Windows.Forms.ComboBox();
             this.label12 = new System.Windows.Forms.Label();
             this.textBox_Telefono = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -68,8 +68,8 @@ namespace MercadoEnvio.ABM_Cliente
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.label11);
             this.groupBox1.Controls.Add(this.monthCalendar_FechaDeNacimiento);
+            this.groupBox1.Controls.Add(this.label11);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.button_FechaDeNacimiento);
             this.groupBox1.Controls.Add(this.textBox_FechaDeNacimiento);
@@ -90,23 +90,15 @@ namespace MercadoEnvio.ABM_Cliente
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(6, 100);
+            this.label11.Location = new System.Drawing.Point(5, 100);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(99, 13);
             this.label11.TabIndex = 12;
             this.label11.Text = "Tipo de documento";
             // 
-            // comboBox_TipoDeDocumento
-            // 
-            this.comboBox_TipoDeDocumento.FormattingEnabled = true;
-            this.comboBox_TipoDeDocumento.Location = new System.Drawing.Point(112, 97);
-            this.comboBox_TipoDeDocumento.Name = "comboBox_TipoDeDocumento";
-            this.comboBox_TipoDeDocumento.Size = new System.Drawing.Size(250, 21);
-            this.comboBox_TipoDeDocumento.TabIndex = 11;
-            // 
             // monthCalendar_FechaDeNacimiento
             // 
-            this.monthCalendar_FechaDeNacimiento.Location = new System.Drawing.Point(135, 14);
+            this.monthCalendar_FechaDeNacimiento.Location = new System.Drawing.Point(135, 6);
             this.monthCalendar_FechaDeNacimiento.Name = "monthCalendar_FechaDeNacimiento";
             this.monthCalendar_FechaDeNacimiento.TabIndex = 13;
             this.monthCalendar_FechaDeNacimiento.Visible = false;
@@ -185,6 +177,14 @@ namespace MercadoEnvio.ABM_Cliente
             this.label1.Size = new System.Drawing.Size(44, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Nombre";
+            // 
+            // comboBox_TipoDeDocumento
+            // 
+            this.comboBox_TipoDeDocumento.FormattingEnabled = true;
+            this.comboBox_TipoDeDocumento.Location = new System.Drawing.Point(112, 97);
+            this.comboBox_TipoDeDocumento.Name = "comboBox_TipoDeDocumento";
+            this.comboBox_TipoDeDocumento.Size = new System.Drawing.Size(250, 21);
+            this.comboBox_TipoDeDocumento.TabIndex = 11;
             // 
             // label12
             // 

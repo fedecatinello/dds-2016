@@ -136,13 +136,12 @@ namespace MercadoEnvio
 
         public Decimal CrearCliente(Clientes cliente)
         {
-            if (!pasoControlDeRegistro(cliente.GetIdTipoDeDocumento(), cliente.GetNumeroDeDocumento()))
+            
+            if (!pasoControlDeRegistro(cliente.GetTipoDeDocumento(), cliente.GetNumeroDeDocumento()))
                 throw new ClienteYaExisteException();
 
-            if (!pasoControlDeUnicidad(cliente.GetTelefono(), "telefono", "Clientes"))
-                throw new TelefonoYaExisteException();
-
             return this.Crear(cliente);
+             
         }
 
         public Decimal CrearEmpresa(Empresas empresa)
@@ -150,8 +149,8 @@ namespace MercadoEnvio
             if (!pasoControlDeRegistroDeCuit(empresa.GetCuit()))
                 throw new CuitYaExisteException();
 
-            if (!pasoControlDeUnicidad(empresa.GetTelefono(), "telefono", "Empresa"))
-                throw new TelefonoYaExisteException();
+            //if (!pasoControlDeUnicidad(empresa.GetTelefono(), "telefono", "Empresa"))
+            //    throw new TelefonoYaExisteException();
 
             if (!pasoControlDeRegistroDeRazonSocial(empresa.GetRazonSocial()))
                 throw new RazonSocialYaExisteException();
@@ -159,9 +158,9 @@ namespace MercadoEnvio
             return this.Crear(empresa);
         }
 
-        public Decimal CrearDireccion(Contacto direccion)
+        public Decimal CrearDireccion(Contacto contacto)
         {
-            return this.Crear(direccion);
+            return this.Crear(contacto);
         }
 
         public Decimal CrearPublicacion(Publicacion publicacion)
@@ -177,6 +176,13 @@ namespace MercadoEnvio
             return this.Crear(visibilidad);
         }
 
+        public Usuarios ObtenerUsuario(Decimal idUsuario)
+        {
+            Usuarios objeto = new Usuarios();
+            Type clase = objeto.GetType();
+            return (Usuarios)this.Obtener(idUsuario, clase);
+        }
+
         public Clientes ObtenerCliente(Decimal idCliente)
         {
             Clientes objeto = new Clientes();
@@ -190,6 +196,7 @@ namespace MercadoEnvio
             Type clase = objeto.GetType();
             return (Empresas)this.Obtener(idEmpresa, clase);
         }
+
 
         public Contacto ObtenerContacto(Decimal idContacto)
         {
@@ -337,7 +344,7 @@ namespace MercadoEnvio
             return ControlDeUnicidad(query, parametros);
         }
 
-        private bool pasoControlDeRegistro(Decimal tipoDeDocumento, String numeroDeDocumento)
+        private bool pasoControlDeRegistro(String tipoDeDocumento, String numeroDeDocumento)
         {
             query = "SELECT COUNT(*) FROM NET_A_CERO.Clientes WHERE cli_tipo_dni = @tipoDeDocumento AND cli_dni = @numeroDeDocumento";
             parametros.Clear();
