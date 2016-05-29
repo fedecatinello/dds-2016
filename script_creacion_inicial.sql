@@ -20,14 +20,23 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'NET_A_CERO.Of
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'NET_A_CERO.Compras'))
     DROP TABLE NET_A_CERO.Compras
     
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'NET_A_CERO.Calificacion'))
+    DROP TABLE NET_A_CERO.Calificacion
+    
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'NET_A_CERO.Publicaciones'))
     DROP TABLE NET_A_CERO.Publicaciones
+    
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'NET_A_CERO.Estado'))
+    DROP TABLE NET_A_CERO.Estado
 
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'NET_A_CERO.Visibilidad'))
     DROP TABLE NET_A_CERO.Visibilidad
 
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'NET_A_CERO.Rubros'))
     DROP TABLE NET_A_CERO.Rubros
+    
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'NET_A_CERO.Rubro_x_Publicacion'))
+    DROP TABLE NET_A_CERO.Rubro_x_Publicacion
 
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'NET_A_CERO.Clientes'))
     DROP TABLE NET_A_CERO.Clientes
@@ -52,6 +61,9 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'NET_A_CERO.Us
 
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'NET_A_CERO.Roles'))
     DROP TABLE NET_A_CERO.Roles
+    
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'NET_A_CERO.Preguntas'))
+    DROP TABLE NET_A_CERO.Preguntas
 
 
 -- Creo tablas del sistema
@@ -96,7 +108,7 @@ CREATE TABLE [NET_A_CERO].[Empresas] (
     [emp_ciudad] [nvarchar](50),
     [emp_cuit] [nvarchar](50) UNIQUE NOT NULL,
     [emp_nombre_contacto] [nvarchar](255) default 'Nombre Contacto',        -- No existe en la maestra
-    [emp_rubro] [nvarchar](50),                                             
+    [emp_rubro] INT,                                             
     [emp_fecha_alta] [datetime],
     [emp_usr_id] INT
 )
@@ -105,22 +117,22 @@ CREATE TABLE [NET_A_CERO].[Publicaciones] (
     [publi_id] [NUMERIC](18, 0) IDENTITY(1, 1) PRIMARY KEY,
     [publi_tipo] [nvarchar](255) NOT NULL,          
     [publi_descripcion] [nvarchar](255) NOT NULL,
-    [publi_estado] [nvarchar](255) NOT NULL,        
     [publi_stock] [NUMERIC](18, 0) NOT NULL,
     [publi_fec_vencimiento] [datetime],
     [publi_fec_inicio] [datetime] NOT NULL,
     [publi_precio] [NUMERIC](18, 2) NOT NULL,
-    [publi_costo] [NUMERIC](18, 2),                                 -- No existe en la maestra
+    --[publi_costo] [NUMERIC](18, 2) NOT NULL,                                 No existe en la maestra
     [publi_preguntas] [bit] DEFAULT 1,
-    [publi_envio] [bit] DEFAULT 0,
-    [publi_calificacion] [NUMERIC](18, 0),     
-    [publi_calificacion_detalle] [nvarchar](255),
     [publi_usr_id] INT,
     [publi_visib_id] NUMERIC(18, 0),
-    [publi_rubro_id] INT,
+    [publi_estado_id] INT,
     CONSTRAINT [tipo_publicacion] CHECK (publi_tipo IN ('Compra inmediata', 'Subasta')),
-    CONSTRAINT [estado_publicacion] CHECK (publi_estado IN ('Borrador', 'Activa', 'Pausada', 'Finalizada')),
-    CONSTRAINT [calificacion_publicacion] CHECK (publi_calificacion >= 0 AND publi_calificacion <= 5)
+)
+
+CREATE TABLE [NET_A_CERO].[Estado] (
+    [estado_id] INT IDENTITY(1,1) PRIMARY KEY,
+    [estado_desc] [nvarchar](255) NOT NULL,
+    CONSTRAINT [estado_publicacion] CHECK (estado_desc IN ('Borrador', 'Activa', 'Pausada', 'Finalizada'))
 )
     
 CREATE TABLE [NET_A_CERO].[Visibilidad] (
@@ -129,6 +141,7 @@ CREATE TABLE [NET_A_CERO].[Visibilidad] (
     [visib_grado] [nvarchar](50) NOT NULL,
     [visib_precio] [NUMERIC](18, 2) NOT NULL,
     [visib_porcentaje] [NUMERIC](18, 2) NOT NULL,
+    [visib_envios] [bit] DEFAULT 1,
     CONSTRAINT [descripcion_visibilidad] CHECK (visib_desc IN ('Oro', 'Plata', 'Bronce', 'Platino', 'Gratis')),
     CONSTRAINT [grado_visibilidad] CHECK (visib_grado IN ('Comisión por tipo de publicación', 'Comisión por producto vendido', 'Comisión por envío del producto')) --Es necesario esto?
 )
@@ -146,23 +159,32 @@ CREATE TABLE [NET_A_CERO].[Roles] (
 )
 
 CREATE TABLE [NET_A_CERO].[Rol_x_Funcionalidad] (
-    [id] INTEGER IDENTITY(1,1) PRIMARY KEY,
     [rol_id] INTEGER,
-    [func_id] INTEGER
+    [func_id] INTEGER,
+    PRIMARY KEY (rol_id, func_id)
 )
 
 CREATE TABLE [NET_A_CERO].[Usuarios_x_Rol] (
-    [id] INTEGER IDENTITY(1,1) PRIMARY KEY,
     [usr_id] INTEGER,
-    [rol_id] INTEGER
+    [rol_id] INTEGER,
+    PRIMARY KEY (usr_id, rol_id)
 )
 
 CREATE TABLE [NET_A_CERO].[Compras] (
     [comp_id] INTEGER IDENTITY(1,1) PRIMARY KEY,
-    [comp_cli_id] INTEGER,
+    [comp_usr_id] INTEGER,
     [comp_publi_id] [NUMERIC](18, 0),
     [comp_fecha] [datetime],
-    [comp_cantidad] [NUMERIC](18, 0)
+    [comp_cantidad] [NUMERIC](18, 0),
+    [comp_monto] [NUMERIC](18, 2),
+    [comp_calif_id] [NUMERIC](18, 0)
+)
+
+CREATE TABLE [NET_A_CERO].[Calificacion] (
+    [calif_id] [NUMERIC](18, 0) PRIMARY KEY,
+    [calif_cant_estrellas] [NUMERIC](18,0) NOT NULL,
+    [calif_desc] [nvarchar](255),
+    CONSTRAINT [calificacion_publicacion] CHECK (calif_cant_estrellas >= 0 AND calif_cant_estrellas <= 5)
 )
 
 CREATE TABLE [NET_A_CERO].[Rubros] (
@@ -171,9 +193,15 @@ CREATE TABLE [NET_A_CERO].[Rubros] (
     [rubro_desc_larga] [nvarchar](255) NOT NULL
 )
 
+CREATE TABLE [NET_A_CERO].[Rubro_x_Publicacion] (
+    [rubro_id] INTEGER,
+    [publi_id] NUMERIC(18, 0),
+    PRIMARY KEY (rubro_id, publi_id)
+)
+
 CREATE TABLE [NET_A_CERO].[Ofertas_x_Subasta] (
     [sub_id] INTEGER IDENTITY(1,1) PRIMARY KEY,
-    [sub_usr_id] INT NOT NULL,
+    [sub_usr_id] INT,
     [sub_monto] [NUMERIC](18, 2) NOT NULL,
     [sub_fecha] [datetime] NOT NULL,
     [sub_ganador] [bit] NOT NULL DEFAULT 0,
@@ -198,12 +226,23 @@ CREATE TABLE [NET_A_CERO].[Items] (
     [item_fact_id] NUMERIC(18, 0)
 )
 
+CREATE TABLE [NET_A_CERO].[Preguntas] (
+    [preg_id] INT IDENTITY(1,1) PRIMARY KEY,
+    [preg_desc] [nvarchar](255),
+    [preg_resp] [nvarchar](255),
+    [preg_resp_fecha] datetime,
+    [preg_usr_id] INT,
+    [preg_publi_id] [NUMERIC](18, 0)
+)
+
 
 /* FKs */
  
 ALTER TABLE [NET_A_CERO].[Clientes] ADD CONSTRAINT cliente_usuario FOREIGN KEY (cli_usr_id) REFERENCES [NET_A_CERO].[Usuarios](usr_id)
 
 ALTER TABLE [NET_A_CERO].[Empresas] ADD CONSTRAINT empresa_usuario FOREIGN KEY (emp_usr_id) REFERENCES [NET_A_CERO].[Usuarios](usr_id)
+
+ALTER TABLE [NET_A_CERO].[Empresas] ADD CONSTRAINT rubro_empresa FOREIGN KEY (emp_rubro) REFERENCES [NET_A_CERO].[Rubros](rubro_id)
 
 ALTER TABLE [NET_A_CERO].[Contacto] ADD CONSTRAINT contacto_usuario FOREIGN KEY (cont_usr_id) REFERENCES [NET_A_CERO].[Usuarios](usr_id)
 
@@ -221,21 +260,35 @@ ALTER TABLE [NET_A_CERO].[Rol_x_Funcionalidad] ADD CONSTRAINT unique_rol_funcion
 
 ALTER TABLE [NET_A_CERO].[Ofertas_x_Subasta] ADD CONSTRAINT subasta_publicacion FOREIGN KEY (sub_publi_id) REFERENCES [NET_A_CERO].[Publicaciones](publi_id)
 
-ALTER TABLE [NET_A_CERO].[Compras] ADD CONSTRAINT compras_usuario FOREIGN KEY (comp_cli_id) REFERENCES [NET_A_CERO].[Clientes](cli_id)
+ALTER TABLE [NET_A_CERO].[Ofertas_x_Subasta] ADD CONSTRAINT subasta_usuario FOREIGN KEY (sub_usr_id) REFERENCES [NET_A_CERO].[Usuarios](usr_id)
+
+ALTER TABLE [NET_A_CERO].[Compras] ADD CONSTRAINT compras_usuario FOREIGN KEY (comp_usr_id) REFERENCES [NET_A_CERO].[Usuarios](usr_id)
 
 ALTER TABLE [NET_A_CERO].[Compras] ADD CONSTRAINT compras_publicacion FOREIGN KEY (comp_publi_id) REFERENCES [NET_A_CERO].[Publicaciones](publi_id)
 
-ALTER TABLE [NET_A_CERO].[Compras] ADD CONSTRAINT compras_unique UNIQUE(comp_cli_id, comp_publi_id)
+ALTER TABLE [NET_A_CERO].[Compras] ADD CONSTRAINT compras_calificacion FOREIGN KEY (comp_calif_id) REFERENCES [NET_A_CERO].[Calificacion](calif_id)
+
+ALTER TABLE [NET_A_CERO].[Compras] ADD CONSTRAINT compras_unique UNIQUE(comp_usr_id, comp_publi_id)
 
 ALTER TABLE [NET_A_CERO].[Publicaciones] ADD CONSTRAINT visibilidad_publicacion FOREIGN KEY (publi_visib_id) REFERENCES [NET_A_CERO].[Visibilidad](visib_id)
 
-ALTER TABLE [NET_A_CERO].[Publicaciones] ADD CONSTRAINT rubro_publicacion FOREIGN KEY (publi_rubro_id) REFERENCES [NET_A_CERO].[Rubros](rubro_id)
-
 ALTER TABLE [NET_A_CERO].[Publicaciones] ADD CONSTRAINT usuario_publicacion FOREIGN KEY (publi_usr_id) REFERENCES [NET_A_CERO].[Usuarios](usr_id)
+
+ALTER TABLE [NET_A_CERO].[Publicaciones] ADD CONSTRAINT estado_publicacion FOREIGN KEY (publi_estado_id) REFERENCES [NET_A_CERO].[Estado](estado_id)
+
+ALTER TABLE [NET_A_CERO].[Rubro_x_Publicacion] ADD CONSTRAINT rubro_publicacion_rubro FOREIGN KEY (rubro_id) REFERENCES [NET_A_CERO].[Rubros](rubro_id)
+
+ALTER TABLE [NET_A_CERO].[Rubro_x_Publicacion] ADD CONSTRAINT publicacion_publicacion_rubro FOREIGN KEY (publi_id) REFERENCES [NET_A_CERO].[Publicaciones](publi_id)
+
+ALTER TABLE [NET_A_CERO].[Rubro_x_Publicacion] ADD CONSTRAINT unique_publicacion_rubro UNIQUE(publi_id, publi_id)
 
 ALTER TABLE [NET_A_CERO].[Facturas] ADD CONSTRAINT factura_publicacion FOREIGN KEY (fact_publi_id) REFERENCES [NET_A_CERO].[Publicaciones](publi_id)
 
 ALTER TABLE [NET_A_CERO].[Items] ADD CONSTRAINT item_factura FOREIGN KEY (item_fact_id) REFERENCES [NET_A_CERO].[Facturas](fact_id)
+
+ALTER TABLE [NET_A_CERO].[Preguntas] ADD CONSTRAINT pregunta_usuario FOREIGN KEY (preg_usr_id) REFERENCES [NET_A_CERO].[Usuarios](usr_id)
+
+ALTER TABLE [NET_A_CERO].[Preguntas] ADD CONSTRAINT pregunta_usuario FOREIGN KEY (preg_publi_id) REFERENCES [NET_A_CERO].[Publicaciones](publi_id)
 
 
 
@@ -316,10 +369,21 @@ END
 GO
 
 
+/** Migración de Rubro **/   
+
+INSERT INTO NET_A_CERO.Rubros(rubro_desc_larga)
+    SELECT DISTINCT Publicacion_Rubro_Descripcion 
+    FROM gd_esquema.Maestra 
+    WHERE Publicacion_Rubro_Descripcion IS NOT NULL
+GO
+
+
+
 /** Migracion de Empresas **/
 
-INSERT INTO NET_A_CERO.Empresas (emp_razon_social, emp_cuit, emp_fecha_alta)
-    SELECT DISTINCT Publ_Empresa_Razon_Social, Publ_Empresa_Cuit, Publ_Empresa_Fecha_Creacion 
+INSERT INTO NET_A_CERO.Empresas (emp_razon_social, emp_cuit, emp_fecha_alta, emp_rubro)
+    SELECT DISTINCT Publ_Empresa_Razon_Social, Publ_Empresa_Cuit, Publ_Empresa_Fecha_Creacion, 
+                    (SELECT rubro_id FROM NET_A_CERO.Rubros r WHERE Publicacion_Rubro_Descripcion = r.rubro_desc_larga)
     FROM gd_esquema.Maestra     
         WHERE Publ_Empresa_Razon_Social IS NOT NULL
         AND Publ_Empresa_Cuit IS NOT NULL
@@ -452,6 +516,8 @@ INSERT INTO NET_A_CERO.Funcionalidades(func_nombre)
 INSERT INTO NET_A_CERO.Funcionalidades(func_nombre)
     VALUES ('Generar factura');
 
+INSERT INTO NET_A_CERO.Funcionalidades(func_nombre)
+    VALUES ('Cambiar Contraseña');
 
 -- Agrego al administrador todas las funcionalidades del sistema
 
@@ -494,26 +560,23 @@ INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(func_id, rol_id)
 
 INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(func_id, rol_id) 
     VALUES(13,3);
+    
+INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(func_id, rol_id) 
+    VALUES(14,2);
+
+INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(func_id, rol_id) 
+    VALUES(14,3);
 
 
 
 /** Migración de Visibilidad **/  --Falta ver que onda el grado de la visibilidad
 
-INSERT INTO NET_A_CERO.Visibilidad(visib_id, visib_desc, visib_grado, visib_precio, visib_porcentaje)
-        SELECT DISTINCT Publicacion_Visibilidad_Cod, Publicacion_Visibilidad_Desc, 'Comisión por tipo de publicación', Publicacion_Visibilidad_Precio, Publicacion_Visibilidad_Porcentaje 
+INSERT INTO NET_A_CERO.Visibilidad(visib_id, visib_desc, visib_precio, visib_porcentaje)
+        SELECT DISTINCT Publicacion_Visibilidad_Cod, Publicacion_Visibilidad_Desc, Publicacion_Visibilidad_Precio, Publicacion_Visibilidad_Porcentaje 
     FROM gd_esquema.Maestra
 GO
 
 -- RECORDAR:   CONSTRAINT [grado_visibilidad] CHECK (visib_grado IN ('Comisión por tipo de publicación', 'Comisión por producto vendido', 'Comisión por envío del producto'))
-
-
-/** Migración de Rubro **/   
-
-INSERT INTO NET_A_CERO.Rubros(rubro_desc_larga)
-    SELECT DISTINCT Publicacion_Rubro_Descripcion 
-    FROM gd_esquema.Maestra 
-    WHERE Publicacion_Rubro_Descripcion IS NOT NULL
-GO
 
 
 /** Migración de Publicaciones **/
@@ -546,57 +609,77 @@ END
 GO
 
 
--- Migración de publicaciones  --FIJARSE CON QUE DATOS COMPLETAR EL COSTO
-
-IF (OBJECT_ID('NET_A_CERO.fc_estado_publicacion') IS NOT NULL)
-    DROP FUNCTION NET_A_CERO.fc_estado_publicacion
-GO
-
-CREATE FUNCTION NET_A_CERO.fc_estado_publicacion 
-(
-	@estado nvarchar(255)
-)
-RETURNS nvarchar(255)
-AS
-BEGIN
-    DECLARE @estado_publi nvarchar(255)
-    IF @estado = 'Publicada'
-        BEGIN
-            SET @estado_publi = 'Activa'
-        END
-    ELSE
-        BEGIN
-            SET @estado_publi = 'Borrador'
-        END
-    RETURN @estado_publi
-END
-GO
-
+-- Migración de publicaciones
 
 SET IDENTITY_INSERT NET_A_CERO.Publicaciones ON;
 GO
 
-INSERT INTO NET_A_CERO.Publicaciones (publi_id, publi_tipo, publi_descripcion, publi_estado, publi_stock, publi_fec_vencimiento, publi_fec_inicio, publi_precio, publi_calificacion, publi_calificacion_detalle, publi_usr_id, publi_visib_id, publi_rubro_id) 
-    SELECT DISTINCT Publicacion_Cod, Publicacion_Tipo, Publicacion_Descripcion, NET_A_CERO.fc_estado_publicacion(Publicacion_Estado), Publicacion_Stock, Publicacion_Fecha_Venc, Publicacion_Fecha, 
-                    Publicacion_Precio, Calificacion_Cant_Estrellas/2, Calificacion_Descripcion, NET_A_CERO.generar_id_publicacion(Publ_Cli_Dni, Publ_Empresa_Razon_Social), Publicacion_Visibilidad_Cod, (SELECT rubro_id FROM NET_A_CERO.Rubros r WHERE Publicacion_Rubro_Descripcion = r.rubro_desc_larga) 
+INSERT INTO NET_A_CERO.Publicaciones (publi_id, publi_tipo, publi_descripcion, publi_stock, publi_fec_vencimiento, publi_fec_inicio, publi_precio, publi_usr_id, publi_visib_id, publi_rubro_id, publi_estado_id) 
+    SELECT DISTINCT Publicacion_Cod, Publicacion_Tipo, Publicacion_Descripcion, Publicacion_Stock, Publicacion_Fecha_Venc, Publicacion_Fecha, 
+                    Publicacion_Precio, NET_A_CERO.generar_id_publicacion(Publ_Cli_Dni, Publ_Empresa_Razon_Social), Publicacion_Visibilidad_Cod,
+                    NET_A_CERO.adjuntar_estado_publicacion(Publicacion_Cod) 
     FROM gd_esquema.Maestra
-    WHERE Publicacion_Rubro_Descripcion IS NOT NULL
+    WHERE Publicacion_Cod IS NOT NULL
 
 SET IDENTITY_INSERT NET_A_CERO.Publicaciones OFF;
 GO
 
 
+/** Migracion de rubros por publicaciones **/
+INSERT INTO NET_A_CERO.Rubro_x_Publicacion(publi_id, rubro_id)
+    SELECT DISTINCT Publicacion_Cod, (SELECT rubro_id FROM NET_A_CERO.Rubros r WHERE Publicacion_Rubro_Descripcion = r.rubro_desc_larga)
+    FROM gd_esquema.Maestra
+    WHERE Publicacion_Rubro_Descripcion IS NOT NULL
+
+
+/** Migracion de estado de publicacion **/
+
+IF (OBJECT_ID('NET_A_CERO.adjuntar_estado_publicacion') IS NOT NULL)
+    DROP PROCEDURE NET_A_CERO.adjuntar_estado_publicacion
+GO
+
+CREATE PROCEDURE NET_A_CERO.adjuntar_estado_publicacion
+(
+	@publi_cod NUMERIC(18,0)
+)
+RETURNS numeric(18,0)
+AS
+BEGIN
+	INSERT INTO NET_A_CERO.Estado(estado_desc)
+	SELECT Publicacion_Estado FROM gd_esquema.Maestra WHERE Publicacion_Cod = @publi_cod AND Publicacion_Cod IS NOT NULL
+END
+GO
+
+
 /** Migracion de Compras **/
-INSERT INTO NET_A_CERO.Compras(comp_cli_id, comp_publi_id, comp_fecha, comp_cantidad)
-    SELECT (SELECT cli_id FROM NET_A_CERO.Clientes c WHERE c.cli_dni = Cli_Dni), Publicacion_Cod, Compra_Fecha, Compra_Cantidad
+INSERT INTO NET_A_CERO.Compras(comp_cli_id, comp_publi_id, comp_fecha, comp_cantidad, comp_monto, comp_calif_id)
+    SELECT (SELECT cli_id FROM NET_A_CERO.Clientes WHERE cli_dni = Cli_Dni), Publicacion_Cod, Compra_Fecha, Compra_Cantidad, null, Calificacion_Codigo
     FROM gd_esquema.Maestra
     WHERE Compra_Cantidad IS NOT NULL
+	AND Cli_Dni IS NOT NULL
+	AND Publicacion_Cod IS NOT NULL
+	
+	
+	
+/** Migracion de calificacion de compras **/
+
+SET IDENTITY_INSERT NET_A_CERO.Calificacion ON;
+GO
+
+INSERT INTO NET_A_CERO.Calificacion(calif_id, calif_cant_estrellas, calif_desc)
+    SELECT Calificacion_Codigo, Calificacion_Cant_Estrellas/2, Calificacion_Descripcion 
+    FROM gd_esquema.Maestra
+    WHERE Calificacion_Descripcion IS NOT NULL
+    AND Calificacion_Codigo IS NOT NULL
+    
+SET IDENTITY_INSERT NET_A_CERO.Calificacion OFF;
+GO
     
 
 
 /** Migracion de Ofertas_x_Subasta **/
 INSERT INTO NET_A_CERO.Ofertas_x_Subasta(sub_usr_id, sub_monto, sub_fecha, sub_publi_id)
-    SELECT (SELECT cli_usr_id FROM NET_A_CERO.Clientes c WHERE c.cli_dni = Cli_Dni), Oferta_Monto, Oferta_Fecha, Publicacion_Cod
+    SELECT (SELECT cli_usr_id FROM NET_A_CERO.Clientes WHERE cli_dni = Cli_Dni), Oferta_Monto, Oferta_Fecha, Publicacion_Cod
     FROM gd_esquema.Maestra
     WHERE Oferta_Monto IS NOT NULL
 
