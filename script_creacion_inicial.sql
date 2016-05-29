@@ -399,10 +399,10 @@ SET @row_pos_emp = 1
 WHILE (@row_pos_emp <= @row_count_emp)
 BEGIN
     DECLARE @emp_id numeric(18,0)
-	DECLARE @emp_razon nvarchar(255)
-	DECLARE @emp_cuit nvarchar(50)
-	SET @emp_razon = (SELECT DISTINCT emp_razon_social FROM NET_A_CERO.Empresas WHERE emp_id = @row_pos_emp)
-	SET @emp_cuit = (SELECT DISTINCT emp_cuit FROM NET_A_CERO.Empresas WHERE emp_id = @row_pos_emp)
+    DECLARE @emp_razon nvarchar(255)
+    DECLARE @emp_cuit nvarchar(50)
+    SET @emp_razon = (SELECT DISTINCT emp_razon_social FROM NET_A_CERO.Empresas WHERE emp_id = @row_pos_emp)
+    SET @emp_cuit = (SELECT DISTINCT emp_cuit FROM NET_A_CERO.Empresas WHERE emp_id = @row_pos_emp)
     --Agrego usuario de empresa
     EXEC NET_A_CERO.pr_crear_usuario @emp_id OUTPUT
     UPDATE NET_A_CERO.Empresas SET emp_usr_id = @emp_id WHERE emp_id = @row_pos_emp
@@ -442,8 +442,8 @@ SET @row_pos_cli = 1
 WHILE (@row_pos_cli <= @row_count_cli)
 BEGIN
     DECLARE @cli_id numeric(18,0)
-	DECLARE @cli_dni numeric(18,0)
-	SET @cli_dni = (SELECT DISTINCT cli_dni FROM NET_A_CERO.Clientes WHERE cli_id = @row_pos_cli)
+    DECLARE @cli_dni numeric(18,0)
+    SET @cli_dni = (SELECT DISTINCT cli_dni FROM NET_A_CERO.Clientes WHERE cli_id = @row_pos_cli)
     --Agrego usuario de cliente
     EXEC NET_A_CERO.pr_crear_usuario @cli_id OUTPUT
     UPDATE NET_A_CERO.Clientes SET cli_usr_id = @cli_id WHERE cli_id = @row_pos_cli
@@ -640,13 +640,39 @@ GO
 
 CREATE PROCEDURE NET_A_CERO.adjuntar_estado_publicacion
 (
-	@publi_cod NUMERIC(18,0)
+    @publi_cod NUMERIC(18,0)
 )
 RETURNS numeric(18,0)
 AS
 BEGIN
-	INSERT INTO NET_A_CERO.Estado(estado_desc)
-	SELECT Publicacion_Estado FROM gd_esquema.Maestra WHERE Publicacion_Cod = @publi_cod AND Publicacion_Cod IS NOT NULL
+    INSERT INTO NET_A_CERO.Estado(estado_desc)
+    NET_A_CERO.fc_estado_publicacion(SELECT Publicacion_Estado FROM gd_esquema.Maestra WHERE Publicacion_Cod = @publi_cod AND Publicacion_Cod IS NOT NULL)
+END
+GO
+
+--Funcion para mapear el estado de la publicacion
+
+IF (OBJECT_ID('NET_A_CERO.fc_estado_publicacion') IS NOT NULL)
+    DROP FUNCTION NET_A_CERO.fc_estado_publicacion
+GO
+
+CREATE FUNCTION NET_A_CERO.fc_estado_publicacion 
+(
+    @estado nvarchar(255)
+)
+RETURNS nvarchar(255)
+AS
+BEGIN
+    DECLARE @estado_publi nvarchar(255)
+    IF @estado = 'Publicada'
+        BEGIN
+            SET @estado_publi = 'Activa'
+        END
+    ELSE
+        BEGIN
+            SET @estado_publi = 'Borrador'
+        END
+    RETURN @estado_publi
 END
 GO
 
@@ -656,11 +682,11 @@ INSERT INTO NET_A_CERO.Compras(comp_cli_id, comp_publi_id, comp_fecha, comp_cant
     SELECT (SELECT cli_id FROM NET_A_CERO.Clientes WHERE cli_dni = Cli_Dni), Publicacion_Cod, Compra_Fecha, Compra_Cantidad, null, Calificacion_Codigo
     FROM gd_esquema.Maestra
     WHERE Compra_Cantidad IS NOT NULL
-	AND Cli_Dni IS NOT NULL
-	AND Publicacion_Cod IS NOT NULL
-	
-	
-	
+    AND Cli_Dni IS NOT NULL
+    AND Publicacion_Cod IS NOT NULL
+    
+    
+    
 /** Migracion de calificacion de compras **/
 
 SET IDENTITY_INSERT NET_A_CERO.Calificacion ON;
@@ -681,11 +707,13 @@ GO
 INSERT INTO NET_A_CERO.Ofertas_x_Subasta(sub_usr_id, sub_monto, sub_fecha, sub_publi_id)
     SELECT (SELECT cli_usr_id FROM NET_A_CERO.Clientes WHERE cli_dni = Cli_Dni), Oferta_Monto, Oferta_Fecha, Publicacion_Cod
     FROM gd_esquema.Maestra
-    WHERE Oferta_Monto IS NOT NULL
+    WHERE Publicacion_Cod IS NOT NULL
+    AND Cli_Dni IS NOT NULL
+    AND Oferta_Monto IS NOT NULL
 
 
 
-/** Migración de Items **/    --TODO CUAL ES EL TIPO DE UN ITEM? VERLO!!!!!!!!!
+/** Migración de Items **/ 
 
 INSERT INTO NET_A_CERO.Items(item_cantidad, item_monto, item_fact_id)
     SELECT DISTINCT Item_Factura_Monto, Item_Factura_Cantidad, Factura_Nro
@@ -702,22 +730,22 @@ GO
 
 CREATE FUNCTION NET_A_CERO.factura_cliente_empresa
 (
-	@dni NUMERIC(18,0),
-	@emp_razon_social nvarchar(255)
+    @dni NUMERIC(18,0),
+    @emp_razon_social nvarchar(255)
 )
 RETURNS numeric(18,0)
 AS
 BEGIN
-	DECLARE @id NUMERIC(18,0)
-	IF @dni IS NULL
-		BEGIN
-			SELECT @id = emp_usr_id FROM NET_A_CERO.Empresas WHERE emp_razon_social = @emp_razon_social
-		END
-	ELSE
-		BEGIN
-			SELECT @id = cli_usr_id FROM NET_A_CERO.Clientes WHERE cli_dni = @dni
-		END
-	RETURN @id
+    DECLARE @id NUMERIC(18,0)
+    IF @dni IS NULL
+        BEGIN
+            SELECT @id = emp_usr_id FROM NET_A_CERO.Empresas WHERE emp_razon_social = @emp_razon_social
+        END
+    ELSE
+        BEGIN
+            SELECT @id = cli_usr_id FROM NET_A_CERO.Clientes WHERE cli_dni = @dni
+        END
+    RETURN @id
 END
 GO
 
@@ -726,4 +754,4 @@ INSERT INTO NET_A_CERO.Facturas(fact_id, fact_fecha, fact_monto, fact_destinatar
     SELECT DISTINCT Factura_Nro, Factura_Fecha, Factura_Total, NET_A_CERO.factura_cliente_empresa(Publ_Cli_Dni, Publ_Empresa_Razon_Social), Forma_Pago_Desc, Publicacion_Cod
     FROM gd_esquema.Maestra 
     WHERE Factura_Nro IS NOT NULL
-	AND Publicacion_Cod IS NOT NULL
+    
