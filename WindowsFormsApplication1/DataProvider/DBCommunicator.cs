@@ -259,9 +259,13 @@ namespace MercadoEnvio
 
         public DataTable SelectClientesParaFiltroConFiltro(String filtro)
         {
-            return this.SelectDataTable("c.cli_id, u.usr_usuario Username, c.cli_nombre Nombre, c.cli_apellido Apellido, c.cli_tipo_dni 'Tipo de Documento', c.cli_dni Documento, c.cli_fecha_nac 'Fecha de Nacimiento', d.cont_mail Mail, d.cont_telefono Telefono, d.cont_calle Calle, d.cont_numero_calle Numero, d.cont_piso Piso, d.cont_depto Departamento, d.cont_codigo_postal 'Codigo postal', d.cont_localidad Localidad"
-                , "NET_A_CERO.Clientes c, NET_A_CERO.Contacto d, NET_A_CERO.Usuarios u"
-                , "c.cli_usr_id = u.usr_id AND u.usr_id = d.cont_id AND dado_de_baja = 0 " + filtro);
+            //return this.SelectDataTable("c.cli_id, u.usr_usuario Username, c.cli_nombre Nombre, c.cli_apellido Apellido, c.cli_tipo_dni 'Tipo de Documento', c.cli_dni Documento, c.cli_fecha_nac 'Fecha de Nacimiento', d.cont_mail Mail, d.cont_telefono Telefono, d.cont_calle Calle, d.cont_numero_calle Numero, d.cont_piso Piso, d.cont_depto Departamento, d.cont_codigo_postal 'Codigo postal', d.cont_localidad Localidad"
+            //    , "NET_A_CERO.Clientes c, NET_A_CERO.Contacto d, NET_A_CERO.Usuarios u"
+            //    , "c.cli_usr_id = u.usr_id AND u.usr_id = d.cont_id AND dado_de_baja = 0 " + filtro);
+
+           return this.SelectDataTable("cli.cli_id, usr.usr_usuario Username, cli.cli_nombre Nombre, cli.cli_apellido Apellido, cli.cli_dni Documento, cli.cli_tipo_dni 'Tipo de Documento', cli.cli_fecha_nac 'Fecha de Nacimiento', cont.cont_mail Mail, cont.cont_telefono Telefono, cont.cont_calle Calle, cont.cont_numero_calle 'Numero Calle', cont.cont_piso Piso, cont.cont_depto Departamento, cont.cont_localidad Localidad, cont.cont_codigo_posta 'Codigo Postal' "
+               ,"NET_A_CERO.Clientes cli, NET_A_CERO.Contacto cont, NET_A_CERO.Usuarios usr"
+               , "cli.cli_usr_id = u.usr_id AND u.usr_id = cont.cont_id " + filtro);
         }
 
         public DataTable SelectClientesParaFiltro()

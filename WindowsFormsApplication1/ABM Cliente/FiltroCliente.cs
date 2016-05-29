@@ -29,10 +29,13 @@ namespace MercadoEnvio.ABM_Cliente
             OcultarColumnasQueNoDebenVerse();
         }
 
-        private void CargarTiposDeDocumento()
-        {
-            comboBox_TipoDeDoc.DataSource = comunicador.SelectDataTable("nombre", "LOS_SUPER_AMIGOS.TipoDeDocumento");
-            comboBox_TipoDeDoc.ValueMember = "nombre";
+        private void CargarTiposDeDocumento()//Chequear como hacer para que se sincronice con el de agregarCliente
+        {          
+        
+            comboBox_TipoDeDoc.Items.Add("DNI - Documento Nacional de Identidad");
+            comboBox_TipoDeDoc.Items.Add("Pasaporte");
+            comboBox_TipoDeDoc.Items.Add("LC - Libreta Civica");
+            comboBox_TipoDeDoc.Items.Add("LE - Libreta de Enrolamiento");       
         }
 
         private void OcultarColumnasQueNoDebenVerse()
@@ -78,12 +81,11 @@ namespace MercadoEnvio.ABM_Cliente
         private String CalcularFiltro()
         {
             String filtro = "";
-            if (textBox_Nombre.Text != "") filtro += "AND " + "c.nombre LIKE '" + textBox_Nombre.Text + "%'";
-            if (textBox_Apellido.Text != "") filtro += "AND " + "c.apellido LIKE '" + textBox_Apellido.Text + "%'";
-            if (textBox_Mail.Text != "") filtro += "AND " + "c.mail LIKE '" + textBox_Mail.Text + "%'";
-            if (textBox_NumeroDeDoc.Text != "") filtro += "AND " + "c.documento LIKE '" + textBox_NumeroDeDoc.Text + "%'";
-            Decimal idTipoDeDocumento = (Decimal)comunicador.SelectFromWhere("id", "TipoDeDocumento", "nombre", comboBox_TipoDeDoc.Text);
-            filtro += "AND " + "c.tipo_de_documento_id = " + idTipoDeDocumento;
+            if (textBox_Nombre.Text != "") filtro += "AND " + "cli.cli_nombre LIKE '" + textBox_Nombre.Text + "%'";
+            if (textBox_Apellido.Text != "") filtro += "AND " + "cli.cli_apellido LIKE '" + textBox_Apellido.Text + "%'";
+            if (textBox_Mail.Text != "") filtro += "AND " + "cont.cont_mail LIKE '" + textBox_Mail.Text + "%'";
+            if (textBox_NumeroDeDoc.Text != "") filtro += "AND " + "cli.cli_dni LIKE '" + textBox_NumeroDeDoc.Text + "%'";
+            if (comboBox_TipoDeDoc.Text != "") filtro += "AND " + "cli.cli_tipo_dni LIKE '" + textBox_NumeroDeDoc.Text + "%'";
             return filtro;
         }
 
