@@ -272,7 +272,7 @@ namespace MercadoEnvio
 
            return this.SelectDataTable("cli.cli_id, usr.usr_usuario Username, cli.cli_nombre Nombre, cli.cli_apellido Apellido, cli.cli_dni Documento, cli.cli_tipo_dni 'Tipo de Documento', cli.cli_fecha_nac 'Fecha de Nacimiento', cont.cont_mail Mail, cont.cont_telefono Telefono, cont.cont_calle Calle, cont.cont_numero_calle 'Numero Calle', cont.cont_piso Piso, cont.cont_depto Departamento, cont.cont_localidad Localidad, cont.cont_codigo_posta 'Codigo Postal' "
                ,"NET_A_CERO.Clientes cli, NET_A_CERO.Contacto cont, NET_A_CERO.Usuarios usr"
-               , "cli.cli_usr_id = u.usr_id AND u.usr_id = cont.cont_id " + filtro);
+               , "cli.cli_usr_id = usr.usr_id AND usr.usr_id = cont.cont_usr_id " + filtro);
         }
 
         public DataTable SelectClientesParaFiltro()
@@ -282,9 +282,12 @@ namespace MercadoEnvio
 
         public DataTable SelectEmpresasParaFiltroConFiltro(String filtro)
         {
-            return this.SelectDataTable("e.emp_id, u.usr_apellido Username, e.emp_razon_social 'Razon Social', e.emp_nombre_contacto 'Nombre de contacto', e.emp_cuit 'CUIT', e.emp_fecha_alta 'Fecha de creacion', d.cont_mail 'Mail', d.cont_telefono 'Telefono', d.cont_localidad Ciudad, d.cont_calle Calle, d.cont_numero_calle Numero, d.cont_piso Piso, d.cont_depto Departamento, d.cont_codigo_postal 'Codigo Postal', d.cont_localidad Localidad"
-                , "NET_A_CERO.Empresas e, NET_A_CERO.Contacto d, NET_A_CERO.Usuarios u"
-                , "e.emp_usr_id = u.usr_id AND u.usr_id = d.cont_id AND dado_de_baja = 0 " + filtro); //fijarse si esta bien
+           //return this.SelectDataTable("e.emp_id, u.usr_apellido Username, e.emp_razon_social 'Razon Social', e.emp_nombre_contacto 'Nombre de contacto', e.emp_cuit 'CUIT', e.emp_fecha_alta 'Fecha de creacion', d.cont_mail 'Mail', d.cont_telefono 'Telefono', d.cont_localidad Ciudad, d.cont_calle Calle, d.cont_numero_calle Numero, d.cont_piso Piso, d.cont_depto Departamento, d.cont_codigo_postal 'Codigo Postal', d.cont_localidad Localidad"
+           //     , "NET_A_CERO.Empresas e, NET_A_CERO.Contacto d, NET_A_CERO.Usuarios u"
+           //     , "e.emp_usr_id = u.usr_id AND u.usr_id = d.cont_id AND dado_de_baja = 0 " + filtro); //fijarse si esta bien
+            return this.SelectDataTable("emp.emp_id, usr.usr_usuario Username, emp.emp_razon_social 'Razon Social', emp.emp_ciudad Ciudad, emp.emp_cuit 'CUIT', emp.emp_nombre_contacto 'Nombre Contacto', emp.emp_rubro Rubro, emp.emp_fecha_alta 'Fecha Alta', cont.cont_mail Mail, cont.cont_telefono Telefono, cont.cont_calle Calle, cont.cont_numero_calle 'Numero Calle', cont.cont_piso Piso, cont.cont_depto Departamento, cont.cont_localidad Localidad, cont.cont_codigo_posta 'Codigo Postal' "
+                , "NET_A_CERO.Empresas emp, NET_A_CERO.Contacto cont, NET_A_CERO.Usuarios usr"
+                , "emp.emp_usr_id = usr.usr_id AND usr.usr_id = cont.cont_usr_id");
         }
 
         public DataTable SelectEmpresasParaFiltro()

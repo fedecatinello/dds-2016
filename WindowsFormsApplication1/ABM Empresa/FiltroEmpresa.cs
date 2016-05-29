@@ -70,9 +70,9 @@ namespace MercadoEnvio.ABM_Empresa
         private String CalcularFiltro()
         {
             String filtro = "";
-            if (textBox_RazonSocial.Text != "") filtro += "AND " + "e.razon_social LIKE '" + textBox_RazonSocial.Text + "%'";
-            if (textBox_Cuit.Text != "") filtro += "AND " + "e.cuit LIKE '" + textBox_Cuit.Text + "%'";
-            if (textBox_Mail.Text != "") filtro += "AND " + "e.mail LIKE '" + textBox_Mail.Text + "%'";
+            if (textBox_RazonSocial.Text != "") filtro += "AND " + "emp.empr_razon_social LIKE '" + textBox_RazonSocial.Text + "%'";
+            if (textBox_Cuit.Text != "") filtro += "AND " + "emp.emp_cuit LIKE '" + textBox_Cuit.Text + "%'";
+            if (textBox_Mail.Text != "") filtro += "AND " + "emp.emp_mail LIKE '" + textBox_Mail.Text + "%'";
             return filtro;
         }
 
