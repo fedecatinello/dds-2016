@@ -98,14 +98,14 @@ namespace MercadoEnvio.Registro_de_Usuario
                 return;
             }
 
-            if (rolElegido == "Cliente")
+            if (rolElegido == "Clientes")
             {
                 this.Hide();
                 new ABM_Cliente.AgregarCliente(usuario,contraseña).ShowDialog();
 
                 if (UsuarioSesion.Usuario.rol != "Administrador")
                 {
-                    UsuarioSesion.Usuario.rol = "Cliente";
+                    UsuarioSesion.Usuario.rol = "Clientes";
                     UsuarioSesion.Usuario.nombre = usuario;
 
                     String idUsuario = "select top 1 id" 

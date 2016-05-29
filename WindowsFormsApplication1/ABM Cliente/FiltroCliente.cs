@@ -119,7 +119,7 @@ namespace MercadoEnvio.ABM_Cliente
             if (e.ColumnIndex == dataGridView_Cliente.Columns["Eliminar"].Index && e.RowIndex >= 0)
             {
                 String idClienteAEliminar = dataGridView_Cliente.Rows[e.RowIndex].Cells["id"].Value.ToString();
-                Boolean resultado = comunicador.Eliminar(Convert.ToDecimal(idClienteAEliminar), "Cliente");
+                Boolean resultado = comunicador.Eliminar(Convert.ToDecimal(idClienteAEliminar), "Clientes");
                 if (resultado) MessageBox.Show("Se elimino correctamente");
                 CargarClientes();
                 return;

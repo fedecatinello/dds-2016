@@ -71,7 +71,7 @@ namespace MercadoEnvio.ABM_Cliente
                 contacto.setMail(mail);
                 contacto.setTelefono(telefono);
                 contacto.SetCalle(calle);
-                contacto.SetNumero(numeroCalle);
+                contacto.SetNumeroCalle(numeroCalle);
                 contacto.SetPiso(piso);
                 contacto.SetDepartamento(departamento);
                 contacto.SetCodigoPostal(codigoPostal);
@@ -96,7 +96,7 @@ namespace MercadoEnvio.ABM_Cliente
             // Crear cliente
             try
             {
-                Cliente cliente = new Cliente();
+                Clientes cliente = new Clientes();
                 cliente.SetNombre(nombre);
                 cliente.SetApellido(apellido);
                 cliente.SetNumeroDeDocumento(numeroDeDocumento);
@@ -147,30 +147,31 @@ namespace MercadoEnvio.ABM_Cliente
              ------------- SOLO LOS ADMINISTRADORES PUEDEN CREAR USUARIOS-----------------
              if (UsuarioSesion.Usuario.rol != "Administrador")
             {
-                UsuarioSesion.Usuario.rol = "Cliente";
+                UsuarioSesion.Usuario.rol = "Clientes";
                 UsuarioSesion.Usuario.nombre = username;
                 UsuarioSesion.Usuario.id = idUsuario;
             }
              */
 
-            comunicador.AsignarRolAUsuario(this.idUsuario, "Cliente");
+            comunicador.AsignarRolAUsuario(this.idUsuario, "Clientes");
 
             VolverAlMenuPrincial();
         }
-        /*
-             ------------- SOLO LOS ADMINISTRADORES PUEDEN CREAR USUARIOS-----------------
+        
         private Decimal CrearUsuario()
         {
+            /*
+             ------------- SOLO LOS ADMINISTRADORES PUEDEN CREAR USUARIOS-----------------
             if (username == "clienteCreadoPorAdmin")
             {
                 return comunicador.CrearUsuario();
             }
             else
-            {
+            {*/
                 return comunicador.CrearUsuarioConValores(username, contrasena);
-            }
+            //}
         }
-         */
+        
 
         private void button_Limpiar_Click(object sender, EventArgs e)
         {

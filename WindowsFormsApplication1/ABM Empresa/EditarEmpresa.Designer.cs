@@ -62,13 +62,15 @@ namespace MercadoEnvio.ABM_Empresa
             this.textBox_Piso = new System.Windows.Forms.TextBox();
             this.textBox_Numero = new System.Windows.Forms.TextBox();
             this.textBox_Calle = new System.Windows.Forms.TextBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.textBox_Rubro = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // button_Guardar
             // 
-            this.button_Guardar.Location = new System.Drawing.Point(280, 444);
+            this.button_Guardar.Location = new System.Drawing.Point(280, 459);
             this.button_Guardar.Name = "button_Guardar";
             this.button_Guardar.Size = new System.Drawing.Size(100, 30);
             this.button_Guardar.TabIndex = 2;
@@ -78,7 +80,7 @@ namespace MercadoEnvio.ABM_Empresa
             // 
             // button_Cancelar
             // 
-            this.button_Cancelar.Location = new System.Drawing.Point(12, 444);
+            this.button_Cancelar.Location = new System.Drawing.Point(12, 459);
             this.button_Cancelar.Name = "button_Cancelar";
             this.button_Cancelar.Size = new System.Drawing.Size(100, 30);
             this.button_Cancelar.TabIndex = 3;
@@ -88,7 +90,7 @@ namespace MercadoEnvio.ABM_Empresa
             // 
             // button_Limpiar
             // 
-            this.button_Limpiar.Location = new System.Drawing.Point(174, 444);
+            this.button_Limpiar.Location = new System.Drawing.Point(174, 459);
             this.button_Limpiar.Name = "button_Limpiar";
             this.button_Limpiar.Size = new System.Drawing.Size(100, 30);
             this.button_Limpiar.TabIndex = 4;
@@ -99,7 +101,7 @@ namespace MercadoEnvio.ABM_Empresa
             // checkBox_Habilitado
             // 
             this.checkBox_Habilitado.AutoSize = true;
-            this.checkBox_Habilitado.Location = new System.Drawing.Point(12, 414);
+            this.checkBox_Habilitado.Location = new System.Drawing.Point(12, 429);
             this.checkBox_Habilitado.Name = "checkBox_Habilitado";
             this.checkBox_Habilitado.Size = new System.Drawing.Size(73, 17);
             this.checkBox_Habilitado.TabIndex = 5;
@@ -108,15 +110,12 @@ namespace MercadoEnvio.ABM_Empresa
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label14);
             this.groupBox1.Controls.Add(this.label13);
-            this.groupBox1.Controls.Add(this.textBox_Ciudad);
             this.groupBox1.Controls.Add(this.monthCalendar_FechaDeCreacion);
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.textBox_Telefono);
+            this.groupBox1.Controls.Add(this.textBox_Ciudad);
             this.groupBox1.Controls.Add(this.label11);
             this.groupBox1.Controls.Add(this.textBox_NombreDeContacto);
-            this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.textBox_Mail);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.button_FechaDeCreacion);
             this.groupBox1.Controls.Add(this.textBox_FechaDeCreacion);
@@ -124,9 +123,10 @@ namespace MercadoEnvio.ABM_Empresa
             this.groupBox1.Controls.Add(this.textBox_CUIT);
             this.groupBox1.Controls.Add(this.textBox_RazonSocial);
             this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.textBox_Rubro);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(368, 209);
+            this.groupBox1.Size = new System.Drawing.Size(368, 181);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Datos personales";
@@ -134,7 +134,7 @@ namespace MercadoEnvio.ABM_Empresa
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(6, 178);
+            this.label13.Location = new System.Drawing.Point(6, 152);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(40, 13);
             this.label13.TabIndex = 16;
@@ -142,14 +142,14 @@ namespace MercadoEnvio.ABM_Empresa
             // 
             // textBox_Ciudad
             // 
-            this.textBox_Ciudad.Location = new System.Drawing.Point(112, 175);
+            this.textBox_Ciudad.Location = new System.Drawing.Point(112, 149);
             this.textBox_Ciudad.Name = "textBox_Ciudad";
             this.textBox_Ciudad.Size = new System.Drawing.Size(250, 20);
             this.textBox_Ciudad.TabIndex = 15;
             // 
             // monthCalendar_FechaDeCreacion
             // 
-            this.monthCalendar_FechaDeCreacion.Location = new System.Drawing.Point(198, 19);
+            this.monthCalendar_FechaDeCreacion.Location = new System.Drawing.Point(135, 7);
             this.monthCalendar_FechaDeCreacion.Name = "monthCalendar_FechaDeCreacion";
             this.monthCalendar_FechaDeCreacion.TabIndex = 5;
             this.monthCalendar_FechaDeCreacion.Visible = false;
@@ -158,7 +158,7 @@ namespace MercadoEnvio.ABM_Empresa
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 152);
+            this.label2.Location = new System.Drawing.Point(6, 42);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(49, 13);
             this.label2.TabIndex = 14;
@@ -166,7 +166,7 @@ namespace MercadoEnvio.ABM_Empresa
             // 
             // textBox_Telefono
             // 
-            this.textBox_Telefono.Location = new System.Drawing.Point(112, 149);
+            this.textBox_Telefono.Location = new System.Drawing.Point(112, 39);
             this.textBox_Telefono.Name = "textBox_Telefono";
             this.textBox_Telefono.Size = new System.Drawing.Size(250, 20);
             this.textBox_Telefono.TabIndex = 13;
@@ -190,7 +190,7 @@ namespace MercadoEnvio.ABM_Empresa
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 126);
+            this.label5.Location = new System.Drawing.Point(6, 16);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(26, 13);
             this.label5.TabIndex = 10;
@@ -198,7 +198,7 @@ namespace MercadoEnvio.ABM_Empresa
             // 
             // textBox_Mail
             // 
-            this.textBox_Mail.Location = new System.Drawing.Point(112, 123);
+            this.textBox_Mail.Location = new System.Drawing.Point(112, 13);
             this.textBox_Mail.Name = "textBox_Mail";
             this.textBox_Mail.Size = new System.Drawing.Size(250, 20);
             this.textBox_Mail.TabIndex = 9;
@@ -265,19 +265,23 @@ namespace MercadoEnvio.ABM_Empresa
             // 
             this.groupBox2.Controls.Add(this.label12);
             this.groupBox2.Controls.Add(this.textBox_Localidad);
+            this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.label10);
+            this.groupBox2.Controls.Add(this.textBox_Telefono);
             this.groupBox2.Controls.Add(this.label9);
             this.groupBox2.Controls.Add(this.label8);
             this.groupBox2.Controls.Add(this.label7);
             this.groupBox2.Controls.Add(this.label6);
+            this.groupBox2.Controls.Add(this.label5);
             this.groupBox2.Controls.Add(this.textBox_CodigoPostal);
+            this.groupBox2.Controls.Add(this.textBox_Mail);
             this.groupBox2.Controls.Add(this.textBox_Departamento);
             this.groupBox2.Controls.Add(this.textBox_Piso);
             this.groupBox2.Controls.Add(this.textBox_Numero);
             this.groupBox2.Controls.Add(this.textBox_Calle);
-            this.groupBox2.Location = new System.Drawing.Point(12, 227);
+            this.groupBox2.Location = new System.Drawing.Point(12, 199);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(368, 181);
+            this.groupBox2.Size = new System.Drawing.Size(368, 224);
             this.groupBox2.TabIndex = 17;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Contacto";
@@ -285,7 +289,7 @@ namespace MercadoEnvio.ABM_Empresa
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(6, 152);
+            this.label12.Location = new System.Drawing.Point(6, 198);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(53, 13);
             this.label12.TabIndex = 21;
@@ -293,7 +297,7 @@ namespace MercadoEnvio.ABM_Empresa
             // 
             // textBox_Localidad
             // 
-            this.textBox_Localidad.Location = new System.Drawing.Point(112, 149);
+            this.textBox_Localidad.Location = new System.Drawing.Point(112, 195);
             this.textBox_Localidad.Name = "textBox_Localidad";
             this.textBox_Localidad.Size = new System.Drawing.Size(250, 20);
             this.textBox_Localidad.TabIndex = 20;
@@ -301,7 +305,7 @@ namespace MercadoEnvio.ABM_Empresa
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(6, 126);
+            this.label10.Location = new System.Drawing.Point(6, 172);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(71, 13);
             this.label10.TabIndex = 19;
@@ -310,7 +314,7 @@ namespace MercadoEnvio.ABM_Empresa
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(6, 100);
+            this.label9.Location = new System.Drawing.Point(6, 146);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(74, 13);
             this.label9.TabIndex = 18;
@@ -319,7 +323,7 @@ namespace MercadoEnvio.ABM_Empresa
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(6, 74);
+            this.label8.Location = new System.Drawing.Point(6, 120);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(27, 13);
             this.label8.TabIndex = 17;
@@ -328,7 +332,7 @@ namespace MercadoEnvio.ABM_Empresa
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 48);
+            this.label7.Location = new System.Drawing.Point(6, 94);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(44, 13);
             this.label7.TabIndex = 16;
@@ -337,7 +341,7 @@ namespace MercadoEnvio.ABM_Empresa
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 22);
+            this.label6.Location = new System.Drawing.Point(6, 68);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(30, 13);
             this.label6.TabIndex = 11;
@@ -345,44 +349,60 @@ namespace MercadoEnvio.ABM_Empresa
             // 
             // textBox_CodigoPostal
             // 
-            this.textBox_CodigoPostal.Location = new System.Drawing.Point(112, 123);
+            this.textBox_CodigoPostal.Location = new System.Drawing.Point(112, 169);
             this.textBox_CodigoPostal.Name = "textBox_CodigoPostal";
             this.textBox_CodigoPostal.Size = new System.Drawing.Size(250, 20);
             this.textBox_CodigoPostal.TabIndex = 15;
             // 
             // textBox_Departamento
             // 
-            this.textBox_Departamento.Location = new System.Drawing.Point(112, 97);
+            this.textBox_Departamento.Location = new System.Drawing.Point(112, 143);
             this.textBox_Departamento.Name = "textBox_Departamento";
             this.textBox_Departamento.Size = new System.Drawing.Size(250, 20);
             this.textBox_Departamento.TabIndex = 14;
             // 
             // textBox_Piso
             // 
-            this.textBox_Piso.Location = new System.Drawing.Point(112, 71);
+            this.textBox_Piso.Location = new System.Drawing.Point(112, 117);
             this.textBox_Piso.Name = "textBox_Piso";
             this.textBox_Piso.Size = new System.Drawing.Size(250, 20);
             this.textBox_Piso.TabIndex = 13;
             // 
             // textBox_Numero
             // 
-            this.textBox_Numero.Location = new System.Drawing.Point(112, 45);
+            this.textBox_Numero.Location = new System.Drawing.Point(112, 91);
             this.textBox_Numero.Name = "textBox_Numero";
             this.textBox_Numero.Size = new System.Drawing.Size(250, 20);
             this.textBox_Numero.TabIndex = 12;
             // 
             // textBox_Calle
             // 
-            this.textBox_Calle.Location = new System.Drawing.Point(112, 19);
+            this.textBox_Calle.Location = new System.Drawing.Point(112, 65);
             this.textBox_Calle.Name = "textBox_Calle";
             this.textBox_Calle.Size = new System.Drawing.Size(250, 20);
             this.textBox_Calle.TabIndex = 11;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(6, 126);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(36, 13);
+            this.label14.TabIndex = 18;
+            this.label14.Text = "Rubro";
+            // 
+            // textBox_Rubro
+            // 
+            this.textBox_Rubro.Location = new System.Drawing.Point(112, 123);
+            this.textBox_Rubro.Name = "textBox_Rubro";
+            this.textBox_Rubro.Size = new System.Drawing.Size(250, 20);
+            this.textBox_Rubro.TabIndex = 17;
             // 
             // EditarEmpresa
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(392, 486);
+            this.ClientSize = new System.Drawing.Size(386, 499);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.checkBox_Habilitado);
@@ -437,5 +457,7 @@ namespace MercadoEnvio.ABM_Empresa
         private System.Windows.Forms.TextBox textBox_Piso;
         private System.Windows.Forms.TextBox textBox_Numero;
         private System.Windows.Forms.TextBox textBox_Calle;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.TextBox textBox_Rubro;
     }
 }

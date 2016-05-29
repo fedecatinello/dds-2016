@@ -7,7 +7,7 @@ using System.Data.SqlClient;
 
 namespace MercadoEnvio.Objetos
 {
-    class Cliente : Objeto, Comunicable
+    class Clientes : Objeto, Comunicable
     {
         private Decimal id;
         private String nombre;
@@ -123,12 +123,12 @@ namespace MercadoEnvio.Objetos
 
         string Comunicable.GetQueryModificar()
         {
-            return "UPDATE NET_A_CERO.Cliente SET nombre = @nombre, apellido = @apellido, documento = @documento, tipo_de_documento = @tipo_de_documento, fecha_nacimiento = @fecha_nacimiento, fecha_Alta = @fecha_Alta WHERE id = @id";
+            return "UPDATE NET_A_CERO.Clientes SET nombre = @nombre, apellido = @apellido, documento = @documento, tipo_de_documento = @tipo_de_documento, fecha_nacimiento = @fecha_nacimiento, fecha_Alta = @fecha_Alta WHERE id = @id";
         }
 
         string Comunicable.GetQueryObtener()
         {
-            return "SELECT * FROM NET_A_CERO.Cliente WHERE id = @id";
+            return "SELECT * FROM NET_A_CERO.Clientes WHERE id = @id";
         }
 
         IList<System.Data.SqlClient.SqlParameter> Comunicable.GetParametros()

@@ -134,18 +134,18 @@ namespace MercadoEnvio
             return false;
         }
 
-        public Decimal CrearCliente(Cliente cliente)
+        public Decimal CrearCliente(Clientes cliente)
         {
             if (!pasoControlDeRegistro(cliente.GetIdTipoDeDocumento(), cliente.GetNumeroDeDocumento()))
                 throw new ClienteYaExisteException();
 
-            if (!pasoControlDeUnicidad(cliente.GetTelefono(), "telefono", "Cliente"))
+            if (!pasoControlDeUnicidad(cliente.GetTelefono(), "telefono", "Clientes"))
                 throw new TelefonoYaExisteException();
 
             return this.Crear(cliente);
         }
 
-        public Decimal CrearEmpresa(Empresa empresa)
+        public Decimal CrearEmpresa(Empresas empresa)
         {
             if (!pasoControlDeRegistroDeCuit(empresa.GetCuit()))
                 throw new CuitYaExisteException();
@@ -177,18 +177,18 @@ namespace MercadoEnvio
             return this.Crear(visibilidad);
         }
 
-        public Cliente ObtenerCliente(Decimal idCliente)
+        public Clientes ObtenerCliente(Decimal idCliente)
         {
-            Cliente objeto = new Cliente();
+            Clientes objeto = new Clientes();
             Type clase = objeto.GetType();
-            return (Cliente) this.Obtener(idCliente, clase);
+            return (Clientes) this.Obtener(idCliente, clase);
         }
 
-        public Empresa ObtenerEmpresa(Decimal idEmpresa)
+        public Empresas ObtenerEmpresa(Decimal idEmpresa)
         {
-            Empresa objeto = new Empresa();
+            Empresas objeto = new Empresas();
             Type clase = objeto.GetType();
-            return (Empresa)this.Obtener(idEmpresa, clase);
+            return (Empresas)this.Obtener(idEmpresa, clase);
         }
 
         public Contacto ObtenerContacto(Decimal idContacto)

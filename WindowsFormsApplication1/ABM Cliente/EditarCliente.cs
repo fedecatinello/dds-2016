@@ -41,7 +41,7 @@ namespace MercadoEnvio.ABM_Cliente
 
         private void CargarDatos()
         {
-            Cliente cliente = comunicador.ObtenerCliente(idCliente);
+            Clientes cliente = comunicador.ObtenerCliente(idCliente);
             Contacto contacto = comunicador.ObtenerContacto(idContacto);
 
             textBox_Nombre.Text = cliente.GetNombre();
@@ -129,7 +129,7 @@ namespace MercadoEnvio.ABM_Cliente
             // Update cliente
             try
             {
-                Cliente cliente = new Cliente();
+                Clientes cliente = new Clientes();
                 Usuarios usuario = new Usuarios();
 
                 cliente.SetNombre(nombre);

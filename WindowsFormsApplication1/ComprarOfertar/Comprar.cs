@@ -40,7 +40,7 @@ namespace MercadoEnvio.Comprar_Ofertar
             parametros.Clear();
             parametros.Add(new SqlParameter("@usuario", vendedorId));
 
-            String queryCliente = "SELECT * FROM LOS_SUPER_AMIGOS.Cliente WHERE usuario_id = @usuario and habilitado = 1";
+            String queryCliente = "SELECT * FROM LOS_SUPER_AMIGOS.Clientes WHERE usuario_id = @usuario and habilitado = 1";
             SqlDataReader readerCliente = QueryBuilder.Instance.build(queryCliente, parametros).ExecuteReader();
 
             if (readerCliente.Read())

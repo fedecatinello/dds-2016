@@ -17,7 +17,7 @@ namespace MercadoEnvio.ABM_Empresa
         private String username;
         private String contrasena;
         private DBCommunicator comunicador = new DBCommunicator();
-        private Decimal idDireccion;
+        //private Decimal idDireccion;
         private Decimal idUsuario;
         private Decimal idEmpresa;
 
@@ -26,7 +26,7 @@ namespace MercadoEnvio.ABM_Empresa
             InitializeComponent();
             this.username = username;
             this.contrasena = contrasena;
-            this.idDireccion = 0;
+           // this.idDireccion = 0;
             this.idUsuario = 0;
         }
 
@@ -39,30 +39,36 @@ namespace MercadoEnvio.ABM_Empresa
         {
             // Guarda en variables todos los campos de entrada
             String razonSocial = textBox_RazonSocial.Text;
-            String nombreDeContacto = textBox_NombreDeContacto.Text;
+            String ciudad = textBox_Ciudad.Text;
             String cuit = textBox_CUIT.Text;
+            String nombreDeContacto = textBox_NombreDeContacto.Text;
+            String rubro = textBox_Rubro.Text;
             DateTime fechaDeCreacion;
             DateTime.TryParse(textBox_FechaDeCreacion.Text, out fechaDeCreacion);
+
             String mail = textBox_Mail.Text;
             String telefono = textBox_Telefono.Text;
-            String ciudad = textBox_Ciudad.Text;
             String calle = textBox_Calle.Text;
-            String numero = textBox_Numero.Text;
+            String numeroCalle = textBox_Numero.Text;
             String piso = textBox_Piso.Text;
             String departamento = textBox_Departamento.Text;
-            String codigoPostal = textBox_CodigoPostal.Text;
             String localidad = textBox_Localidad.Text;
+            String codigoPostal = textBox_CodigoPostal.Text;
+            
 
             // Crea una contacto y se guarda su id
-            Contacto direccion = new Contacto();
+            Contacto contacto = new Contacto();
             try
             {
-                direccion.SetCalle(calle);
-                direccion.SetNumero(numero);
-                direccion.SetPiso(piso);
-                direccion.SetDepartamento(departamento);
-                direccion.SetCodigoPostal(codigoPostal);
-                direccion.SetLocalidad(localidad);
+                contacto.setMail(mail);
+                contacto.setTelefono(telefono);
+                contacto.SetCalle(calle);
+                contacto.SetNumeroCalle(numeroCalle);
+                contacto.SetPiso(piso);
+                contacto.SetDepartamento(departamento);
+                contacto.SetLocalidad(localidad);
+                contacto.SetCodigoPostal(codigoPostal);
+                
             }
             catch (CampoVacioException exception)
             {
@@ -74,25 +80,23 @@ namespace MercadoEnvio.ABM_Empresa
                 MessageBox.Show("Datos mal ingresados en: " + exception.Message);
                 return;
             }
-            // Controla que no se haya creado ya la contacto
+            /* --------------------NO USAMOS DIRECCION-------------------------
+             Controla que no se haya creado ya la contacto
             if (this.idDireccion == 0)
             {
-                this.idDireccion = comunicador.CrearDireccion(direccion);
+                this.idDireccion = comunicador.CrearDireccion(contacto);
             }
-
+            */
             // Crea empresa
             try
             {
-                Empresa empresa = new Empresa();
+                Empresas empresa = new Empresas();
                 empresa.SetRazonSocial(razonSocial);
-                empresa.SetNombreDeContacto(nombreDeContacto);
-                empresa.SetCuit(cuit);
-                empresa.SetFechaDeCreacion(fechaDeCreacion);
-                empresa.SetMail(mail);
-                empresa.SetTelefono(telefono);
                 empresa.SetCiudad(ciudad);
-                empresa.SetIdDireccion(idDireccion);
-                empresa.SetHabilitado(true);
+                empresa.SetCuit(cuit);
+                empresa.SetNombreDeContacto(nombreDeContacto);
+                empresa.SetRubro(rubro);
+                empresa.SetFechaDeCreacion(fechaDeCreacion);
                 idEmpresa = comunicador.CrearEmpresa(empresa);
                 if (idEmpresa > 0) MessageBox.Show("Se agrego la empresa correctamente");
             }
@@ -134,14 +138,15 @@ namespace MercadoEnvio.ABM_Empresa
                 Boolean seCreoBien = comunicador.AsignarUsuarioAEmpresa(idEmpresa, idUsuario);
                 if (seCreoBien) MessageBox.Show("Se creo el usuario correctamente");
             }
-
+            /*
+             ------------- SOLO LOS ADMINISTRADORES PUEDEN CREAR USUARIOS-----------------
             if (UsuarioSesion.Usuario.rol != "Administrador")
             {
                 UsuarioSesion.Usuario.rol = "Empresa";
                 UsuarioSesion.Usuario.nombre = username;
                 UsuarioSesion.Usuario.id = idUsuario;
             }
-
+            */
             comunicador.AsignarRolAUsuario(this.idUsuario, "Empresa");
 
             VolverAlMenuPrincipal();
@@ -149,25 +154,28 @@ namespace MercadoEnvio.ABM_Empresa
 
         private Decimal CrearUsuario()
         {
+            /*
+             ------------- SOLO LOS ADMINISTRADORES PUEDEN CREAR USUARIOS-----------------
             if (username == "clienteCreadoPorAdmin")
             {
                 return comunicador.CrearUsuario();
             }
             else
-            {
+            {*/
                 return comunicador.CrearUsuarioConValores(username, contrasena);
-            }
+            //}
         }
 
         private void button_Limpiar_Click(object sender, EventArgs e)
         {
             textBox_RazonSocial.Text = "";
-            textBox_NombreDeContacto.Text = "";
+            textBox_Ciudad.Text = "";
             textBox_CUIT.Text = "";
+            textBox_NombreDeContacto.Text = "";
+            textBox_Rubro.Text = "";
             textBox_FechaDeCreacion.Text = "";
             textBox_Mail.Text = "";
             textBox_Telefono.Text = "";
-            textBox_Ciudad.Text = "";
             textBox_Calle.Text = "";
             textBox_Numero.Text = "";
             textBox_Piso.Text = "";

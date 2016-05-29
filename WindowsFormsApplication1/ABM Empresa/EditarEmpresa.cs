@@ -31,7 +31,7 @@ namespace MercadoEnvio.ABM_Empresa
 
         private void CargarDatos()
         {
-            Empresa empresa = comunicador.ObtenerEmpresa(idEmpresa);
+            Empresas empresa = comunicador.ObtenerEmpresa(idEmpresa);
 
             this.idDireccion = empresa.GetIdDireccion();
             textBox_RazonSocial.Text = empresa.GetRazonSocial();
@@ -55,7 +55,8 @@ namespace MercadoEnvio.ABM_Empresa
             textBox_Departamento.Text = direccion.GetDepartamento();
             textBox_CodigoPostal.Text = direccion.GetCodigoPostal();
             textBox_Localidad.Text = direccion.GetLocalidad();
-        }
+                   
+            }
 
         private void button_Guardar_Click(object sender, EventArgs e)
         {
@@ -83,7 +84,7 @@ namespace MercadoEnvio.ABM_Empresa
             try
             {
                 direccion.SetCalle(calle);
-                direccion.SetNumero(numero);
+                direccion.SetNumeroCalle(numero);
                 direccion.SetPiso(piso);
                 direccion.SetDepartamento(departamento);
                 direccion.SetCodigoPostal(codigoPostal);
@@ -104,7 +105,7 @@ namespace MercadoEnvio.ABM_Empresa
             // Update empresa
             try
             {
-                Empresa empresa = new Empresa();
+                Empresas empresa = new Empresas();
                 empresa.SetRazonSocial(razonSocial);
                 empresa.SetNombreDeContacto(nombreDeContacto);
                 empresa.SetCuit(cuit);
