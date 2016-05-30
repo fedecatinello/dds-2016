@@ -104,9 +104,9 @@ CREATE TABLE [NET_A_CERO].[Clientes] (
 
 CREATE TABLE [NET_A_CERO].[Empresas] (
     [emp_id] INT IDENTITY(1,1) PRIMARY KEY,
-    [emp_razon_social] [nvarchar](255) UNIQUE NOT NULL,
+    [emp_razon_social] [nvarchar](255) NOT NULL,
     [emp_ciudad] [nvarchar](50),
-    [emp_cuit] [nvarchar](50) UNIQUE NOT NULL,
+    [emp_cuit] [nvarchar](50) NOT NULL,
     [emp_nombre_contacto] [nvarchar](255) default 'Nombre Contacto',        -- No existe en la maestra
     [emp_rubro] INT,                                             
     [emp_fecha_alta] [datetime],
@@ -132,13 +132,13 @@ CREATE TABLE [NET_A_CERO].[Publicaciones] (
 CREATE TABLE [NET_A_CERO].[Estado] (
     [estado_id] INT IDENTITY(1,1) PRIMARY KEY,
     [estado_desc] [nvarchar](255) NOT NULL,
-    CONSTRAINT [estado_publicacion] CHECK (estado_desc IN ('Borrador', 'Activa', 'Pausada', 'Finalizada'))
+    CONSTRAINT [estado_publi] CHECK (estado_desc IN ('Borrador', 'Activa', 'Pausada', 'Finalizada'))
 )
     
 CREATE TABLE [NET_A_CERO].[Visibilidad] (
     [visib_id] [NUMERIC](18, 0) PRIMARY KEY,
     [visib_desc] [nvarchar](255),
-    [visib_grado] [nvarchar](50) NOT NULL,
+    [visib_grado] [nvarchar](50),
     [visib_precio] [NUMERIC](18, 2) NOT NULL,
     [visib_porcentaje] [NUMERIC](18, 2) NOT NULL,
     [visib_envios] [bit] DEFAULT 1,
@@ -181,7 +181,7 @@ CREATE TABLE [NET_A_CERO].[Compras] (
 )
 
 CREATE TABLE [NET_A_CERO].[Calificacion] (
-    [calif_id] [NUMERIC](18, 0) PRIMARY KEY,
+    [calif_id] [NUMERIC](18, 0) IDENTITY(1, 1) PRIMARY KEY,
     [calif_cant_estrellas] [NUMERIC](18,0) NOT NULL,
     [calif_desc] [nvarchar](255),
     CONSTRAINT [calificacion_publicacion] CHECK (calif_cant_estrellas >= 0 AND calif_cant_estrellas <= 5)
@@ -212,7 +212,7 @@ CREATE TABLE [NET_A_CERO].[Facturas] (
     [fact_id] [NUMERIC](18, 0) PRIMARY KEY,
     [fact_fecha] [datetime] NOT NULL,
     [fact_monto] [NUMERIC](18, 2) NOT NULL,
-    [fact_destinatario] INT NOT NULL,
+    [fact_destinatario] INT,
     [fact_forma_pago] [varchar](20) NOT NULL,
     [fact_publi_id] NUMERIC(18, 0),
     CONSTRAINT [forma_pago] CHECK (fact_forma_pago IN ('Efectivo', 'Crédito', 'Débito', 'Sin especificar'))
@@ -280,7 +280,7 @@ ALTER TABLE [NET_A_CERO].[Rubro_x_Publicacion] ADD CONSTRAINT rubro_publicacion_
 
 ALTER TABLE [NET_A_CERO].[Rubro_x_Publicacion] ADD CONSTRAINT publicacion_publicacion_rubro FOREIGN KEY (publi_id) REFERENCES [NET_A_CERO].[Publicaciones](publi_id)
 
-ALTER TABLE [NET_A_CERO].[Rubro_x_Publicacion] ADD CONSTRAINT unique_publicacion_rubro UNIQUE(publi_id, publi_id)
+ALTER TABLE [NET_A_CERO].[Rubro_x_Publicacion] ADD CONSTRAINT unique_publicacion_rubro UNIQUE(rubro_id, publi_id)
 
 ALTER TABLE [NET_A_CERO].[Facturas] ADD CONSTRAINT factura_publicacion FOREIGN KEY (fact_publi_id) REFERENCES [NET_A_CERO].[Publicaciones](publi_id)
 
@@ -288,7 +288,7 @@ ALTER TABLE [NET_A_CERO].[Items] ADD CONSTRAINT item_factura FOREIGN KEY (item_f
 
 ALTER TABLE [NET_A_CERO].[Preguntas] ADD CONSTRAINT pregunta_usuario FOREIGN KEY (preg_usr_id) REFERENCES [NET_A_CERO].[Usuarios](usr_id)
 
-ALTER TABLE [NET_A_CERO].[Preguntas] ADD CONSTRAINT pregunta_usuario FOREIGN KEY (preg_publi_id) REFERENCES [NET_A_CERO].[Publicaciones](publi_id)
+ALTER TABLE [NET_A_CERO].[Preguntas] ADD CONSTRAINT pregunta_publicacion FOREIGN KEY (preg_publi_id) REFERENCES [NET_A_CERO].[Publicaciones](publi_id)
 
 
 
@@ -609,15 +609,59 @@ END
 GO
 
 
--- Migración de publicaciones
+/** Migracion de estado de publicacion **/
+
+INSERT INTO NET_A_CERO.Estado(estado_desc)
+	VALUES('Borrador')
+
+INSERT INTO NET_A_CERO.Estado(estado_desc)
+	VALUES('Activa')
+
+INSERT INTO NET_A_CERO.Estado(estado_desc)
+	VALUES('Pausada')
+
+INSERT INTO NET_A_CERO.Estado(estado_desc)
+	VALUES('Finalizada')
+
+
+/** Agregar el estado de una publicacion dado su codigo **/
+
+IF (OBJECT_ID('NET_A_CERO.agregar_estado_publicacion') IS NOT NULL)
+    DROP FUNCTION NET_A_CERO.agregar_estado_publicacion
+GO
+
+CREATE FUNCTION NET_A_CERO.agregar_estado_publicacion
+(
+    @publi_cod NUMERIC(18,0)
+)
+RETURNS INT
+AS
+BEGIN
+	DECLARE @estado_publi nvarchar(255)
+	DECLARE @estado nvarchar(255)
+	SET @estado = (SELECT Publicacion_Estado FROM gd_esquema.Maestra WHERE Publicacion_Cod = @publi_cod AND Publicacion_Cod IS NOT NULL)
+	IF @estado = 'Publicada'
+        BEGIN
+            SET @estado_publi = 'Activa'
+        END
+    ELSE
+        BEGIN
+            SET @estado_publi = 'Borrador'
+        END
+	RETURN (SELECT estado_id FROM NET_A_CERO.Estado WHERE estado_desc = @estado_publi)
+END
+GO
+
+
+/** Migracion de Publicaciones **/
 
 SET IDENTITY_INSERT NET_A_CERO.Publicaciones ON;
 GO
 
-INSERT INTO NET_A_CERO.Publicaciones (publi_id, publi_tipo, publi_descripcion, publi_stock, publi_fec_vencimiento, publi_fec_inicio, publi_precio, publi_usr_id, publi_visib_id, publi_rubro_id, publi_estado_id) 
+INSERT INTO NET_A_CERO.Publicaciones (publi_id, publi_tipo, publi_descripcion, publi_stock, publi_fec_vencimiento, publi_fec_inicio, publi_precio, publi_usr_id, publi_visib_id, publi_estado_id) 
     SELECT DISTINCT Publicacion_Cod, Publicacion_Tipo, Publicacion_Descripcion, Publicacion_Stock, Publicacion_Fecha_Venc, Publicacion_Fecha, 
                     Publicacion_Precio, NET_A_CERO.generar_id_publicacion(Publ_Cli_Dni, Publ_Empresa_Razon_Social), Publicacion_Visibilidad_Cod,
-                    NET_A_CERO.adjuntar_estado_publicacion(Publicacion_Cod) 
+                    NET_A_CERO.agregar_estado_publicacion(Publicacion_Cod) 
     FROM gd_esquema.Maestra
     WHERE Publicacion_Cod IS NOT NULL
 
@@ -632,53 +676,8 @@ INSERT INTO NET_A_CERO.Rubro_x_Publicacion(publi_id, rubro_id)
     WHERE Publicacion_Rubro_Descripcion IS NOT NULL
 
 
-/** Migracion de estado de publicacion **/
-
-IF (OBJECT_ID('NET_A_CERO.adjuntar_estado_publicacion') IS NOT NULL)
-    DROP PROCEDURE NET_A_CERO.adjuntar_estado_publicacion
-GO
-
-CREATE PROCEDURE NET_A_CERO.adjuntar_estado_publicacion
-(
-    @publi_cod NUMERIC(18,0)
-)
-RETURNS numeric(18,0)
-AS
-BEGIN
-    INSERT INTO NET_A_CERO.Estado(estado_desc)
-    NET_A_CERO.fc_estado_publicacion(SELECT Publicacion_Estado FROM gd_esquema.Maestra WHERE Publicacion_Cod = @publi_cod AND Publicacion_Cod IS NOT NULL)
-END
-GO
-
---Funcion para mapear el estado de la publicacion
-
-IF (OBJECT_ID('NET_A_CERO.fc_estado_publicacion') IS NOT NULL)
-    DROP FUNCTION NET_A_CERO.fc_estado_publicacion
-GO
-
-CREATE FUNCTION NET_A_CERO.fc_estado_publicacion 
-(
-    @estado nvarchar(255)
-)
-RETURNS nvarchar(255)
-AS
-BEGIN
-    DECLARE @estado_publi nvarchar(255)
-    IF @estado = 'Publicada'
-        BEGIN
-            SET @estado_publi = 'Activa'
-        END
-    ELSE
-        BEGIN
-            SET @estado_publi = 'Borrador'
-        END
-    RETURN @estado_publi
-END
-GO
-
-
 /** Migracion de Compras **/
-INSERT INTO NET_A_CERO.Compras(comp_cli_id, comp_publi_id, comp_fecha, comp_cantidad, comp_monto, comp_calif_id)
+INSERT INTO NET_A_CERO.Compras(comp_usr_id, comp_publi_id, comp_fecha, comp_cantidad, comp_monto, comp_calif_id)
     SELECT (SELECT cli_id FROM NET_A_CERO.Clientes WHERE cli_dni = Cli_Dni), Publicacion_Cod, Compra_Fecha, Compra_Cantidad, null, Calificacion_Codigo
     FROM gd_esquema.Maestra
     WHERE Compra_Cantidad IS NOT NULL
