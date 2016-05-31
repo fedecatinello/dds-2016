@@ -60,7 +60,7 @@ namespace MercadoEnvio.ABM_Cliente
             textBox_Localidad.Text = contacto.GetLocalidad();
             textBox_CodigoPostal.Text = contacto.GetCodigoPostal();
 
-            checkBox_Habilitado.Checked = Convert.ToBoolean(comunicador.SelectFromWhere("usr_activo", "Usuarios", "id", idCliente));
+            checkBox_Habilitado.Checked = Convert.ToBoolean(comunicador.SelectFromWhere("usr_activo", "Usuarios", "usr_id", idCliente));
         }
 
 /*-------------------NO SE USA PORQUE LO IMPLEMENTAMOS DE OTRA MANERA------------------------------*/
