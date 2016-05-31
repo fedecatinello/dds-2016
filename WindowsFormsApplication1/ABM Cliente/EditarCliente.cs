@@ -15,15 +15,15 @@ namespace MercadoEnvio.ABM_Cliente
 {
     public partial class EditarCliente : Form
     {
-        private Decimal idCliente;
-        private Decimal idContacto;
-        private Decimal idUsuario;
+        private int idCliente;
+        private int idContacto;
+        private int idUsuario;
         private DBCommunicator comunicador = new DBCommunicator();
 
         public EditarCliente(String idCliente)
         {
             InitializeComponent();
-            this.idCliente = Convert.ToDecimal(idCliente);
+            this.idCliente = Convert.ToInt32(idCliente);
         }
 
         private void EditarCliente_Load(object sender, EventArgs e)
@@ -70,9 +70,9 @@ namespace MercadoEnvio.ABM_Cliente
             comboBox_TipoDeDocumento.SelectedValue = (String) comunicador.SelectFromWhere("nombre", "TipoDeDocumento", "id", idTipoDeDocumento);
         }
 
-        private void CargarDireccion(Decimal idDireccion)
+        private void CargarDireccion(Decimal idContacto)
         {
-            Contacto contacto = comunicador.ObtenerDireccion(idDireccion);
+            Contacto contacto = comunicador.ObtenerDireccion(idContacto);
             textBox_Calle.Text = contacto.GetCalle();
             textBox_Numero.Text = contacto.GetNumero();
             textBox_Piso.Text = contacto.GetPiso();
@@ -107,8 +107,7 @@ namespace MercadoEnvio.ABM_Cliente
             try
             {
                 Contacto contacto = new Contacto();
-                Usuarios usuario = new Usuarios();
-
+                
                 contacto.setMail(mail);
                 contacto.setTelefono(telefono);
                 contacto.SetCalle(calle);
@@ -117,7 +116,6 @@ namespace MercadoEnvio.ABM_Cliente
                 contacto.SetDepartamento(departamento);
                 contacto.SetCodigoPostal(codigoPostal);
                 contacto.SetLocalidad(localidad);
-                usuario.SetActivo(activo);
                 comunicador.Modificar(idContacto, contacto);
 
             }

@@ -14,14 +14,15 @@ namespace MercadoEnvio.ABM_Empresa
 {
     public partial class EditarEmpresa : Form
     {
-        private Decimal idEmpresa;
-        private Decimal idContacto;
-        private Decimal idUsuario;
+        private int idEmpresa;
+        private int idContacto;
+        private int idUsuario;
         private DBCommunicator comunicador = new DBCommunicator();
 
         public EditarEmpresa(String idEmpresa)
         {
             InitializeComponent();
+            this.idEmpresa = Convert.ToInt32(idEmpresa);
         }
 
         private void EditarEmpresa_Load(object sender, EventArgs e)
@@ -111,6 +112,7 @@ namespace MercadoEnvio.ABM_Empresa
                 empresa.SetNombreDeContacto(nombreDeContacto);
                 empresa.SetRubro(rubro);
                 empresa.SetFechaDeCreacion(fechaDeCreacion);
+                empresa.SetIdContacto(idContacto);
                 usuario.SetActivo(activo);
                 pudoModificar = comunicador.Modificar(idEmpresa, empresa);
                 if (pudoModificar) MessageBox.Show("La empresa se modifico correctamente");

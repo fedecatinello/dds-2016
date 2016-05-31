@@ -17,16 +17,16 @@ namespace MercadoEnvio.ABM_Empresa
         private String username;
         private String contrasena;
         private DBCommunicator comunicador = new DBCommunicator();
-        //private Decimal idDireccion;
-        private Decimal idUsuario;
-        private Decimal idEmpresa;
+        private int idContacto;
+        private int idUsuario;
+        private int idEmpresa;
 
         public AgregarEmpresa(String username, String contrasena)
         {
             InitializeComponent();
             this.username = username;
             this.contrasena = contrasena;
-           // this.idDireccion = 0;
+            this.idContacto = 0;
             this.idUsuario = 0;
         }
 
@@ -80,23 +80,29 @@ namespace MercadoEnvio.ABM_Empresa
                 MessageBox.Show("Datos mal ingresados en: " + exception.Message);
                 return;
             }
-            /* --------------------NO USAMOS DIRECCION-------------------------
-             Controla que no se haya creado ya la contacto
-            if (this.idDireccion == 0)
+            
+            // Controla que no se haya creado ya la contacto
+            if (this.idContacto == 0)
             {
-                this.idDireccion = comunicador.CrearDireccion(contacto);
+                this.idContacto = comunicador.CrearContacto(contacto);
             }
-            */
+            
             // Crea empresa
             try
             {
                 Empresas empresa = new Empresas();
+                Usuarios usuario = new Usuarios();
+
                 empresa.SetRazonSocial(razonSocial);
                 empresa.SetCiudad(ciudad);
                 empresa.SetCuit(cuit);
                 empresa.SetNombreDeContacto(nombreDeContacto);
                 empresa.SetRubro(rubro);
                 empresa.SetFechaDeCreacion(fechaDeCreacion);
+                empresa.SetIdUsuario(idUsuario);
+                usuario.SetActivo(true);
+                empresa.SetIdContacto(idContacto);
+                
                 idEmpresa = comunicador.CrearEmpresa(empresa);
                 if (idEmpresa > 0) MessageBox.Show("Se agrego la empresa correctamente");
             }
@@ -152,7 +158,7 @@ namespace MercadoEnvio.ABM_Empresa
             VolverAlMenuPrincipal();
         }
 
-        private Decimal CrearUsuario()
+        private int CrearUsuario()
         {
             /*
              ------------- SOLO LOS ADMINISTRADORES PUEDEN CREAR USUARIOS-----------------

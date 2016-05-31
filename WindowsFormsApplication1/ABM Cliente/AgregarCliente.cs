@@ -17,9 +17,9 @@ namespace MercadoEnvio.ABM_Cliente
         private String username;
         private String contrasena;
         private DBCommunicator comunicador = new DBCommunicator();
-        private Decimal idDireccion;
-        private Decimal idUsuario;
-        private Decimal idCliente;
+        private int idContacto;
+        private int idUsuario;
+        private int idCliente;
 
 
         public AgregarCliente(String username, String contrasena)
@@ -27,7 +27,7 @@ namespace MercadoEnvio.ABM_Cliente
             InitializeComponent();
             this.username = username;
             this.contrasena = contrasena;
-            this.idDireccion = 0;
+            this.idContacto = 0;
             this.idUsuario = 0;
         }
 
@@ -62,7 +62,7 @@ namespace MercadoEnvio.ABM_Cliente
             String codigoPostal = textBox_CodigoPostal.Text;
             String localidad = textBox_Localidad.Text;
 
-            Decimal idTipoDeDocumento = (Decimal) comunicador.SelectFromWhere("id", "TipoDeDocumento", "nombre", tipoDeDocumento);
+           // Decimal idTipoDeDocumento = (Decimal) comunicador.SelectFromWhere("id", "TipoDeDocumento", "nombre", tipoDeDocumento);
 
             // Crea una contacto y se guarda su id
             Contacto contacto = new Contacto();
@@ -88,15 +88,17 @@ namespace MercadoEnvio.ABM_Cliente
                 return;
             }
             // Controla que no se haya creado ya el contacto
-            if (this.idDireccion == 0)
+            if (this.idContacto == 0)
             {
-                this.idDireccion = comunicador.CrearDireccion(contacto);
+                this.idContacto = comunicador.CrearContacto(contacto);
             } 
 
             // Crear cliente
             try
             {
                 Clientes cliente = new Clientes();
+                Usuarios usuario = new Usuarios();
+
                 cliente.SetNombre(nombre);
                 cliente.SetApellido(apellido);
                 cliente.SetNumeroDeDocumento(numeroDeDocumento);
@@ -104,6 +106,9 @@ namespace MercadoEnvio.ABM_Cliente
                 cliente.SetFechaDeNacimiento(fechaDeNacimiento);
                 cliente.SetFechaDeAlta(Config.getInstance().getCurrentDate());
                 cliente.SetIdUsuario(idUsuario);
+                cliente.SetIdContacto(idContacto);
+                usuario.SetActivo(true);
+                
                 
                 idCliente = comunicador.CrearCliente(cliente);
                 if (idCliente > 0) MessageBox.Show("Se agrego el cliente correctamente");
@@ -137,7 +142,7 @@ namespace MercadoEnvio.ABM_Cliente
             // Si el cliente lo crea el admin, crea un nuevo usuario predeterminado. Si lo crea un nuevo registro de usuario, usa el que viene por parametro
             if (idUsuario == 0)
             {
-                //idUsuario = CrearUsuario();
+                idUsuario = CrearUsuario();
                 idUsuario = comunicador.CrearUsuarioConValores(username, contrasena);
                 Boolean seCreoBien = comunicador.AsignarUsuarioACliente(idCliente, idUsuario);
                 if (seCreoBien) MessageBox.Show("Se creo el usuario correctamente");
@@ -158,7 +163,7 @@ namespace MercadoEnvio.ABM_Cliente
             VolverAlMenuPrincial();
         }
         
-        private Decimal CrearUsuario()
+        private int CrearUsuario()
         {
             /*
              ------------- SOLO LOS ADMINISTRADORES PUEDEN CREAR USUARIOS-----------------

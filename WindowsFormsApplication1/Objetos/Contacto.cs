@@ -20,7 +20,7 @@ namespace MercadoEnvio
         private String departamento;
         private String localidad;
         private String codigoPostal;
-        private int usr_id;
+      
 
 
         public void setMail(String mail)
@@ -129,11 +129,8 @@ namespace MercadoEnvio
         {
             return this.localidad;
         }
-        public int GetUsr_id()
-        {
-            return this.usr_id;
-        }
       
+     
 
         #region Miembros de Comunicable
 
@@ -144,12 +141,12 @@ namespace MercadoEnvio
 
         string Comunicable.GetQueryModificar()
         {
-            return "UPDATE NET_A_CERO.Contacto SET mail=@mail, telefono=@telefono, calle = @calle, numeroCalle = @numeroCalle, piso = @piso, depto = @depto, cod_postal = @cod_postal, localidad = @localidad WHERE id = @id";
+            return "UPDATE NET_A_CERO.Contacto SET cont_mail = @mail, cont_telefono = @telefono, cont_calle = @calle, cont_numero_calle = @numeroCalle, cont_piso = @piso, cont_depto = @depto, cont_localidad = @localidad, cont_codigo_postal = @cod_postal WHERE cont_id = @id";
         }
 
         string Comunicable.GetQueryObtener()
         {
-            return "SELECT * FROM NET_A_CERO.Contacto WHERE id = @id";
+            return "SELECT * FROM NET_A_CERO.Contacto WHERE cont_id = @id";
         }
 
         IList<SqlParameter> Comunicable.GetParametros()

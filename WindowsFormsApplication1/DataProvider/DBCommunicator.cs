@@ -31,7 +31,7 @@ namespace MercadoEnvio
             return (Decimal)parametroOutput.Value;
         }
 
-        public Decimal CrearUsuarioConValores(String username, String password)
+        public int CrearUsuarioConValores(String username, String password)
         {
             query = "NET_A_CERO.crear_usuario_con_valores";
             parametros.Clear();
@@ -43,7 +43,7 @@ namespace MercadoEnvio
             command = QueryBuilder.Instance.build(query, parametros);
             command.CommandType = CommandType.StoredProcedure;
             command.ExecuteNonQuery();
-            return (Decimal)parametroOutput.Value;
+            return (int)parametroOutput.Value;
         }
 
         public Boolean AsignarUsuarioACliente(Decimal idCliente, Decimal idUsuario)
@@ -84,7 +84,7 @@ namespace MercadoEnvio
             return false;
         }
 
-        public Decimal Crear(Comunicable objeto)
+        public int Crear(Comunicable objeto)
         {
             query = objeto.GetQueryCrear();
             parametros.Clear();
@@ -95,7 +95,7 @@ namespace MercadoEnvio
             command = QueryBuilder.Instance.build(query, parametros);
             command.CommandType = CommandType.StoredProcedure;
             command.ExecuteNonQuery();
-            return (Decimal)parametroOutput.Value;
+            return (int)parametroOutput.Value;
         }
 
         public Boolean Modificar(Decimal id, Comunicable objeto)
@@ -134,7 +134,7 @@ namespace MercadoEnvio
             return false;
         }
 
-        public Decimal CrearCliente(Clientes cliente)
+        public int CrearCliente(Clientes cliente)
         {
             
             if (!pasoControlDeRegistro(cliente.GetTipoDeDocumento(), cliente.GetNumeroDeDocumento()))
@@ -144,7 +144,7 @@ namespace MercadoEnvio
              
         }
 
-        public Decimal CrearEmpresa(Empresas empresa)
+        public int CrearEmpresa(Empresas empresa)
         {
             if (!pasoControlDeRegistroDeCuit(empresa.GetCuit()))
                 throw new CuitYaExisteException();
@@ -158,7 +158,7 @@ namespace MercadoEnvio
             return this.Crear(empresa);
         }
 
-        public Decimal CrearDireccion(Contacto contacto)
+        public int CrearContacto(Contacto contacto)
         {
             return this.Crear(contacto);
         }

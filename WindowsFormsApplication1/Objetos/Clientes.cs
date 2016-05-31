@@ -9,21 +9,22 @@ namespace MercadoEnvio.Objetos
 {
     class Clientes : Objeto, Comunicable
     {
-        private Decimal id;
+        private int id;
         private String nombre;
         private String apellido;
         private String numeroDeDocumento; 
         private String tipoDeDocumento;
         private DateTime fechaDeNacimiento;
         private DateTime fechaDeAlta;
-        private Decimal idUsuario;
+        private int idUsuario;
+        private int idContacto;
 
-        public void SetId(Decimal id)
+        public void SetId(int id)
         {
             this.id = id;
         }
 
-        public Decimal GetId()
+        public int GetId()
         {
             return this.id;
         }
@@ -104,15 +105,26 @@ namespace MercadoEnvio.Objetos
             return this.fechaDeAlta;
         }
 
-        public void SetIdUsuario(Decimal idUsuario)
+        public void SetIdUsuario(int idUsuario)
         {
             this.idUsuario = idUsuario;
         }
 
-        public Decimal GetIdUsuario()
+        public int GetIdUsuario()
         {
             return this.idUsuario;
         }
+
+        public void SetIdContacto(int idContacto)
+        {
+            this.idContacto = idContacto;
+        }
+
+        public int GetIdContacto()
+        {
+            return this.idContacto;
+        }
+
 
         #region Miembros de Comunicable
 
@@ -123,12 +135,12 @@ namespace MercadoEnvio.Objetos
 
         string Comunicable.GetQueryModificar()
         {
-            return "UPDATE NET_A_CERO.Clientes SET nombre = @nombre, apellido = @apellido, documento = @documento, tipo_de_documento = @tipo_de_documento, fecha_nacimiento = @fecha_nacimiento, fecha_Alta = @fecha_Alta WHERE id = @id";
+            return "UPDATE NET_A_CERO.Clientes SET cli_nombre = @nombre, cli_apellido = @apellido, cli_documento = @documento, cli_tipo_dni = @tipo_de_documento, cli_fecha_nac = @fecha_nacimiento, cli_fecha_lta = @fecha_alta WHERE id = @id";
         }
 
         string Comunicable.GetQueryObtener()
         {
-            return "SELECT * FROM NET_A_CERO.Clientes WHERE id = @id";
+            return "SELECT * FROM NET_A_CERO.Clientes WHERE cli_id = @id";
         }
 
         IList<System.Data.SqlClient.SqlParameter> Comunicable.GetParametros()
@@ -151,7 +163,8 @@ namespace MercadoEnvio.Objetos
             this.numeroDeDocumento = Convert.ToString(reader["documento"]);
             this.tipoDeDocumento = Convert.ToString(reader["tipo_de_documento"]);
             this.fechaDeNacimiento = Convert.ToDateTime(reader["fecha_nacimiento"]);
-            this.idUsuario = Convert.ToDecimal(reader["usuario_id"]);
+            this.idUsuario = Convert.ToInt32(reader["usuario_id"]);
+            this.idContacto = Convert.ToInt32(reader["contacto_id"]);
         }
 
         #endregion
