@@ -39,7 +39,6 @@ namespace MercadoEnvio.ABM_Rol
 
         private void RolForm_Load(object sender, EventArgs e)
         {
-
         }
 
         private void botonVolver_Click(object sender, EventArgs e)
