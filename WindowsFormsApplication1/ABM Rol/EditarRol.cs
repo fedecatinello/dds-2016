@@ -17,13 +17,13 @@ namespace MercadoEnvio.ABM_Rol
         private IList<SqlParameter> parametros = new List<SqlParameter>();
         
         public Object SelectedItem { get; set; }
-        private String rolElegido;
+        private String rolElegidoACambiar;
         private int estabaDeshabilitado;
 
         public EditarRol(String rol)
         {
             InitializeComponent();
-            rolElegido = rol;            
+            rolElegidoACambiar = rol;            
             
         }
 
@@ -34,7 +34,7 @@ namespace MercadoEnvio.ABM_Rol
 
         private void CargarTodosLosDatos()
         {
-            this.labelRolElegido.Text = rolElegido;
+            this.labelRolElegido.Text = rolElegidoACambiar;
             CargarFuncionalidades();            
             if (estaHabilitado())
             {
@@ -81,12 +81,12 @@ namespace MercadoEnvio.ABM_Rol
             if (this.textBoxRol.Text != "")
             {
                 RenombrarRol();
-                MessageBox.Show("Se modifico correctamente el rol " + rolElegido);
-                rolElegido = this.textBoxRol.Text;
+                MessageBox.Show("Se modifico correctamente el rol " + rolElegidoACambiar);
+                rolElegidoACambiar = this.textBoxRol.Text;
             }
             else
             {
-                MessageBox.Show("Se modifico correctamente el rol " + rolElegido);
+                MessageBox.Show("Se modifico correctamente el rol " + rolElegidoACambiar);
             }
 
             CargarTodosLosDatos();
@@ -97,7 +97,7 @@ namespace MercadoEnvio.ABM_Rol
         private bool estaHabilitado()
         {
             parametros.Clear();
-            parametros.Add(new SqlParameter("@rol", rolElegido));
+            parametros.Add(new SqlParameter("@rol", rolElegidoACambiar));
 
             String consulta = "SELECT COUNT(DISTINCT nombre) FROM NET_A_CERO.Roles WHERE rol_nombre = @rol and rol_activo = 1";
             int estadoRol = (int)QueryBuilder.Instance.build(consulta, parametros).ExecuteScalar();
@@ -117,7 +117,7 @@ namespace MercadoEnvio.ABM_Rol
             DataSet funcionalidades = new DataSet();
             SqlDataAdapter adapter = new SqlDataAdapter();
             parametros = new List<SqlParameter>();
-            command = QueryBuilder.Instance.build("SELECT DISTINCT nombre FROM NET_A_CERO.Funcionalidades", parametros);
+            command = QueryBuilder.Instance.build("SELECT DISTINCT func_nombre FROM NET_A_CERO.Funcionalidades", parametros);
             adapter.SelectCommand = command;
             adapter.Fill(funcionalidades);
             checkedListBoxFuncionalidades.DataSource = funcionalidades.Tables[0].DefaultView;
@@ -135,7 +135,7 @@ namespace MercadoEnvio.ABM_Rol
             foreach (DataRowView funcionalidad in this.checkedListBoxFuncionalidades.Items)
             {                
                 parametros.Clear();
-                parametros.Add(new SqlParameter("@rol", rolElegido));
+                parametros.Add(new SqlParameter("@rol", rolElegidoACambiar));
                 parametros.Add(new SqlParameter("@funcionalidad", funcionalidad.Row["nombre"] as String));
 
                 if (verificarSiLaTiene(funcionalidad.Row["nombre"] as String))
@@ -165,13 +165,13 @@ namespace MercadoEnvio.ABM_Rol
             String nuevoNombreRol = this.textBoxRol.Text;
 
             parametros.Clear();
-            parametros.Add(new SqlParameter("@nombre_viejo", rolElegido));
+            parametros.Add(new SqlParameter("@nombre_viejo", rolElegidoACambiar));
             parametros.Add(new SqlParameter("@nombre_nuevo", nuevoNombreRol));
 
-            String sql = "UPDATE NET_A_CERO.Roles SET rol_nombre = @nombre_nuevo WHERE rol_nombre = @nombre_viejo";
+            String sql = "UPDATE NET_A_CERO.Roles r SET r.rol_nombre = @nombre_nuevo WHERE r.rol_nombre = @nombre_viejo";
             QueryBuilder.Instance.build(sql, parametros).ExecuteNonQuery();
             
-            MessageBox.Show("El rol " + rolElegido + " fue renombrado como " + nuevoNombreRol);            
+            MessageBox.Show("El rol " + rolElegidoACambiar + " fue renombrado como " + nuevoNombreRol);            
         }
 
         private void AgregarFuncionalidades()
@@ -186,10 +186,10 @@ namespace MercadoEnvio.ABM_Rol
                 else
                 {
                     parametros.Clear();
-                    parametros.Add(new SqlParameter("@rol", rolElegido));
+                    parametros.Add(new SqlParameter("@rol", rolElegidoACambiar));
                     parametros.Add(new SqlParameter("@funcionalidad", funcionalidad.Row["nombre"] as String));
 
-                    String sql1 = "INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(func_id, rol_id) VALUES ((SELECT id FROM NET_A_CERO.Funcionalidades WHERE func_nombre = @funcionalidad), (SELECT id FROM NET_A_CERO.Roles WHERE rol_nombre = @rol))";
+                    String sql1 = "INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(func_id, rol_id) VALUES ((SELECT f.func_id FROM NET_A_CERO.Funcionalidades f WHERE f.func_nombre = @funcionalidad), (SELECT r.rol_id FROM NET_A_CERO.Roles r WHERE r.rol_nombre = @rol))";
 
                     QueryBuilder.Instance.build(sql1, parametros).ExecuteNonQuery();
                 }
@@ -199,10 +199,10 @@ namespace MercadoEnvio.ABM_Rol
         private bool verificarSiLaTiene(String funcionalidad)
         {
             parametros.Clear();
-            parametros.Add(new SqlParameter("@rol", rolElegido));
+            parametros.Add(new SqlParameter("@rol", rolElegidoACambiar));
             parametros.Add(new SqlParameter("@funcionalidad", funcionalidad));
 
-            String consulta = "SELECT COUNT(*) FROM NET_A_CERO.Rol_x_Funcionalidad WHERE func_id = (SELECT id FROM NET_A_CERO.Funcionalidades WHERE func_nombre = @funcionalidad) and rol_id = (SELECT  id FROM NET_A_CERO.Roles WHERE rol_nombre = @rol)";
+            String consulta = "SELECT COUNT(*) FROM NET_A_CERO.Rol_x_Funcionalidad rxf WHERE rxf.func_id = (SELECT f.func_id FROM NET_A_CERO.Funcionalidades f WHERE f.func_nombre = @funcionalidad) AND rxf.rol_id = (SELECT r.rol_id FROM NET_A_CERO.Roles r WHERE r.rol_nombre = @rol)";
             int tieneLaFuncionalidad = (int)QueryBuilder.Instance.build(consulta, parametros).ExecuteScalar();
 
                 if (tieneLaFuncionalidad == 1)
@@ -226,10 +226,10 @@ namespace MercadoEnvio.ABM_Rol
                 if (estado == "Unchecked")
                 {
                     parametros.Clear();
-                    parametros.Add(new SqlParameter("@rol", rolElegido));
+                    parametros.Add(new SqlParameter("@rol", rolElegidoACambiar));
                     parametros.Add(new SqlParameter("@funcionalidad", funcionalidad.Row["nombre"] as String));
 
-                    String sql2 = "DELETE NET_A_CERO.Rol_x_Funcionalidad WHERE func_id = (SELECT id FROM NET_A_CERO.Funcionalidades WHERE func_nombre = @funcionalidad) and rol_id = (SELECT  id FROM NET_A_CERO.Roles WHERE rol_nombre = @rol)";
+                    String sql2 = "DELETE NET_A_CERO.Rol_x_Funcionalidad rxf WHERE rxf.func_id = (SELECT f.func_id FROM NET_A_CERO.Funcionalidades f WHERE f.func_nombre = @funcionalidad) AND rxf.rol_id = (SELECT  r.rol_id FROM NET_A_CERO.Roles r WHERE r.rol_nombre = @rol)";
 
                     QueryBuilder.Instance.build(sql2, parametros).ExecuteNonQuery();
                 }
@@ -239,7 +239,7 @@ namespace MercadoEnvio.ABM_Rol
         private void HabilitarRol()
         {
             parametros.Clear();
-            parametros.Add(new SqlParameter("@nombre", rolElegido));
+            parametros.Add(new SqlParameter("@nombre", rolElegidoACambiar));
 
             String sql = "UPDATE NET_A_CERO.Roles SET rol_activo = 1 WHERE rol_nombre = @nombre";
 

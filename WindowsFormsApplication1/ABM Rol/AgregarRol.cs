@@ -31,7 +31,7 @@ namespace MercadoEnvio.ABM_Rol
             DataSet funcionalidades = new DataSet();
             SqlDataAdapter adapter = new SqlDataAdapter();
             parametros = new List<SqlParameter>();
-            command = QueryBuilder.Instance.build("SELECT DISTINCT nombre FROM NET_A_CERO.Funcionalidades", parametros);
+            command = QueryBuilder.Instance.build("SELECT DISTINCT func_nombre FROM NET_A_CERO.Funcionalidades", parametros);
             adapter.SelectCommand = command;
             adapter.Fill(funcionalidades);
             checkedListBoxFuncionalidades.DataSource = funcionalidades.Tables[0].DefaultView;
@@ -60,7 +60,7 @@ namespace MercadoEnvio.ABM_Rol
 
                 parametros.Add(new SqlParameter("@funcionalidad", funcionalidad.Row["nombre"] as String));
 
-                String sql2 = "INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(func_id, rol_id) VALUES ((SELECT id FROM NET_A_CERO.Funcionalidades WHERE func_nombre = @funcionalidad), (SELECT  id FROM NET_A_CERO.Roles WHERE rol_nombre = @rol))";
+                String sql2 = "INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(func_id, rol_id) VALUES ((SELECT func_id FROM NET_A_CERO.Funcionalidades WHERE func_nombre = @funcionalidad), (SELECT  rol_id FROM NET_A_CERO.Roles WHERE rol_nombre = @rol))";
                                 
                 QueryBuilder.Instance.build(sql2, parametros).ExecuteNonQuery();                                
             }

@@ -35,6 +35,9 @@ namespace MercadoEnvio.ABM_Rubro
             this.button_Limpiar = new System.Windows.Forms.Button();
             this.button_Cancelar = new System.Windows.Forms.Button();
             this.dataGridView_Rubro = new System.Windows.Forms.DataGridView();
+            this.button1 = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_Rubro)).BeginInit();
             this.SuspendLayout();
@@ -102,11 +105,47 @@ namespace MercadoEnvio.ABM_Rubro
             this.dataGridView_Rubro.Size = new System.Drawing.Size(1068, 199);
             this.dataGridView_Rubro.TabIndex = 4;
             // 
+            // button1
+            // 
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.Location = new System.Drawing.Point(471, 202);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(152, 28);
+            this.button1.TabIndex = 7;
+            this.button1.Text = "Volver al menu principal";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(468, 168);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(155, 15);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "Regrese al menu principal.";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(385, 136);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(323, 15);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "Esta funcionalidad todavia  no se encuentra en el sistema.";
+            this.label3.Click += new System.EventHandler(this.label3_Click);
+            // 
             // RubroForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1092, 366);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.dataGridView_Rubro);
             this.Controls.Add(this.button_Cancelar);
             this.Controls.Add(this.button_Limpiar);
@@ -119,6 +158,7 @@ namespace MercadoEnvio.ABM_Rubro
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_Rubro)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -131,5 +171,8 @@ namespace MercadoEnvio.ABM_Rubro
         private System.Windows.Forms.Button button_Limpiar;
         private System.Windows.Forms.Button button_Cancelar;
         private System.Windows.Forms.DataGridView dataGridView_Rubro;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
     }
 }

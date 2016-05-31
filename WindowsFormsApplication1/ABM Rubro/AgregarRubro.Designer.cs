@@ -42,6 +42,7 @@ namespace MercadoEnvio.ABM_Rubro
             this.label1.Size = new System.Drawing.Size(323, 15);
             this.label1.TabIndex = 0;
             this.label1.Text = "Esta funcionalidad todavia  no se encuentra en el sistema.";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // label2
             // 
@@ -52,6 +53,7 @@ namespace MercadoEnvio.ABM_Rubro
             this.label2.Size = new System.Drawing.Size(155, 15);
             this.label2.TabIndex = 1;
             this.label2.Text = "Regrese al menu principal.";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // button1
             // 

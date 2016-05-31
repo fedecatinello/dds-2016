@@ -13,22 +13,30 @@ namespace MercadoEnvio.ABM_Rubro
 {
     public partial class RubroForm : Form
     {
-        private String query;
-        private SqlCommand command;
-        private IList<SqlParameter> parametros = new List<SqlParameter>();
+        //private String query;
+        //private SqlCommand command;
+        //private IList<SqlParameter> parametros = new List<SqlParameter>();
 
         public RubroForm()
         {
             InitializeComponent();
+            groupBox1.Visible = false;
+            label1.Visible = false;
+            textBox_Descripcion.Visible = false;
+            button_Buscar.Visible = false;
+            button_Limpiar.Visible = false;
+            button_Cancelar.Visible = false;
+            dataGridView_Rubro.Visible = false;
         }
 
+        
         private void RubroForm_Load(object sender, EventArgs e)
         {
-            CargarRubro();
-            AgregarColumnaDeModificacion();
-            AgregarListenerBotonDeModificacion();
+            //CargarRubro();
+            //AgregarColumnaDeModificacion();
+           // AgregarListenerBotonDeModificacion();
         }
-
+        /*----------------NO HAY QUE IMPLEMENTARLO---------------------
         private void CargarRubro()
         {
             command = QueryBuilder.Instance.build("SELECT * FROM Rubro", parametros);
@@ -65,9 +73,10 @@ namespace MercadoEnvio.ABM_Rubro
                 new EditarRubro(idRubroAModificiar).ShowDialog();
             }
         }
-
+        */
         private void button_Buscar_Click(object sender, EventArgs e)
         {
+            /*
             String filtro = "";
 
             if (textBox_Descripcion.Text != "") filtro += "descripcion like '" + textBox_Descripcion.Text + "%'";
@@ -81,17 +90,37 @@ namespace MercadoEnvio.ABM_Rubro
             adapter.SelectCommand = command;
             adapter.Fill(rubros);
             dataGridView_Rubro.DataSource = rubros.Tables[0].DefaultView;
+             */
         }
 
         private void button_Limpiar_Click(object sender, EventArgs e)
         {
+            /*
             textBox_Descripcion.Text = "";
             CargarRubro();
+             */
         }
 
         private void button_Cancelar_Click(object sender, EventArgs e)
         {
+            //this.Close();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            new MenuPrincipal().ShowDialog();
             this.Close();
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
