@@ -33,6 +33,7 @@ namespace MercadoEnvio.ABM_Rol
             this.labelEstadoRoles = new System.Windows.Forms.Label();
             this.botonCancelar = new System.Windows.Forms.Button();
             this.botonBuscar = new System.Windows.Forms.Button();
+            this.botonVolver = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResultadosBusqueda)).BeginInit();
             this.SuspendLayout();
             // 
@@ -67,7 +68,7 @@ namespace MercadoEnvio.ABM_Rol
             // 
             // botonCancelar
             // 
-            this.botonCancelar.Location = new System.Drawing.Point(23, 76);
+            this.botonCancelar.Location = new System.Drawing.Point(191, 74);
             this.botonCancelar.Name = "botonCancelar";
             this.botonCancelar.Size = new System.Drawing.Size(73, 23);
             this.botonCancelar.TabIndex = 3;
@@ -77,7 +78,7 @@ namespace MercadoEnvio.ABM_Rol
             // 
             // botonBuscar
             // 
-            this.botonBuscar.Location = new System.Drawing.Point(191, 77);
+            this.botonBuscar.Location = new System.Drawing.Point(291, 76);
             this.botonBuscar.Name = "botonBuscar";
             this.botonBuscar.Size = new System.Drawing.Size(94, 21);
             this.botonBuscar.TabIndex = 4;
@@ -85,11 +86,23 @@ namespace MercadoEnvio.ABM_Rol
             this.botonBuscar.UseVisualStyleBackColor = true;
             this.botonBuscar.Click += new System.EventHandler(this.botonBuscar_Click);
             // 
+            // botonVolver
+            // 
+            this.botonVolver.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.botonVolver.Location = new System.Drawing.Point(25, 74);
+            this.botonVolver.Name = "botonVolver";
+            this.botonVolver.Size = new System.Drawing.Size(141, 23);
+            this.botonVolver.TabIndex = 5;
+            this.botonVolver.Text = "< Volver a menu de rol";
+            this.botonVolver.UseVisualStyleBackColor = true;
+            this.botonVolver.Click += new System.EventHandler(this.botonVolver_Click);
+            // 
             // ListadoEditarRol
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(406, 348);
+            this.Controls.Add(this.botonVolver);
             this.Controls.Add(this.botonBuscar);
             this.Controls.Add(this.botonCancelar);
             this.Controls.Add(this.labelEstadoRoles);
@@ -111,5 +124,6 @@ namespace MercadoEnvio.ABM_Rol
         private System.Windows.Forms.Label labelEstadoRoles;
         private System.Windows.Forms.Button botonCancelar;
         private System.Windows.Forms.Button botonBuscar;
+        private System.Windows.Forms.Button botonVolver;
     }
 }

@@ -41,9 +41,9 @@ namespace MercadoEnvio.ABM_Rol
             parametros = new List<SqlParameter>();            
             
             parametros.Clear();
-            parametros.Add(new SqlParameter("@habilitado", estadoRol));
+            parametros.Add(new SqlParameter("@activo", estadoRol));
 
-            command = QueryBuilder.Instance.build("SELECT DISTINCT * FROM LOS_SUPER_AMIGOS.Rol WHERE habilitado = @habilitado", parametros);
+            command = QueryBuilder.Instance.build("SELECT DISTINCT * FROM NET_A_CERO.Roles WHERE rol_activo = @activo", parametros);
             adapter.SelectCommand = command;
             adapter.Fill(roles);
             dataGridViewResultadosBusqueda.DataSource = roles.Tables[0].DefaultView;
@@ -80,15 +80,13 @@ namespace MercadoEnvio.ABM_Rol
                 buttons.Text = "Editar";
                 buttons.Name = "Editar";
                 buttons.UseColumnTextForButtonValue = true;
-                buttons.AutoSizeMode =
-                    DataGridViewAutoSizeColumnMode.AllCells;
+                buttons.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                 buttons.FlatStyle = FlatStyle.Standard;
                 buttons.CellTemplate.Style.BackColor = Color.Honeydew;                
             }
 
             dataGridViewResultadosBusqueda.Columns.Add(buttons);
-            dataGridViewResultadosBusqueda.CellClick +=
-                new DataGridViewCellEventHandler(dataGridView1_CellClick);
+            dataGridViewResultadosBusqueda.CellClick += new DataGridViewCellEventHandler(dataGridView1_CellClick);
 
         }
 
@@ -105,6 +103,13 @@ namespace MercadoEnvio.ABM_Rol
         }
 
         private void botonCancelar_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            new RolForm().ShowDialog();
+            this.Close();
+        }
+
+        private void botonVolver_Click(object sender, EventArgs e)
         {
             this.Hide();
             new RolForm().ShowDialog();
