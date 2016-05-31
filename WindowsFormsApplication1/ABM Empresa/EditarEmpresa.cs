@@ -44,7 +44,7 @@ namespace MercadoEnvio.ABM_Empresa
             textBox_FechaDeCreacion.Text = Convert.ToString(empresa.GetFechaDeCreacion());
             textBox_Mail.Text = contacto.GetMail();
             textBox_Telefono.Text = contacto.GetTelefono();
-            checkBox_Habilitado.Checked = Convert.ToBoolean(comunicador.SelectFromWhere("usr_activo", "Usuarios", "id", idEmpresa));
+            checkBox_Habilitado.Checked = Convert.ToBoolean(comunicador.SelectFromWhere("usr_activo", "Usuarios", "usr_id", idEmpresa));
             textBox_Calle.Text = contacto.GetCalle();
             textBox_Numero.Text = contacto.GetNumeroCalle();
             textBox_Piso.Text = contacto.GetPiso();
