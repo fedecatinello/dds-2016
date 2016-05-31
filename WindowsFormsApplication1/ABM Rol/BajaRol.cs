@@ -34,7 +34,7 @@ namespace MercadoEnvio.ABM_Rol
             DataSet roles = new DataSet();
             SqlDataAdapter adapter = new SqlDataAdapter();
             parametros = new List<SqlParameter>();
-            command = QueryBuilder.Instance.build("SELECT DISTINCT nombre FROM NET_A_CERO.Roles  where rol_activo = 1", parametros);
+            command = QueryBuilder.Instance.build("SELECT DISTINCT rol_nombre FROM NET_A_CERO.Roles WHERE rol_activo = 1", parametros);
             adapter.SelectCommand = command;
             adapter.Fill(roles);
             comboBoxRol.DataSource = roles.Tables[0].DefaultView;
@@ -74,7 +74,7 @@ namespace MercadoEnvio.ABM_Rol
             parametros.Add(new SqlParameter("@nombre", rolElegido));
 
             // Borramos el rol en los usuarios que lo tienen
-            String sql2 = "DELETE NET_A_CERO.Usuarios_x_Rol WHERE rol_id = (SELECT id FROM NET_A_CERO.Roles WHERE rol_nombre = @nombre and rol_activo = 0)";
+            String sql2 = "DELETE NET_A_CERO.Usuarios_x_Rol WHERE rol_id = (SELECT rol_id FROM NET_A_CERO.Roles WHERE rol_nombre = @nombre AND rol_activo = 0)"; 
 
             filas_afectadas = QueryBuilder.Instance.build(sql2, parametros).ExecuteNonQuery();
             if (filas_afectadas != -1)
