@@ -34,7 +34,7 @@ namespace MercadoEnvio.Registro_de_Usuario
             DataSet roles = new DataSet();
             SqlDataAdapter adapter = new SqlDataAdapter();
             parametros = new List<SqlParameter>();
-            command = QueryBuilder.Instance.build("SELECT DISTINCT nombre FROM NET_A_CERO.Roles WHERE rol_activo = 1 AND rol_nombre != 'Administrador'", parametros);
+            command = QueryBuilder.Instance.build("SELECT DISTINCT rol_nombre FROM NET_A_CERO.Roles WHERE rol_activo = 1 AND rol_nombre != 'Administrador'", parametros);
             adapter.SelectCommand = command;
             adapter.Fill(roles, "Rol");
             comboBoxRol.DataSource = roles.Tables[0].DefaultView;
@@ -88,7 +88,7 @@ namespace MercadoEnvio.Registro_de_Usuario
             parametros.Add(new SqlParameter("@username", usuario));
 
             // Buscamos si el username ya se encuentra registrado
-            String consulta = "SELECT id FROM LOS_SUPER_AMIGOS.Usuario WHERE username = @username";
+            String consulta = "SELECT usr_id FROM NET_A_CERO.Usuario WHERE usr_usuario = @username";
 
             SqlDataReader reader = QueryBuilder.Instance.build(consulta, parametros).ExecuteReader();
 
@@ -108,7 +108,7 @@ namespace MercadoEnvio.Registro_de_Usuario
                     UsuarioSesion.Usuario.rol = "Clientes";
                     UsuarioSesion.Usuario.nombre = usuario;
 
-                    String idUsuario = "select top 1 id" 
+                    String idUsuario = "select top 1 usr_id" 
                                 + " from NET_A_CERO.Usuarios"
                                 + " order by id DESC";
                     parametros.Clear();

@@ -49,3 +49,4 @@ C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\FrbaCom
 C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\MercadoEnvio.Properties.Resources.resources
 C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Registro_de_Usuario.RegistrarUsuario.resources
 C:\Users\Sebastian\Documents\gdd-2016\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csproj.GenerateResource.Cache
+C:\Users\Mati\Documents\GitHub\gdd-2016\WindowsFormsApplication1\bin\Debug\MercadoEnvio.exe.config
