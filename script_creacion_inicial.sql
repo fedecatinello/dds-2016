@@ -107,9 +107,9 @@ CREATE TABLE [NET_A_CERO].[Empresas] (
     [emp_ciudad] [nvarchar](50),
     [emp_cuit] [nvarchar](50) NOT NULL,
     [emp_nombre_contacto] [nvarchar](255) default 'Nombre Contacto',        -- No existe en la maestra
-    [emp_rubro] INT,                                             
     [emp_fecha_alta] [datetime],
     [emp_usr_id] INT,
+	[emp_rubro] INT,
 	[emp_cont_id] INT
 )
 
@@ -244,9 +244,9 @@ ALTER TABLE [NET_A_CERO].[Clientes] ADD CONSTRAINT cliente_contacto FOREIGN KEY 
 
 ALTER TABLE [NET_A_CERO].[Empresas] ADD CONSTRAINT empresa_usuario FOREIGN KEY (emp_usr_id) REFERENCES [NET_A_CERO].[Usuarios](usr_id)
 
-ALTER TABLE [NET_A_CERO].[Empresas] ADD CONSTRAINT rubro_empresa FOREIGN KEY (emp_rubro) REFERENCES [NET_A_CERO].[Rubros](rubro_id)
-
 ALTER TABLE [NET_A_CERO].[Empresas] ADD CONSTRAINT empresa_contacto FOREIGN KEY (emp_cont_id) REFERENCES [NET_A_CERO].[Contacto](cont_id)
+
+ALTER TABLE [NET_A_CERO].[Empresas] ADD CONSTRAINT empresa_rubro FOREIGN KEY (emp_rubro) REFERENCES [NET_A_CERO].[Rubros](rubro_id)
 
 ALTER TABLE [NET_A_CERO].[Usuarios_x_Rol] ADD CONSTRAINT usuario_rol_usuario FOREIGN KEY (usr_id) REFERENCES [NET_A_CERO].[Usuarios](usr_id)
 
@@ -269,8 +269,6 @@ ALTER TABLE [NET_A_CERO].[Compras] ADD CONSTRAINT compras_usuario FOREIGN KEY (c
 ALTER TABLE [NET_A_CERO].[Compras] ADD CONSTRAINT compras_publicacion FOREIGN KEY (comp_publi_id) REFERENCES [NET_A_CERO].[Publicaciones](publi_id)
 
 ALTER TABLE [NET_A_CERO].[Compras] ADD CONSTRAINT compras_calificacion FOREIGN KEY (comp_calif_id) REFERENCES [NET_A_CERO].[Calificacion](calif_id)
-
-ALTER TABLE [NET_A_CERO].[Compras] ADD CONSTRAINT compras_unique UNIQUE(comp_usr_id, comp_publi_id)
 
 ALTER TABLE [NET_A_CERO].[Publicaciones] ADD CONSTRAINT visibilidad_publicacion FOREIGN KEY (publi_visib_id) REFERENCES [NET_A_CERO].[Visibilidad](visib_id)
 
@@ -325,6 +323,11 @@ INSERT INTO NET_A_CERO.Rubros(rubro_desc_larga)
     WHERE Publicacion_Rubro_Descripcion IS NOT NULL
 GO
 
+--Inserto una descripcion corta para el rubro principal de la empresa
+
+INSERT INTO NET_A_CERO.Rubros(rubro_desc_larga)
+	VALUES('Electronica')
+
 
 /** Migracion de Contacto de empresas **/
 
@@ -360,9 +363,9 @@ INSERT INTO NET_A_CERO.Contacto (cont_mail, cont_calle, cont_numero_calle, cont_
 /** Migracion de Empresas **/
 
 INSERT INTO NET_A_CERO.Empresas (emp_razon_social, emp_cuit, emp_fecha_alta, emp_rubro, emp_cont_id)
-    SELECT DISTINCT Publ_Empresa_Razon_Social, Publ_Empresa_Cuit, Publ_Empresa_Fecha_Creacion, 
-                    (SELECT rubro_id FROM NET_A_CERO.Rubros r WHERE Publicacion_Rubro_Descripcion = r.rubro_desc_larga),
-					(SELECT DISTINCT cont_id FROM NET_A_CERO.Contacto c 
+    SELECT DISTINCT Publ_Empresa_Razon_Social, Publ_Empresa_Cuit, Publ_Empresa_Fecha_Creacion,
+					(SELECT DISTINCT rubro_id FROM NET_A_CERO.Rubros WHERE rubro_desc_larga = 'Electronica'),
+                    (SELECT DISTINCT cont_id FROM NET_A_CERO.Contacto c 
 											WHERE Publ_Empresa_Dom_Calle = c.cont_calle
 											AND Publ_Empresa_Nro_Calle = c.cont_numero_calle
 											AND Publ_Empresa_Piso = c.cont_piso
@@ -393,7 +396,7 @@ BEGIN
     UPDATE NET_A_CERO.Empresas SET emp_usr_id = @emp_id WHERE emp_id = @row_pos_emp
     SET @row_pos_emp = @row_pos_emp + 1
 END
-    
+
     
 /** Migracion de Clientes que compraron **/
 
@@ -615,34 +618,6 @@ INSERT INTO NET_A_CERO.Estado(estado_desc)
 	VALUES('Finalizada')
 
 
-/** Agregar el estado de una publicacion dado su codigo **/
-
-IF (OBJECT_ID('NET_A_CERO.agregar_estado_publicacion') IS NOT NULL)
-    DROP FUNCTION NET_A_CERO.agregar_estado_publicacion
-GO
-
-CREATE FUNCTION NET_A_CERO.agregar_estado_publicacion
-(
-    @publi_cod NUMERIC(18,0)
-)
-RETURNS INT
-AS
-BEGIN
-	DECLARE @estado_publi nvarchar(255)
-	DECLARE @estado nvarchar(255)
-	SET @estado = (SELECT Publicacion_Estado FROM gd_esquema.Maestra WHERE Publicacion_Cod = @publi_cod AND Publicacion_Cod IS NOT NULL)
-	IF @estado = 'Publicada'
-        BEGIN
-            SET @estado_publi = 'Activa'
-        END
-    ELSE
-        BEGIN
-            SET @estado_publi = 'Borrador'
-        END
-	RETURN (SELECT estado_id FROM NET_A_CERO.Estado WHERE estado_desc = @estado_publi)
-END
-GO
-
 
 /** Migracion de Publicaciones **/
 
@@ -652,9 +627,9 @@ GO
 INSERT INTO NET_A_CERO.Publicaciones (publi_id, publi_tipo, publi_descripcion, publi_stock, publi_fec_vencimiento, publi_fec_inicio, publi_precio, publi_usr_id, publi_visib_id, publi_estado_id) 
     SELECT DISTINCT Publicacion_Cod, Publicacion_Tipo, Publicacion_Descripcion, Publicacion_Stock, Publicacion_Fecha_Venc, Publicacion_Fecha, 
                     Publicacion_Precio, NET_A_CERO.generar_id_publicacion(Publ_Cli_Dni, Publ_Empresa_Razon_Social), Publicacion_Visibilidad_Cod,
-                    NET_A_CERO.agregar_estado_publicacion(Publicacion_Cod) 
+                    (SELECT estado_id FROM NET_A_CERO.Estado WHERE estado_desc = 'Activa') 
     FROM gd_esquema.Maestra
-    WHERE Publicacion_Cod IS NOT NULL
+    WHERE Publicacion_Rubro_Descripcion IS NOT NULL
 
 SET IDENTITY_INSERT NET_A_CERO.Publicaciones OFF;
 GO
@@ -669,7 +644,7 @@ INSERT INTO NET_A_CERO.Rubro_x_Publicacion(publi_id, rubro_id)
 
 /** Migracion de Compras **/
 INSERT INTO NET_A_CERO.Compras(comp_usr_id, comp_publi_id, comp_fecha, comp_cantidad, comp_monto, comp_calif_id)
-    SELECT (SELECT cli_id FROM NET_A_CERO.Clientes WHERE cli_dni = Cli_Dni), Publicacion_Cod, Compra_Fecha, Compra_Cantidad, null, Calificacion_Codigo
+    SELECT (SELECT DISTINCT cli_usr_id FROM NET_A_CERO.Clientes WHERE cli_dni = Cli_Dni), Publicacion_Cod, Compra_Fecha, Compra_Cantidad, null, Calificacion_Codigo
     FROM gd_esquema.Maestra
     WHERE Compra_Cantidad IS NOT NULL
     AND Cli_Dni IS NOT NULL
@@ -695,7 +670,7 @@ GO
 
 /** Migracion de Ofertas_x_Subasta **/
 INSERT INTO NET_A_CERO.Ofertas_x_Subasta(sub_usr_id, sub_monto, sub_fecha, sub_publi_id)
-    SELECT (SELECT cli_usr_id FROM NET_A_CERO.Clientes WHERE cli_dni = Cli_Dni), Oferta_Monto, Oferta_Fecha, Publicacion_Cod
+    SELECT (SELECT DISTINCT cli_usr_id FROM NET_A_CERO.Clientes WHERE cli_dni = Cli_Dni), Oferta_Monto, Oferta_Fecha, Publicacion_Cod
     FROM gd_esquema.Maestra
     WHERE Publicacion_Cod IS NOT NULL
     AND Cli_Dni IS NOT NULL
