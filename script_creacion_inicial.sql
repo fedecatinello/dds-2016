@@ -642,16 +642,27 @@ INSERT INTO NET_A_CERO.Rubro_x_Publicacion(publi_id, rubro_id)
     WHERE Publicacion_Rubro_Descripcion IS NOT NULL
 
 
-/** Migracion de Compras **/
-INSERT INTO NET_A_CERO.Compras(comp_usr_id, comp_publi_id, comp_fecha, comp_cantidad, comp_monto, comp_calif_id)
-    SELECT (SELECT DISTINCT cli_usr_id FROM NET_A_CERO.Clientes WHERE cli_dni = Cli_Dni), Publicacion_Cod, Compra_Fecha, Compra_Cantidad, null, Calificacion_Codigo
-    FROM gd_esquema.Maestra
-    WHERE Compra_Cantidad IS NOT NULL
-    AND Cli_Dni IS NOT NULL
-    AND Publicacion_Cod IS NOT NULL
-    
-    
-    
+-- Funcion que obtiene un id de usuario cliente dado su dni
+IF (OBJECT_ID('NET_A_CERO.get_cliente_dni') IS NOT NULL)
+    DROP FUNCTION NET_A_CERO.get_cliente_dni
+GO
+
+CREATE FUNCTION NET_A_CERO.get_cliente_dni
+(
+    @dni NUMERIC(18,0)
+)
+RETURNS INT
+AS
+BEGIN
+    DECLARE @id NUMERIC(18,0)
+    BEGIN
+		SELECT @id = cli_usr_id FROM NET_A_CERO.Clientes WHERE cli_dni = @dni
+	END
+    RETURN @id
+END
+GO
+
+
 /** Migracion de calificacion de compras **/
 
 SET IDENTITY_INSERT NET_A_CERO.Calificacion ON;
@@ -665,26 +676,51 @@ INSERT INTO NET_A_CERO.Calificacion(calif_id, calif_cant_estrellas, calif_desc)
     
 SET IDENTITY_INSERT NET_A_CERO.Calificacion OFF;
 GO
+
+
+-- Funcion para obtener la calificacion de una compra
+IF (OBJECT_ID('NET_A_CERO.get_calificacion_compra') IS NOT NULL)
+    DROP FUNCTION NET_A_CERO.get_calificacion_compra
+GO
+
+CREATE FUNCTION NET_A_CERO.get_calificacion_compra
+(
+    @cod NUMERIC(18,0)
+)
+RETURNS numeric(18,0)
+AS
+BEGIN
+    DECLARE @calif_id NUMERIC(18,0)
+    IF @cod IS NULL
+        RETURN NULL
+    ELSE
+        BEGIN
+            SELECT @calif_id = calif_id FROM NET_A_CERO.Calificacion WHERE calif_id = @cod
+        END
+    RETURN @calif_id
+END
+GO
+
+
+/** Migracion de Compras **/
+
+INSERT INTO NET_A_CERO.Compras(comp_usr_id, comp_publi_id, comp_fecha, comp_cantidad, comp_monto, comp_calif_id)
+    SELECT NET_A_CERO.get_cliente_dni(Cli_Dni), Publicacion_Cod, Compra_Fecha, Compra_Cantidad, null, NET_A_CERO.get_calificacion_compra(Calificacion_Codigo)
+    FROM gd_esquema.Maestra
+    WHERE Compra_Cantidad IS NOT NULL
+    AND Cli_Dni IS NOT NULL
+    AND Publicacion_Cod IS NOT NULL
     
 
 
 /** Migracion de Ofertas_x_Subasta **/
+
 INSERT INTO NET_A_CERO.Ofertas_x_Subasta(sub_usr_id, sub_monto, sub_fecha, sub_publi_id)
-    SELECT (SELECT DISTINCT cli_usr_id FROM NET_A_CERO.Clientes WHERE cli_dni = Cli_Dni), Oferta_Monto, Oferta_Fecha, Publicacion_Cod
+    SELECT NET_A_CERO.get_cliente_dni(Cli_Dni), Oferta_Monto, Oferta_Fecha, Publicacion_Cod
     FROM gd_esquema.Maestra
     WHERE Publicacion_Cod IS NOT NULL
     AND Cli_Dni IS NOT NULL
     AND Oferta_Monto IS NOT NULL
-
-
-
-/** Migración de Items **/ 
-
-INSERT INTO NET_A_CERO.Items(item_cantidad, item_monto, item_fact_id)
-    SELECT DISTINCT Item_Factura_Monto, Item_Factura_Cantidad, Factura_Nro
-    FROM gd_esquema.Maestra 
-    WHERE ISNULL(Factura_Nro,-1) != -1
-
 
 
 /** Migración de Facturas realizadas al comprador (cuando se cierra la publicacion) **/
@@ -720,3 +756,31 @@ INSERT INTO NET_A_CERO.Facturas(fact_id, fact_fecha, fact_monto, fact_destinatar
     FROM gd_esquema.Maestra 
     WHERE ISNULL(Factura_Nro,-1) != -1
     
+
+-- Funcion que obtiene un id de factura dado su cod
+IF (OBJECT_ID('NET_A_CERO.get_factura_cod') IS NOT NULL)
+    DROP FUNCTION NET_A_CERO.get_factura_cod
+GO
+
+CREATE FUNCTION NET_A_CERO.get_factura_cod
+(
+    @cod NUMERIC(18,0)
+)
+RETURNS NUMERIC(18,0)
+AS
+BEGIN
+    DECLARE @fact_id NUMERIC(18,0)
+    BEGIN
+		SELECT @fact_id = fact_id FROM NET_A_CERO.Facturas WHERE fact_id = @cod
+	END
+    RETURN @fact_id
+END
+GO
+
+
+/** Migración de Items **/ 
+
+INSERT INTO NET_A_CERO.Items(item_cantidad, item_monto, item_fact_id)
+    SELECT DISTINCT Item_Factura_Monto, Item_Factura_Cantidad, NET_A_CERO.get_factura_cod(Factura_Nro)
+    FROM gd_esquema.Maestra 
+    WHERE ISNULL(Factura_Nro,-1) != -1
