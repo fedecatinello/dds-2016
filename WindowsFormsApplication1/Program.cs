@@ -16,7 +16,7 @@ namespace MercadoEnvio
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ABM_Cliente.FiltroCliente());
+            Application.Run(new Login.LoginForm());
         }
     }
 }

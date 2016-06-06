@@ -27,6 +27,7 @@ namespace MercadoEnvio.DataProvider
         }
 
         private SqlCommand command { get; set; }
+        private ConnectionManager conexion = new ConnectionManager();
 
         public SqlCommand build(string sqlText, IList<SqlParameter> parameters)
         {
@@ -39,7 +40,8 @@ namespace MercadoEnvio.DataProvider
                     this.command.Parameters.Add(parameter);
                 }
             }
-            
+            if (this.command.Connection == null) this.command.Connection = conexion.connect();
+
             return this.command;
         }
     }

@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Security;
+using System.Configuration;
+
 
 namespace MercadoEnvio.DataProvider
 {
@@ -47,10 +49,11 @@ namespace MercadoEnvio.DataProvider
             return gd_connection;
         }
 
-
+       
         //Get DB credentials
         public SqlCredential getCredentials()
         {
+            
             SecureString password = new SecureString();
             password.AppendChar('g');
             password.AppendChar('d');
@@ -58,24 +61,30 @@ namespace MercadoEnvio.DataProvider
             password.AppendChar('0');
             password.AppendChar('1');
             password.AppendChar('6');
+        
+            password.MakeReadOnly();//hace a password solo de lectura!
 
-            return new SqlCredential(USER_ID, password);
+            return new SqlCredential(USER_ID,password);
         }
 
         //Connect to DB
-        public void connect()
+        public SqlConnection connect()
         {
             gd_connection = new SqlConnection(CONNECTION_STRING, getCredentials());
             gd_connection.Open();
 
             new SqlCommand("USE [" + DATABASE + "] ", gd_connection).ExecuteNonQuery();
+            return gd_connection;
         }
 
 
         //Close DB connection
         public void close()
         {
-            gd_connection.Close();
+           // if (this.gd_connection != null)
+           //{
+                gd_connection.Close();
+            //}
         }
 
         public String getSchema()
