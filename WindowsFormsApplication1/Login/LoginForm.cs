@@ -46,7 +46,7 @@ namespace MercadoEnvio.Login
             String query = "SELECT * FROM NET_A_CERO.Usuarios WHERE usr_usuario = @username AND usr_password = @password AND usr_activo = 1";
 
             String usuario = this.textBoxUsuario.Text;
-            // encripta contraseña
+            // valida contraseña encriptada
             String contraseña = HashSha256.getHash(this.textBoxContaseña.Text);
 
             IList<SqlParameter> parametros = new List<SqlParameter>();
@@ -58,10 +58,10 @@ namespace MercadoEnvio.Login
             //Chequea el ingreso
             if (QueryHelper.Instance.readFrom(reader))
             {
-                MessageBox.Show("Bienvenido " + reader["username"] + "!");
+                MessageBox.Show("Bienvenido " + reader["usr_usuario"] + "!");
 
-                UsuarioSesion.Usuario.nombre = (String)reader["username"];
-                UsuarioSesion.Usuario.id = (Decimal)reader["id"];
+                UsuarioSesion.Usuario.nombre = (String)reader["usr_usuario"];
+                UsuarioSesion.Usuario.id = (Int32)reader["usr_id"];
 
                 // Usuario logueado correctamente (intentos fallidos = 0)
                 parametros.Clear();
@@ -74,7 +74,7 @@ namespace MercadoEnvio.Login
                 parametros.Add(new SqlParameter("@username", usuario));
                 String sesion = "SELECT usr_password FROM NET_A_CERO.Usuarios WHERE usr_usuario = @username"; 
                 String primerInicio = (String)QueryBuilder.Instance.build(sesion, parametros).ExecuteScalar();
-                if (primerInicio == "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd") //El primer inicio la contraseña es fija
+                if (primerInicio == "565339bc4d33d72817b583024112eb7f5cdf3e5eef0252d6ec1b9c9a94e12bb3") //El primer inicio la contraseña es fija (OK)
                 {
                     this.Hide();
                     new CambiarContrasena().ShowDialog();
@@ -84,7 +84,7 @@ namespace MercadoEnvio.Login
                 parametros.Clear();
                 parametros.Add(new SqlParameter("@username", usuario));
 
-                String consultaRoles = "SELECT COUNT(rol_id) FROM NET_A_CERO.Usuario_x_Rol WHERE (SELECT usr_id FROM NET_A_CERO.Usuarios WHERE usr_usuario = @username) = usr_id";
+                String consultaRoles = "SELECT COUNT(rol_id) FROM NET_A_CERO.Usuarios_x_Rol WHERE (SELECT usr_id FROM NET_A_CERO.Usuarios WHERE usr_usuario = @username) = usr_id";
                 int cantidadDeRoles = (int)QueryBuilder.Instance.build(consultaRoles, parametros).ExecuteScalar();
 
                 if(cantidadDeRoles > 1)
@@ -97,7 +97,7 @@ namespace MercadoEnvio.Login
                 {
                     parametros.Clear();
                     parametros.Add(new SqlParameter("@username", usuario));
-                    String rolDeUsuario = "SELECT r.nombre FROM NET_A_CERO.Roles r, NET_A_CERO.Usuario_x_Rol ru, NET_A_CERO.Usuarios u WHERE r.usr_id = ru.id AND ru.usr_id = u.usr_id AND u.usr_usuario = @username";
+                    String rolDeUsuario = "SELECT r.rol_nombre FROM NET_A_CERO.Roles r, NET_A_CERO.Usuarios_x_Rol ru, NET_A_CERO.Usuarios u WHERE r.rol_id = ru.rol_id AND ru.usr_id = u.usr_id AND u.usr_usuario = @username";
                     String rolUser = (String)QueryBuilder.Instance.build(rolDeUsuario, parametros).ExecuteScalar();
 
                     UsuarioSesion.Usuario.rol = rolUser;

@@ -13,6 +13,7 @@ namespace MercadoEnvio
         public String rol { get; set; }
         public String nombre { get; set; }
         private UsuarioSesion() { }
+        
         public static UsuarioSesion Usuario
         {
             get
