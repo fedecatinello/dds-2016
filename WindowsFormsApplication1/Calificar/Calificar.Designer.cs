@@ -44,9 +44,9 @@ namespace MercadoEnvio.Calificar_Vendedor
             this.labelTituloNumero.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelTituloNumero.Location = new System.Drawing.Point(28, 49);
             this.labelTituloNumero.Name = "labelTituloNumero";
-            this.labelTituloNumero.Size = new System.Drawing.Size(244, 15);
+            this.labelTituloNumero.Size = new System.Drawing.Size(237, 15);
             this.labelTituloNumero.TabIndex = 10;
-            this.labelTituloNumero.Text = "Seleccione cantidad de estrellas del 1 al 10";
+            this.labelTituloNumero.Text = "Seleccione cantidad de estrellas del 1 al 5";
             // 
             // labelTituloDescripcion
             // 

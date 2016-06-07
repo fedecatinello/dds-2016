@@ -31,17 +31,13 @@ namespace MercadoEnvio.Calificar_Vendedor
 
         private void Calificar_Load(object sender, EventArgs e)
         {
-            dropdownCalificacion.Items.Add(10);
-            dropdownCalificacion.Items.Add(9);
-            dropdownCalificacion.Items.Add(8);
-            dropdownCalificacion.Items.Add(7);
-            dropdownCalificacion.Items.Add(6);
             dropdownCalificacion.Items.Add(5);
             dropdownCalificacion.Items.Add(4);
             dropdownCalificacion.Items.Add(3);
             dropdownCalificacion.Items.Add(2);
             dropdownCalificacion.Items.Add(1);
-
+            dropdownCalificacion.Items.Add(0);
+            
             checkBoxPredeterminado.Checked = true;
 
             comboBoxDescripciones.Items.Add("Vendedor muy confiable");
@@ -88,15 +84,15 @@ namespace MercadoEnvio.Calificar_Vendedor
             parametros.Add(new SqlParameter("@descripcion", descripcion));
 
             // inserta nueva calificacion
-            String nuevaCalificacion = "insert LOS_SUPER_AMIGOS.Calificacion"
-                                + " (cantidad_estrellas, descripcion)"
+            String nuevaCalificacion = "insert NET_A_CERO.Calificacion"
+                                + " (calif_cant_estrellas, calif_desc)"
                                 + " values(@estrellas,@descripcion)";
             QueryBuilder.Instance.build(nuevaCalificacion, parametros).ExecuteNonQuery();
 
             parametros.Clear();
-            String idCalificacion = "select top 1 id"
-                                + " from LOS_SUPER_AMIGOS.Calificacion"
-                                + " order by id DESC";
+            String idCalificacion = "select top 1 calif_id"
+                                + " from NET_A_CERO.Calificacion"
+                                + " order by calif_id DESC";
             Decimal elId = (Decimal)QueryBuilder.Instance.build(idCalificacion, parametros).ExecuteScalar();
 
             parametros.Clear();
@@ -105,9 +101,9 @@ namespace MercadoEnvio.Calificar_Vendedor
 
             // referencia en compra a la calificacion
 
-            String compraAct = "update LOS_SUPER_AMIGOS.Compra"
-                             + " set calificacion_id = @idCalif"
-                             + " where id = @id";
+            String compraAct = "update NET_A_CERO.Compras"
+                             + " set comp_calif_id = @idCalif"
+                             + " where comp_id = @id";
             QueryBuilder.Instance.build(compraAct, parametros).ExecuteNonQuery();
 
 

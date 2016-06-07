@@ -149,8 +149,8 @@ namespace MercadoEnvio.Login
                     // Si es el tercer fallido se deshabilita al usuario
                     parametros.Clear();
                     parametros.Add(new SqlParameter("@username", usuario));
-                    String cantidadFallidos = "SELECT login_fallidos FROM NET_A_CERO.Usuarios WHERE usr_usuario = @username";
-                    int intentosFallidos = (int)QueryBuilder.Instance.build(cantidadFallidos, parametros).ExecuteScalar();
+                    String cantidadFallidos = "SELECT usr_intentos FROM NET_A_CERO.Usuarios WHERE usr_usuario = @username";
+                    int intentosFallidos = Convert.ToInt32(QueryBuilder.Instance.build(cantidadFallidos, parametros).ExecuteScalar());
 
                     if (intentosFallidos == 3)
                     {

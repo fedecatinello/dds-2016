@@ -50,7 +50,7 @@ namespace MercadoEnvio.Comprar_Ofertar
             
             if (Convert.ToInt32(this.textBoxMonto.Text) > ofertaMax)
             {
-                String sql = "INSERT INTO LOS_SUPER_AMIGOS.Oferta(monto, fecha, usuario_id, publicacion_id) VALUES (@monto, @fecha, @usuario, @publicacion)";
+                String sql = "INSERT INTO NET_A_CERO.Ofertas_x_Subasta(sub_monto, sub_fecha, sub_usr_id, sub_publi_id, sub_ganador) VALUES (@monto, @fecha, @usuario, @publicacion, @ganador)";
                 //DateTime fecha = Convert.ToDateTime(System.Configuration.ConfigurationManager.AppSettings["DateKey"]);
                 DateTime fecha = Config.getInstance().getCurrentDate();
                 parametros.Clear();
@@ -58,8 +58,18 @@ namespace MercadoEnvio.Comprar_Ofertar
                 parametros.Add(new SqlParameter("@fecha", fecha));
                 parametros.Add(new SqlParameter("@usuario", idUsuarioActual));
                 parametros.Add(new SqlParameter("@publicacion", publicacionId));
+                parametros.Add(new SqlParameter("@ganador", 1)); //es el ganador actual por tener la oferta mayor a la ofertaMax
                 QueryBuilder.Instance.build(sql, parametros).ExecuteNonQuery();                
                 MessageBox.Show("Su oferta fue registrada");
+
+                //Actualizamos los perdedores
+                parametros.Clear();
+                parametros.Add(new SqlParameter("@publicacion", publicacionId));
+                parametros.Add(new SqlParameter("@usuarioGanador", idUsuarioActual));
+                String sqlUpdatePerdedores = "UPDATE NET_A_CERO.Ofertas_x_Subasta SET sub_ganador = 0 WHERE sub_publi_id = @publicacion AND sub_usr_id <> @usuarioGanador";
+                QueryBuilder.Instance.build(sqlUpdatePerdedores, parametros).ExecuteNonQuery();
+
+
                 this.Hide();
                 new VerPublicacion(publicacionId).ShowDialog();
                 this.Close();
