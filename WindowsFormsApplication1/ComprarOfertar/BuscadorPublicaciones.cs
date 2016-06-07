@@ -39,7 +39,7 @@ namespace MercadoEnvio.Comprar_Ofertar
 
         private void CargarRubros()
         {
-            comboBoxRubro.DataSource = comunicador.SelectDataTable("descripcion", "LOS_SUPER_AMIGOS.Rubro", "habilitado = 1");
+            comboBoxRubro.DataSource = comunicador.SelectDataTable("rubro_desc_corta", "NET_A_CERO.Rubro");
             comboBoxRubro.ValueMember = "descripcion";
             comboBoxRubro.SelectedIndex = -1;
         }
@@ -51,20 +51,32 @@ namespace MercadoEnvio.Comprar_Ofertar
             parametros.Clear();
             parametros.Add(new SqlParameter("@usuario", idUsuarioActual));
             DataTable busquedaTemporal = new DataTable();
-            String filtro = "and publicacion.usuario_id != @usuario";            
+            String filtro = "and publicaciones.publi_usr_id != @usuario";            
 
             if (textBoxDescripcion.Text != "")
             {
-                filtro += " and publicacion.descripcion like '%" + textBoxDescripcion.Text + "%'";                
+                filtro += " and publicaciones.publi_descripcion like '%" + textBoxDescripcion.Text + "%'";                
             }            
 
             if (comboBoxRubro.Text != "")
             {
-                String idRubro = Convert.ToString(comunicador.SelectFromWhere("id", "Rubro", "descripcion", comboBoxRubro.Text));
+                String idRubro = Convert.ToString(comunicador.SelectFromWhere("rubro_id", "Rubro", "rubro_desc_corta", comboBoxRubro.Text));
                 parametros.Add(new SqlParameter("@idRubro", idRubro));
-                filtro += " and publicacion.rubro_id = @idRubro";                
+                filtro += " and publicaciones.rubro_id = @idRubro";                
             }
 
+            String query = "SELECT publicaciones.publi_id, " +
+                                  "publicaciones.publi_descripcion, "+
+                                "(CASE WHEN (publicaciones.publi_tipo = 'Subasta' AND (SELECT COUNT (*) from NET_A_CER_.Ofertas_x_Subasta OXS WHERE OXS.sub_publi_id = publicaciones.publi_id) = 1) " +
+                                        "THEN(SELECT sub_monto FROM NET_A_CERO.Ofertas_x_Subasta OXS WHERE OXS.sub_publi_id = publicaciones.publi_id)" +
+                                "ELSE publicaciones.publi_precio " +
+                             "END), " +
+                            "publicaciones.publi_tipo " +
+                         "FROM NET_A_CERO.Publicaciones publicaciones, NET_A_CERO.Visibilidad visibilidad " +
+                         "WHERE publicaciones.publi_visib_id = visibilidad.visib_id AND (publicaciones.publi_estado_id = (SELECT estado_id FROM NET_A_CERO.Estado WHERE estado_desc='Activa')or publicaciones.publi_estado_id = (SELECT estado_id FROM NET_A_CERO.Estado WHERE estado_desc = 'Pausada'))"
+                + filtro + "ORDER BY visibilidad.visib_precio DESC";
+
+            /*
             String query = "SELECT publicacion.id, " + 
                                   "publicacion.descripcion, " +
                                  "(CASE WHEN (tipo.descripcion = 'Subasta' AND (SELECT COUNT(*) FROM LOS_SUPER_AMIGOS.VistaOfertaMax vista WHERE vista.publicacion_id = publicacion.id) = 1) " + 
@@ -75,7 +87,7 @@ namespace MercadoEnvio.Comprar_Ofertar
                            "FROM LOS_SUPER_AMIGOS.Publicacion publicacion, LOS_SUPER_AMIGOS.Visibilidad visibilidad, LOS_SUPER_AMIGOS.TipoDePublicacion tipo " + 
                            "WHERE publicacion.tipo_id = tipo.id AND publicacion.visibilidad_id = visibilidad.id AND (publicacion.estado_id = (SELECT id FROM LOS_SUPER_AMIGOS.Estado WHERE descripcion = 'Publicada') or publicacion.estado_id = (SELECT id FROM LOS_SUPER_AMIGOS.Estado WHERE descripcion = 'Pausada')) " 
                            + filtro + " ORDER BY visibilidad.precio DESC";
-            
+            */
             command = QueryBuilder.Instance.build(query, parametros);
             adapter.SelectCommand = command;            
             adapter.Fill(busquedaTemporal);
