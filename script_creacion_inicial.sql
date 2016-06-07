@@ -2,12 +2,16 @@
 USE [GD1C2016]
 GO
 
---Creo el esquema y lo comento para que no rompa cuando se ejecute nuevamente
---CREATE SCHEMA NET_A_CERO AUTHORIZATION [gd]
---GO
+/** CREACION DE SCHEMA **/
+IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'NET_A_CERO')
+BEGIN
+	EXEC ('CREATE SCHEMA NET_A_CERO AUTHORIZATION gd')
+END
+GO
+/** FIN CREACION DE SCHEMA**/
 
---Valido si las tablas existen, si asi fuere las dropeo
 
+/** VALIDACION DE TABLAS **/
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'NET_A_CERO.Rol_x_Funcionalidad'))
     DROP TABLE NET_A_CERO.Rol_x_Funcionalidad
 
@@ -64,13 +68,14 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'NET_A_CERO.Co
 
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'NET_A_CERO.Usuarios'))
     DROP TABLE NET_A_CERO.Usuarios
+/** FIN VALIDACION DE TABLAS **/
 
--- Creo tablas del sistema
 
+/** CREACION DE TABLAS **/
 CREATE TABLE [NET_A_CERO].[Usuarios] (
     [usr_id] INT IDENTITY(1,1) PRIMARY KEY,
-    [usr_usuario] as isnull('USER' + CAST(usr_id AS NVARCHAR(10)),'X'),  --equivale a un [nvarchar](50)
-    [usr_password] [nvarchar](150) NOT NULL default '559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd',  --A en SHA 256
+    [usr_usuario] [nvarchar](50),
+    [usr_password] [nvarchar](150) NOT NULL default '565339bc4d33d72817b583024112eb7f5cdf3e5eef0252d6ec1b9c9a94e12bb3',  --OK en SHA 256
     [usr_activo] [bit] NOT NULL DEFAULT 1,
     [usr_intentos] [tinyint] DEFAULT 0,
     [usr_admin] [bit] NOT NULL DEFAULT 0,
@@ -121,7 +126,7 @@ CREATE TABLE [NET_A_CERO].[Publicaciones] (
     [publi_fec_vencimiento] [datetime],
     [publi_fec_inicio] [datetime] NOT NULL,
     [publi_precio] [NUMERIC](18, 2) NOT NULL,
-    --[publi_costo] [NUMERIC](18, 2) NOT NULL,                                 No existe en la maestra
+    [publi_costo_pagado] BIT DEFAULT 1,                                --Saber si fue pagado el costo por publicar
     [publi_preguntas] [bit] DEFAULT 1,
     [publi_usr_id] INT,
     [publi_visib_id] NUMERIC(18, 0),
@@ -235,7 +240,6 @@ CREATE TABLE [NET_A_CERO].[Preguntas] (
     [preg_publi_id] [NUMERIC](18, 0)
 )
 
-
 /* FKs */
  
 ALTER TABLE [NET_A_CERO].[Clientes] ADD CONSTRAINT cliente_usuario FOREIGN KEY (cli_usr_id) REFERENCES [NET_A_CERO].[Usuarios](usr_id)
@@ -290,30 +294,168 @@ ALTER TABLE [NET_A_CERO].[Preguntas] ADD CONSTRAINT pregunta_usuario FOREIGN KEY
 
 ALTER TABLE [NET_A_CERO].[Preguntas] ADD CONSTRAINT pregunta_publicacion FOREIGN KEY (preg_publi_id) REFERENCES [NET_A_CERO].[Publicaciones](publi_id)
 
+/** FIN CREACION DE TABLAS **/
 
 
-/******************************
-*         MIGRACION           *
-******************************/
+/** VALIDACION DE FUNCIONES Y PROCEDURES **/
 
-
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'NET_A_CERO.pr_crear_usuario'))
+IF (OBJECT_ID('NET_A_CERO.pr_crear_usuario') IS NOT NULL)
     DROP PROCEDURE NET_A_CERO.pr_crear_usuario
 GO
 
+IF (OBJECT_ID('NET_A_CERO.pr_crear_usuario_con_valores') IS NOT NULL)
+    DROP PROCEDURE NET_A_CERO.pr_crear_usuario_con_valores
+GO
 
--- Creo procedure para crear usuarios
+IF (OBJECT_ID('NET_A_CERO.generar_id_publicacion') IS NOT NULL)
+    DROP FUNCTION NET_A_CERO.generar_id_publicacion
+GO
+
+IF (OBJECT_ID('NET_A_CERO.get_cliente_dni') IS NOT NULL)
+    DROP FUNCTION NET_A_CERO.get_cliente_dni
+GO
+
+IF (OBJECT_ID('NET_A_CERO.get_calificacion_compra') IS NOT NULL)
+    DROP FUNCTION NET_A_CERO.get_calificacion_compra
+GO
+
+IF (OBJECT_ID('NET_A_CERO.factura_cliente_empresa') IS NOT NULL)
+    DROP FUNCTION NET_A_CERO.factura_cliente_empresa
+GO
+
+IF (OBJECT_ID('NET_A_CERO.get_factura_cod') IS NOT NULL)
+    DROP FUNCTION NET_A_CERO.get_factura_cod
+GO
+
+/** FIN VALIDACION DE FUNCIONES Y PROCEDURES **/
+
+
+
+/** CREACION DE FUNCIONES Y PROCEDURES **/
 
 CREATE PROCEDURE NET_A_CERO.pr_crear_usuario
     @usr_id numeric(18,0) OUTPUT
 AS
 BEGIN
     SET NOCOUNT ON;
-    INSERT INTO NET_A_CERO.Usuarios default values
+    INSERT INTO NET_A_CERO.Usuarios(usr_usuario)
+	VALUES(ISNULL('USER' + CAST(((SELECT COUNT(*) FROM NET_A_CERO.Usuarios)+ 1) AS NVARCHAR(10)),''))
     SET @usr_id = SCOPE_IDENTITY();
 END
 GO
 
+CREATE PROCEDURE NET_A_CERO.pr_crear_usuario_con_valores
+	@username nvarchar(50),
+	@password nvarchar(150),
+	@is_admin bit,
+	@usuario_id INT OUTPUT
+AS
+BEGIN
+	INSERT INTO NET_A_CERO.Usuarios 
+		(usr_usuario, usr_password, usr_admin) 
+	VALUES 
+		(@username, @password, @is_admin)
+	SET @usuario_id = SCOPE_IDENTITY();	
+END
+GO
+
+CREATE FUNCTION NET_A_CERO.generar_id_publicacion
+(
+    @dni NUMERIC(18,0),
+    @emp_razon_social nvarchar(255)
+)
+RETURNS numeric(18,0)
+AS
+BEGIN
+    DECLARE @id NUMERIC(18,0)
+    IF @dni IS NULL
+        BEGIN
+            SELECT @id = emp_usr_id FROM NET_A_CERO.Empresas WHERE emp_razon_social = @emp_razon_social
+        END
+    ELSE
+        BEGIN
+            SELECT @id = cli_usr_id FROM NET_A_CERO.Clientes WHERE cli_dni = @dni
+        END
+    RETURN @id
+END
+GO
+
+CREATE FUNCTION NET_A_CERO.get_cliente_dni
+(
+    @dni NUMERIC(18,0)
+)
+RETURNS INT
+AS
+BEGIN
+    DECLARE @id NUMERIC(18,0)
+    BEGIN
+		SELECT @id = cli_usr_id FROM NET_A_CERO.Clientes WHERE cli_dni = @dni
+	END
+    RETURN @id
+END
+GO
+
+CREATE FUNCTION NET_A_CERO.get_calificacion_compra
+(
+    @cod NUMERIC(18,0)
+)
+RETURNS numeric(18,0)
+AS
+BEGIN
+    DECLARE @calif_id NUMERIC(18,0)
+    IF @cod IS NULL
+        RETURN NULL
+    ELSE
+        BEGIN
+            SELECT @calif_id = calif_id FROM NET_A_CERO.Calificacion WHERE calif_id = @cod
+        END
+    RETURN @calif_id
+END
+GO
+
+CREATE FUNCTION NET_A_CERO.factura_cliente_empresa
+(
+    @dni NUMERIC(18,0),
+    @emp_razon_social nvarchar(255)
+)
+RETURNS numeric(18,0)
+AS
+BEGIN
+    DECLARE @id NUMERIC(18,0)
+    IF @dni IS NULL
+        BEGIN
+            SELECT @id = emp_usr_id FROM NET_A_CERO.Empresas WHERE emp_razon_social = @emp_razon_social
+        END
+    ELSE
+        BEGIN
+            SELECT @id = cli_usr_id FROM NET_A_CERO.Clientes WHERE cli_dni = @dni
+        END
+    RETURN @id
+END
+GO
+
+CREATE FUNCTION NET_A_CERO.get_factura_cod
+(
+    @cod NUMERIC(18,0)
+)
+RETURNS NUMERIC(18,0)
+AS
+BEGIN
+    DECLARE @fact_id NUMERIC(18,0)
+    BEGIN
+		SELECT @fact_id = fact_id FROM NET_A_CERO.Facturas WHERE fact_id = @cod
+	END
+    RETURN @fact_id
+END
+GO
+
+/** FIN CREACION DE FUNCIONES Y PROCEDURES **/
+
+
+
+/******************************
+*         MIGRACION           *
+******************************/
 
 /** Migración de Rubro **/   
 
@@ -327,6 +469,23 @@ GO
 
 INSERT INTO NET_A_CERO.Rubros(rubro_desc_larga)
 	VALUES('Electronica')
+
+-- Inserto algunos rubros mas de ejemplo
+
+INSERT INTO NET_A_CERO.Rubros(rubro_desc_larga)
+	VALUES('Articulos de limpieza')
+
+INSERT INTO NET_A_CERO.Rubros(rubro_desc_larga)
+	VALUES('Utiles Escolares')
+
+INSERT INTO NET_A_CERO.Rubros(rubro_desc_larga)
+	VALUES('Decoracion de interiores')
+
+INSERT INTO NET_A_CERO.Rubros(rubro_desc_larga)
+	VALUES('Materiales de construccion')
+
+INSERT INTO NET_A_CERO.Rubros(rubro_desc_larga)
+	VALUES('Actividades de ocio')
 
 
 /** Migracion de Contacto de empresas **/
@@ -573,36 +732,6 @@ GO
 -- RECORDAR:   CONSTRAINT [grado_visibilidad] CHECK (visib_grado IN ('Comisión por tipo de publicación', 'Comisión por producto vendido', 'Comisión por envío del producto'))
 
 
-/** Migración de Publicaciones **/
-
--- Creo funcion para discriminar PUBLICACIONES de clientes y empresas
-
-IF (OBJECT_ID('NET_A_CERO.generar_id_publicacion') IS NOT NULL)
-    DROP FUNCTION NET_A_CERO.generar_id_publicacion
-GO
-
-CREATE FUNCTION NET_A_CERO.generar_id_publicacion
-(
-    @dni NUMERIC(18,0),
-    @emp_razon_social nvarchar(255)
-)
-RETURNS numeric(18,0)
-AS
-BEGIN
-    DECLARE @id NUMERIC(18,0)
-    IF @dni IS NULL
-        BEGIN
-            SELECT @id = emp_usr_id FROM NET_A_CERO.Empresas WHERE emp_razon_social = @emp_razon_social
-        END
-    ELSE
-        BEGIN
-            SELECT @id = cli_usr_id FROM NET_A_CERO.Clientes WHERE cli_dni = @dni
-        END
-    RETURN @id
-END
-GO
-
-
 /** Migracion de estado de publicacion **/
 
 INSERT INTO NET_A_CERO.Estado(estado_desc)
@@ -634,33 +763,19 @@ INSERT INTO NET_A_CERO.Publicaciones (publi_id, publi_tipo, publi_descripcion, p
 SET IDENTITY_INSERT NET_A_CERO.Publicaciones OFF;
 GO
 
+-- Finaliza todas las publicaciones con fecha de vencimiento anterior al dia de la entrega para el caso de las subastas
+
+UPDATE NET_A_CERO.Publicaciones 
+	SET publi_estado_id = (SELECT estado_id FROM NET_A_CERO.Estado WHERE estado_desc = 'Finalizada')
+	WHERE publi_fec_vencimiento <= '15/06/2016'
+	
+
 
 /** Migracion de rubros por publicaciones **/
 INSERT INTO NET_A_CERO.Rubro_x_Publicacion(publi_id, rubro_id)
     SELECT DISTINCT Publicacion_Cod, (SELECT rubro_id FROM NET_A_CERO.Rubros r WHERE Publicacion_Rubro_Descripcion = r.rubro_desc_larga)
     FROM gd_esquema.Maestra
     WHERE Publicacion_Rubro_Descripcion IS NOT NULL
-
-
--- Funcion que obtiene un id de usuario cliente dado su dni
-IF (OBJECT_ID('NET_A_CERO.get_cliente_dni') IS NOT NULL)
-    DROP FUNCTION NET_A_CERO.get_cliente_dni
-GO
-
-CREATE FUNCTION NET_A_CERO.get_cliente_dni
-(
-    @dni NUMERIC(18,0)
-)
-RETURNS INT
-AS
-BEGIN
-    DECLARE @id NUMERIC(18,0)
-    BEGIN
-		SELECT @id = cli_usr_id FROM NET_A_CERO.Clientes WHERE cli_dni = @dni
-	END
-    RETURN @id
-END
-GO
 
 
 /** Migracion de calificacion de compras **/
@@ -675,30 +790,6 @@ INSERT INTO NET_A_CERO.Calificacion(calif_id, calif_cant_estrellas, calif_desc)
     AND Calificacion_Codigo IS NOT NULL
     
 SET IDENTITY_INSERT NET_A_CERO.Calificacion OFF;
-GO
-
-
--- Funcion para obtener la calificacion de una compra
-IF (OBJECT_ID('NET_A_CERO.get_calificacion_compra') IS NOT NULL)
-    DROP FUNCTION NET_A_CERO.get_calificacion_compra
-GO
-
-CREATE FUNCTION NET_A_CERO.get_calificacion_compra
-(
-    @cod NUMERIC(18,0)
-)
-RETURNS numeric(18,0)
-AS
-BEGIN
-    DECLARE @calif_id NUMERIC(18,0)
-    IF @cod IS NULL
-        RETURN NULL
-    ELSE
-        BEGIN
-            SELECT @calif_id = calif_id FROM NET_A_CERO.Calificacion WHERE calif_id = @cod
-        END
-    RETURN @calif_id
-END
 GO
 
 
@@ -723,59 +814,12 @@ INSERT INTO NET_A_CERO.Ofertas_x_Subasta(sub_usr_id, sub_monto, sub_fecha, sub_p
     AND Oferta_Monto IS NOT NULL
 
 
-/** Migración de Facturas realizadas al comprador (cuando se cierra la publicacion) **/
-
-IF (OBJECT_ID('NET_A_CERO.factura_cliente_empresa') IS NOT NULL)
-    DROP FUNCTION NET_A_CERO.factura_cliente_empresa
-GO
-
-CREATE FUNCTION NET_A_CERO.factura_cliente_empresa
-(
-    @dni NUMERIC(18,0),
-    @emp_razon_social nvarchar(255)
-)
-RETURNS numeric(18,0)
-AS
-BEGIN
-    DECLARE @id NUMERIC(18,0)
-    IF @dni IS NULL
-        BEGIN
-            SELECT @id = emp_usr_id FROM NET_A_CERO.Empresas WHERE emp_razon_social = @emp_razon_social
-        END
-    ELSE
-        BEGIN
-            SELECT @id = cli_usr_id FROM NET_A_CERO.Clientes WHERE cli_dni = @dni
-        END
-    RETURN @id
-END
-GO
-
+/** Migracion de Facturas **/
 
 INSERT INTO NET_A_CERO.Facturas(fact_id, fact_fecha, fact_monto, fact_destinatario, fact_forma_pago, fact_publi_id)
     SELECT DISTINCT Factura_Nro, Factura_Fecha, Factura_Total, NET_A_CERO.factura_cliente_empresa(Publ_Cli_Dni, Publ_Empresa_Razon_Social), Forma_Pago_Desc, Publicacion_Cod
     FROM gd_esquema.Maestra 
     WHERE ISNULL(Factura_Nro,-1) != -1
-    
-
--- Funcion que obtiene un id de factura dado su cod
-IF (OBJECT_ID('NET_A_CERO.get_factura_cod') IS NOT NULL)
-    DROP FUNCTION NET_A_CERO.get_factura_cod
-GO
-
-CREATE FUNCTION NET_A_CERO.get_factura_cod
-(
-    @cod NUMERIC(18,0)
-)
-RETURNS NUMERIC(18,0)
-AS
-BEGIN
-    DECLARE @fact_id NUMERIC(18,0)
-    BEGIN
-		SELECT @fact_id = fact_id FROM NET_A_CERO.Facturas WHERE fact_id = @cod
-	END
-    RETURN @fact_id
-END
-GO
 
 
 /** Migración de Items **/ 
@@ -784,3 +828,12 @@ INSERT INTO NET_A_CERO.Items(item_cantidad, item_monto, item_fact_id)
     SELECT DISTINCT Item_Factura_Monto, Item_Factura_Cantidad, NET_A_CERO.get_factura_cod(Factura_Nro)
     FROM gd_esquema.Maestra 
     WHERE ISNULL(Factura_Nro,-1) != -1
+
+
+/** Inserto usuario administrador para manejar la app (admin:w23e) **/
+
+DECLARE @id INT
+EXEC NET_A_CERO.pr_crear_usuario_con_valores 'admin', 'e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7', 1,  @id output   
+
+INSERT INTO NET_A_CERO.Usuarios_x_Rol (rol_id, usr_id)
+	VALUES(1, @id)
