@@ -40,39 +40,25 @@ namespace MercadoEnvio.Comprar_Ofertar
             parametros.Clear();
             parametros.Add(new SqlParameter("@usuario", vendedorId));
 
-            String queryCliente = "SELECT * FROM LOS_SUPER_AMIGOS.Clientes WHERE usuario_id = @usuario and habilitado = 1";
+            String queryCliente = "SELECT * FROM NET_A_CERO.Clientes WHERE cli_usr_id= @usuario and (SELECT usr_activo FROM NET_A_CERO.Usuarios WHERE usr_id = @usuario) = 1";
             SqlDataReader readerCliente = QueryBuilder.Instance.build(queryCliente, parametros).ExecuteReader();
+
+            
 
             if (readerCliente.Read())
             {
-                labelNombre.Text = (String)readerCliente["nombre"] + " " + (String)readerCliente["apellido"];
-                labelMail.Text = (String)readerCliente["mail"];
-                if ((Decimal)readerCliente["telefono"] == 0)
-                {
-                    labelLocalidad.Text = "";
-                }
-                else
-                {
-                    labelLocalidad.Text = ((Decimal)readerCliente["telefono"]).ToString();
-                }
+                labelNombre.Text = (String)readerCliente["cli_nombre"] + " " + (String)readerCliente["cli_apellido"];
+               
             }
             else
             {
                 parametros.Clear();
                 parametros.Add(new SqlParameter("@usuario", vendedorId));
-                String queryEmpresa = "SELECT * FROM LOS_SUPER_AMIGOS.Empresa WHERE usuario_id = @usuario and habilitado = 1";
+                String queryEmpresa = "SELECT * FROM NET_A_CERO.Empresas WHERE usr_id = @usuario and (SELECT usr_activo FROM NET_A_CERO.Usuarios WHERE usr_id = @usuario) = 1";
                 SqlDataReader readerEmpresa = QueryBuilder.Instance.build(queryEmpresa, parametros).ExecuteReader();
                 readerEmpresa.Read();
-                labelNombre.Text = (String)readerEmpresa["razon_social"];
-                labelMail.Text = (String)readerEmpresa["mail"];                
-                if ((Decimal)readerEmpresa["telefono"] == 0)
-                {
-                    labelLocalidad.Text = "";
-                }
-                else
-                {
-                    labelLocalidad.Text = ((Decimal)readerEmpresa["telefono"]).ToString();
-                }
+                labelNombre.Text = (String)readerEmpresa["emp_razon_social"];
+               
             }
         }
 
@@ -81,21 +67,34 @@ namespace MercadoEnvio.Comprar_Ofertar
             parametros.Clear();
             parametros.Add(new SqlParameter("@usuario", vendedorId));
 
-            String queryDireccion = "SELECT * FROM LOS_SUPER_AMIGOS.Contacto WHERE id = @usuario";
-            SqlDataReader readerDireccion = QueryBuilder.Instance.build(queryDireccion, parametros).ExecuteReader();
-            readerDireccion.Read();
 
-            labelCalle.Text = (String)readerDireccion["calle"] + " " + (Decimal)readerDireccion["numeroCalle"];
-            labelDepartamento.Text = "Departamento " + (Decimal)readerDireccion["piso"] + "-" + (String)readerDireccion["depto"];
-            labelPostal.Text = ((String)readerDireccion["cod_postal"]).ToString();
-            if ((String)readerDireccion["localidad"] == "localidadMigrada")
+            String queryContacto = "SELECT * FROM NET_A_CERO.Contacto WHERE cont_id = (SELECT cli_cont_id FROM NET_A_CERO.Clientes WHERE cli_id = @usuario)";
+            SqlDataReader readerContacto = QueryBuilder.Instance.build(queryContacto, parametros).ExecuteReader();
+            readerContacto.Read();
+
+            labelMail.Text = (String)readerContacto["cont_mail"];
+            if ((Decimal)readerContacto["cont_telefono"] == 0)
             {
                 labelLocalidad.Text = "";
             }
             else
             {
-                labelLocalidad.Text = (String)readerDireccion["localidad"];
+                labelLocalidad.Text = ((Decimal)readerContacto["cont_telefono"]).ToString();
             }
+
+            labelCalle.Text = (String)readerContacto["cont_calle"] + " " + (Decimal)readerContacto["cont_numero_calle"];
+            labelDepartamento.Text = "Departamento " + (Decimal)readerContacto["cont_piso"] + "-" + (String)readerContacto["cont_depto"];
+            labelPostal.Text = ((String)readerContacto["cont_codigo_postal"]).ToString();
+
+            /*CHEQUEAR POR QUE EN LA MAESTRA NO HAY LOCALIDAD
+            if ((String)readerContacto["cont_localidad"] == "localidadMigrada") 
+            {
+                labelLocalidad.Text = "";
+            }
+            else
+            {*/
+                labelLocalidad.Text = (String)readerContacto["cont_localidad"];
+            //}
         }
 
         private void buttonConfirmarCompra_Click(object sender, EventArgs e)
@@ -120,15 +119,24 @@ namespace MercadoEnvio.Comprar_Ofertar
                 return;
             }
 
-            String sql = "INSERT INTO LOS_SUPER_AMIGOS.Compra(cantidad, fecha, usuario_id, publicacion_id, calificacion_id, facturada) VALUES (@cant, @fecha, @usuario, @publicacion, NULL,0)";
+            String sql = "INSERT INTO NET_A_CERO.Compras(comp_cantidad, comp_fecha, comp_usr_id, comp_publi_id, comp_calif_id, comp_monto) VALUES (@cant, @fecha, @usuario, @publicacion, NULL,@monto)";
             //DateTime fecha = Convert.ToDateTime(System.Configuration.ConfigurationManager.AppSettings["DateKey"]);
             DateTime fecha = Config.getInstance().getCurrentDate();
+
+            //CHEQUAR ESTA QUERY
+            String sqlMonto = "SELECT publi_precio FROM NET_A_CERO.Publicaiones WHERE publi_id = @publicacion";
+            parametros.Clear();
+            parametros.Add(new SqlParameter("@cant",publicacionId));
+            SqlDataReader readerMontoPublicacion = QueryBuilder.Instance.build(sqlMonto, parametros).ExecuteReader();
+            readerMontoPublicacion.Read();
+            Decimal precioPublicacion = ((Decimal)readerMontoPublicacion["publi_precio"]);
 
             parametros.Clear();
             parametros.Add(new SqlParameter("@cant", this.textBoxCant.Text));
             parametros.Add(new SqlParameter("@fecha", fecha));
             parametros.Add(new SqlParameter("@usuario", idUsuarioActual));
             parametros.Add(new SqlParameter("@publicacion", publicacionId));
+            parametros.Add(new SqlParameter("@monto", (precioPublicacion * Convert.ToInt32(textBoxCant.Text))));
             QueryBuilder.Instance.build(sql, parametros).ExecuteNonQuery();
 
             MessageBox.Show("Contactese con el vendedor para finalizar la compra");
@@ -152,12 +160,12 @@ namespace MercadoEnvio.Comprar_Ofertar
             parametros.Clear();
             parametros.Add(new SqlParameter("@id", publicacionId));
 
-            String query = "SELECT * FROM LOS_SUPER_AMIGOS.Publicacion WHERE id = @id";
+            String query = "SELECT * FROM NET_A_CERO.Publicaciones WHERE publi_id = @id";
             SqlDataReader reader = QueryBuilder.Instance.build(query, parametros).ExecuteReader();
             reader.Read();
 
-            Decimal idEstado = (Decimal)reader["estado_id"];
-            String estado = (String)comunicador.SelectFromWhere("descripcion", "Estado", "id", idEstado);
+            Decimal idEstado = (Decimal)reader["publi_estado_id"];
+            String estado = (String)comunicador.SelectFromWhere("estado_desc", "Estado", "estado_id", idEstado);
             if (estado == "Finalizada")
             {
                 return false;
