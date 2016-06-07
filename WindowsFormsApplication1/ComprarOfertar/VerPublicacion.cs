@@ -43,20 +43,22 @@ namespace MercadoEnvio.Comprar_Ofertar
             parametros.Clear();
             parametros.Add(new SqlParameter("@id", publicacionId));
 
-            String query = "SELECT * FROM LOS_SUPER_AMIGOS.Publicacion WHERE id = @id";            
+            String query = "SELECT * FROM NET_A_CERO.Publicaciones WHERE publi_id = @id";            
             
             SqlDataReader reader = QueryBuilder.Instance.build(query, parametros).ExecuteReader();
             reader.Read();
-            Decimal idEstado = (Decimal)reader["estado_id"];
-            String estado = (String) comunicador.SelectFromWhere("descripcion", "Estado", "id", idEstado);
+            Decimal idEstado = (Decimal)reader["publi_estado_id"];
+            String estado = (String) comunicador.SelectFromWhere("estado_desc", "Estado", "estado_id", idEstado);
             if (estado == "Pausada")
             {
                 botonComprarOfertar.Enabled = false;
                 MessageBox.Show("La publicación se encuentra pausada y no se pueden realizar compras/ofertas");
             }
+            /*------------CHEQUEAR-----------------
             labelProductoDatos.Text = (String)reader["descripcion"];
             Decimal idTipoPublicacion = (Decimal)reader["tipo_id"];
             tipoPublicacion = (String)comunicador.SelectFromWhere("descripcion", "TipoDePublicacion", "id", idTipoPublicacion);
+             */
         }
 
         private void pedirVendedor()
@@ -64,12 +66,12 @@ namespace MercadoEnvio.Comprar_Ofertar
             parametros.Clear();
             parametros.Add(new SqlParameter("@id", publicacionId));            
 
-            String query = "SELECT * FROM LOS_SUPER_AMIGOS.Usuario WHERE id = (SELECT usuario_id FROM LOS_SUPER_AMIGOS.Publicacion WHERE id = @id)";
+            String query = "SELECT * FROM NET_A_CERO.Usuarios WHERE usr_id = (SELECT publi_usr_id FROM NET_A_CERO.Publicaciones WHERE publi_id = @id)";
 
             SqlDataReader reader = QueryBuilder.Instance.build(query, parametros).ExecuteReader();
             reader.Read();
-            vendedorId = (Decimal)reader["id"];
-            labelVendedorDatos.Text = (String)reader["username"];            
+            vendedorId = (Decimal)reader["usr_id"];
+            labelVendedorDatos.Text = (String)reader["usr_usuario"];            
         }
 
         private void pedirRubro()
@@ -77,11 +79,11 @@ namespace MercadoEnvio.Comprar_Ofertar
             parametros.Clear();
             parametros.Add(new SqlParameter("@id", publicacionId));
 
-            String query = "SELECT * FROM LOS_SUPER_AMIGOS.Rubro WHERE id = (SELECT rubro_id FROM LOS_SUPER_AMIGOS.Publicacion WHERE id = @id)";
+            String query = "SELECT * FROM NET_A_CERO.Rubros WHERE rubro_id = (SELECT rubro_id FROM LOS_SUPER_AMIGOS.Publicaciones WHERE publi_id = @id)";
 
             SqlDataReader reader = QueryBuilder.Instance.build(query, parametros).ExecuteReader();
             reader.Read();
-            labelRubroDatos.Text = (String)reader["descripcion"];
+            labelRubroDatos.Text = (String)reader["rubro_desc_corta"];
         }
 
         private void pedirVencimientoPreguntas()
@@ -89,13 +91,13 @@ namespace MercadoEnvio.Comprar_Ofertar
             parametros.Clear();
             parametros.Add(new SqlParameter("@id", publicacionId));
 
-            String query = "SELECT * FROM LOS_SUPER_AMIGOS.Publicacion WHERE id = @id";
+            String query = "SELECT * FROM NET_A_CERO.Publicaciones WHERE publi_id = @id";
 
             SqlDataReader reader = QueryBuilder.Instance.build(query, parametros).ExecuteReader();
             reader.Read();
-            labelVencimientoDatos.Text = ( (DateTime)reader["fecha_vencimiento"] ).ToString();
+            labelVencimientoDatos.Text = ( (DateTime)reader["publi_fec_vencimiento"] ).ToString();
             
-            if ((bool)reader["se_realizan_preguntas"] == false)
+            if ((int)reader["publi_preguntas"] == 0)
             {
                 botonPreguntar.Enabled = false;
             }            
@@ -108,24 +110,24 @@ namespace MercadoEnvio.Comprar_Ofertar
 
             if (tipoPublicacion == "Subasta")
             {
-                String querySubasta = "SELECT * FROM LOS_SUPER_AMIGOS.Publicacion WHERE id = @id";
+                String querySubasta = "SELECT * FROM NET_A_CERO.Publicaciones WHERE publi_id = @id";
                 SqlDataReader readerSubasta = QueryBuilder.Instance.build(querySubasta, parametros).ExecuteReader();
                 readerSubasta.Read();
-                labelStockDatos.Text = ((Decimal)readerSubasta["stock"]).ToString();
+                labelStockDatos.Text = ((Decimal)readerSubasta["publi_stock"]).ToString();
             }
             else
             {
-                String queryCompra = "SELECT * FROM LOS_SUPER_AMIGOS.Publicacion WHERE id = @id";
+                String queryCompra = "SELECT * FROM NET_A_CERO.Publicaciones WHERE publi_id = @id";
                 SqlDataReader readerCompra = QueryBuilder.Instance.build(queryCompra, parametros).ExecuteReader();
                 readerCompra.Read();
-                Decimal stockInicial = (Decimal)readerCompra["stock"];
+                Decimal stockInicial = (Decimal)readerCompra["publi_stock"];
 
                 parametros.Clear();
                 parametros.Add(new SqlParameter("@id", publicacionId));
-                String queryVista = "SELECT * FROM LOS_SUPER_AMIGOS.VistaCantidadVendida WHERE publicacion_id = @id";
-                SqlDataReader readerVista = QueryBuilder.Instance.build(queryVista, parametros).ExecuteReader();
-                
-                if (readerVista.Read())
+                String queryVista = "SELECT * FROM NET_A_CERO.VistaCantidadVendida WHERE publicacion_id = @id";  //CHEQUEAR POR LA VISTA
+                SqlDataReader readerVista = QueryBuilder.Instance.build(queryVista, parametros).ExecuteReader();//CHEQUEAR POR LA VISTA
+
+                if (readerVista.Read()) //CHEQUEAR POR LA VISTA                                         
                 {
                     labelStockDatos.Text = (stockInicial - (Decimal)readerVista["cant_vendida"]).ToString();
                 }
@@ -143,16 +145,16 @@ namespace MercadoEnvio.Comprar_Ofertar
 
             if (tipoPublicacion == "Compra Inmediata")
             {
-                String queryCompra = "SELECT * FROM LOS_SUPER_AMIGOS.Publicacion WHERE id = @id";
+                String queryCompra = "SELECT * FROM NET_A_CERO.Publicaciones WHERE publi_id = @id";
                 SqlDataReader readerCompra = QueryBuilder.Instance.build(queryCompra, parametros).ExecuteReader();
                 readerCompra.Read();
-                labelPrecioDatos.Text = ( (Decimal)readerCompra["precio"] ).ToString();
+                labelPrecioDatos.Text = ( (Decimal)readerCompra["publi_precio"] ).ToString();
             }
             else
-            {                
-                String queryVista = "SELECT * FROM LOS_SUPER_AMIGOS.VistaOfertaMax WHERE publicacion_id = @id";
-                SqlDataReader readerVista = QueryBuilder.Instance.build(queryVista, parametros).ExecuteReader();
-                if (readerVista.Read())
+            {
+                String queryVista = "SELECT * FROM NET_A_CERO.VistaOfertaMax WHERE publicacion_id = @id"; //CHEQUEAR POR LA VISTA
+                SqlDataReader readerVista = QueryBuilder.Instance.build(queryVista, parametros).ExecuteReader();//CHEQUEAR POR LA VISTA
+                if (readerVista.Read())//CHEQUEAR POR LA VISTA
                 {
                     labelPrecioDatos.Text = ((Decimal)readerVista["precioMax"]).ToString();
                 }
@@ -160,10 +162,10 @@ namespace MercadoEnvio.Comprar_Ofertar
                 {
                     parametros.Clear();
                     parametros.Add(new SqlParameter("@id", publicacionId));
-                    String queryOferta = "SELECT * FROM LOS_SUPER_AMIGOS.Publicacion WHERE id = @id";
+                    String queryOferta = "SELECT * FROM NET_A_CERO.Publicaciones WHERE publi_id = @id";
                     SqlDataReader readerOferta = QueryBuilder.Instance.build(queryOferta, parametros).ExecuteReader();
                     readerOferta.Read();
-                    labelPrecioDatos.Text = ((Decimal)readerOferta["precio"]).ToString();
+                    labelPrecioDatos.Text = ((Decimal)readerOferta["publi_precio"]).ToString();
                 }
             }
         }
@@ -184,8 +186,8 @@ namespace MercadoEnvio.Comprar_Ofertar
         {
             parametros.Clear();
             parametros.Add(new SqlParameter("@user", UsuarioSesion.Usuario.id));
-            String query = "select COUNT(*) from LOS_SUPER_AMIGOS.Compra c "
-                + "where isnull(c.calificacion_id,0)=0 and c.usuario_id = @user";
+            String query = "select COUNT(*) from NET_A_CERO.Compras c "
+                + "where isnull(c.comp_calif_id,0)=0 and c.comp_usr_id = @user";
             Decimal cantidad = Convert.ToDecimal(QueryBuilder.Instance.build(query, parametros).ExecuteScalar());
 
             if (cantidad >= 5)
