@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Configuration;
 
 namespace MercadoEnvio
 {
@@ -20,44 +21,17 @@ namespace MercadoEnvio
 
             return instance;
         }
-        public String server { get; set; }
-        public String username { get; set; }
-        public String password { get; set; }
-        public String database { get; set; }
-        public String schema { get; set; }
-
+       
         private DateTime currentDate;
 
-        private Config()
+        public DateTime getCurrentDate()
         {
-            parseConfig();
-        }
-        private void parseConfig()
-        {
-            XmlDocument doc = new XmlDocument();
-            doc.Load("../../../../configuracion.xml");
+          if(!String.IsNullOrWhiteSpace(ConfigurationManager.AppSettings["CurrentDate"]))
+          {
+              return DateTime.Parse(ConfigurationManager.AppSettings["CurrentDate"]);
+          }
 
-            XmlNodeList nodes = doc.DocumentElement.GetElementsByTagName("properties");
-
-            foreach (XmlNode node in nodes)
-            {
-                server = node.SelectSingleNode("server").InnerText;
-                username = node.SelectSingleNode("username").InnerText;
-                password = node.SelectSingleNode("password").InnerText;
-                database = node.SelectSingleNode("database").InnerText;
-                schema = node.SelectSingleNode("schema").InnerText;
-            }
-            currentDate = DateTime.Parse(doc.DocumentElement.GetElementsByTagName("time")[0].SelectSingleNode("current/time").InnerText);
-        }
-
-        internal DateTime getCurrentDate()
-        {
-            return currentDate;
-        }
-
-        public string getDateFormat()
-        {
-            return "dmy";
+          return DateTime.Now;
         }
     }
 }
