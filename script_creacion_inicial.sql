@@ -644,8 +644,8 @@ INSERT INTO NET_A_CERO.Funcionalidades(func_nombre)
             ('Listado Estadistico'),
             ('Ver Historial'),
             ('Cambiar Contraseña'),
-            ('Agregar rubro'),          --Ver que onda este
-            ('Editar rubro')           --Ver que onda este
+            ('Agregar Rubro'),          --Ver que onda este
+            ('Editar Rubro')           --Ver que onda este
 
 -- Agrego al administrador todas las funcionalidades del sistema
 

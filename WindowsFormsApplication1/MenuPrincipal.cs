@@ -20,26 +20,26 @@ namespace MercadoEnvio
         {
             InitializeComponent();
 
-            funcionalidades.Add("Comprar", new Comprar_Ofertar.BuscadorPublicaciones());
-            funcionalidades.Add("Ofertar", new Comprar_Ofertar.BuscadorPublicaciones());
-            funcionalidades.Add("Generar publicacion", new Generar_Publicacion.GenerarPublicacion());
-            funcionalidades.Add("Editar publicacion", new Editar_Publicacion.FiltrarPublicacion());
-            funcionalidades.Add("Calificar vendedor", new Calificar_Vendedor.Listado());            
-            funcionalidades.Add("Responder preguntas", new Gestion_de_Preguntas.VerPreguntas());
-            funcionalidades.Add("Ver respuestas", new Gestion_de_Preguntas.VerRespuestas());
-            funcionalidades.Add("Gestionar roles", new ABM_Rol.RolForm());
-            funcionalidades.Add("Generar factura", new Facturar_Publicaciones.Facturar());
-            funcionalidades.Add("Crear empresa", new ABM_Empresa.AgregarEmpresa("empresaCreadoPorAdmin", "password"));
-            funcionalidades.Add("Editar empresa", new ABM_Empresa.FiltroEmpresa());
-            funcionalidades.Add("Crear cliente", new ABM_Cliente.AgregarCliente("clienteCreadoPorAdmin", "password"));
-            funcionalidades.Add("Editar cliente", new ABM_Cliente.FiltroCliente());
-            funcionalidades.Add("Cambiar contraseña", new Login.CambiarContrasena()); 
-            funcionalidades.Add("Agregar visibilidad", new ABM_Visibilidad.AgregarVisibilidad());
-            funcionalidades.Add("Editar visibilidad", new ABM_Visibilidad.FiltroVisibilidad());
-            funcionalidades.Add("Agregar rubro", new ABM_Rubro.AgregarRubro());
-            funcionalidades.Add("Editar rubro", new ABM_Rubro.FiltroRubros());
-            funcionalidades.Add("Obtener estadisticas", new Listado_Estadistico.Estadisticas());
-            funcionalidades.Add("Ver historial", new Historial_Cliente.Historial());
+            funcionalidades.Add("Comprar/Ofertar", new Comprar_Ofertar.BuscadorPublicaciones());
+            funcionalidades.Add("Generar Publicacion", new Generar_Publicacion.GenerarPublicacion());
+            funcionalidades.Add("Editar Publicacion", new Editar_Publicacion.FiltrarPublicacion());
+            funcionalidades.Add("Calificar Vendedor", new Calificar_Vendedor.Listado());            
+            funcionalidades.Add("Responder Preguntas", new Gestion_de_Preguntas.VerPreguntas());
+            funcionalidades.Add("Ver Respuestas", new Gestion_de_Preguntas.VerRespuestas());
+            funcionalidades.Add("ABM Rol", new ABM_Rol.RolForm());
+            funcionalidades.Add("Generar Factura", new Facturar_Publicaciones.Facturar());
+            funcionalidades.Add("Crear Empresa", new ABM_Empresa.AgregarEmpresa("empresaCreadoPorAdmin", "password"));
+            funcionalidades.Add("Editar Empresa", new ABM_Empresa.FiltroEmpresa());
+            funcionalidades.Add("Crear Cliente", new ABM_Cliente.AgregarCliente("clienteCreadoPorAdmin", "password"));
+            funcionalidades.Add("Editar Cliente", new ABM_Cliente.FiltroCliente());
+            funcionalidades.Add("Agregar Visibilidad", new ABM_Visibilidad.AgregarVisibilidad());
+            funcionalidades.Add("Editar Visibilidad", new ABM_Visibilidad.FiltroVisibilidad());
+            funcionalidades.Add("Listado Estadistico", new Listado_Estadistico.Estadisticas());
+            funcionalidades.Add("Ver Historial", new Historial_Cliente.Historial());
+            funcionalidades.Add("Cambiar Contraseña", new Login.CambiarContrasena());
+            funcionalidades.Add("Agregar Rubro", new ABM_Rubro.AgregarRubro());
+            funcionalidades.Add("Editar Rubro", new ABM_Rubro.FiltroRubros());            
+             
         }
 
         private void MenuPrincipal_Load(object sender, EventArgs e)
