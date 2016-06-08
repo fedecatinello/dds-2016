@@ -12,7 +12,7 @@ namespace MercadoEnvio.Editar_Publicacion
 {
     public partial class FiltrarPublicacion : Form
     {
-        private DBCommunicator comunicador = new DBCommunicator();
+        private DBMapper comunicador = new DBMapper();
         
         public FiltrarPublicacion()
         {

@@ -18,7 +18,7 @@ namespace MercadoEnvio.ABM_Cliente
         private int idCliente;
         private int idContacto;
         private int idUsuario;
-        private DBCommunicator comunicador = new DBCommunicator();
+        private DBMapper comunicador = new DBMapper();
 
         public EditarCliente(String idCliente)
         {

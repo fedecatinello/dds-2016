@@ -15,7 +15,7 @@ namespace MercadoEnvio.Registro_de_Usuario
     {
         private SqlCommand command { get; set; }
         private IList<SqlParameter> parametros = new List<SqlParameter>();
-        private DBCommunicator comunicador = new DBCommunicator();
+        private DBMapper mapper = new DBMapper();
 
         public Object SelectedItem { get; set; }
 
@@ -38,7 +38,7 @@ namespace MercadoEnvio.Registro_de_Usuario
             adapter.SelectCommand = command;
             adapter.Fill(roles, "Rol");
             comboBoxRol.DataSource = roles.Tables[0].DefaultView;
-            comboBoxRol.ValueMember = "nombre";
+            comboBoxRol.ValueMember = "rol_nombre";
         }
 
         private void botonSiguiente_Click(object sender, EventArgs e)
@@ -51,24 +51,24 @@ namespace MercadoEnvio.Registro_de_Usuario
 
             if (usuario == "")
             {
-                MessageBox.Show("Debe completarse el campo Usuario");
+                MessageBox.Show("El campo Usuario es obligatorio");
                 return;
             }
 
             if (contraseña == "")
             {
-                MessageBox.Show("Debe completarse el campo Contraseña");
+                MessageBox.Show("El campo Contraseña es obligatorio");
                 return;
             }
             if (repetirContraseña == "")
             {
-                MessageBox.Show("Debe completarse el campo Repetir contraseña");
+                MessageBox.Show("El campo Repetir contraseña es obligatorio");
                 return;
             }
 
             if (rolElegido == "")
             {
-                MessageBox.Show("Debe seleccionarse un rol");
+                MessageBox.Show("El rol es obligatorio");
                 return;
             }
 
@@ -80,7 +80,7 @@ namespace MercadoEnvio.Registro_de_Usuario
 
             if (textBoxPass.Text != textBoxPass2.Text)
             {
-                MessageBox.Show("La contraseña no se repite correctamente");
+                MessageBox.Show("La contraseña no coincide");
                 return;
             }
 
@@ -88,33 +88,36 @@ namespace MercadoEnvio.Registro_de_Usuario
             parametros.Add(new SqlParameter("@username", usuario));
 
             // Buscamos si el username ya se encuentra registrado
-            String consulta = "SELECT usr_id FROM NET_A_CERO.Usuario WHERE usr_usuario = @username";
+            String queryUsuario = "SELECT usr_id FROM NET_A_CERO.Usuarios WHERE usr_usuario = @username";
 
-            SqlDataReader reader = QueryBuilder.Instance.build(consulta, parametros).ExecuteReader();
+            SqlDataReader reader = QueryBuilder.Instance.build(queryUsuario, parametros).ExecuteReader();
 
             if (reader.Read())
             {
-                MessageBox.Show("Ya existe un usuario con ese nombre");
+                MessageBox.Show("El usuario ya existe");
                 return;
             }
 
-            if (rolElegido == "Clientes")
+            if (rolElegido == "Cliente")
             {
                 this.Hide();
                 new ABM_Cliente.AgregarCliente(usuario,contraseña).ShowDialog();
 
-                if (UsuarioSesion.Usuario.rol != "Administrador")
+                if (UsuarioSesion.Usuario.rol != "Administrativo")
                 {
-                    UsuarioSesion.Usuario.rol = "Clientes";
+                    UsuarioSesion.Usuario.rol = "Cliente";
                     UsuarioSesion.Usuario.nombre = usuario;
 
-                    String idUsuario = "select top 1 usr_id" 
-                                + " from NET_A_CERO.Usuarios"
-                                + " order by id DESC";
-                    parametros.Clear();
-                    Decimal idC = (Decimal)QueryBuilder.Instance.build(idUsuario,parametros).ExecuteScalar();
+                    String idUsuario = "SELECT TOP 1 usr_id" 
+                                + " FROM NET_A_CERO.Usuarios"
+                                + " ORDER BY usr_id DESC";
 
-                    UsuarioSesion.Usuario.id = idC;
+                    // Limpio parametros
+                    parametros.Clear();
+
+                    int idCliente = (int)QueryBuilder.Instance.build(idUsuario, parametros).ExecuteScalar();
+
+                    UsuarioSesion.Usuario.id = idCliente;
                 }
    
             }
@@ -125,8 +128,8 @@ namespace MercadoEnvio.Registro_de_Usuario
             }
             else
             {
-                Decimal idUsuario = comunicador.CrearUsuarioConValores(usuario, contraseña);
-                comunicador.AsignarRolAUsuario(idUsuario, rolElegido);
+                Int32 idUsuario = mapper.CrearUsuarioConValores(usuario, contraseña);
+                mapper.AsignarRolAUsuario(idUsuario, rolElegido);
                 UsuarioSesion.Usuario.rol = rolElegido;
                 UsuarioSesion.Usuario.nombre = usuario;
                 UsuarioSesion.Usuario.id = idUsuario;

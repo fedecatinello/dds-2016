@@ -19,7 +19,7 @@ namespace MercadoEnvio.Comprar_Ofertar
         private Decimal vendedorId;
         private int publicacionId;
         private int stockActual;
-        private DBCommunicator comunicador = new DBCommunicator();
+        private DBMapper comunicador = new DBMapper();
 
         public Comprar(Decimal usuarioVendedor, int publicacion, int stock)
         {

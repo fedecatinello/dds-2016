@@ -17,7 +17,7 @@ namespace MercadoEnvio.Editar_Publicacion
         private Decimal idPublicacion;
         private Decimal idEstadoInicial;
         private String estadoInicial;
-        private DBCommunicator comunicador = new DBCommunicator();
+        private DBMapper comunicador = new DBMapper();
 
         public EditarPublicacion(String idPublicacion)
         {

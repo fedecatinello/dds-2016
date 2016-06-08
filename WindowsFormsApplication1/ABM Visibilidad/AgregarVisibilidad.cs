@@ -14,7 +14,7 @@ namespace MercadoEnvio.ABM_Visibilidad
 {
     public partial class AgregarVisibilidad : Form
     {
-        private DBCommunicator comunicador = new DBCommunicator();
+        private DBMapper comunicador = new DBMapper();
 
         public AgregarVisibilidad()
         {

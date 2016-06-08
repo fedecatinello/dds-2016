@@ -14,7 +14,7 @@ namespace MercadoEnvio.Generar_Publicacion
 {
     public partial class GenerarPublicacion : Form
     {
-        private DBCommunicator comunicador = new DBCommunicator();
+        private DBMapper comunicador = new DBMapper();
 
         public GenerarPublicacion()
         {
