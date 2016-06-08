@@ -52,7 +52,7 @@ namespace MercadoEnvio.Comprar_Ofertar
             {
                 String sql = "INSERT INTO NET_A_CERO.Ofertas_x_Subasta(sub_monto, sub_fecha, sub_usr_id, sub_publi_id, sub_ganador) VALUES (@monto, @fecha, @usuario, @publicacion, @ganador)";
                 //DateTime fecha = Convert.ToDateTime(System.Configuration.ConfigurationManager.AppSettings["DateKey"]);
-                DateTime fecha = Config.getInstance().getCurrentDate();
+                DateTime fecha = DateConfig.getInstance().getCurrentDate();
                 parametros.Clear();
                 parametros.Add(new SqlParameter("@monto", this.textBoxMonto.Text));
                 parametros.Add(new SqlParameter("@fecha", fecha));

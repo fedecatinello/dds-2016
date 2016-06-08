@@ -153,7 +153,7 @@ namespace MercadoEnvio.Editar_Publicacion
             if (estadoInicial == "Borrador")
             {
                 //fechaDeInicio = Convert.ToDateTime(System.Configuration.ConfigurationManager.AppSettings["DateKey"]); TP ANTERIOR
-                fechaDeInicio = Config.getInstance().getCurrentDate();
+                fechaDeInicio = DateConfig.getInstance().getCurrentDate();
                 fechaDeVencimiento = Convert.ToDateTime(Convert.ToString(Convert.ToDateTime(fechaDeInicio).AddDays(duracion)));
             }
             else

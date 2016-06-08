@@ -104,7 +104,7 @@ namespace MercadoEnvio.ABM_Cliente
                 cliente.SetNumeroDeDocumento(numeroDeDocumento);
                 cliente.SetTipoDeDocumento(tipoDeDocumento);
                 cliente.SetFechaDeNacimiento(fechaDeNacimiento);
-                cliente.SetFechaDeAlta(Config.getInstance().getCurrentDate());
+                cliente.SetFechaDeAlta(DateConfig.getInstance().getCurrentDate());
                 cliente.SetIdUsuario(idUsuario);
                 cliente.SetIdContacto(idContacto);
                 usuario.SetActivo(true);

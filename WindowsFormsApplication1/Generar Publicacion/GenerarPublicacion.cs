@@ -63,7 +63,7 @@ namespace MercadoEnvio.Generar_Publicacion
             String estado = comboBox_Estado.Text;
             String descripcion = textBox_Descripcion.Text;
             //DateTime fechaDeInicio = Convert.ToDateTime(System.Configuration.ConfigurationManager.AppSettings["DateKey"]);
-            DateTime fechaDeInicio = Config.getInstance().getCurrentDate();
+            DateTime fechaDeInicio = DateConfig.getInstance().getCurrentDate();
             String rubro = comboBox_Rubro.Text;
             String visibilidadDescripcion = comboBox_Visibilidad.Text;
             Boolean pregunta = radioButton_Pregunta.Checked;

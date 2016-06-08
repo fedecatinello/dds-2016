@@ -21,8 +21,7 @@ namespace MercadoEnvio.Objetos
 
         public Boolean esFechaPasada(DateTime dateTime)
         {
-           // DateTime dateNow = Convert.ToDateTime(System.Configuration.ConfigurationManager.AppSettings["DateKey"]); TP ANTERIOR
-            DateTime dateNow = Config.getInstance().getCurrentDate();
+            DateTime dateNow = DateConfig.getInstance().getCurrentDate();
             int comparacion = dateTime.CompareTo(dateNow);
             if (comparacion >= 0)
                 return false;

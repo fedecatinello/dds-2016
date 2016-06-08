@@ -33,7 +33,7 @@ namespace MercadoEnvio.Comprar_Ofertar
         {
             String sql = "INSERT INTO LOS_SUPER_AMIGOS.Pregunta(descripcion, respuesta, respuesta_fecha, usuario_id, publicacion_id) VALUES (@descripcion, '', NULL, @usuario, @publicacion)";
             //DateTime fecha = Convert.ToDateTime(System.Configuration.ConfigurationManager.AppSettings["DateKey"]);
-            DateTime fecha = Config.getInstance().getCurrentDate();
+            DateTime fecha = DateConfig.getInstance().getCurrentDate();
             parametros.Clear();
             parametros.Add(new SqlParameter("@descripcion", this.textBoxPregunta.Text));            
             parametros.Add(new SqlParameter("@usuario", idUsuarioActual));

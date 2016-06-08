@@ -74,7 +74,8 @@ namespace MercadoEnvio.Login
                 parametros.Add(new SqlParameter("@username", usuario));
                 String sesion = "SELECT usr_password FROM NET_A_CERO.Usuarios WHERE usr_usuario = @username"; 
                 String primerInicio = (String)QueryBuilder.Instance.build(sesion, parametros).ExecuteScalar();
-                if (primerInicio == "565339bc4d33d72817b583024112eb7f5cdf3e5eef0252d6ec1b9c9a94e12bb3") //El primer inicio la contraseña es fija (OK)
+                //El primer inicio la contraseña es fija (OK)
+                if (primerInicio == "565339bc4d33d72817b583024112eb7f5cdf3e5eef0252d6ec1b9c9a94e12bb3") 
                 {
                     this.Hide();
                     new CambiarContrasena().ShowDialog();
@@ -103,10 +104,11 @@ namespace MercadoEnvio.Login
                     UsuarioSesion.Usuario.rol = rolUser;
                     if(UsuarioSesion.Usuario.rol == null)
                     {
-                        MessageBox.Show("Usted no tiene roles para iniciar sesion");
+                        MessageBox.Show("No existen roles para iniciar sesion");
                         return;
                     }
-                  //  MessageBox.Show("Rol: " + UsuarioSesion.Usuario.rol);
+                  
+                    // Para testear si elige bien el rol: MessageBox.Show("Rol: " + UsuarioSesion.Usuario.rol);
 
                     this.Hide();
                     new MenuPrincipal().ShowDialog();
@@ -131,9 +133,9 @@ namespace MercadoEnvio.Login
                     parametros.Add(new SqlParameter("@password", contraseña));
                     String estaDeshabilitado = "SELECT * FROM NET_A_CERO.Usuarios WHERE usr_usuario = @username AND usr_activo = 0";
 
-                    SqlDataReader leeDeshabilitado = QueryBuilder.Instance.build(estaDeshabilitado, parametros).ExecuteReader();
+                    SqlDataReader userDeshabilitado = QueryBuilder.Instance.build(estaDeshabilitado, parametros).ExecuteReader();
 
-                    if (leeDeshabilitado.Read())
+                    if (userDeshabilitado.Read())
                     {
                         MessageBox.Show("El usuario esta deshabilitado");
                         return;
@@ -159,7 +161,7 @@ namespace MercadoEnvio.Login
                         String deshabilitar = "UPDATE NET_A_CERO.Usuarios SET usr_activo = 0 WHERE usr_usuario = @username";
                         QueryBuilder.Instance.build(deshabilitar, parametros).ExecuteNonQuery();
                     }
-                    MessageBox.Show("Contraseña incorrecta." + '\n' + "La contrseña distingue mayusculas y minusculas." + '\n' + "Fallidos del usuario: " + intentosFallidos);
+                    MessageBox.Show("Contraseña incorrecta." + '\n' + '\n' + "La contraseña distingue mayusculas y minusculas." + '\n' + '\n' + "Fallidos del usuario: " + intentosFallidos);
                 }
                 else 
                 {

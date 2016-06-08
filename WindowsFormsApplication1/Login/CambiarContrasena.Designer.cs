@@ -33,7 +33,7 @@ namespace MercadoEnvio.Login
             this.textBoxRepetirContraseña = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.botonContinuar = new System.Windows.Forms.Button();
+            this.btnContinuar = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // labelTitulo
@@ -84,23 +84,23 @@ namespace MercadoEnvio.Login
             this.label2.TabIndex = 4;
             this.label2.Text = "Repita nueva contraseña";
             // 
-            // botonContinuar
+            // btnContinuar
             // 
-            this.botonContinuar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.botonContinuar.Location = new System.Drawing.Point(132, 170);
-            this.botonContinuar.Name = "botonContinuar";
-            this.botonContinuar.Size = new System.Drawing.Size(109, 35);
-            this.botonContinuar.TabIndex = 5;
-            this.botonContinuar.Text = "Continuar";
-            this.botonContinuar.UseVisualStyleBackColor = true;
-            this.botonContinuar.Click += new System.EventHandler(this.botonContinuar_Click);
+            this.btnContinuar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnContinuar.Location = new System.Drawing.Point(132, 170);
+            this.btnContinuar.Name = "btnContinuar";
+            this.btnContinuar.Size = new System.Drawing.Size(109, 35);
+            this.btnContinuar.TabIndex = 5;
+            this.btnContinuar.Text = "Continuar";
+            this.btnContinuar.UseVisualStyleBackColor = true;
+            this.btnContinuar.Click += new System.EventHandler(this.btnContinuar_Click);
             // 
             // CambiarContrasena
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(338, 230);
-            this.Controls.Add(this.botonContinuar);
+            this.Controls.Add(this.btnContinuar);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBoxRepetirContraseña);
@@ -121,6 +121,6 @@ namespace MercadoEnvio.Login
         private System.Windows.Forms.TextBox textBoxRepetirContraseña;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button botonContinuar;
+        private System.Windows.Forms.Button btnContinuar;
     }
 }

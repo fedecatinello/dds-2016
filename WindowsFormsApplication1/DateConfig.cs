@@ -8,22 +8,20 @@ using System.Configuration;
 
 namespace MercadoEnvio
 {
-    public class Config
+    public class DateConfig
     {
-        private static Config instance;
+        private static DateConfig instance;
         
-        public static Config getInstance()
+        public static DateConfig getInstance()
         {
             if (instance == null)
             {
-                instance = new Config();
+                instance = new DateConfig();
             }
 
             return instance;
         }
        
-        private DateTime currentDate;
-
         public DateTime getCurrentDate()
         {
           if(!String.IsNullOrWhiteSpace(ConfigurationManager.AppSettings["CurrentDate"]))

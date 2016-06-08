@@ -20,7 +20,7 @@ namespace MercadoEnvio.Login
             InitializeComponent();
         }
 
-        private void botonContinuar_Click(object sender, EventArgs e)
+        private void btnContinuar_Click(object sender, EventArgs e)
         {
             if (textBoxContraseña.Text == "")
             {
@@ -41,19 +41,21 @@ namespace MercadoEnvio.Login
 
             if (textBoxContraseña.Text != textBoxRepetirContraseña.Text)
             {
-                MessageBox.Show("La contraseña no se repite correctamente");
+                MessageBox.Show("La contraseña no coincide, ingrese nuevamente");
+                textBoxContraseña.Clear();
+                textBoxRepetirContraseña.Clear();
                 return;
             }
             
 
-            // Acualiza contraseña
+            // Actualiza contraseña
             IList<SqlParameter> parametros = new List<SqlParameter>();
             parametros.Add(new SqlParameter("@username", UsuarioSesion.Usuario.nombre));
             parametros.Add(new SqlParameter("@pass", HashSha256.getHash(textBoxContraseña.Text)));
-            String nuevaPass = "UPDATE NET_A_CERO.Usuarios SET usr_password = @pass WHERE username = @username";
+            String nuevaPass = "UPDATE NET_A_CERO.Usuarios SET usr_password = @pass WHERE usr_usuario = @username";
             QueryBuilder.Instance.build(nuevaPass, parametros).ExecuteNonQuery();
 
-            // Asigna rol
+            // Asigna el rol
             parametros.Clear();
             parametros.Add(new SqlParameter("@username", UsuarioSesion.Usuario.nombre));
 
