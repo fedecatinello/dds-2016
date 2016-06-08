@@ -10,6 +10,7 @@ namespace MercadoEnvio.Objetos
         private Decimal id;
         private String username;
         private String password;
+        private Boolean activo;
         private Boolean is_admin;
 
         public void SetId(Decimal id)
@@ -40,6 +41,16 @@ namespace MercadoEnvio.Objetos
         public String GetPassword()
         {
             return this.password;
+        }
+
+        public void SetActivo(Boolean activo)
+        {
+            this.activo = activo;
+        }
+
+        public Boolean GetActivo()
+        {
+            return this.activo;
         }
 
         public void Setis_admin(Boolean activo)

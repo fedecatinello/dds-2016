@@ -77,7 +77,7 @@ namespace MercadoEnvio.ABM_Empresa
             }
             catch (FormatoInvalidoException exception)
             {
-                MessageBox.Show("Datos mal ingresados en: " + exception.Message);
+                MessageBox.Show("Los datos fueron mal ingresados en: " + exception.Message);
                 return;
             }
             
@@ -106,43 +106,43 @@ namespace MercadoEnvio.ABM_Empresa
                 idEmpresa = comunicador.CrearEmpresa(empresa);
                 if (idEmpresa > 0) MessageBox.Show("Se agrego la empresa correctamente");
             }
-            catch (CampoVacioException exception)
+            catch (CampoVacioException exceptionCampoVacio)
             {
-                MessageBox.Show("Falta completar campo: " + exception.Message);
+                MessageBox.Show("Falta completar campo: " + exceptionCampoVacio.Message);
                 return;
             }
-            catch (FormatoInvalidoException exception)
+            catch (FormatoInvalidoException exceptionFormato)
             {
-                MessageBox.Show("Datos mal ingresados en: " + exception.Message);
+                MessageBox.Show("Los datos fueron mal ingresados en: " + exceptionFormato.Message);
                 return;
             }
-            catch (TelefonoYaExisteException exception)
+            catch (TelefonoYaExisteException exceptionTelefono)
             {
                 MessageBox.Show("Telefono ya existe");
                 return;
             }
-            catch (CuitYaExisteException exception)
+            catch (CuitYaExisteException exceptionCuit)
             {
                 MessageBox.Show("Cuit ya existe");
                 return;
             }
-            catch (RazonSocialYaExisteException exception)
+            catch (RazonSocialYaExisteException exceptionRazonSocial)
             {
                 MessageBox.Show("RazonSocial ya existe");
                 return;
             }
-            catch (FechaPasadaException exception)
+            catch (FechaPasadaException exceptionFecha)
             {
                 MessageBox.Show("Fecha no valida");
                 return;
             }
 
-            // Si la empresa lo crea el admin, crea un nuevo usuario predeterminado. Si lo crea un nuevo registro de usuario, usa el que viene por parametro
+            // Si la empresa lo crea el admin, crea un nuevo usuario predeterminado.
             if (idUsuario == 0)
             {
                 idUsuario = CrearUsuario();
-                Boolean seCreoBien = comunicador.AsignarUsuarioAEmpresa(idEmpresa, idUsuario);
-                if (seCreoBien) MessageBox.Show("Se creo el usuario correctamente");
+                Boolean resultado = comunicador.AsignarUsuarioAEmpresa(idEmpresa, idUsuario);
+                if (resultado) MessageBox.Show("El usuario fue creado correctamente");
             }
             /*
              ------------- SOLO LOS ADMINISTRADORES PUEDEN CREAR USUARIOS-----------------
