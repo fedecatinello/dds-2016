@@ -609,13 +609,9 @@ END
 /** Migracion de Roles **/
 
 INSERT INTO NET_A_CERO.Roles(rol_nombre, rol_activo)
-    VALUES ('Administrativo', 1)
-
-INSERT INTO NET_A_CERO.Roles(rol_nombre, rol_activo)
-    VALUES ('Empresa', 1)
-
-INSERT INTO NET_A_CERO.Roles(rol_nombre, rol_activo)
-    VALUES ('Cliente', 1)
+    VALUES  ('Administrativo', 1),
+            ('Cliente', 1),
+            ('Empresa', 1)
 
 
 /** Migracion de Usuarios_x_Rol **/
@@ -631,46 +627,25 @@ INSERT INTO NET_A_CERO.Usuarios_x_Rol(rol_id, usr_id)
 /** Migración de Funcionalidades **/
 
 INSERT INTO NET_A_CERO.Funcionalidades(func_nombre)
-    VALUES ('Comprar');
-
-INSERT INTO NET_A_CERO.Funcionalidades(func_nombre)
-    VALUES ('Ofertar');
-
-INSERT INTO NET_A_CERO.Funcionalidades(func_nombre)
-    VALUES ('Vender');
-
-INSERT INTO NET_A_CERO.Funcionalidades(func_nombre)
-    VALUES ('Calificar vendedor');
-
-INSERT INTO NET_A_CERO.Funcionalidades(func_nombre)
-    VALUES ('Preguntar');
-
-INSERT INTO NET_A_CERO.Funcionalidades(func_nombre)
-    VALUES ('Agregar rol');
-
-INSERT INTO NET_A_CERO.Funcionalidades(func_nombre)
-    VALUES ('Deshabilitar rol');
-
-INSERT INTO NET_A_CERO.Funcionalidades(func_nombre)
-    VALUES ('Editar rol');
-
-INSERT INTO NET_A_CERO.Funcionalidades(func_nombre)
-    VALUES ('Crear usuario');
-
-INSERT INTO NET_A_CERO.Funcionalidades(func_nombre)
-    VALUES ('Editar usuario');
-
-INSERT INTO NET_A_CERO.Funcionalidades(func_nombre)
-    VALUES ('Habilitar usuario');
-
-INSERT INTO NET_A_CERO.Funcionalidades(func_nombre)
-    VALUES ('Deshabilitar usuario');
-
-INSERT INTO NET_A_CERO.Funcionalidades(func_nombre)
-    VALUES ('Generar factura');
-
-INSERT INTO NET_A_CERO.Funcionalidades(func_nombre)
-    VALUES ('Cambiar Contraseña');
+    VALUES  ('Comprar/Ofertar'),
+            ('Generar Publicacion'),
+            ('Editar Publicacion'),
+            ('Calificar Vendedor'),
+            ('Responder Preguntas'),
+            ('Ver Respuestas'),
+            ('ABM Rol'),
+            ('Generar Factura'),
+            ('Crear Empresa'),
+            ('Editar Empresa'),
+            ('Crear Cliente'),
+            ('Editar Cliente'),
+            ('Agregar Visibilidad'),
+            ('Editar Visibilidad'),
+            ('Listado Estadistico'),
+            ('Ver Historial'),
+            ('Cambiar Contraseña'),
+            ('Agregar rubro'),          --Ver que onda este
+            ('Editar rubro')           --Ver que onda este
 
 -- Agrego al administrador todas las funcionalidades del sistema
 
@@ -691,34 +666,22 @@ COMMIT
 /** Migracion de Rol_x_Funcionalidad **/
 
 INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(func_id, rol_id)   
-    VALUES(1,2);
-    
-INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(func_id, rol_id)   
-    VALUES(2,2);
-
-INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(func_id, rol_id)   
-    VALUES(3,2);
-
-INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(func_id, rol_id) 
-    VALUES(4,2);
-    
-INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(func_id, rol_id) 
-    VALUES(5,2);
-    
-INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(func_id, rol_id) 
-    VALUES(13,2);
-
-INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(func_id, rol_id) 
-    VALUES(3,3);
-
-INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(func_id, rol_id) 
-    VALUES(13,3);
-    
-INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(func_id, rol_id) 
-    VALUES(14,2);
-
-INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(func_id, rol_id) 
-    VALUES(14,3);
+    VALUES  (1,2),
+            (2,2),
+            (3,2),
+            (4,2),
+            (5,2),
+            (6,2),
+            (8,2),
+            (15,2),
+            (16,2),
+            (2,3),
+            (3,3),
+            (5,3),
+            (8,3),
+            (15,3),
+            (17,2),
+            (17,3)
 
 
 
