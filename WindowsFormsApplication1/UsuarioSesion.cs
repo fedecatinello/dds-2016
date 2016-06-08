@@ -9,7 +9,7 @@ namespace MercadoEnvio
     class UsuarioSesion
     {
         public static UsuarioSesion usuario;
-        public Decimal id { get; set; }
+        public int id { get; set; }
         public String rol { get; set; }
         public String nombre { get; set; }
         private UsuarioSesion() { }

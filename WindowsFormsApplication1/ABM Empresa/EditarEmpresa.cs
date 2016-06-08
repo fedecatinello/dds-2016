@@ -17,7 +17,7 @@ namespace MercadoEnvio.ABM_Empresa
         private int idEmpresa;
         private int idContacto;
         private int idUsuario;
-        private DBCommunicator comunicador = new DBCommunicator();
+        private DBMapper comunicador = new DBMapper();
 
         public EditarEmpresa(String idEmpresa)
         {

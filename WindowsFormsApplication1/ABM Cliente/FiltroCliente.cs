@@ -15,7 +15,7 @@ namespace MercadoEnvio.ABM_Cliente
     public partial class FiltroCliente : Form
     {
         //private ComunicadorConBaseDeDatos comunicador = new ComunicadorConBaseDeDatos();     TP ANTERIOR
-        private DBCommunicator comunicador = new DBCommunicator();
+        private DBMapper comunicador = new DBMapper();
 
         public FiltroCliente()
         {

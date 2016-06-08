@@ -17,7 +17,7 @@ namespace MercadoEnvio.Comprar_Ofertar
         private IList<SqlParameter> parametros = new List<SqlParameter>();
         public Object SelectedItem { get; set; }
         decimal idUsuarioActual = UsuarioSesion.Usuario.id;
-        private DBCommunicator comunicador = new DBCommunicator();
+        private DBMapper comunicador = new DBMapper();
 
         DataTable tablaTemporal;
         int totalPaginas;
