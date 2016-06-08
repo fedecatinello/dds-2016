@@ -35,10 +35,11 @@ namespace MercadoEnvio
         {
             query = "NET_A_CERO.pr_crear_usuario_con_valores";
             parametros.Clear();
-            parametroOutput = new SqlParameter("@usuario_id", SqlDbType.Decimal);
+            parametroOutput = new SqlParameter("@usuario_id", SqlDbType.Int);
             parametroOutput.Direction = ParameterDirection.Output;
             parametros.Add(new SqlParameter("@username", username));
             parametros.Add(new SqlParameter("@password", HashSha256.getHash(password)));
+            parametros.Add(new SqlParameter("@is_admin", "0"));
             parametros.Add(parametroOutput);
             command = QueryBuilder.Instance.build(query, parametros);
             command.CommandType = CommandType.StoredProcedure;
@@ -89,7 +90,7 @@ namespace MercadoEnvio
             query = objeto.GetQueryCrear();
             parametros.Clear();
             parametros = objeto.GetParametros();
-            parametroOutput = new SqlParameter("@id", SqlDbType.Decimal);
+            parametroOutput = new SqlParameter("@id", SqlDbType.Int);
             parametroOutput.Direction = ParameterDirection.Output;
             parametros.Add(parametroOutput);
             command = QueryBuilder.Instance.build(query, parametros);
