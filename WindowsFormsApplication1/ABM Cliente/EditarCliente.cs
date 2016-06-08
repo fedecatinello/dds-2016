@@ -141,7 +141,7 @@ namespace MercadoEnvio.ABM_Cliente
                 cliente.SetNumeroDeDocumento(numeroDeDocumento);
                 cliente.SetTipoDeDocumento(tipoDeDocumento);
                 cliente.SetFechaDeNacimiento(fechaDeNacimiento);
-                usuario.SetActivo(activo);
+                usuario.Setis_admin(activo);
 
                 pudoModificar = comunicador.Modificar(idCliente, cliente);
                 if (pudoModificar) MessageBox.Show("El cliente se modifico correctamente");
