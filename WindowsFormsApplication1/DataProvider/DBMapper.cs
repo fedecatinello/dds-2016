@@ -17,25 +17,25 @@ namespace MercadoEnvio
         private IList<SqlParameter> parametros = new List<SqlParameter>();
         private SqlParameter parametroOutput;
         private SqlCommand command;
-        
-        public int CrearUsuario()
+
+        public Decimal CrearUsuario()
         {
             query = "NET_A_CERO.pr_crear_usuario";
             parametros.Clear();
-            parametroOutput = new SqlParameter("@usuario_id", SqlDbType.Int);
+            parametroOutput = new SqlParameter("@usuario_id", SqlDbType.Decimal);
             parametroOutput.Direction = ParameterDirection.Output;
             parametros.Add(parametroOutput);
             command = QueryBuilder.Instance.build(query, parametros);
             command.CommandType = CommandType.StoredProcedure;
             command.ExecuteNonQuery();
-            return (int)parametroOutput.Value;
+            return (Decimal)parametroOutput.Value;
         }
 
         public int CrearUsuarioConValores(String username, String password)
         {
             query = "NET_A_CERO.pr_crear_usuario_con_valores";
             parametros.Clear();
-            parametroOutput = new SqlParameter("@usuario_id", SqlDbType.Int);
+            parametroOutput = new SqlParameter("@usuario_id", SqlDbType.Decimal);
             parametroOutput.Direction = ParameterDirection.Output;
             parametros.Add(new SqlParameter("@username", username));
             parametros.Add(new SqlParameter("@password", HashSha256.getHash(password)));
@@ -46,7 +46,7 @@ namespace MercadoEnvio
             return (int)parametroOutput.Value;
         }
 
-        public Boolean AsignarUsuarioACliente(int idCliente, int idUsuario)
+        public Boolean AsignarUsuarioACliente(Decimal idCliente, Decimal idUsuario)
         {
             query = "UPDATE NET_A_CERO.Clientes SET usr_id = @idUsuario WHERE cli_id = @idCliente";
             parametros.Clear();
@@ -57,7 +57,7 @@ namespace MercadoEnvio
             if (filasAfectadas == 1) return true;
             return false;
         }
-        public Boolean AsignarUsuarioAEmpresa(int idEmpresa, int idUsuario)
+        public Boolean AsignarUsuarioAEmpresa(Decimal idEmpresa, Decimal idUsuario)
         {
             query = "UPDATE NET_A_CERO.Empresas SET usr_id = @idUsuario WHERE emp_id = @idEmpresa";
             parametros.Clear();
@@ -70,12 +70,12 @@ namespace MercadoEnvio
         }
 
 
-        public Boolean AsignarRolAUsuario(int idUsuario, String rol)
+        public Boolean AsignarRolAUsuario(Decimal idUsuario, String rol)
         {
-            int idRol = Convert.ToInt32(this.SelectFromWhere("id", "Rol", "nombre", rol));
+            Decimal idRol = Convert.ToDecimal(this.SelectFromWhere("id", "Rol", "nombre", rol));
             query = "NET_A_CERO.agregar_rol_a_usuario";
             parametros.Clear();
-            parametros.Add(new SqlParameter("@usr_id", idUsuario));
+            parametros.Add(new SqlParameter("@usuario_id", idUsuario));
             parametros.Add(new SqlParameter("@rol_id", idRol));
             command = QueryBuilder.Instance.build(query, parametros);
             command.CommandType = CommandType.StoredProcedure;
@@ -89,7 +89,7 @@ namespace MercadoEnvio
             query = objeto.GetQueryCrear();
             parametros.Clear();
             parametros = objeto.GetParametros();
-            parametroOutput = new SqlParameter("@id", SqlDbType.Int);
+            parametroOutput = new SqlParameter("@id", SqlDbType.Decimal);
             parametroOutput.Direction = ParameterDirection.Output;
             parametros.Add(parametroOutput);
             command = QueryBuilder.Instance.build(query, parametros);
@@ -98,7 +98,7 @@ namespace MercadoEnvio
             return (int)parametroOutput.Value;
         }
 
-        public Boolean Modificar(int id, Comunicable objeto)
+        public Boolean Modificar(Decimal id, Comunicable objeto)
         {
             query = objeto.GetQueryModificar();
             parametros.Clear();
@@ -109,7 +109,7 @@ namespace MercadoEnvio
             return false;
         }
 
-        public Comunicable Obtener(int id, Type clase)
+        public Comunicable Obtener(Decimal id, Type clase)
         {
             Comunicable objeto = (Comunicable)Activator.CreateInstance(clase);
             query = objeto.GetQueryObtener();
@@ -124,9 +124,9 @@ namespace MercadoEnvio
             return objeto;
         }
 
-        public Boolean Eliminar(int id, String whereClause)
+        public Boolean Eliminar(Decimal id, String enDonde)
         {
-            query = "UPDATE NET_A_CERO." + whereClause + " SET dado_de_baja = 1 WHERE id = @id";
+            query = "UPDATE NET_A_CERO." + enDonde + " SET dado_de_baja = 1 WHERE id = @id";
             parametros.Clear();
             parametros.Add(new SqlParameter("@id", id));
             int filasAfectadas = QueryBuilder.Instance.build(query, parametros).ExecuteNonQuery();
@@ -136,12 +136,12 @@ namespace MercadoEnvio
 
         public int CrearCliente(Clientes cliente)
         {
-            
+
             if (!pasoControlDeRegistro(cliente.GetTipoDeDocumento(), cliente.GetNumeroDeDocumento()))
                 throw new ClienteYaExisteException();
 
             return this.Crear(cliente);
-             
+
         }
 
         public int CrearEmpresa(Empresas empresa)
@@ -187,7 +187,7 @@ namespace MercadoEnvio
         {
             Clientes objeto = new Clientes();
             Type clase = objeto.GetType();
-            return (Clientes) this.Obtener(idCliente, clase);
+            return (Clientes)this.Obtener(idCliente, clase);
         }
 
         public Empresas ObtenerEmpresa(Decimal idEmpresa)
@@ -219,26 +219,26 @@ namespace MercadoEnvio
             return (Publicacion)this.Obtener(idPublicacion, clase);
         }
 
-        public Object SelectFromWhere(String resultFieldClause, String fromClause, String param1, String param2)
+        public Object SelectFromWhere(String que, String deDonde, String param1, String param2)
         {
-            query = "SELECT " + resultFieldClause + " FROM NET_A_CERO." + fromClause + " WHERE " + param1 + " = @" + param1;
+            query = "SELECT " + que + " FROM NET_A_CERO." + deDonde + " WHERE " + param1 + " = @" + param1;
             parametros.Clear();
             parametros.Add(new SqlParameter("@" + param1, param2));
             return QueryBuilder.Instance.build(query, parametros).ExecuteScalar();
         }
 
-        public Object SelectFromWhere(String resultFieldClause, String fromClause, String param1, Decimal param2)
+        public Object SelectFromWhere(String que, String deDonde, String param1, Decimal param2)
         {
-            query = "SELECT " + resultFieldClause + " FROM NET_A_CERO." + fromClause + " WHERE " + param1 + " = @" + param1;
+            query = "SELECT " + que + " FROM NET_A_CERO." + deDonde + " WHERE " + param1 + " = @" + param1;
             parametros.Clear();
             parametros.Add(new SqlParameter("@" + param1, param2));
             return QueryBuilder.Instance.build(query, parametros).ExecuteScalar();
         }
 
-        public DataTable SelectDataTable(String resultFieldClause, String fromClause)
+        public DataTable SelectDataTable(String que, String deDonde)
         {
             parametros.Clear();
-            command = QueryBuilder.Instance.build("SELECT " + resultFieldClause + " FROM " + fromClause, parametros);
+            command = QueryBuilder.Instance.build("SELECT " + que + " FROM " + deDonde, parametros);
             DataSet datos = new DataSet();
             SqlDataAdapter adapter = new SqlDataAdapter();
             adapter.SelectCommand = command;
@@ -246,16 +246,16 @@ namespace MercadoEnvio
             return datos.Tables[0];
         }
 
-        public DataTable SelectDataTable(String resultFieldClause, String fromClause, String conditions)
+        public DataTable SelectDataTable(String que, String deDonde, String condiciones)
         {
-            return this.SelectDataTableConUsuario(resultFieldClause, fromClause, conditions);
+            return this.SelectDataTableConUsuario(que, deDonde, condiciones);
         }
 
-        public DataTable SelectDataTableConUsuario(String resultFieldClause, String fromClause, String conditions)
+        public DataTable SelectDataTableConUsuario(String que, String deDonde, String condiciones)
         {
             parametros.Clear();
             parametros.Add(new SqlParameter("@idUsuario", UsuarioSesion.Usuario.id));
-            command = QueryBuilder.Instance.build("SELECT " + resultFieldClause + " FROM " + fromClause + " WHERE " + conditions, parametros);
+            command = QueryBuilder.Instance.build("SELECT " + que + " FROM " + deDonde + " WHERE " + condiciones, parametros);
             command.CommandTimeout = 0;
             DataSet datos = new DataSet();
             SqlDataAdapter adapter = new SqlDataAdapter();
@@ -264,15 +264,15 @@ namespace MercadoEnvio
             return datos.Tables[0];
         }
 
-        public DataTable SelectClientesParaFiltroConFiltro(String filter)
+        public DataTable SelectClientesParaFiltroConFiltro(String filtro)
         {
             //return this.SelectDataTable("c.cli_id, u.usr_usuario Username, c.cli_nombre Nombre, c.cli_apellido Apellido, c.cli_tipo_dni 'Tipo de Documento', c.cli_dni Documento, c.cli_fecha_nac 'Fecha de Nacimiento', d.cont_mail Mail, d.cont_telefono Telefono, d.cont_calle Calle, d.cont_numero_calle Numero, d.cont_piso Piso, d.cont_depto Departamento, d.cont_codigo_postal 'Codigo postal', d.cont_localidad Localidad"
             //    , "NET_A_CERO.Clientes c, NET_A_CERO.Contacto d, NET_A_CERO.Usuarios u"
             //    , "c.cli_usr_id = u.usr_id AND u.usr_id = d.cont_id AND dado_de_baja = 0 " + filtro);
 
-           return this.SelectDataTable("cli.cli_id, usr.usr_usuario Username, cli.cli_nombre Nombre, cli.cli_apellido Apellido, cli.cli_dni Documento, cli.cli_tipo_dni 'Tipo de Documento', cli.cli_fecha_nac 'Fecha de Nacimiento', cont.cont_mail Mail, cont.cont_telefono Telefono, cont.cont_calle Calle, cont.cont_numero_calle 'Numero Calle', cont.cont_piso Piso, cont.cont_depto Departamento, cont.cont_localidad Localidad, cont.cont_codigo_posta 'Codigo Postal' "
-               ,"NET_A_CERO.Clientes cli, NET_A_CERO.Contacto cont, NET_A_CERO.Usuarios usr"
-               , "cli.cli_usr_id = usr.usr_id AND usr.usr_id = cont.cont_usr_id " + filter);
+            return this.SelectDataTable("cli.cli_id, usr.usr_usuario Username, cli.cli_nombre Nombre, cli.cli_apellido Apellido, cli.cli_dni Documento, cli.cli_tipo_dni 'Tipo de Documento', cli.cli_fecha_nac 'Fecha de Nacimiento', cont.cont_mail Mail, cont.cont_telefono Telefono, cont.cont_calle Calle, cont.cont_numero_calle 'Numero Calle', cont.cont_piso Piso, cont.cont_depto Departamento, cont.cont_localidad Localidad, cont.cont_codigo_posta 'Codigo Postal' "
+                , "NET_A_CERO.Clientes cli, NET_A_CERO.Contacto cont, NET_A_CERO.Usuarios usr"
+                , "cli.cli_usr_id = usr.usr_id AND usr.usr_id = cont.cont_usr_id " + filtro);
         }
 
         public DataTable SelectClientesParaFiltro()
@@ -280,11 +280,11 @@ namespace MercadoEnvio
             return this.SelectClientesParaFiltroConFiltro("");
         }
 
-        public DataTable SelectEmpresasParaFiltroConFiltro(String filter)
+        public DataTable SelectEmpresasParaFiltroConFiltro(String filtro)
         {
-           //return this.SelectDataTable("e.emp_id, u.usr_apellido Username, e.emp_razon_social 'Razon Social', e.emp_nombre_contacto 'Nombre de contacto', e.emp_cuit 'CUIT', e.emp_fecha_alta 'Fecha de creacion', d.cont_mail 'Mail', d.cont_telefono 'Telefono', d.cont_localidad Ciudad, d.cont_calle Calle, d.cont_numero_calle Numero, d.cont_piso Piso, d.cont_depto Departamento, d.cont_codigo_postal 'Codigo Postal', d.cont_localidad Localidad"
-           //     , "NET_A_CERO.Empresas e, NET_A_CERO.Contacto d, NET_A_CERO.Usuarios u"
-           //     , "e.emp_usr_id = u.usr_id AND u.usr_id = d.cont_id AND dado_de_baja = 0 " + filtro); //fijarse si esta bien
+            //return this.SelectDataTable("e.emp_id, u.usr_apellido Username, e.emp_razon_social 'Razon Social', e.emp_nombre_contacto 'Nombre de contacto', e.emp_cuit 'CUIT', e.emp_fecha_alta 'Fecha de creacion', d.cont_mail 'Mail', d.cont_telefono 'Telefono', d.cont_localidad Ciudad, d.cont_calle Calle, d.cont_numero_calle Numero, d.cont_piso Piso, d.cont_depto Departamento, d.cont_codigo_postal 'Codigo Postal', d.cont_localidad Localidad"
+            //     , "NET_A_CERO.Empresas e, NET_A_CERO.Contacto d, NET_A_CERO.Usuarios u"
+            //     , "e.emp_usr_id = u.usr_id AND u.usr_id = d.cont_id AND dado_de_baja = 0 " + filtro); //fijarse si esta bien
             return this.SelectDataTable("emp.emp_id, usr.usr_usuario Username, emp.emp_razon_social 'Razon Social', emp.emp_ciudad Ciudad, emp.emp_cuit 'CUIT', emp.emp_nombre_contacto 'Nombre Contacto', emp.emp_rubro Rubro, emp.emp_fecha_alta 'Fecha Alta', cont.cont_mail Mail, cont.cont_telefono Telefono, cont.cont_calle Calle, cont.cont_numero_calle 'Numero Calle', cont.cont_piso Piso, cont.cont_depto Departamento, cont.cont_localidad Localidad, cont.cont_codigo_posta 'Codigo Postal' "
                 , "NET_A_CERO.Empresas emp, NET_A_CERO.Contacto cont, NET_A_CERO.Usuarios usr"
                 , "emp.emp_usr_id = usr.usr_id AND usr.usr_id = cont.cont_usr_id");
@@ -295,11 +295,11 @@ namespace MercadoEnvio
             return this.SelectEmpresasParaFiltroConFiltro("");
         }
 
-        public DataTable SelectVisibilidadesParaFiltroConFiltro(String filter)
+        public DataTable SelectVisibilidadesParaFiltroConFiltro(String filtro)
         {
             return this.SelectDataTable("v.id, v.visib_cod Descripcion, v.visib_precio Precio, v.visib_porcentaje Porcentaje, v.visib_grado Duracion"
                 , "NET_A_CERO.Visibilidad v"
-                , "dado_de_baja = 0 " + filter);
+                , "dado_de_baja = 0 " + filtro);
         }
 
         public DataTable SelectVisibilidadesParaFiltro()
