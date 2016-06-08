@@ -54,7 +54,7 @@ namespace MercadoEnvio.ABM_Rol
         {
             if (this.comboBoxEstadoRoles.Text == "")
             {
-                MessageBox.Show("No seleccíono un estado de rol para buscar");
+                MessageBox.Show("Seleccione un estado de rol");
             }
             else
             {
@@ -74,6 +74,7 @@ namespace MercadoEnvio.ABM_Rol
         {
             if (dataGridViewResultadosBusqueda.Columns.Contains("Editar"))
                 dataGridViewResultadosBusqueda.Columns.Remove("Editar");
+            
             DataGridViewButtonColumn buttons = new DataGridViewButtonColumn();
             {
                 buttons.HeaderText = "Editar";
@@ -95,7 +96,7 @@ namespace MercadoEnvio.ABM_Rol
 
             if (e.ColumnIndex == dataGridViewResultadosBusqueda.Columns["Editar"].Index)
             {
-                String nombreRolAEditar = dataGridViewResultadosBusqueda.Rows[e.RowIndex].Cells["nombre"].Value.ToString();
+                String nombreRolAEditar = dataGridViewResultadosBusqueda.Rows[e.RowIndex].Cells["rol_nombre"].Value.ToString();
                 this.Hide();
                 new EditarRol(nombreRolAEditar).ShowDialog();
             }

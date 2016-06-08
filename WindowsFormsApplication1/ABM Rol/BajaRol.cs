@@ -38,7 +38,7 @@ namespace MercadoEnvio.ABM_Rol
             adapter.SelectCommand = command;
             adapter.Fill(roles);
             comboBoxRol.DataSource = roles.Tables[0].DefaultView;
-            comboBoxRol.ValueMember = "nombre";
+            comboBoxRol.ValueMember = "rol_nombre";
             comboBoxRol.SelectedIndex = -1;
         }
 
@@ -58,32 +58,32 @@ namespace MercadoEnvio.ABM_Rol
 
             String sql = "UPDATE NET_A_CERO.Roles SET rol_activo = 0 WHERE rol_nombre = @nombre";
 
-            int filas_afectadas = 0;
+            int filasAfectadas = 0;
                         
-            filas_afectadas = QueryBuilder.Instance.build(sql, parametros).ExecuteNonQuery();
-            if (filas_afectadas != -1)
+            filasAfectadas = QueryBuilder.Instance.build(sql, parametros).ExecuteNonQuery();
+            if (filasAfectadas != -1)
             {
-                MessageBox.Show("Deshabilitado rol " + rolElegido);
+                MessageBox.Show("El rol " + rolElegido + " fue deshabilitado");
             }
             else
             {
-                MessageBox.Show("Error");
+                MessageBox.Show("Ocurrio un error");
             }
 
             parametros.Clear();
             parametros.Add(new SqlParameter("@nombre", rolElegido));
 
             // Borramos el rol en los usuarios que lo tienen
-            String sql2 = "DELETE NET_A_CERO.Usuarios_x_Rol WHERE rol_id = (SELECT rol_id FROM NET_A_CERO.Roles WHERE rol_nombre = @nombre AND rol_activo = 0)"; 
+            String queryBorrarRolUsuario = "DELETE NET_A_CERO.Usuarios_x_Rol WHERE rol_id = (SELECT rol_id FROM NET_A_CERO.Roles WHERE rol_nombre = @nombre AND rol_activo = 0)"; 
 
-            filas_afectadas = QueryBuilder.Instance.build(sql2, parametros).ExecuteNonQuery();
-            if (filas_afectadas != -1)
+            filasAfectadas = QueryBuilder.Instance.build(queryBorrarRolUsuario, parametros).ExecuteNonQuery();
+            if (filasAfectadas != -1)
             {
-                MessageBox.Show("Se quito el rol " + rolElegido + " a " + filas_afectadas + " usuarios porque fue deshabilitado");
+                MessageBox.Show("Se elimino el rol " + rolElegido + " de " + filasAfectadas + " usuarios ya que fue deshabilitado");
             }
             else
             {
-                MessageBox.Show("Error");
+                MessageBox.Show("Ocurrio un error");
             }
             CargarRoles();
         }

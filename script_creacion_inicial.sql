@@ -159,8 +159,7 @@ CREATE TABLE [NET_A_CERO].[Funcionalidades] (
 CREATE TABLE [NET_A_CERO].[Roles] (
     [rol_id] INT IDENTITY(1,1) PRIMARY KEY,
     [rol_nombre] [nvarchar](20) NOT NULL,  
-    [rol_activo] [bit] NOT NULL DEFAULT 1,
-    CONSTRAINT [tipo_rol] CHECK (rol_nombre IN ('Administrativo', 'Empresa', 'Cliente'))
+    [rol_activo] [bit] NOT NULL DEFAULT 1
 )
 
 CREATE TABLE [NET_A_CERO].[Rol_x_Funcionalidad] (

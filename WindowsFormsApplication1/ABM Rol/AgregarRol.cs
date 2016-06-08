@@ -35,7 +35,7 @@ namespace MercadoEnvio.ABM_Rol
             adapter.SelectCommand = command;
             adapter.Fill(funcionalidades);
             checkedListBoxFuncionalidades.DataSource = funcionalidades.Tables[0].DefaultView;
-            checkedListBoxFuncionalidades.ValueMember = "nombre";
+            checkedListBoxFuncionalidades.ValueMember = "func_nombre";
         }
 
         private void botonVolver_Click(object sender, EventArgs e)
@@ -47,24 +47,23 @@ namespace MercadoEnvio.ABM_Rol
 
         private void botonGuardar_Click(object sender, EventArgs e)
         {
-            String sql = "INSERT INTO NET_A_CERO.Roles(rol_nombre, rol_activo) VALUES (@rol, 1)";
+            String queryRol = "INSERT INTO NET_A_CERO.Roles(rol_nombre, rol_activo) VALUES (@rol, 1)";
             String nombreRol = this.textBoxRol.Text;
             parametros.Clear();
             parametros.Add(new SqlParameter("@rol", nombreRol));
-            QueryBuilder.Instance.build(sql, parametros).ExecuteNonQuery();
+            QueryBuilder.Instance.build(queryRol, parametros).ExecuteNonQuery();
 
             foreach (DataRowView funcionalidad in this.checkedListBoxFuncionalidades.CheckedItems)
             {
                 parametros.Clear();
                 parametros.Add(new SqlParameter("@rol", nombreRol));
+                parametros.Add(new SqlParameter("@funcionalidad", funcionalidad.Row["func_nombre"] as String));
 
-                parametros.Add(new SqlParameter("@funcionalidad", funcionalidad.Row["nombre"] as String));
-
-                String sql2 = "INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(func_id, rol_id) VALUES ((SELECT func_id FROM NET_A_CERO.Funcionalidades WHERE func_nombre = @funcionalidad), (SELECT  rol_id FROM NET_A_CERO.Roles WHERE rol_nombre = @rol))";
+                String queryRolFuncionalidad = "INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(func_id, rol_id) VALUES ((SELECT func_id FROM NET_A_CERO.Funcionalidades WHERE func_nombre = @funcionalidad), (SELECT  rol_id FROM NET_A_CERO.Roles WHERE rol_nombre = @rol))";
                                 
-                QueryBuilder.Instance.build(sql2, parametros).ExecuteNonQuery();                                
+                QueryBuilder.Instance.build(queryRolFuncionalidad, parametros).ExecuteNonQuery();                                
             }
-            MessageBox.Show("Se creo el rol " + nombreRol);
+            MessageBox.Show("El rol " + nombreRol + " fue creado");
             BorrarDatosIngresados();
         }
 
