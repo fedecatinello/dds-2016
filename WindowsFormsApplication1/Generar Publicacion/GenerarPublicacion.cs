@@ -31,8 +31,8 @@ namespace MercadoEnvio.Generar_Publicacion
 
         private void CargarTiposDePublicacion()
         {
-            comboBox_TiposDePublicacion.DataSource = comunicador.SelectDataTable("descripcion", "LOS_SUPER_AMIGOS.TipoDePublicacion");
-            comboBox_TiposDePublicacion.ValueMember = "descripcion";
+            comboBox_TiposDePublicacion.Items.Add("Compra Inmediata");
+            comboBox_TiposDePublicacion.Items.Add("Subasta");
         }
 
         private void CargarEstados()
@@ -47,14 +47,14 @@ namespace MercadoEnvio.Generar_Publicacion
 
         private void CargarRubros()
         {
-            comboBox_Rubro.DataSource = comunicador.SelectDataTable("descripcion", "LOS_SUPER_AMIGOS.Rubro");
-            comboBox_Rubro.ValueMember = "descripcion";
+            comboBox_Rubro.DataSource = comunicador.SelectDataTable("rubro_desc_larga", "NET_A_CERO.Rubros");
+            comboBox_Rubro.ValueMember = "rubro_desc_larga";
         }
 
         private void CargarVisibilidades()
         {
-            comboBox_Visibilidad.DataSource = comunicador.SelectDataTable("descripcion", "LOS_SUPER_AMIGOS.Visibilidad");
-            comboBox_Visibilidad.ValueMember = "descripcion";
+            comboBox_Visibilidad.DataSource = comunicador.SelectDataTable("visib_desc", "NET_A_CERO.Visibilidad");
+            comboBox_Visibilidad.ValueMember = "visib_desc";
         }
 
         private void button_generar_Click(object sender, EventArgs e)
@@ -69,19 +69,23 @@ namespace MercadoEnvio.Generar_Publicacion
             Boolean pregunta = radioButton_Pregunta.Checked;
             String stock = textBox_Stock.Text;
             String precio = textBox_Precio.Text;
+            String tipoPublicacion = comboBox_TiposDePublicacion.Text;
 
-            Decimal idRubro = (Decimal)comunicador.SelectFromWhere("id", "Rubro", "descripcion", rubro);
-            Decimal idEstado = (Decimal)comunicador.SelectFromWhere("id", "Estado", "descripcion", estado);
-            Decimal idTipoDePublicacion = (Decimal)comunicador.SelectFromWhere("id", "TipoDePublicacion", "descripcion", tipo);
-            Decimal idVisibilidad = Convert.ToDecimal(comunicador.SelectFromWhere("id", "Visibilidad", "descripcion", visibilidadDescripcion));
-            Double duracion = Convert.ToDouble(comunicador.SelectFromWhere("duracion", "Visibilidad", "descripcion", visibilidadDescripcion));
+            Decimal idRubro = (Decimal)comunicador.SelectFromWhere("rubro_id", "Rubros", "rubro_desc_larga", rubro);
+            Decimal idEstado = (Decimal)comunicador.SelectFromWhere("estado_id", "Estado", "estado_desc", estado);
+            //Decimal idTipoDePublicacion = (Decimal)comunicador.SelectFromWhere("id", "TipoDePublicacion", "descripcion", tipo);
+            Decimal idVisibilidad = Convert.ToDecimal(comunicador.SelectFromWhere("visib_id", "Visibilidad", "visib_desc", visibilidadDescripcion));
+            
+            
+            //-------------------------CHEQUEAR SI ESTO VA!!!!-------------------------------------
+            Double duracion = Convert.ToDouble(comunicador.SelectFromWhere("duracion", "Visibilidad", "descripcion", visibilidadDescripcion)); 
             DateTime fechaDeVencimiento = Convert.ToDateTime(Convert.ToString(Convert.ToDateTime(fechaDeInicio).AddDays(duracion)));
 
             // Insert Publicacion
             try
             {
                 Publicacion publicacion = new Publicacion();
-                publicacion.SetTipo(idTipoDePublicacion);
+                publicacion.SetTipo(tipoPublicacion);
                 publicacion.SetEstado(idEstado);
                 publicacion.SetDescripcion(descripcion);
                 publicacion.SetFechaDeInicio(fechaDeInicio);

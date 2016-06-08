@@ -10,7 +10,7 @@ namespace MercadoEnvio.Objetos
     class Publicacion : Objeto, Comunicable
     {
         private Decimal id;
-        private Decimal idTipoDePublicacion;
+        private String tipoDePublicacion;
         private Decimal idEstado;
         private String descripcion;
         private DateTime fechaDeInicio;
@@ -33,14 +33,14 @@ namespace MercadoEnvio.Objetos
             return this.id;
         }
 
-        public void SetTipo(Decimal idTipoDePublicacion)
+        public void SetTipo(String tipoDePublicacion)
         {
-            this.idTipoDePublicacion = idTipoDePublicacion;
+            this.tipoDePublicacion = tipoDePublicacion;
         }
 
-        public Decimal GetTipo()
+        public String GetTipo()
         {
-            return this.idTipoDePublicacion;
+            return this.tipoDePublicacion;
         }
 
         public void SetEstado(Decimal idEstado)
@@ -178,23 +178,23 @@ namespace MercadoEnvio.Objetos
 
         string Comunicable.GetQueryCrear()
         {
-            return "LOS_SUPER_AMIGOS.crear_publicacion";
+            return "NET_A_CERO.crear_publicacion";
         }
 
         string Comunicable.GetQueryModificar()
         {
-            return "UPDATE LOS_SUPER_AMIGOS.Publicacion SET tipo_id = @tipo_id, estado_id = @estado_id, descripcion = @descripcion, fecha_inicio = @fecha_inicio, fecha_vencimiento = @fecha_vencimiento, rubro_id = @rubro_id, visibilidad_id = @visibilidad_id, stock = @stock, precio = @precio, se_realizan_preguntas = @se_realizan_preguntas, habilitado = @habilitado WHERE id = @id";
+            return "UPDATE NET_A_CERO.Publicaciones SET publi_tipo = @tipo_id, publi_estado_id = @estado_id, publi_descripcion = @descripcion, publi_fec_inicio = @fecha_inicio, publi_fec_vencimiento = @fecha_vencimiento, publi_rubro_id = @rubro_id, publi_visib_id = @visibilidad_id, publi_stock = @stock, publi_precio = @precio, publi_preguntas = @se_realizan_preguntas WHERE publi_id = @id";
         }
 
         string Comunicable.GetQueryObtener()
         {
-            return "SELECT * FROM LOS_SUPER_AMIGOS.Publicacion WHERE id = @id";
+            return "SELECT * FROM NET_A_CERO.Publicaciones WHERE publi_id = @id";
         }
 
         IList<System.Data.SqlClient.SqlParameter> Comunicable.GetParametros()
         {
             IList<SqlParameter> parametros = new List<SqlParameter>();
-            parametros.Add(new SqlParameter("@tipo_id", this.idTipoDePublicacion));
+            parametros.Add(new SqlParameter("@tipo_id", this.tipoDePublicacion));
             parametros.Add(new SqlParameter("@estado_id", this.idEstado));
             parametros.Add(new SqlParameter("@descripcion", this.descripcion));
             parametros.Add(new SqlParameter("@fecha_inicio", this.fechaDeInicio));
@@ -205,23 +205,23 @@ namespace MercadoEnvio.Objetos
             parametros.Add(new SqlParameter("@visibilidad_id", this.idVisibilidad));
             parametros.Add(new SqlParameter("@usuario_id", this.idUsuario));
             parametros.Add(new SqlParameter("@se_realizan_preguntas", this.pregunta));
-            parametros.Add(new SqlParameter("@habilitado", this.habilitado));
+            //parametros.Add(new SqlParameter("@habilitado", this.habilitado));
             return parametros;
         }
 
         void Comunicable.CargarInformacion(SqlDataReader reader)
         {
-            this.idTipoDePublicacion = Convert.ToDecimal(reader["tipo_id"]);
-            this.idEstado = Convert.ToDecimal(reader["estado_id"]);
-            this.descripcion = Convert.ToString(reader["descripcion"]);
-            this.fechaDeInicio = Convert.ToDateTime(reader["fecha_inicio"]);
-            this.fechaDeVencimiento = Convert.ToDateTime(reader["fecha_vencimiento"]);
-            this.stock = Convert.ToString(reader["stock"]);
-            this.precio = Convert.ToString(reader["precio"]);
-            this.idRubro = Convert.ToDecimal(reader["rubro_id"]);
-            this.idVisibilidad = Convert.ToDecimal(reader["visibilidad_id"]);
-            this.idUsuario = Convert.ToDecimal(reader["usuario_id"]);
-            this.pregunta = Convert.ToBoolean(reader["se_realizan_preguntas"]);
+            this.tipoDePublicacion = Convert.ToString(reader["publi_tipo"]);
+            this.idEstado = Convert.ToDecimal(reader["publi_estado_id"]);
+            this.descripcion = Convert.ToString(reader["publi_descripcion"]);
+            this.fechaDeInicio = Convert.ToDateTime(reader["publi_fec_inicio"]);
+            this.fechaDeVencimiento = Convert.ToDateTime(reader["publi_fec_vencimiento"]);
+            this.stock = Convert.ToString(reader["publi_stock"]);
+            this.precio = Convert.ToString(reader["publi_precio"]);
+            this.idRubro = Convert.ToDecimal(reader["publi_rubro_id"]);
+            this.idVisibilidad = Convert.ToDecimal(reader["publi_visib_id"]);
+            this.idUsuario = Convert.ToDecimal(reader["publi_usr_id"]);
+            this.pregunta = Convert.ToBoolean(reader["publi_preguntas"]);
         }
 
         #endregion

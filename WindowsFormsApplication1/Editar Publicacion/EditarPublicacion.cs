@@ -36,8 +36,8 @@ namespace MercadoEnvio.Editar_Publicacion
 
         private void CargarTiposDePublicacion()
         {
-            comboBox_TiposDePublicacion.DataSource = comunicador.SelectDataTable("descripcion", "LOS_SUPER_AMIGOS.TipoDePublicacion");
-            comboBox_TiposDePublicacion.ValueMember = "descripcion";
+            comboBox_TiposDePublicacion.Items.Add("Compra Inmediata");
+            comboBox_TiposDePublicacion.Items.Add("Subasta");
         }
 
         private void CargarEstados()
@@ -45,8 +45,8 @@ namespace MercadoEnvio.Editar_Publicacion
             DataTable estados = new DataTable();
             estados.Columns.Add("estados");
 
-            idEstadoInicial = (Decimal) comunicador.SelectFromWhere("estado_id", "Publicacion", "id", idPublicacion);
-            estadoInicial = (String)comunicador.SelectFromWhere("descripcion", "Estado", "id", idEstadoInicial);
+            idEstadoInicial = (Decimal) comunicador.SelectFromWhere("publi_estado_id", "Publicaciones", "publi_id", idPublicacion);
+            estadoInicial = (String)comunicador.SelectFromWhere("estado_desc", "Estado", "estado_id", idEstadoInicial);
 
             if (estadoInicial == "Borrador") CargarSegunBorrador(estados);
             if (estadoInicial == "Publicada") CargarSegunPublicada(estados);
@@ -107,14 +107,14 @@ namespace MercadoEnvio.Editar_Publicacion
 
         private void CargarRubros()
         {
-            comboBox_Rubro.DataSource = comunicador.SelectDataTable("descripcion", "LOS_SUPER_AMIGOS.Rubro");
-            comboBox_Rubro.ValueMember = "descripcion";
+            comboBox_Rubro.DataSource = comunicador.SelectDataTable("rubro_desc_larga", "NET_A_CERO.Rubros");
+            comboBox_Rubro.ValueMember = "rubro_desc_larga";
         }
 
         private void CargarVisibilidades()
         {
-            comboBox_Visibilidad.DataSource = comunicador.SelectDataTable("descripcion", "LOS_SUPER_AMIGOS.Visibilidad");
-            comboBox_Visibilidad.ValueMember = "descripcion";
+            comboBox_Visibilidad.DataSource = comunicador.SelectDataTable("visib_desc", "NET_A_CERO.Visibilidad");
+            comboBox_Visibilidad.ValueMember = "_visib_desc";
         }
 
         private void CargarDatos()
@@ -123,18 +123,20 @@ namespace MercadoEnvio.Editar_Publicacion
             textBox_Descripcion.Text = publicacion.GetDescripcion();
             textBox_Precio.Text = publicacion.GetPrecio();
             textBox_Stock.Text = publicacion.GetStock();
-            comboBox_Rubro.SelectedValue = (String) comunicador.SelectFromWhere("descripcion", "Rubro", "id", publicacion.GetIdRubro());
-            comboBox_Visibilidad.SelectedValue = (String) comunicador.SelectFromWhere("descripcion", "Visibilidad", "id", publicacion.GetIdVisibilidad()); ;
-            comboBox_TiposDePublicacion.SelectedValue = (String)comunicador.SelectFromWhere("descripcion", "TipoDePublicacion", "id", publicacion.GetTipo());
-            comboBox_Estado.SelectedValue = (String) comunicador.SelectFromWhere("descripcion", "Estado", "id", publicacion.GetEstado());
-            checkBox_Pregunta.Checked = Convert.ToBoolean(comunicador.SelectFromWhere("se_realizan_preguntas", "Publicacion", "id", idPublicacion));
-            checkBox_Habilitado.Checked = Convert.ToBoolean(comunicador.SelectFromWhere("habilitado", "Publicacion", "id", idPublicacion));
+            comboBox_Rubro.SelectedValue = (String) comunicador.SelectFromWhere("rubro_desc_larga", "Rubros", "rubro_id", publicacion.GetIdRubro());
+            comboBox_Visibilidad.SelectedValue = (String) comunicador.SelectFromWhere("visib_desc", "Visibilidad", "visib_id", publicacion.GetIdVisibilidad()); ;
+            comboBox_TiposDePublicacion.SelectedValue = (String)comunicador.SelectFromWhere("publi_tipo", "Publicaciones", "publi_id", idPublicacion);
+            comboBox_Estado.SelectedValue = (String) comunicador.SelectFromWhere("estado_desc", "Estado", "estado_id", publicacion.GetEstado());
+            checkBox_Pregunta.Checked = Convert.ToBoolean(comunicador.SelectFromWhere("publi_preguntas", "Publicaciones", "publi_id", idPublicacion));
+            
+            //---------------------------------------CHEQUEAR ESTO--------------------------------------------------------//
+            //checkBox_Habilitado.Checked = Convert.ToBoolean(comunicador.SelectFromWhere("habilitado", "Publicacion", "id", idPublicacion));
         }
 
         private void button_Guardar_Click(object sender, EventArgs e)
         {
-            String tipo = comboBox_TiposDePublicacion.Text;
-            Decimal idTipoDePublicacion = (Decimal)comunicador.SelectFromWhere("id", "TipoDePublicacion", "descripcion", tipo);
+            String tipoPublicacion = comboBox_TiposDePublicacion.Text;
+            //Decimal idTipoDePublicacion = (Decimal)comunicador.SelectFromWhere("id", "TipoDePublicacion", "descripcion", tipo);
             String estado = comboBox_Estado.Text;
             Decimal idEstado = (Decimal)comunicador.SelectFromWhere("id", "Estado", "descripcion", estado);
             String descripcion = textBox_Descripcion.Text;
@@ -143,10 +145,11 @@ namespace MercadoEnvio.Editar_Publicacion
             Boolean pregunta = checkBox_Pregunta.Checked;
             String stock = textBox_Stock.Text;
             String precio = textBox_Precio.Text;
-            Decimal idRubro = (Decimal) comunicador.SelectFromWhere("id", "Rubro", "descripcion", rubro);
-            Decimal idVisibilidad = (Decimal)comunicador.SelectFromWhere("id", "Visibilidad", "descripcion", visibilidad);
-            Double duracion = Convert.ToDouble(comunicador.SelectFromWhere("duracion", "Visibilidad", "id", idVisibilidad));
-            Boolean habilitado = checkBox_Habilitado.Checked;
+            Decimal idRubro = (Decimal) comunicador.SelectFromWhere("rubro_id", "Rubros", "rubro_desc_larga", rubro);
+            Decimal idVisibilidad = (Decimal)comunicador.SelectFromWhere("visib_id", "Visibilidad", "visib_desc", visibilidad);
+            //---------------------------------------CHEQUEAR ESTO--------------------------------------------------------//
+            //Double duracion = Convert.ToDouble(comunicador.SelectFromWhere("duracion", "Visibilidad", "id", idVisibilidad));
+            //Boolean habilitado = checkBox_Habilitado.Checked;
             DateTime fechaDeInicio;
             DateTime fechaDeVencimiento;
 
@@ -158,15 +161,15 @@ namespace MercadoEnvio.Editar_Publicacion
             }
             else
             {
-                fechaDeInicio = Convert.ToDateTime(comunicador.SelectFromWhere("fecha_inicio", "Publicacion", "id", idPublicacion));
-                fechaDeVencimiento = Convert.ToDateTime(comunicador.SelectFromWhere("fecha_vencimiento", "Publicacion", "id", idPublicacion));
+                fechaDeInicio = Convert.ToDateTime(comunicador.SelectFromWhere("publi_fec_inicio", "Publicaciones", "publi_id", idPublicacion));
+                fechaDeVencimiento = Convert.ToDateTime(comunicador.SelectFromWhere("publi_fec_vencimiento", "Publicaciones", "publi_id", idPublicacion));
             }
 
             // Update Publicacion
             try
             {
                 Publicacion publicacion = new Publicacion();
-                publicacion.SetTipo(idTipoDePublicacion);
+                publicacion.SetTipo(tipoPublicacion);
                 publicacion.SetEstado(idEstado);
                 publicacion.SetDescripcion(descripcion);
                 publicacion.SetFechaDeInicio(fechaDeInicio);
@@ -176,7 +179,8 @@ namespace MercadoEnvio.Editar_Publicacion
                 publicacion.SetPrecio(precio);
                 publicacion.SetIdRubro(idRubro);
                 publicacion.SetIdVisibilidad(idVisibilidad);
-                publicacion.SetHabilitado(habilitado);
+                //---------------VER ESTO---------------------------/
+                //publicacion.SetHabilitado(habilitado);
                 Boolean pudoModificar = comunicador.Modificar(idPublicacion, publicacion);
                 if (pudoModificar) MessageBox.Show("La publicacion se modifico correctamente");
             }
