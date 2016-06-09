@@ -34,18 +34,22 @@ namespace MercadoEnvio.Editar_Publicacion
             this.button_Cancelar = new System.Windows.Forms.Button();
             this.dataGridView_Publicacion = new System.Windows.Forms.DataGridView();
             this.labelDescricpion = new System.Windows.Forms.Label();
-            this.labelRubro = new System.Windows.Forms.Label();
-            this.comboBoxRubro = new System.Windows.Forms.ComboBox();
             this.textBoxDescripcion = new System.Windows.Forms.TextBox();
+            this.comboBoxRubro2 = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.comboBoxRubro1 = new System.Windows.Forms.ComboBox();
+            this.labelRubro = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_Publicacion)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.comboBoxRubro);
-            this.groupBox1.Controls.Add(this.textBoxDescripcion);
+            this.groupBox1.Controls.Add(this.comboBoxRubro2);
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.comboBoxRubro1);
             this.groupBox1.Controls.Add(this.labelRubro);
+            this.groupBox1.Controls.Add(this.textBoxDescripcion);
             this.groupBox1.Controls.Add(this.labelDescricpion);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
@@ -105,29 +109,46 @@ namespace MercadoEnvio.Editar_Publicacion
             this.labelDescricpion.TabIndex = 9;
             this.labelDescricpion.Text = "Descripcion";
             // 
-            // labelRubro
-            // 
-            this.labelRubro.AutoSize = true;
-            this.labelRubro.Location = new System.Drawing.Point(6, 52);
-            this.labelRubro.Name = "labelRubro";
-            this.labelRubro.Size = new System.Drawing.Size(36, 13);
-            this.labelRubro.TabIndex = 10;
-            this.labelRubro.Text = "Rubro";
-            // 
-            // comboBoxRubro
-            // 
-            this.comboBoxRubro.FormattingEnabled = true;
-            this.comboBoxRubro.Location = new System.Drawing.Point(87, 53);
-            this.comboBoxRubro.Name = "comboBoxRubro";
-            this.comboBoxRubro.Size = new System.Drawing.Size(195, 21);
-            this.comboBoxRubro.TabIndex = 13;
-            // 
             // textBoxDescripcion
             // 
             this.textBoxDescripcion.Location = new System.Drawing.Point(87, 26);
             this.textBoxDescripcion.Name = "textBoxDescripcion";
             this.textBoxDescripcion.Size = new System.Drawing.Size(195, 20);
             this.textBoxDescripcion.TabIndex = 12;
+            // 
+            // comboBoxRubro2
+            // 
+            this.comboBoxRubro2.FormattingEnabled = true;
+            this.comboBoxRubro2.Location = new System.Drawing.Point(87, 79);
+            this.comboBoxRubro2.Name = "comboBoxRubro2";
+            this.comboBoxRubro2.Size = new System.Drawing.Size(195, 21);
+            this.comboBoxRubro2.TabIndex = 18;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(7, 82);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(45, 13);
+            this.label1.TabIndex = 17;
+            this.label1.Text = "Rubro 2";
+            // 
+            // comboBoxRubro1
+            // 
+            this.comboBoxRubro1.FormattingEnabled = true;
+            this.comboBoxRubro1.Location = new System.Drawing.Point(87, 52);
+            this.comboBoxRubro1.Name = "comboBoxRubro1";
+            this.comboBoxRubro1.Size = new System.Drawing.Size(195, 21);
+            this.comboBoxRubro1.TabIndex = 16;
+            // 
+            // labelRubro
+            // 
+            this.labelRubro.AutoSize = true;
+            this.labelRubro.Location = new System.Drawing.Point(7, 55);
+            this.labelRubro.Name = "labelRubro";
+            this.labelRubro.Size = new System.Drawing.Size(45, 13);
+            this.labelRubro.TabIndex = 15;
+            this.labelRubro.Text = "Rubro 1";
             // 
             // FiltrarPublicacion
             // 
@@ -157,8 +178,10 @@ namespace MercadoEnvio.Editar_Publicacion
         private System.Windows.Forms.Button button_Cancelar;
         private System.Windows.Forms.DataGridView dataGridView_Publicacion;
         private System.Windows.Forms.Label labelDescricpion;
-        private System.Windows.Forms.Label labelRubro;
-        private System.Windows.Forms.ComboBox comboBoxRubro;
         private System.Windows.Forms.TextBox textBoxDescripcion;
+        private System.Windows.Forms.ComboBox comboBoxRubro2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox comboBoxRubro1;
+        private System.Windows.Forms.Label labelRubro;
     }
 }
