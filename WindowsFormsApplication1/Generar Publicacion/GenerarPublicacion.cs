@@ -31,7 +31,7 @@ namespace MercadoEnvio.Generar_Publicacion
 
         private void CargarTiposDePublicacion()
         {
-            comboBox_TiposDePublicacion.Items.Add("Compra Inmediata");
+            comboBox_TiposDePublicacion.Items.Add("Compra inmediata");
             comboBox_TiposDePublicacion.Items.Add("Subasta");
         }
 
@@ -73,12 +73,12 @@ namespace MercadoEnvio.Generar_Publicacion
 
             Decimal idRubro = (Decimal)comunicador.SelectFromWhere("rubro_id", "Rubros", "rubro_desc_larga", rubro);
             Decimal idEstado = (Decimal)comunicador.SelectFromWhere("estado_id", "Estado", "estado_desc", estado);
-            //Decimal idTipoDePublicacion = (Decimal)comunicador.SelectFromWhere("id", "TipoDePublicacion", "descripcion", tipo);
             Decimal idVisibilidad = Convert.ToDecimal(comunicador.SelectFromWhere("visib_id", "Visibilidad", "visib_desc", visibilidadDescripcion));
             
             
-            //-------------------------CHEQUEAR SI ESTO VA!!!!-------------------------------------
-            Double duracion = Convert.ToDouble(comunicador.SelectFromWhere("duracion", "Visibilidad", "descripcion", visibilidadDescripcion)); 
+            //-------------------------CHEQUEAR DURACION-------------------------------------
+            //Double duracion = Convert.ToDouble(comunicador.SelectFromWhere("duracion", "Visibilidad", "descripcion", visibilidadDescripcion)); 
+            Double duracion = 30;
             DateTime fechaDeVencimiento = Convert.ToDateTime(Convert.ToString(Convert.ToDateTime(fechaDeInicio).AddDays(duracion)));
 
             // Insert Publicacion
@@ -146,7 +146,7 @@ namespace MercadoEnvio.Generar_Publicacion
         private void comboBox_tiposDePublicacion_SelectedIndexChanged(object sender, EventArgs e)
         {
             String tipoSeleccionado = comboBox_TiposDePublicacion.Text;
-            if (tipoSeleccionado == "Compra Inmediata")
+            if (tipoSeleccionado == "Compra inmediata")
             {
                 label_stock.Text = "Stock";
                 label_precio.Text = "Precio por unidad";

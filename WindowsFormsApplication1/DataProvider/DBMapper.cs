@@ -313,7 +313,7 @@ namespace MercadoEnvio
 
         public DataTable SelectPublicacionesParaFiltroConFiltro(String filtro)
         {
-            return this.SelectDataTableConUsuario("p.publi_id, u.usr_usuario Usuario, (SELECT publi_descripcion FROM NET_A_CERO.Publicaciones WHERE publi_id = p.publi_id) id, p.publi_descripcion Descripcion, p.publi_fec_inicio 'Fecha de inicio', p.publi_fec_vencimiento 'Fecha de vencimiento', r.rubro_id Rubro, v.visib_id Visibilidad, p.publi_preguntas 'Permite preguntas', p.publi_stock Stock, p.publi_precio Precio"
+            return this.SelectDataTableConUsuario("p.publi_id, u.usr_usuario Usuario, p.publi_descripcion Descripcion, p.publi_fec_inicio 'Fecha de inicio', p.publi_fec_vencimiento 'Fecha de vencimiento', r.rubro_desc_larga Rubro, v.visib_desc Visibilidad, p.publi_preguntas 'Permite preguntas', p.publi_stock Stock, p.publi_precio Precio"
                 , "NET_A_CERO.Publicaciones p, NET_A_CERO.Rubros r, NET_A_CERO.Visibilidad v, NET_A_CERO.Usuarios u, NET_A_CERO.Rubro_x_Publicacion rxp"
                 , "rxp.rubro_id = r.rubro_id AND rxp.publi_id=p.publi_id AND p.publi_visib_id = v.visib_id AND p.publi_usr_id = u.usr_id AND p.publi_usr_id = @idUsuario" + filtro);
         }

@@ -36,7 +36,7 @@ namespace MercadoEnvio.Editar_Publicacion
 
         private void CargarTiposDePublicacion()
         {
-            comboBox_TiposDePublicacion.Items.Add("Compra Inmediata");
+            comboBox_TiposDePublicacion.Items.Add("Compra inmediata");
             comboBox_TiposDePublicacion.Items.Add("Subasta");
         }
 
@@ -147,8 +147,9 @@ namespace MercadoEnvio.Editar_Publicacion
             String precio = textBox_Precio.Text;
             Decimal idRubro = (Decimal) comunicador.SelectFromWhere("rubro_id", "Rubros", "rubro_desc_larga", rubro);
             Decimal idVisibilidad = (Decimal)comunicador.SelectFromWhere("visib_id", "Visibilidad", "visib_desc", visibilidad);
-            //---------------------------------------CHEQUEAR ESTO--------------------------------------------------------//
+            //-------------------------CHEQUEAR DURACION-------------------------------------//
             //Double duracion = Convert.ToDouble(comunicador.SelectFromWhere("duracion", "Visibilidad", "id", idVisibilidad));
+            Double duracion = 30;
             //Boolean habilitado = checkBox_Habilitado.Checked;
             DateTime fechaDeInicio;
             DateTime fechaDeVencimiento;

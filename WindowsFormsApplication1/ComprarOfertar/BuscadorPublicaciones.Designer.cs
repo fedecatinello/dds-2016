@@ -39,8 +39,10 @@ namespace MercadoEnvio.Comprar_Ofertar
             this.labelDescricpion = new System.Windows.Forms.Label();
             this.labelRubro = new System.Windows.Forms.Label();
             this.textBoxDescripcion = new System.Windows.Forms.TextBox();
-            this.comboBoxRubro = new System.Windows.Forms.ComboBox();
+            this.comboBoxRubro1 = new System.Windows.Forms.ComboBox();
             this.botonVolver = new System.Windows.Forms.Button();
+            this.comboBoxRubro2 = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -56,7 +58,7 @@ namespace MercadoEnvio.Comprar_Ofertar
             // 
             // botonLimpiar
             // 
-            this.botonLimpiar.Location = new System.Drawing.Point(37, 90);
+            this.botonLimpiar.Location = new System.Drawing.Point(37, 97);
             this.botonLimpiar.Name = "botonLimpiar";
             this.botonLimpiar.Size = new System.Drawing.Size(99, 28);
             this.botonLimpiar.TabIndex = 1;
@@ -66,7 +68,7 @@ namespace MercadoEnvio.Comprar_Ofertar
             // 
             // botonBuscar
             // 
-            this.botonBuscar.Location = new System.Drawing.Point(339, 96);
+            this.botonBuscar.Location = new System.Drawing.Point(339, 101);
             this.botonBuscar.Name = "botonBuscar";
             this.botonBuscar.Size = new System.Drawing.Size(122, 22);
             this.botonBuscar.TabIndex = 2;
@@ -136,9 +138,9 @@ namespace MercadoEnvio.Comprar_Ofertar
             this.labelRubro.AutoSize = true;
             this.labelRubro.Location = new System.Drawing.Point(34, 50);
             this.labelRubro.Name = "labelRubro";
-            this.labelRubro.Size = new System.Drawing.Size(36, 13);
+            this.labelRubro.Size = new System.Drawing.Size(45, 13);
             this.labelRubro.TabIndex = 9;
-            this.labelRubro.Text = "Rubro";
+            this.labelRubro.Text = "Rubro 1";
             // 
             // textBoxDescripcion
             // 
@@ -147,13 +149,13 @@ namespace MercadoEnvio.Comprar_Ofertar
             this.textBoxDescripcion.Size = new System.Drawing.Size(195, 20);
             this.textBoxDescripcion.TabIndex = 10;
             // 
-            // comboBoxRubro
+            // comboBoxRubro1
             // 
-            this.comboBoxRubro.FormattingEnabled = true;
-            this.comboBoxRubro.Location = new System.Drawing.Point(114, 47);
-            this.comboBoxRubro.Name = "comboBoxRubro";
-            this.comboBoxRubro.Size = new System.Drawing.Size(195, 21);
-            this.comboBoxRubro.TabIndex = 11;
+            this.comboBoxRubro1.FormattingEnabled = true;
+            this.comboBoxRubro1.Location = new System.Drawing.Point(114, 47);
+            this.comboBoxRubro1.Name = "comboBoxRubro1";
+            this.comboBoxRubro1.Size = new System.Drawing.Size(195, 21);
+            this.comboBoxRubro1.TabIndex = 11;
             // 
             // botonVolver
             // 
@@ -165,13 +167,32 @@ namespace MercadoEnvio.Comprar_Ofertar
             this.botonVolver.UseVisualStyleBackColor = true;
             this.botonVolver.Click += new System.EventHandler(this.botonVolver_Click);
             // 
+            // comboBoxRubro2
+            // 
+            this.comboBoxRubro2.FormattingEnabled = true;
+            this.comboBoxRubro2.Location = new System.Drawing.Point(114, 74);
+            this.comboBoxRubro2.Name = "comboBoxRubro2";
+            this.comboBoxRubro2.Size = new System.Drawing.Size(195, 21);
+            this.comboBoxRubro2.TabIndex = 14;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(34, 77);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(45, 13);
+            this.label1.TabIndex = 13;
+            this.label1.Text = "Rubro 2";
+            // 
             // BuscadorPublicaciones
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(481, 499);
+            this.Controls.Add(this.comboBoxRubro2);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.botonVolver);
-            this.Controls.Add(this.comboBoxRubro);
+            this.Controls.Add(this.comboBoxRubro1);
             this.Controls.Add(this.textBoxDescripcion);
             this.Controls.Add(this.labelRubro);
             this.Controls.Add(this.labelDescricpion);
@@ -205,8 +226,10 @@ namespace MercadoEnvio.Comprar_Ofertar
         private System.Windows.Forms.Label labelDescricpion;
         private System.Windows.Forms.Label labelRubro;
         private System.Windows.Forms.TextBox textBoxDescripcion;
-        private System.Windows.Forms.ComboBox comboBoxRubro;
+        private System.Windows.Forms.ComboBox comboBoxRubro1;
         private System.Windows.Forms.Button botonVolver;
+        private System.Windows.Forms.ComboBox comboBoxRubro2;
+        private System.Windows.Forms.Label label1;
 
     }
 }

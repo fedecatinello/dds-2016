@@ -23,6 +23,14 @@ namespace MercadoEnvio.Editar_Publicacion
         {
             CargarPublicacion();
             OcultarColumnasQueNoDebenVerse();
+            CargarRubros(); 
+        }
+
+        private void CargarRubros()
+        {
+            comboBoxRubro.DataSource = comunicador.SelectDataTable("rubro_desc_larga", "NET_A_CERO.Rubros");
+            comboBoxRubro.ValueMember = "rubro_desc_larga";
+            comboBoxRubro.SelectedIndex = -1;
         }
 
         private void OcultarColumnasQueNoDebenVerse()
@@ -79,7 +87,7 @@ namespace MercadoEnvio.Editar_Publicacion
             // Controla que la celda que se clickeo fue la de modificar
             if (e.ColumnIndex == dataGridView_Publicacion.Columns["Modificar"].Index && e.RowIndex >= 0)
             {
-                String idPublicacionAModificiar = dataGridView_Publicacion.Rows[e.RowIndex].Cells["id"].Value.ToString();
+                String idPublicacionAModificiar = dataGridView_Publicacion.Rows[e.RowIndex].Cells["publi_id"].Value.ToString();
                 new Editar_Publicacion.EditarPublicacion(idPublicacionAModificiar).ShowDialog();
                 CargarPublicacion();
                 return;

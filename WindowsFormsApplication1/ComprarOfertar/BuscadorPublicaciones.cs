@@ -39,9 +39,13 @@ namespace MercadoEnvio.Comprar_Ofertar
 
         private void CargarRubros()
         {
-            comboBoxRubro.DataSource = comunicador.SelectDataTable("rubro_desc_corta", "NET_A_CERO.Rubro");
-            comboBoxRubro.ValueMember = "descripcion";
-            comboBoxRubro.SelectedIndex = -1;
+            comboBoxRubro1.DataSource = comunicador.SelectDataTable("rubro_desc_larga", "NET_A_CERO.Rubros");
+            comboBoxRubro1.ValueMember = "rubro_desc_larga";
+            comboBoxRubro1.SelectedIndex = -1;
+
+            comboBoxRubro2.DataSource = comunicador.SelectDataTable("rubro_desc_larga", "NET_A_CERO.Rubros");
+            comboBoxRubro2.ValueMember = "rubro_desc_larga";
+            comboBoxRubro2.SelectedIndex = -1;
         }
 
         private void botonBuscar_Click(object sender, EventArgs e)
@@ -58,25 +62,57 @@ namespace MercadoEnvio.Comprar_Ofertar
                 filtro += " and publicaciones.publi_descripcion like '%" + textBoxDescripcion.Text + "%'";                
             }            
 
-            if (comboBoxRubro.Text != "")
+            if (comboBoxRubro1.Text != "")
             {
-                String idRubro = Convert.ToString(comunicador.SelectFromWhere("rubro_id", "Rubro", "rubro_desc_corta", comboBoxRubro.Text));
-                parametros.Add(new SqlParameter("@idRubro", idRubro));
-                filtro += " and publicaciones.rubro_id = @idRubro";                
+                String idRubro1 = Convert.ToString(comunicador.SelectFromWhere("rubro_id", "Rubros", "rubro_desc_larga", comboBoxRubro1.Text));
+                parametros.Add(new SqlParameter("@idRubro1", idRubro1));
+                filtro += " and ( rxp.rubro_id = @idRubro1 ";                
             }
 
+            if (comboBoxRubro2.Text != "")
+            {
+                String idRubro2 = Convert.ToString(comunicador.SelectFromWhere("rubro_id", "Rubros", "rubro_desc_larga", comboBoxRubro2.Text));
+                parametros.Add(new SqlParameter("@idRubro2", idRubro2));
+                if (comboBoxRubro1.Text != "")
+                {
+                    filtro += " or rxp.rubro_id = @idRubro2 ) ";
+                }
+                else
+                {
+                    filtro += " and rxp.rubro_id = @idRubro2 ";
+                }
+
+            }
+            else
+            {
+                filtro += ") ";
+            }
+
+            String query = "SELECT DISTINCT(publicaciones.publi_id),visibilidad.visib_precio,publicaciones.publi_descripcion, " +
+                    "(CASE WHEN (publicaciones.publi_tipo = 'Subasta' AND (SELECT COUNT(*) FROM NET_A_CERO.VistaOfertaMax vista WHERE vista.vista_publi_id = publicaciones.publi_id) = 1)" +
+                        "THEN (SELECT vista.precioMax FROM NET_A_CERO.VistaOfertaMax vista WHERE vista.vista_publi_id = publicaciones.publi_id) " +
+                            "ELSE publicaciones.publi_precio END) precio, " +
+                        "publicaciones.publi_tipo " +
+                    "FROM NET_A_CERO.Publicaciones publicaciones, NET_A_CERO.Visibilidad visibilidad, NET_A_CERO.Rubro_x_Publicacion rxp " +
+                    "WHERE publicaciones.publi_visib_id = visibilidad.visib_id AND (publicaciones.publi_estado_id = (SELECT estado_id FROM NET_A_CERO.Estado WHERE estado_desc='Finalizada') " +
+                            "or publicaciones.publi_estado_id = (SELECT estado_id FROM NET_A_CERO.Estado WHERE estado_desc='Pausada')) " +
+                              " and publicaciones.publi_id = rxp.publi_id "
+                                      + filtro + "ORDER BY visibilidad.visib_precio DESC";
+            
+            
+            /* query vieja
             String query = "SELECT publicaciones.publi_id, " +
                                   "publicaciones.publi_descripcion, "+
-                                "(CASE WHEN (publicaciones.publi_tipo = 'Subasta' AND (SELECT COUNT (*) from NET_A_CER_.Ofertas_x_Subasta OXS WHERE OXS.sub_publi_id = publicaciones.publi_id) = 1) " +
+                                "(CASE WHEN (publicaciones.publi_tipo = 'Subasta' AND (SELECT COUNT (*) from NET_A_CERO.Ofertas_x_Subasta OXS WHERE OXS.sub_publi_id = publicaciones.publi_id) = 1) " +
                                         "THEN(SELECT sub_monto FROM NET_A_CERO.Ofertas_x_Subasta OXS WHERE OXS.sub_publi_id = publicaciones.publi_id)" +
-                                "ELSE publicaciones.publi_precio " +
-                             "END), " +
+                                    "ELSE publicaciones.publi_precio " +
+                                        "END), " +
                             "publicaciones.publi_tipo " +
-                         "FROM NET_A_CERO.Publicaciones publicaciones, NET_A_CERO.Visibilidad visibilidad " +
+                         "FROM NET_A_CERO.Publicaciones publicaciones, NET_A_CERO.Visibilidad visibilidad, NET_A_CERO.Rubro_x_Publicacion rxp " +
                          "WHERE publicaciones.publi_visib_id = visibilidad.visib_id AND (publicaciones.publi_estado_id = (SELECT estado_id FROM NET_A_CERO.Estado WHERE estado_desc='Activa')or publicaciones.publi_estado_id = (SELECT estado_id FROM NET_A_CERO.Estado WHERE estado_desc = 'Pausada'))"
                 + filtro + "ORDER BY visibilidad.visib_precio DESC";
 
-            /*
+            
             String query = "SELECT publicacion.id, " + 
                                   "publicacion.descripcion, " +
                                  "(CASE WHEN (tipo.descripcion = 'Subasta' AND (SELECT COUNT(*) FROM LOS_SUPER_AMIGOS.VistaOfertaMax vista WHERE vista.publicacion_id = publicacion.id) = 1) " + 
@@ -297,7 +333,8 @@ namespace MercadoEnvio.Comprar_Ofertar
         private void botonLimpiar_Click(object sender, EventArgs e)
         {
             textBoxDescripcion.Clear();
-            comboBoxRubro.SelectedIndex = -1;
+            comboBoxRubro1.SelectedIndex = -1;
+            comboBoxRubro2.SelectedIndex = -1;
             labelNrosPagina.Text = "";
             dataGridView1.DataSource = null;
             if (dataGridView1.Columns.Contains("Ver Publicacion"))
