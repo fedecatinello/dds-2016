@@ -135,7 +135,7 @@ namespace MercadoEnvio.Objetos
 
         string Comunicable.GetQueryModificar()
         {
-            return "UPDATE NET_A_CERO.Clientes SET cli_nombre = @nombre, cli_apellido = @apellido, cli_documento = @documento, cli_tipo_dni = @tipo_de_documento, cli_fecha_nac = @fecha_nacimiento, cli_fecha_lta = @fecha_alta WHERE id = @id";
+            return "UPDATE NET_A_CERO.Clientes SET cli_nombre = @nombre, cli_apellido = @apellido, cli_documento = @documento, cli_tipo_dni = @tipo_de_documento, cli_fecha_nac = @fecha_nacimiento, cli_fecha_alta = @fecha_alta WHERE cli_id = @id";
         }
 
         string Comunicable.GetQueryObtener()
@@ -153,18 +153,20 @@ namespace MercadoEnvio.Objetos
             parametros.Add(new SqlParameter("@tipo_de_documento", this.tipoDeDocumento));
             parametros.Add(new SqlParameter("@fecha_nacimiento", this.fechaDeNacimiento));
             parametros.Add(new SqlParameter("@fecha_alta", this.fechaDeAlta));
+            parametros.Add(new SqlParameter("@cont_id", this.idContacto));
             return parametros;
         }
 
         void Comunicable.CargarInformacion(SqlDataReader reader)
         {
-            this.nombre = Convert.ToString(reader["nombre"]);
-            this.apellido = Convert.ToString(reader["apellido"]);
-            this.numeroDeDocumento = Convert.ToString(reader["documento"]);
-            this.tipoDeDocumento = Convert.ToString(reader["tipo_de_documento"]);
-            this.fechaDeNacimiento = Convert.ToDateTime(reader["fecha_nacimiento"]);
-            this.idUsuario = Convert.ToInt32(reader["usuario_id"]);
-            this.idContacto = Convert.ToInt32(reader["contacto_id"]);
+            this.nombre = Convert.ToString(reader["cli_nombre"]);
+            this.apellido = Convert.ToString(reader["cli_apellido"]);
+            this.numeroDeDocumento = Convert.ToString(reader["cli_dni"]);
+            this.tipoDeDocumento = Convert.ToString(reader["cli_tipo_dni"]);
+            this.fechaDeNacimiento = Convert.ToDateTime(reader["cli_fecha_nac"]);
+            this.fechaDeAlta = Convert.ToDateTime(reader["cli_fecha_alta"]);
+            this.idUsuario = Convert.ToInt32(reader["cli_usr_id"]);
+            this.idContacto = Convert.ToInt32(reader["cli_cont_id"]);
         }
 
         #endregion

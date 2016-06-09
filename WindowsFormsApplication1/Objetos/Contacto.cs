@@ -165,14 +165,14 @@ namespace MercadoEnvio
 
         void Comunicable.CargarInformacion(SqlDataReader reader)
         {
-            this.mail = Convert.ToString(reader["mail"]);
-            this.telefono = Convert.ToString(reader["telefono"]);
-            this.calle = Convert.ToString(reader["calle"]);
-            this.numeroCalle = Convert.ToString(reader["numeroCalle"]);
-            this.piso = Convert.ToString(reader["piso"]);
-            this.departamento = Convert.ToString(reader["depto"]);
-            this.codigoPostal = Convert.ToString(reader["cod_postal"]);
-            this.localidad = Convert.ToString(reader["localidad"]);
+            this.mail = Convert.ToString(reader["cont_mail"]);
+            this.telefono = Convert.ToString(reader["cont_telefono"]);
+            this.calle = Convert.ToString(reader["cont_calle"]);
+            this.numeroCalle = Convert.ToString(reader["cont_numero_calle"]);
+            this.piso = Convert.ToString(reader["cont_piso"]);
+            this.departamento = Convert.ToString(reader["cont_depto"]);
+            this.codigoPostal = Convert.ToString(reader["cont_codigo_postal"]);
+            this.localidad = Convert.ToString(reader["cont_localidad"]);
         }
 
         #endregion

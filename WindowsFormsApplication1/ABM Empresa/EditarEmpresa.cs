@@ -113,7 +113,7 @@ namespace MercadoEnvio.ABM_Empresa
                 empresa.SetRubro(rubro);
                 empresa.SetFechaDeCreacion(fechaDeCreacion);
                 empresa.SetIdContacto(idContacto);
-                usuario.SetActivo(activo);
+                usuario.Setis_admin(activo);
                 pudoModificar = comunicador.Modificar(idEmpresa, empresa);
                 if (pudoModificar) MessageBox.Show("La empresa se modifico correctamente");
             }
