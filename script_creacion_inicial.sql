@@ -101,6 +101,7 @@ CREATE TABLE [NET_A_CERO].[Clientes] (
     [cli_tipo_dni] [varchar](50) default 'DNI - Documento Nacional de Identidad',
     [cli_fecha_nac] [datetime],
     [cli_fecha_alta] [datetime],
+    [cli_activo] [bit] NOT NULL DEFAULT 1,
     [cli_usr_id] INT,
 	[cli_cont_id] INT,
     CONSTRAINT [tipo_dni] CHECK (cli_tipo_dni IN ('DNI - Documento Nacional de Identidad', 'LC - Libreta Civica', 'LE - Libreta de Enrolamiento', 'Pasaporte'))
@@ -113,6 +114,7 @@ CREATE TABLE [NET_A_CERO].[Empresas] (
     [emp_cuit] [nvarchar](50) NOT NULL,
     [emp_nombre_contacto] [nvarchar](255) default 'Nombre Contacto',        -- No existe en la maestra
     [emp_fecha_alta] [datetime],
+    [emp_activo] [bit] NOT NULL DEFAULT 1,
     [emp_usr_id] INT,
 	[emp_rubro] INT,
 	[emp_cont_id] INT
