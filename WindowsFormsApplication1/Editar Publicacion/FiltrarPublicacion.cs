@@ -27,7 +27,7 @@ namespace MercadoEnvio.Editar_Publicacion
 
         private void OcultarColumnasQueNoDebenVerse()
         {
-            dataGridView_Publicacion.Columns["id"].Visible = false;
+            dataGridView_Publicacion.Columns["publi_id"].Visible = false;
         }
 
         private void CargarPublicacion()
