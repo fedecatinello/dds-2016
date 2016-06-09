@@ -110,7 +110,7 @@ CREATE TABLE [NET_A_CERO].[Clientes] (
 CREATE TABLE [NET_A_CERO].[Empresas] (
     [emp_id] INT IDENTITY(1,1) PRIMARY KEY,
     [emp_razon_social] [nvarchar](255) NOT NULL,
-    [emp_ciudad] [nvarchar](50),
+    [emp_ciudad] [nvarchar](50) default 'Buenos Aires',
     [emp_cuit] [nvarchar](50) NOT NULL,
     [emp_nombre_contacto] [nvarchar](255) default 'Nombre Contacto',        -- No existe en la maestra
     [emp_fecha_alta] [datetime],
@@ -145,7 +145,7 @@ CREATE TABLE [NET_A_CERO].[Estado] (
 CREATE TABLE [NET_A_CERO].[Visibilidad] (
     [visib_id] [NUMERIC](18, 0) PRIMARY KEY,
     [visib_desc] [nvarchar](255),
-    [visib_grado] [nvarchar](50),
+    [visib_grado] [nvarchar](50) default 'Comisión por tipo de publicación',
     [visib_precio] [NUMERIC](18, 2) NOT NULL,
     [visib_porcentaje] [NUMERIC](18, 2) NOT NULL,
     [visib_envios] [bit] DEFAULT 1,
@@ -637,7 +637,7 @@ INSERT INTO NET_A_CERO.Empresas (emp_razon_social, emp_cuit, emp_fecha_alta, emp
                                             WHERE Publ_Empresa_Dom_Calle = c.cont_calle
                                             AND Publ_Empresa_Nro_Calle = c.cont_numero_calle
                                             AND Publ_Empresa_Piso = c.cont_piso
-                                            AND Publ_Empresa_Depto = c.cont_codigo_postal
+                                            AND Publ_Empresa_Depto = c.cont_depto
                                             AND Publ_Empresa_Cod_Postal = c.cont_codigo_postal
                                             AND Publ_Empresa_Mail = c.cont_mail)
     FROM gd_esquema.Maestra     
@@ -674,7 +674,7 @@ INSERT INTO NET_A_CERO.Clientes (cli_nombre, cli_apellido, cli_dni, cli_fecha_na
                                             WHERE Cli_Dom_Calle = c.cont_calle
                                             AND Cli_Nro_Calle = c.cont_numero_calle
                                             AND Cli_Piso = c.cont_piso
-                                            AND Cli_Depto = c.cont_codigo_postal
+                                            AND Cli_Depto = c.cont_depto
                                             AND Cli_Cod_Postal = c.cont_codigo_postal
                                             AND Cli_Mail = c.cont_mail)
     FROM gd_esquema.Maestra    
