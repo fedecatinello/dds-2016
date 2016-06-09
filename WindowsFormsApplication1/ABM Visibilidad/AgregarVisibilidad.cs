@@ -14,7 +14,7 @@ namespace MercadoEnvio.ABM_Visibilidad
 {
     public partial class AgregarVisibilidad : Form
     {
-        private DBMapper comunicador = new DBMapper();
+        private DBMapper mapper = new DBMapper();
 
         public AgregarVisibilidad()
         {
@@ -31,18 +31,18 @@ namespace MercadoEnvio.ABM_Visibilidad
             String descripcion = textBox_Descripcion.Text;
             String precioPorPublicar = textBox_PrecioPorPublicar.Text;
             String porcentajePorVenta = textBox_PorcentajePorVenta.Text;
-            String duracion = textBox_Duracion.Text;
+            //String duracion = textBox_Duracion.Text;
 
-            // Insert Visibilidad
+            // Inserto la Visibilidad en la DB
             try
             {
                 Visibilidad visibilidad = new Visibilidad();
                 visibilidad.SetDescripcion(descripcion);
                 visibilidad.SetPrecioPorPublicar(precioPorPublicar);
                 visibilidad.SetPorcentajePorVenta(porcentajePorVenta);
-                visibilidad.SetDuracion(duracion);
-                Decimal idVisibilidad = comunicador.CrearVisibilidad(visibilidad);
-                if (idVisibilidad > 0) MessageBox.Show("Se creo la visibilidad");
+                //visibilidad.SetDuracion(duracion);
+                Decimal idVisibilidad = mapper.CrearVisibilidad(visibilidad);
+                if (idVisibilidad > 0) MessageBox.Show("La visibilidad fue creada");
             }
             catch (CampoVacioException exception)
             {
@@ -51,12 +51,12 @@ namespace MercadoEnvio.ABM_Visibilidad
             }
             catch (FormatoInvalidoException exception)
             {
-                MessageBox.Show("Datos mal ingresados en: " + exception.Message);
+                MessageBox.Show("Los datos fueron mal ingresados en: " + exception.Message);
                 return;
             }
             catch (VisibilidadYaExisteException exception)
             {
-                MessageBox.Show("Ya existe esa visibilidad");
+                MessageBox.Show("La visibilidad ya existe");
                 return;
             }
 

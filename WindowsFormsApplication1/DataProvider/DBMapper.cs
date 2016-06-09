@@ -18,6 +18,74 @@ namespace MercadoEnvio
         private SqlParameter parametroOutput;
         private SqlCommand command;
 
+        
+        /*
+        *
+        *   GENERIC CRUD
+        *
+        */
+
+
+        public int Crear(Comunicable objeto, String idParameter)
+        {
+            query = objeto.GetQueryCrear();
+            parametros.Clear();
+            parametros = objeto.GetParametros();
+            parametroOutput = new SqlParameter("@"+idParameter, SqlDbType.Int);
+            parametroOutput.Direction = ParameterDirection.Output;
+            parametros.Add(parametroOutput);
+            command = QueryBuilder.Instance.build(query, parametros);
+            command.CommandType = CommandType.StoredProcedure;
+            command.ExecuteNonQuery();
+            return (int)parametroOutput.Value;
+        }
+
+        public Boolean Modificar(String idParameter, Decimal id, Comunicable objeto)
+        {
+            query = objeto.GetQueryModificar();
+            parametros.Clear();
+            parametros = objeto.GetParametros();
+            parametros.Add(new SqlParameter("@"+idParameter, id));
+            int filasAfectadas = QueryBuilder.Instance.build(query, parametros).ExecuteNonQuery();
+            if (filasAfectadas == 1) return true;
+            return false;
+        }
+
+        public Comunicable Obtener(String idParameter, Decimal id, Type clase)
+        {
+            Comunicable objeto = (Comunicable)Activator.CreateInstance(clase);
+            query = objeto.GetQueryObtener();
+            parametros.Clear();
+            parametros.Add(new SqlParameter("@"+idParameter, id));
+            SqlDataReader reader = QueryBuilder.Instance.build(query, parametros).ExecuteReader();
+            if (reader.Read())
+            {
+                objeto.CargarInformacion(reader);
+                return objeto;
+            }
+            return objeto;
+        }
+
+       public Boolean Eliminar(String idParameter, Decimal id, String enDonde)
+        {
+            query = "UPDATE NET_A_CERO." + enDonde + " SET dado_de_baja = 1 WHERE id = @id";
+            parametros.Clear();
+            parametros.Add(new SqlParameter("@"+idParameter, id));
+            int filasAfectadas = QueryBuilder.Instance.build(query, parametros).ExecuteNonQuery();
+            if (filasAfectadas == 1) return true;
+            return false;
+        }
+
+        
+        /*
+        *
+        *   CREATE TABLE QUERYS
+        *
+        */
+
+
+        /** Usuarios **/
+
         public Decimal CrearUsuario()
         {
             query = "NET_A_CERO.pr_crear_usuario";
@@ -46,6 +114,146 @@ namespace MercadoEnvio
             command.ExecuteNonQuery();
             return (int)parametroOutput.Value;
         }
+
+        /** Clientes **/
+
+        public int CrearCliente(Clientes cliente)
+        {
+
+            if (!esClienteUnico(cliente.GetTipoDeDocumento(), cliente.GetNumeroDeDocumento()))
+                throw new ClienteYaExisteException();
+
+            return this.Crear(cliente, "cli_id");
+
+        }
+
+        /** Empresas **/
+
+        public int CrearEmpresa(Empresas empresa)
+        {
+            if (!esEmpresaUnica(empresa.GetCuit()))
+                throw new CuitYaExisteException();
+
+            if (!esEmpresaUnica(empresa.GetRazonSocial()))
+                throw new RazonSocialYaExisteException();
+
+            return this.Crear(empresa, "emp_id");
+        }
+
+        /** Contacto **/
+
+        public int CrearContacto(Contacto contacto)
+        {
+            return this.Crear(contacto, "cont_id");
+        }
+
+        /** Publicaciones **/
+
+        public Decimal CrearPublicacion(Publicacion publicacion)
+        {
+            return this.Crear(publicacion, "publi_id");
+        }
+
+        /** Visibilidad **/
+
+        public Decimal CrearVisibilidad(Visibilidad visibilidad)
+        {
+            if (!esVisibilidadUnica(visibilidad.GetDescripcion()))
+                throw new VisibilidadYaExisteException();
+
+            return this.Crear(visibilidad, "visib_id");
+        }
+
+
+        /*
+        *
+        *   GET TABLE QUERYS
+        *
+        */
+
+
+        /** Usuarios **/
+
+        public Usuarios ObtenerUsuario(int idUsuario)
+        {
+            Usuarios objeto = new Usuarios();
+            Type clase = objeto.GetType();
+            return (Usuarios)this.Obtener("usr_id", idUsuario, clase);
+        }
+
+        /** Clientes **/
+
+        public Clientes ObtenerCliente(int idCliente)
+        {
+            Clientes objeto = new Clientes();
+            Type clase = objeto.GetType();
+            return (Clientes)this.Obtener("cli_id", idCliente, clase);
+        }
+
+        /** Empresas **/
+
+        public Empresas ObtenerEmpresa(int idEmpresa)
+        {
+            Empresas objeto = new Empresas();
+            Type clase = objeto.GetType();
+            return (Empresas)this.Obtener("emp_id", idEmpresa, clase);
+        }
+
+        /** Contacto **/
+
+        public Contacto ObtenerContacto(int idContacto)
+        {
+            Contacto objeto = new Contacto();
+            Type clase = objeto.GetType();
+            return (Contacto)this.Obtener("cont_id", idContacto, clase);
+        }
+
+        /** Visibilidad **/
+
+        public Visibilidad ObtenerVisibilidad(Decimal idVisibilidad)
+        {
+            Visibilidad objeto = new Visibilidad();
+            Type clase = objeto.GetType();
+            return (Visibilidad)this.Obtener("visib_id", idVisibilidad, clase);
+        }
+
+        /** Publicaciones **/
+
+        public Publicacion ObtenerPublicacion(Decimal idPublicacion)
+        {
+            Publicacion objeto = new Publicacion();
+            Type clase = objeto.GetType();
+            return (Publicacion)this.Obtener("publi_id", idPublicacion, clase);
+        }
+
+
+        /* 
+        * 
+        *   DELETE QUERYS
+        *
+        */
+
+
+        /** Clientes **/
+
+        public Boolean EliminarCliente(int id, String enDonde)
+        {
+            query = "UPDATE NET_A_CERO." + enDonde + " SET cli_activo = 0 WHERE cli_id = @id";
+            parametros.Clear();
+            parametros.Add(new SqlParameter("@id", id));
+            int filasAfectadas = QueryBuilder.Instance.build(query, parametros).ExecuteNonQuery();
+            if (filasAfectadas == 1) return true;
+            return false;
+        }
+
+        // TODO: AGREGAR LOS DEMAS ELIMINAR SIN PARAMETRIZAR
+
+        
+        /* 
+        * 
+        *   ASSIGN QUERYS
+        *
+        */
 
         public Boolean AsignarUsuarioACliente(Decimal idCliente, Decimal idUsuario)
         {
@@ -85,147 +293,13 @@ namespace MercadoEnvio
             return false;
         }
 
-        public int Crear(Comunicable objeto)
-        {
-            query = objeto.GetQueryCrear();
-            parametros.Clear();
-            parametros = objeto.GetParametros();
-            parametroOutput = new SqlParameter("@id", SqlDbType.Int);
-            parametroOutput.Direction = ParameterDirection.Output;
-            parametros.Add(parametroOutput);
-            command = QueryBuilder.Instance.build(query, parametros);
-            command.CommandType = CommandType.StoredProcedure;
-            command.ExecuteNonQuery();
-            return (int)parametroOutput.Value;
-        }
 
-        public Boolean Modificar(Decimal id, Comunicable objeto)
-        {
-            query = objeto.GetQueryModificar();
-            parametros.Clear();
-            parametros = objeto.GetParametros();
-            parametros.Add(new SqlParameter("@id", id));
-            int filasAfectadas = QueryBuilder.Instance.build(query, parametros).ExecuteNonQuery();
-            if (filasAfectadas == 1) return true;
-            return false;
-        }
+        /* 
+        * 
+        *   SELECT QUERYS
+        *
+        */
 
-        public Comunicable Obtener(Decimal id, Type clase)
-        {
-            Comunicable objeto = (Comunicable)Activator.CreateInstance(clase);
-            query = objeto.GetQueryObtener();
-            parametros.Clear();
-            parametros.Add(new SqlParameter("@id", id));
-            SqlDataReader reader = QueryBuilder.Instance.build(query, parametros).ExecuteReader();
-            if (reader.Read())
-            {
-                objeto.CargarInformacion(reader);
-                return objeto;
-            }
-            return objeto;
-        }
-
-       public Boolean Eliminar(Decimal id, String enDonde)
-        {
-            query = "UPDATE NET_A_CERO." + enDonde + " SET dado_de_baja = 1 WHERE id = @id";
-            parametros.Clear();
-            parametros.Add(new SqlParameter("@id", id));
-            int filasAfectadas = QueryBuilder.Instance.build(query, parametros).ExecuteNonQuery();
-            if (filasAfectadas == 1) return true;
-            return false;
-        }
-
-        public Boolean EliminarCliente(int id, String enDonde)
-        {
-            query = "UPDATE NET_A_CERO." + enDonde + " SET cli_activo = 0 WHERE cli_id = @id";
-            parametros.Clear();
-            parametros.Add(new SqlParameter("@id", id));
-            int filasAfectadas = QueryBuilder.Instance.build(query, parametros).ExecuteNonQuery();
-            if (filasAfectadas == 1) return true;
-            return false;
-        }
-
-        public int CrearCliente(Clientes cliente)
-        {
-
-            if (!pasoControlDeRegistro(cliente.GetTipoDeDocumento(), cliente.GetNumeroDeDocumento()))
-                throw new ClienteYaExisteException();
-
-            return this.Crear(cliente);
-
-        }
-
-        public int CrearEmpresa(Empresas empresa)
-        {
-            if (!pasoControlDeRegistroDeCuit(empresa.GetCuit()))
-                throw new CuitYaExisteException();
-
-            if (!pasoControlDeRegistroDeRazonSocial(empresa.GetRazonSocial()))
-                throw new RazonSocialYaExisteException();
-
-            return this.Crear(empresa);
-        }
-
-        public int CrearContacto(Contacto contacto)
-        {
-            return this.Crear(contacto);
-        }
-
-        public Decimal CrearPublicacion(Publicacion publicacion)
-        {
-            return this.Crear(publicacion);
-        }
-
-        public Decimal CrearVisibilidad(Visibilidad visibilidad)
-        {
-            if (!pasoControlDeUnicidad(visibilidad.GetDescripcion(), "descripcion", "Visibilidad"))
-                throw new VisibilidadYaExisteException();
-
-            return this.Crear(visibilidad);
-        }
-
-        public Usuarios ObtenerUsuario(Decimal idUsuario)
-        {
-            Usuarios objeto = new Usuarios();
-            Type clase = objeto.GetType();
-            return (Usuarios)this.Obtener(idUsuario, clase);
-        }
-
-        public Clientes ObtenerCliente(Decimal idCliente)
-        {
-            Clientes objeto = new Clientes();
-            Type clase = objeto.GetType();
-            return (Clientes)this.Obtener(idCliente, clase);
-        }
-
-        public Empresas ObtenerEmpresa(Decimal idEmpresa)
-        {
-            Empresas objeto = new Empresas();
-            Type clase = objeto.GetType();
-            return (Empresas)this.Obtener(idEmpresa, clase);
-        }
-
-
-        public Contacto ObtenerContacto(Decimal idContacto)
-        {
-            Contacto objeto = new Contacto();
-            Type clase = objeto.GetType();
-            return (Contacto)this.Obtener(idContacto, clase);
-        }
-
-        public Visibilidad ObtenerVisibilidad(Decimal idVisibilidad)
-        {
-            Visibilidad objeto = new Visibilidad();
-            Type clase = objeto.GetType();
-            return (Visibilidad)this.Obtener(idVisibilidad, clase);
-        }
-
-        public Publicacion ObtenerPublicacion(Decimal idPublicacion)
-        {
-            Publicacion objeto = new Publicacion();
-            Type clase = objeto.GetType();
-            return (Publicacion)this.Obtener(idPublicacion, clase);
-        }
 
         public Object SelectFromWhere(String que, String deDonde, String param1, String param2)
         {
@@ -272,6 +346,19 @@ namespace MercadoEnvio
             return datos.Tables[0];
         }
 
+        /*
+        *
+        *   SELECT TABLE QUERYS
+        *
+        */
+
+        /** Clientes **/
+
+        public DataTable SelectClientesParaFiltro()
+        {
+            return this.SelectClientesParaFiltroConFiltro("");
+        }
+
         public DataTable SelectClientesParaFiltroConFiltro(String filtro)
         {
             
@@ -280,9 +367,11 @@ namespace MercadoEnvio
                 , "cli.cli_usr_id = usr.usr_id AND cli.cli_cont_id = cont.cont_id  AND cli.cli_activo = 1" + filtro);
         }
 
-        public DataTable SelectClientesParaFiltro()
+        /** Empresas **/
+
+        public DataTable SelectEmpresasParaFiltro()
         {
-            return this.SelectClientesParaFiltroConFiltro("");
+            return this.SelectEmpresasParaFiltroConFiltro("");
         }
 
         public DataTable SelectEmpresasParaFiltroConFiltro(String filtro)
@@ -292,23 +381,25 @@ namespace MercadoEnvio
                 , "emp.emp_usr_id = usr.usr_id AND emp.emp_cont_id = cont.cont_id");
         }
 
-        public DataTable SelectEmpresasParaFiltro()
+        /** Visibilidad **/
+
+        public DataTable SelectVisibilidadesParaFiltro()
         {
-            return this.SelectEmpresasParaFiltroConFiltro("");
+            return this.SelectVisibilidadesParaFiltroConFiltro("");
         }
 
         public DataTable SelectVisibilidadesParaFiltroConFiltro(String filtro)
         {
-            return this.SelectDataTable("v.id, v.visib_cod Descripcion, v.visib_precio Precio, v.visib_porcentaje Porcentaje, v.visib_grado Duracion"
+            return this.SelectDataTable("v.visib_id Codigo, v.visib_desc Descripcion, v.visib_grado Grado, v.visib_precio Precio, v.visib_porcentaje Porcentaje, v.visib_envios 'Soporta Envios'"
                 , "NET_A_CERO.Visibilidad v"
-                , "dado_de_baja = 0 " + filtro);
+                , filtro);
         }
 
-        public DataTable SelectVisibilidadesParaFiltro()
+        /** Publicaciones **/
+
+        public DataTable SelectPublicacionesParaFiltro()
         {
-            return this.SelectDataTable("v.id, v.visib_cod Descripcion, v.visib_precio Precio, v.visib_porcentaje Porcentaje, v.visib_grado Duracion"
-                , "NET_A_CERO.Visibilidad v"
-                , "dado_de_baja = 0");
+            return this.SelectPublicacionesParaFiltroConFiltro("");
         }
 
         public DataTable SelectPublicacionesParaFiltroConFiltro(String filtro)
@@ -318,10 +409,12 @@ namespace MercadoEnvio
                 , "rxp.rubro_id = r.rubro_id AND rxp.publi_id=p.publi_id AND p.publi_visib_id = v.visib_id AND p.publi_usr_id = u.usr_id AND p.publi_usr_id = @idUsuario" + filtro);
         }
 
-        public DataTable SelectPublicacionesParaFiltro()
-        {
-            return this.SelectPublicacionesParaFiltroConFiltro("");
-        }
+        
+        /*
+        *
+        *   TABLE UNIQUE CONTROL 
+        *
+        */
 
         private bool ControlDeUnicidad(String query, IList<SqlParameter> parametros)
         {
@@ -333,7 +426,9 @@ namespace MercadoEnvio
             return true;
         }
 
-        private bool pasoControlDeUnicidad(String que, String aQue, String enDonde)
+        //  TODO: QUITAR SI NO SE UTILIZA
+
+        /*private bool esUnico(String que, String aQue, String enDonde)
         {
             query = "SELECT COUNT(*) FROM NET_A_CERO." + enDonde + " WHERE " + aQue + " = @" + aQue;
             parametros.Clear();
@@ -341,15 +436,18 @@ namespace MercadoEnvio
             return ControlDeUnicidad(query, parametros);
         }
 
-        private bool pasoControlDeUnicidad(String que, String aQue, String enDonde, Decimal id)
+        private bool esUnico(String que, String aQue, String enDonde, Decimal id)
         {
             query = "SELECT COUNT(*) FROM NET_A_CERO." + enDonde + " WHERE " + aQue + " = @" + aQue + " AND id != " + id;
             parametros.Clear();
             parametros.Add(new SqlParameter("@" + aQue, que));
             return ControlDeUnicidad(query, parametros);
         }
+        */
 
-        private bool pasoControlDeRegistro(String tipoDeDocumento, String numeroDeDocumento)
+        /** Clientes **/
+
+        private bool esClienteUnico(String tipoDeDocumento, String numeroDeDocumento)
         {
             query = "SELECT COUNT(*) FROM NET_A_CERO.Clientes WHERE cli_tipo_dni = @tipoDeDocumento AND cli_dni = @numeroDeDocumento";
             parametros.Clear();
@@ -358,7 +456,7 @@ namespace MercadoEnvio
             return ControlDeUnicidad(query, parametros);
         }
 
-        private bool pasoControlDeRegistro(Decimal tipoDeDocumento, String numeroDeDocumento, Decimal idCliente)
+        private bool esClienteUnico(Decimal tipoDeDocumento, String numeroDeDocumento, int idCliente)
         {
             query = "SELECT COUNT(*) FROM NET_A_CERO.Clientes WHERE cli_tipo_dni = @tipoDeDocumento AND cli_dni = @numeroDeDocumento AND cli_id != @idCliente";
             parametros.Clear();
@@ -368,7 +466,9 @@ namespace MercadoEnvio
             return ControlDeUnicidad(query, parametros);
         }
 
-        private bool pasoControlDeRegistroDeRazonSocial(String razonSocial)
+        /** Empresas **/
+
+        private bool esEmpresaUnica(String razonSocial)
         {
             query = "SELECT COUNT(*) FROM NET_A_CERO.Empresas WHERE emp_razon_social = @razonSocial";
             parametros.Clear();
@@ -376,7 +476,7 @@ namespace MercadoEnvio
             return ControlDeUnicidad(query, parametros);
         }
 
-        private bool pasoControlDeRegistroDeRazonSocial(String razonSocial, Decimal idEmpresa)
+        private bool esEmpresaUnica(String razonSocial, int idEmpresa)
         {
             query = "SELECT COUNT(*) FROM NET_A_CERO.Empresas WHERE emp_razon_social = @razonSocial AND emp_id != @idEmpresa";
             parametros.Clear();
@@ -385,7 +485,7 @@ namespace MercadoEnvio
             return ControlDeUnicidad(query, parametros);
         }
 
-        private bool pasoControlDeRegistroDeCuit(String cuit)
+        private bool esEmpresaUnica(String cuit)
         {
             query = "SELECT COUNT(*) FROM NET_A_CERO.Empresas WHERE emp_cuit = @cuit";
             parametros.Clear();
@@ -393,12 +493,31 @@ namespace MercadoEnvio
             return ControlDeUnicidad(query, parametros);
         }
 
-        private bool pasoControlDeRegistroDeCuit(String cuit, Decimal idEmpresa)
+        private bool esEmpresaUnica(String cuit, int idEmpresa)
         {
             query = "SELECT COUNT(*) FROM NET_A_CERO.Empresas WHERE emp_cuit = @cuit AND emp_id != @idEmpresa";
             parametros.Clear();
             parametros.Add(new SqlParameter("@cuit", cuit));
             parametros.Add(new SqlParameter("@idEmpresa", idEmpresa));
+            return ControlDeUnicidad(query, parametros);
+        }
+
+        /** Visibilidad **/
+
+        private bool esVisibilidadUnica(String descripcion)
+        {
+            query = "SELECT COUNT(*) FROM NET_A_CERO.Visibilidad WHERE visib_desc = @desc";
+            parametros.Clear();
+            parametros.Add(new SqlParameter("@desc", descripcion));
+            return ControlDeUnicidad(query, parametros);
+        }
+
+        private bool esVisibilidadUnica(String descripcion, Decimal codVisibilidad)
+        {
+            query = "SELECT COUNT(*) FROM NET_A_CERO.Visibilidad WHERE visib_desc = @desc AND visib_id != @cod";
+            parametros.Clear();
+            parametros.Add(new SqlParameter("@desc", descripcion));
+            parametros.Add(new SqlParameter("@cod", codVisibilidad));
             return ControlDeUnicidad(query, parametros);
         }
 
