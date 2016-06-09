@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MercadoEnvio.Exceptions;
+using MercadoEnvio.DataProvider;
 using System.Data.SqlClient;
+using System.Windows.Forms;
 
 namespace MercadoEnvio.Objetos
 {
@@ -14,10 +16,12 @@ namespace MercadoEnvio.Objetos
         private String ciudad;
         private String cuit;
         private String nombreDeContacto;
-        private String rubro;
+        private int rubro;
         private DateTime fechaDeCreacion;
         private int idUsuario;
         private int idContacto;
+
+        private IList<SqlParameter> parametros = new List<SqlParameter>();
         
 
         public void SetId(int id)
@@ -85,12 +89,12 @@ namespace MercadoEnvio.Objetos
         {
             if (rubro == "")
                 throw new CampoVacioException("Rubro");
-            this.rubro = rubro;
+            SetRubroEmpresa(rubro);
         }
 
         public string GetRubro()
         {
-            return this.rubro;
+            return GetDescripcionRubroEmpresa();
         }
 
 
@@ -130,22 +134,44 @@ namespace MercadoEnvio.Objetos
             return this.idContacto;
         }
 
+        public string GetDescripcionRubroEmpresa()
+        {
+            IList<SqlParameter> parametros = new List<SqlParameter>();
+            parametros.Add(new SqlParameter("@rubro", this.rubro));
+            string queryRubro = "SELECT rubro_desc_larga FROM NET_A_CERO.Rubros WHERE rubro_id = @rubro";
+
+            SqlDataReader reader = QueryHelper.Instance.exec(queryRubro, parametros);
+            return (string)reader["rubro_desc_larga"];
+        }
+
+        public void SetRubroEmpresa(string rubro)
+        {
+            IList<SqlParameter> parametros = new List<SqlParameter>();
+            parametros.Add(new SqlParameter("@rubro", rubro));
+            string queryRubro = "SELECT rubro_id FROM NET_A_CERO.Rubros WHERE rubro_desc_larga = @rubro";
+
+            SqlDataReader reader = QueryHelper.Instance.exec(queryRubro, parametros);
+            this.rubro = (int)reader["rubro_id"];
+
+            //if(this.rubro == null) 
+        }
+
 
         #region Miembros de Comunicable
 
         string Comunicable.GetQueryCrear()
         {
-            return "NET_A_CERO.crear_empresa";
+            return "NET_A_CERO.pr_crear_empresa";
         }
 
         string Comunicable.GetQueryModificar()
         {
-            return "UPDATE NET_A_CERO.Empresas SET emp_razon_social = @razon_social, emp_ciudad = @ciudad, emp_cuit = @cuit, emp_nombre_contacto = @nombre_contacto, emp_rubro = @rubro, emp_fecha_alta = @fecha_alta WHERE emp_id = @id";
+            return "UPDATE NET_A_CERO.Empresas SET emp_razon_social = @razon_social, emp_ciudad = @ciudad, emp_cuit = @cuit, emp_nombre_contacto = @nombre_contacto, emp_rubro = (SELECT rubro_id FROM NET_A_CERO.Rubros WHERE rubro_desc_larga = @rubro), emp_fecha_alta = @fecha_alta WHERE emp_id = @id";
         }
 
         public string GetQueryObtener()
         {
-            return "SELECT * FROM NET_A_CERO.Empresa WHERE emp_id = @id";
+            return "SELECT * FROM NET_A_CERO.Empresas WHERE emp_id = @id";
         }
 
         IList<System.Data.SqlClient.SqlParameter> Comunicable.GetParametros()
@@ -162,14 +188,14 @@ namespace MercadoEnvio.Objetos
 
         public void CargarInformacion(SqlDataReader reader)
         {
-            this.razonSocial = Convert.ToString(reader["razon_social"]);
-            this.ciudad = Convert.ToString(reader["ciudad"]);
-            this.cuit = Convert.ToString(reader["cuit"]);
-            this.nombreDeContacto = Convert.ToString(reader["nombre_contacto"]);
-            this.rubro = Convert.ToString(reader["rubro"]);
-            this.fechaDeCreacion = Convert.ToDateTime(reader["fecha_alta"]);
-            this.idUsuario = Convert.ToInt32(reader["usuario_id"]);
-            this.idContacto = Convert.ToInt32(reader["contacto_id"]);
+            this.razonSocial = Convert.ToString(reader["emp_razon_social"]);
+            this.ciudad = Convert.ToString(reader["emp_ciudad"]);
+            this.cuit = Convert.ToString(reader["emp_cuit"]);
+            this.nombreDeContacto = Convert.ToString(reader["emp_nombre_contacto"]);
+            this.rubro = Convert.ToInt32(reader["emp_rubro"]);
+            this.fechaDeCreacion = Convert.ToDateTime(reader["emp_fecha_alta"]);
+            this.idUsuario = Convert.ToInt32(reader["emp_usr_id"]);
+            this.idContacto = Convert.ToInt32(reader["emp_cont_id"]);
         }
 
         #endregion

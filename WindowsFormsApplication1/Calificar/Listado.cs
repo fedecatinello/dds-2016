@@ -12,7 +12,7 @@ namespace MercadoEnvio.Calificar_Vendedor
 {
     public partial class Listado : Form
     {
-        private DBCommunicator comunicar = new DBCommunicator();
+        private DBMapper comunicar = new DBMapper();
 
         public Listado()
         {

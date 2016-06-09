@@ -301,7 +301,7 @@
     <Compile Include="Exceptions\TelefonoYaExisteException.cs" />
     <Compile Include="Exceptions\VisibilidadYaExisteException.cs" />
     <Compile Include="Exceptions\FaltanDefinirAtributosException.cs" />
-    <Compile Include="DataProvider\DBCommunicator.cs" />
+    <Compile Include="DataProvider\DBMapper.cs" />
     <Compile Include="DataProvider\QueryBuilder.cs" />
     <Compile Include="DataProvider\ConnectionManager.cs" />
     <Compile Include="DataProvider\QueryHelper.cs" />

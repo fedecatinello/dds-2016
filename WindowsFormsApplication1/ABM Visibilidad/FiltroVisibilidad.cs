@@ -13,7 +13,7 @@ namespace MercadoEnvio.ABM_Visibilidad
 {
     public partial class FiltroVisibilidad : Form
     {
-        private DBCommunicator comunicador = new DBCommunicator();
+        private DBMapper comunicador = new DBMapper();
 
         public FiltroVisibilidad()
         {

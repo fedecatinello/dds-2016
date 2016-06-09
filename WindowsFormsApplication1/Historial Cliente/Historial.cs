@@ -15,7 +15,7 @@ namespace MercadoEnvio.Historial_Cliente
         private String query;
         private SqlCommand command;
         private IList<SqlParameter> parametros = new List<SqlParameter>();
-        private DBCommunicator comunicador = new DBCommunicator();
+        private DBMapper comunicador = new DBMapper();
 
         public Historial()
         {

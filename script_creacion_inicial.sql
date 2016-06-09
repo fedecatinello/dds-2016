@@ -101,6 +101,7 @@ CREATE TABLE [NET_A_CERO].[Clientes] (
     [cli_tipo_dni] [varchar](50) default 'DNI - Documento Nacional de Identidad',
     [cli_fecha_nac] [datetime],
     [cli_fecha_alta] [datetime],
+    [cli_activo] [bit] NOT NULL DEFAULT 1,
     [cli_usr_id] INT,
 	[cli_cont_id] INT,
     CONSTRAINT [tipo_dni] CHECK (cli_tipo_dni IN ('DNI - Documento Nacional de Identidad', 'LC - Libreta Civica', 'LE - Libreta de Enrolamiento', 'Pasaporte'))
@@ -113,6 +114,7 @@ CREATE TABLE [NET_A_CERO].[Empresas] (
     [emp_cuit] [nvarchar](50) NOT NULL,
     [emp_nombre_contacto] [nvarchar](255) default 'Nombre Contacto',        -- No existe en la maestra
     [emp_fecha_alta] [datetime],
+    [emp_activo] [bit] NOT NULL DEFAULT 1,
     [emp_usr_id] INT,
 	[emp_rubro] INT,
 	[emp_cont_id] INT
@@ -306,6 +308,22 @@ IF (OBJECT_ID('NET_A_CERO.pr_crear_usuario_con_valores') IS NOT NULL)
     DROP PROCEDURE NET_A_CERO.pr_crear_usuario_con_valores
 GO
 
+IF (OBJECT_ID('NET_A_CERO.pr_crear_cliente') IS NOT NULL)
+    DROP PROCEDURE NET_A_CERO.pr_crear_cliente
+GO
+
+IF (OBJECT_ID('NET_A_CERO.pr_crear_empresa') IS NOT NULL)
+    DROP PROCEDURE NET_A_CERO.pr_crear_empresa
+GO
+
+IF (OBJECT_ID('NET_A_CERO.pr_crear_contacto') IS NOT NULL)
+    DROP PROCEDURE NET_A_CERO.pr_crear_contacto
+GO
+
+IF (OBJECT_ID('NET_A_CERO.pr_crear_visibilidad') IS NOT NULL)
+    DROP PROCEDURE NET_A_CERO.pr_crear_visibilidad
+GO
+
 IF (OBJECT_ID('NET_A_CERO.generar_id_publicacion') IS NOT NULL)
     DROP FUNCTION NET_A_CERO.generar_id_publicacion
 GO
@@ -326,6 +344,7 @@ IF (OBJECT_ID('NET_A_CERO.get_factura_cod') IS NOT NULL)
     DROP FUNCTION NET_A_CERO.get_factura_cod
 GO
 
+
 /** FIN VALIDACION DE FUNCIONES Y PROCEDURES **/
 
 
@@ -333,7 +352,7 @@ GO
 /** CREACION DE FUNCIONES Y PROCEDURES **/
 
 CREATE PROCEDURE NET_A_CERO.pr_crear_usuario
-    @usr_id numeric(18,0) OUTPUT
+    @usr_id int OUTPUT
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -376,6 +395,79 @@ BEGIN
             SELECT @id = cli_usr_id FROM NET_A_CERO.Clientes WHERE cli_dni = @dni
         END
     RETURN @id
+END
+GO
+
+CREATE PROCEDURE NET_A_CERO.pr_crear_cliente
+    @nombre nvarchar(255),
+    @apellido nvarchar(255),
+    @documento numeric(18,0),
+    @tipo_de_documento nvarchar(50),
+    @fecha_nacimiento datetime,
+    @fecha_alta datetime,
+    @id int OUTPUT
+AS
+BEGIN
+    INSERT INTO NET_A_CERO.Clientes 
+        (cli_nombre, cli_apellido, cli_dni, cli_tipo_dni, cli_fecha_nac, cli_fecha_alta) 
+    VALUES 
+        (@nombre, @apellido, @documento, @tipo_de_documento, @fecha_nacimiento, @fecha_alta);
+    SET @id = SCOPE_IDENTITY(); 
+END
+GO
+
+CREATE PROCEDURE NET_A_CERO.pr_crear_empresa
+    @razon_social nvarchar(255),
+    @ciudad varchar(50),
+    @cuit nvarchar(50),
+    @nombre_contacto varchar(255),
+    @rubro int,
+    @fecha_alta datetime,
+    @id int OUTPUT
+AS
+BEGIN
+    INSERT INTO NET_A_CERO.Empresas 
+        (emp_razon_social, emp_ciudad, emp_cuit, emp_nombre_contacto, emp_rubro, emp_fecha_alta) 
+    VALUES 
+        (@razon_social, @ciudad, @cuit, @nombre_contacto, @rubro, @fecha_alta)
+    SET @id = SCOPE_IDENTITY(); 
+END
+GO
+
+CREATE PROCEDURE NET_A_CERO.pr_crear_contacto
+    @mail varchar(255),
+    @telefono varchar(255),
+    @calle varchar(100),
+    @numeroCalle numeric(18,0),
+    @piso numeric(18,0),
+    @depto nvarchar(5),
+    @localidad varchar(255),
+    @cod_postal varchar(50),
+    @id int OUTPUT
+AS
+BEGIN
+    INSERT INTO NET_A_CERO.Contacto 
+        (cont_mail, cont_telefono, cont_calle, cont_numero_calle, cont_piso, cont_depto, cont_localidad, cont_codigo_postal)
+    VALUES
+        (@mail, @telefono, @calle, @numeroCalle, @piso, @depto, @localidad, @cod_postal);
+    SET @id = SCOPE_IDENTITY();
+END
+GO
+
+CREATE PROCEDURE NET_A_CERO.pr_crear_visibilidad
+    @descripcion varchar(255),
+    @grado varchar(50),
+    @precio numeric(18,2),
+    @porcentaje numeric(18,2),
+    @envios bit,
+    @id numeric(18,0) OUTPUT
+AS
+BEGIN
+    INSERT INTO NET_A_CERO.Visibilidad
+        (visib_desc, visib_grado, visib_precio, visib_porcentaje, visib_envios)
+    VALUES
+        (@descripcion, @grado, @precio, @porcentaje, @envios);
+    SET @id = SCOPE_IDENTITY();
 END
 GO
 

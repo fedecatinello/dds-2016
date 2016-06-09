@@ -14,7 +14,7 @@ namespace MercadoEnvio.Listado_Estadistico
 {
     public partial class Estadisticas : Form
     {
-        private DBCommunicator comunicador = new DBCommunicator();
+        private DBMapper comunicador = new DBMapper();
         private IList<SqlParameter> parametros = new List<SqlParameter>();
         private SqlCommand command;
 

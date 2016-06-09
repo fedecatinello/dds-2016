@@ -15,7 +15,7 @@ namespace MercadoEnvio.Comprar_Ofertar
     {
         private SqlCommand command { get; set; }
         private IList<SqlParameter> parametros = new List<SqlParameter>();
-        private DBCommunicator comunicador = new DBCommunicator();
+        private DBMapper comunicador = new DBMapper();
         public Object SelectedItem { get; set; }        
         private String tipoPublicacion;
         private int publicacionId;

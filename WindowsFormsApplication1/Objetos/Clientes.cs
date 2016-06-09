@@ -130,7 +130,7 @@ namespace MercadoEnvio.Objetos
 
         string Comunicable.GetQueryCrear()
         {
-            return "NET_A_CERO.crear_cliente";
+            return "NET_A_CERO.pr_crear_cliente";
         }
 
         string Comunicable.GetQueryModificar()
