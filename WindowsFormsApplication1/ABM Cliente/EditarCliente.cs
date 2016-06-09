@@ -16,8 +16,8 @@ namespace MercadoEnvio.ABM_Cliente
     public partial class EditarCliente : Form
     {
         private int idCliente;
-        private int idContacto;
-        private int idUsuario;
+        private int idContacto = 0;
+        //private int idUsuario;
         private DBMapper comunicador = new DBMapper();
 
         public EditarCliente(String idCliente)
@@ -43,8 +43,11 @@ namespace MercadoEnvio.ABM_Cliente
         private void CargarDatos()
         {
             Clientes cliente = comunicador.ObtenerCliente(idCliente);
-            Contacto contacto = comunicador.ObtenerContacto(idContacto);
-            Usuarios usuario = comunicador.ObtenerUsuario(idUsuario);
+            Contacto contacto = comunicador.ObtenerContacto(cliente.GetIdContacto());
+            //Usuarios usuario = comunicador.ObtenerUsuario(cliente.GetIdUsuario());
+
+            //Me guardo el id contacto
+            idContacto = cliente.GetIdContacto();
 
             textBox_Nombre.Text = cliente.GetNombre();
             textBox_Apellido.Text = cliente.GetApellido();
@@ -60,27 +63,8 @@ namespace MercadoEnvio.ABM_Cliente
             textBox_Localidad.Text = contacto.GetLocalidad();
             textBox_CodigoPostal.Text = contacto.GetCodigoPostal();
 
-            checkBox_Habilitado.Checked = Convert.ToBoolean(comunicador.SelectFromWhere("usr_activo", "Usuarios", "usr_id", idCliente));
+            checkBox_Habilitado.Checked = Convert.ToBoolean(comunicador.SelectFromWhere("usr_activo", "Usuarios", "usr_id", cliente.GetIdUsuario()));
         }
-
-/*-------------------NO SE USA PORQUE LO IMPLEMENTAMOS DE OTRA MANERA------------------------------*/
-
-/*      private void CargarTipoDeDocumento(Decimal idTipoDeDocumento)
-        {
-            comboBox_TipoDeDocumento.SelectedValue = (String) comunicador.SelectFromWhere("nombre", "TipoDeDocumento", "id", idTipoDeDocumento);
-        }
-
-        private void CargarDireccion(Decimal idContacto)
-        {
-            Contacto contacto = comunicador.ObtenerDireccion(idContacto);
-            textBox_Calle.Text = contacto.GetCalle();
-            textBox_Numero.Text = contacto.GetNumero();
-            textBox_Piso.Text = contacto.GetPiso();
-            textBox_Departamento.Text = contacto.GetDepartamento();
-            textBox_CodigoPostal.Text = contacto.GetCodigoPostal();
-            textBox_Localidad.Text = contacto.GetLocalidad();
-        }
-        */
 
         private void button_Guardar_Click(object sender, EventArgs e)
         {
@@ -126,7 +110,7 @@ namespace MercadoEnvio.ABM_Cliente
             }
             catch (FormatoInvalidoException exception)
             {
-                MessageBox.Show("Datos mal ingresados en: " + exception.Message);
+                MessageBox.Show("Los datos fueron mal ingresados en: " + exception.Message);
                 return;
             }
 

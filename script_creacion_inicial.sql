@@ -5,7 +5,7 @@ GO
 /** CREACION DE SCHEMA **/
 IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'NET_A_CERO')
 BEGIN
-	EXEC ('CREATE SCHEMA NET_A_CERO AUTHORIZATION gd')
+    EXEC ('CREATE SCHEMA NET_A_CERO AUTHORIZATION gd')
 END
 GO
 /** FIN CREACION DE SCHEMA**/
@@ -17,7 +17,7 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'NET_A_CERO.Ro
 
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'NET_A_CERO.Usuarios_x_Rol'))
     DROP TABLE NET_A_CERO.Usuarios_x_Rol
-	    
+        
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'NET_A_CERO.Preguntas'))
     DROP TABLE NET_A_CERO.Preguntas
 
@@ -103,7 +103,7 @@ CREATE TABLE [NET_A_CERO].[Clientes] (
     [cli_fecha_alta] [datetime],
     [cli_activo] [bit] NOT NULL DEFAULT 1,
     [cli_usr_id] INT,
-	[cli_cont_id] INT,
+    [cli_cont_id] INT,
     CONSTRAINT [tipo_dni] CHECK (cli_tipo_dni IN ('DNI - Documento Nacional de Identidad', 'LC - Libreta Civica', 'LE - Libreta de Enrolamiento', 'Pasaporte'))
 )
 
@@ -116,8 +116,8 @@ CREATE TABLE [NET_A_CERO].[Empresas] (
     [emp_fecha_alta] [datetime],
     [emp_activo] [bit] NOT NULL DEFAULT 1,
     [emp_usr_id] INT,
-	[emp_rubro] INT,
-	[emp_cont_id] INT
+    [emp_rubro] INT,
+    [emp_cont_id] INT
 )
 
 CREATE TABLE [NET_A_CERO].[Publicaciones] (
@@ -324,6 +324,10 @@ IF (OBJECT_ID('NET_A_CERO.pr_crear_visibilidad') IS NOT NULL)
     DROP PROCEDURE NET_A_CERO.pr_crear_visibilidad
 GO
 
+IF (OBJECT_ID('NET_A_CERO.pr_agregar_rol_a_usuario') IS NOT NULL)
+    DROP PROCEDURE NET_A_CERO.pr_agregar_rol_a_usuario
+GO
+
 IF (OBJECT_ID('NET_A_CERO.generar_id_publicacion') IS NOT NULL)
     DROP FUNCTION NET_A_CERO.generar_id_publicacion
 GO
@@ -357,23 +361,23 @@ AS
 BEGIN
     SET NOCOUNT ON;
     INSERT INTO NET_A_CERO.Usuarios(usr_usuario)
-	VALUES(ISNULL('USER' + CAST(((SELECT COUNT(*) FROM NET_A_CERO.Usuarios)+ 1) AS NVARCHAR(10)),''))
+    VALUES(ISNULL('USER' + CAST(((SELECT COUNT(*) FROM NET_A_CERO.Usuarios)+ 1) AS NVARCHAR(10)),''))
     SET @usr_id = SCOPE_IDENTITY();
 END
 GO
 
 CREATE PROCEDURE NET_A_CERO.pr_crear_usuario_con_valores
-	@username nvarchar(50),
-	@password nvarchar(150),
-	@is_admin bit,
-	@usuario_id INT OUTPUT
+    @username nvarchar(50),
+    @password nvarchar(150),
+    @is_admin bit,
+    @usuario_id INT OUTPUT
 AS
 BEGIN
-	INSERT INTO NET_A_CERO.Usuarios 
-		(usr_usuario, usr_password, usr_admin) 
-	VALUES 
-		(@username, @password, @is_admin)
-	SET @usuario_id = SCOPE_IDENTITY();	
+    INSERT INTO NET_A_CERO.Usuarios 
+        (usr_usuario, usr_password, usr_admin) 
+    VALUES 
+        (@username, @password, @is_admin)
+    SET @usuario_id = SCOPE_IDENTITY(); 
 END
 GO
 
@@ -405,13 +409,14 @@ CREATE PROCEDURE NET_A_CERO.pr_crear_cliente
     @tipo_de_documento nvarchar(50),
     @fecha_nacimiento datetime,
     @fecha_alta datetime,
+    @cont_id int,
     @id int OUTPUT
 AS
 BEGIN
     INSERT INTO NET_A_CERO.Clientes 
-        (cli_nombre, cli_apellido, cli_dni, cli_tipo_dni, cli_fecha_nac, cli_fecha_alta) 
+        (cli_nombre, cli_apellido, cli_dni, cli_tipo_dni, cli_fecha_nac, cli_fecha_alta, cli_cont_id) 
     VALUES 
-        (@nombre, @apellido, @documento, @tipo_de_documento, @fecha_nacimiento, @fecha_alta);
+        (@nombre, @apellido, @documento, @tipo_de_documento, @fecha_nacimiento, @fecha_alta, @cont_id);
     SET @id = SCOPE_IDENTITY(); 
 END
 GO
@@ -423,13 +428,14 @@ CREATE PROCEDURE NET_A_CERO.pr_crear_empresa
     @nombre_contacto varchar(255),
     @rubro int,
     @fecha_alta datetime,
+    @cont_id int,
     @id int OUTPUT
 AS
 BEGIN
     INSERT INTO NET_A_CERO.Empresas 
-        (emp_razon_social, emp_ciudad, emp_cuit, emp_nombre_contacto, emp_rubro, emp_fecha_alta) 
+        (emp_razon_social, emp_ciudad, emp_cuit, emp_nombre_contacto, emp_rubro, emp_fecha_alta, emp_cont_id) 
     VALUES 
-        (@razon_social, @ciudad, @cuit, @nombre_contacto, @rubro, @fecha_alta)
+        (@razon_social, @ciudad, @cuit, @nombre_contacto, @rubro, @fecha_alta, @cont_id)
     SET @id = SCOPE_IDENTITY(); 
 END
 GO
@@ -451,6 +457,18 @@ BEGIN
     VALUES
         (@mail, @telefono, @calle, @numeroCalle, @piso, @depto, @localidad, @cod_postal);
     SET @id = SCOPE_IDENTITY();
+END
+GO
+
+CREATE PROCEDURE NET_A_CERO.pr_agregar_rol_a_usuario
+    @usuario_id int,
+    @rol_id int
+AS
+BEGIN
+    INSERT INTO NET_A_CERO.Usuarios_x_Rol
+        (rol_id, usr_id)
+    VALUES
+        (@rol_id, @usuario_id)
 END
 GO
 
@@ -480,8 +498,8 @@ AS
 BEGIN
     DECLARE @id NUMERIC(18,0)
     BEGIN
-		SELECT @id = cli_usr_id FROM NET_A_CERO.Clientes WHERE cli_dni = @dni
-	END
+        SELECT @id = cli_usr_id FROM NET_A_CERO.Clientes WHERE cli_dni = @dni
+    END
     RETURN @id
 END
 GO
@@ -534,8 +552,8 @@ AS
 BEGIN
     DECLARE @fact_id NUMERIC(18,0)
     BEGIN
-		SELECT @fact_id = fact_id FROM NET_A_CERO.Facturas WHERE fact_id = @cod
-	END
+        SELECT @fact_id = fact_id FROM NET_A_CERO.Facturas WHERE fact_id = @cod
+    END
     RETURN @fact_id
 END
 GO
@@ -559,24 +577,24 @@ GO
 --Inserto una descripcion corta para el rubro principal de la empresa
 
 INSERT INTO NET_A_CERO.Rubros(rubro_desc_larga)
-	VALUES('Electronica')
+    VALUES('Electronica')
 
 -- Inserto algunos rubros mas de ejemplo
 
 INSERT INTO NET_A_CERO.Rubros(rubro_desc_larga)
-	VALUES('Articulos de limpieza')
+    VALUES('Articulos de limpieza')
 
 INSERT INTO NET_A_CERO.Rubros(rubro_desc_larga)
-	VALUES('Utiles Escolares')
+    VALUES('Utiles Escolares')
 
 INSERT INTO NET_A_CERO.Rubros(rubro_desc_larga)
-	VALUES('Decoracion de interiores')
+    VALUES('Decoracion de interiores')
 
 INSERT INTO NET_A_CERO.Rubros(rubro_desc_larga)
-	VALUES('Materiales de construccion')
+    VALUES('Materiales de construccion')
 
 INSERT INTO NET_A_CERO.Rubros(rubro_desc_larga)
-	VALUES('Actividades de ocio')
+    VALUES('Actividades de ocio')
 
 
 /** Migracion de Contacto de empresas **/
@@ -584,7 +602,7 @@ INSERT INTO NET_A_CERO.Rubros(rubro_desc_larga)
 INSERT INTO NET_A_CERO.Contacto (cont_mail, cont_calle, cont_numero_calle, cont_piso, cont_depto, cont_codigo_postal)
            SELECT DISTINCT Publ_Empresa_Mail, Publ_Empresa_Dom_Calle, Publ_Empresa_Nro_Calle, Publ_Empresa_Piso, Publ_Empresa_Depto, Publ_Empresa_Cod_Postal
            FROM gd_esquema.Maestra
-		   WHERE Publ_Empresa_Dom_Calle IS NOT NULL
+           WHERE Publ_Empresa_Dom_Calle IS NOT NULL
 
 
 /** Migracion de Contacto de clientes que vendieron **/
@@ -601,27 +619,27 @@ INSERT INTO NET_A_CERO.Contacto (cont_mail, cont_calle, cont_numero_calle, cont_
            SELECT DISTINCT Cli_Mail, Cli_Dom_Calle, Cli_Nro_Calle, Cli_Piso, Cli_Depto, Cli_Cod_Postal
            FROM gd_esquema.Maestra
                   WHERE Cli_Dom_Calle IS NOT NULL
-				  AND NOT EXISTS (SELECT * FROM NET_A_CERO.Contacto c 
-											WHERE Cli_Dom_Calle = c.cont_calle 
-											AND Cli_Nro_Calle = c.cont_numero_calle 
-											AND Cli_Piso = c.cont_piso 
-											AND Cli_Depto = c.cont_depto 
-											AND Cli_Cod_Postal = c.cont_codigo_postal
-											AND Cli_Mail = c.cont_mail)
+                  AND NOT EXISTS (SELECT * FROM NET_A_CERO.Contacto c 
+                                            WHERE Cli_Dom_Calle = c.cont_calle 
+                                            AND Cli_Nro_Calle = c.cont_numero_calle 
+                                            AND Cli_Piso = c.cont_piso 
+                                            AND Cli_Depto = c.cont_depto 
+                                            AND Cli_Cod_Postal = c.cont_codigo_postal
+                                            AND Cli_Mail = c.cont_mail)
 
 
 /** Migracion de Empresas **/
 
 INSERT INTO NET_A_CERO.Empresas (emp_razon_social, emp_cuit, emp_fecha_alta, emp_rubro, emp_cont_id)
     SELECT DISTINCT Publ_Empresa_Razon_Social, Publ_Empresa_Cuit, Publ_Empresa_Fecha_Creacion,
-					(SELECT DISTINCT rubro_id FROM NET_A_CERO.Rubros WHERE rubro_desc_larga = 'Electronica'),
+                    (SELECT DISTINCT rubro_id FROM NET_A_CERO.Rubros WHERE rubro_desc_larga = 'Electronica'),
                     (SELECT DISTINCT cont_id FROM NET_A_CERO.Contacto c 
-											WHERE Publ_Empresa_Dom_Calle = c.cont_calle
-											AND Publ_Empresa_Nro_Calle = c.cont_numero_calle
-											AND Publ_Empresa_Piso = c.cont_piso
-											AND Publ_Empresa_Depto = c.cont_codigo_postal
-											AND Publ_Empresa_Cod_Postal = c.cont_codigo_postal
-											AND Publ_Empresa_Mail = c.cont_mail)
+                                            WHERE Publ_Empresa_Dom_Calle = c.cont_calle
+                                            AND Publ_Empresa_Nro_Calle = c.cont_numero_calle
+                                            AND Publ_Empresa_Piso = c.cont_piso
+                                            AND Publ_Empresa_Depto = c.cont_codigo_postal
+                                            AND Publ_Empresa_Cod_Postal = c.cont_codigo_postal
+                                            AND Publ_Empresa_Mail = c.cont_mail)
     FROM gd_esquema.Maestra     
         WHERE Publ_Empresa_Razon_Social IS NOT NULL
         AND Publ_Empresa_Cuit IS NOT NULL
@@ -652,13 +670,13 @@ END
 
 INSERT INTO NET_A_CERO.Clientes (cli_nombre, cli_apellido, cli_dni, cli_fecha_nac, cli_fecha_alta, cli_cont_id)
     SELECT DISTINCT Cli_Nombre, Cli_Apeliido, Cli_Dni, Cli_Fecha_Nac, GETDATE(),
-	(SELECT DISTINCT cont_id FROM NET_A_CERO.Contacto c 
-											WHERE Cli_Dom_Calle = c.cont_calle
-											AND Cli_Nro_Calle = c.cont_numero_calle
-											AND Cli_Piso = c.cont_piso
-											AND Cli_Depto = c.cont_codigo_postal
-											AND Cli_Cod_Postal = c.cont_codigo_postal
-											AND Cli_Mail = c.cont_mail)
+    (SELECT DISTINCT cont_id FROM NET_A_CERO.Contacto c 
+                                            WHERE Cli_Dom_Calle = c.cont_calle
+                                            AND Cli_Nro_Calle = c.cont_numero_calle
+                                            AND Cli_Piso = c.cont_piso
+                                            AND Cli_Depto = c.cont_codigo_postal
+                                            AND Cli_Cod_Postal = c.cont_codigo_postal
+                                            AND Cli_Mail = c.cont_mail)
     FROM gd_esquema.Maestra    
     WHERE Cli_Dni IS NOT NULL
 
@@ -667,13 +685,13 @@ INSERT INTO NET_A_CERO.Clientes (cli_nombre, cli_apellido, cli_dni, cli_fecha_na
 
 INSERT INTO NET_A_CERO.Clientes (cli_nombre, cli_apellido, cli_dni, cli_fecha_nac, cli_fecha_alta, cli_cont_id)
     SELECT DISTINCT Publ_Cli_Nombre, Publ_Cli_Apeliido, Publ_Cli_Dni, Publ_Cli_Fecha_Nac, GETDATE(),
-	(SELECT DISTINCT cont_id FROM NET_A_CERO.Contacto c 
-											WHERE Publ_Cli_Dom_Calle = c.cont_calle
-											AND Publ_Cli_Nro_Calle = c.cont_numero_calle
-											AND Publ_Cli_Piso = c.cont_piso
-											AND Publ_Cli_Depto = c.cont_codigo_postal
-											AND Publ_Cli_Cod_Postal = c.cont_codigo_postal
-											AND Publ_Cli_Mail = c.cont_mail) 
+    (SELECT DISTINCT cont_id FROM NET_A_CERO.Contacto c 
+                                            WHERE Publ_Cli_Dom_Calle = c.cont_calle
+                                            AND Publ_Cli_Nro_Calle = c.cont_numero_calle
+                                            AND Publ_Cli_Piso = c.cont_piso
+                                            AND Publ_Cli_Depto = c.cont_codigo_postal
+                                            AND Publ_Cli_Cod_Postal = c.cont_codigo_postal
+                                            AND Publ_Cli_Mail = c.cont_mail) 
     FROM gd_esquema.Maestra as m     
     WHERE Publ_Cli_Dni IS NOT NULL
     AND NOT EXISTS (SELECT * FROM NET_A_CERO.Clientes as c WHERE m.Publ_Cli_Dni = c.cli_dni)
@@ -789,16 +807,16 @@ GO
 /** Migracion de estado de publicacion **/
 
 INSERT INTO NET_A_CERO.Estado(estado_desc)
-	VALUES('Borrador')
+    VALUES('Borrador')
 
 INSERT INTO NET_A_CERO.Estado(estado_desc)
-	VALUES('Activa')
+    VALUES('Activa')
 
 INSERT INTO NET_A_CERO.Estado(estado_desc)
-	VALUES('Pausada')
+    VALUES('Pausada')
 
 INSERT INTO NET_A_CERO.Estado(estado_desc)
-	VALUES('Finalizada')
+    VALUES('Finalizada')
 
 
 
@@ -820,9 +838,9 @@ GO
 -- Finaliza todas las publicaciones con fecha de vencimiento anterior al dia de la entrega para el caso de las subastas
 
 UPDATE NET_A_CERO.Publicaciones 
-	SET publi_estado_id = (SELECT estado_id FROM NET_A_CERO.Estado WHERE estado_desc = 'Finalizada')
-	WHERE publi_fec_vencimiento <= '15/06/2016'
-	
+    SET publi_estado_id = (SELECT estado_id FROM NET_A_CERO.Estado WHERE estado_desc = 'Finalizada')
+    WHERE publi_fec_vencimiento <= '15/06/2016'
+    
 
 
 /** Migracion de rubros por publicaciones **/
@@ -890,4 +908,4 @@ DECLARE @id INT
 EXEC NET_A_CERO.pr_crear_usuario_con_valores 'admin', 'e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7', 1,  @id output   
 
 INSERT INTO NET_A_CERO.Usuarios_x_Rol (rol_id, usr_id)
-	VALUES(1, @id)
+    VALUES(1, @id)

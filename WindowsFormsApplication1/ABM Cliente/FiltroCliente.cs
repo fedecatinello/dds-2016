@@ -31,7 +31,6 @@ namespace MercadoEnvio.ABM_Cliente
 
         private void CargarTiposDeDocumento()//Chequear como hacer para que se sincronice con el de agregarCliente
         {          
-        
             comboBox_TipoDeDoc.Items.Add("DNI - Documento Nacional de Identidad");
             comboBox_TipoDeDoc.Items.Add("Pasaporte");
             comboBox_TipoDeDoc.Items.Add("LC - Libreta Civica");
@@ -40,7 +39,7 @@ namespace MercadoEnvio.ABM_Cliente
 
         private void OcultarColumnasQueNoDebenVerse()
         {
-            dataGridView_Cliente.Columns["id"].Visible = false;
+            dataGridView_Cliente.Columns["cli_id"].Visible = false;
         }
 
         private void CargarClientes()
@@ -85,7 +84,7 @@ namespace MercadoEnvio.ABM_Cliente
             if (textBox_Apellido.Text != "") filtro += "AND " + "cli.cli_apellido LIKE '" + textBox_Apellido.Text + "%'";
             if (textBox_Mail.Text != "") filtro += "AND " + "cont.cont_mail LIKE '" + textBox_Mail.Text + "%'";
             if (textBox_NumeroDeDoc.Text != "") filtro += "AND " + "cli.cli_dni LIKE '" + textBox_NumeroDeDoc.Text + "%'";
-            if (comboBox_TipoDeDoc.Text != "") filtro += "AND " + "cli.cli_tipo_dni LIKE '" + textBox_NumeroDeDoc.Text + "%'";
+            if (comboBox_TipoDeDoc.Text != "") filtro += "AND " + "cli.cli_tipo_dni LIKE '" + comboBox_TipoDeDoc.Text + "%'";
             return filtro;
         }
 
@@ -95,7 +94,7 @@ namespace MercadoEnvio.ABM_Cliente
             textBox_Apellido.Text = "";
             textBox_Mail.Text = "";
             textBox_NumeroDeDoc.Text = "";
-            comboBox_TipoDeDoc.SelectedIndex = 0;
+            comboBox_TipoDeDoc.SelectedIndex = -1;
             CargarClientes();
         }
 
@@ -111,15 +110,15 @@ namespace MercadoEnvio.ABM_Cliente
             // Controla que la celda que se clickeo fue la de modificar
             if (e.ColumnIndex == dataGridView_Cliente.Columns["Modificar"].Index && e.RowIndex >= 0)
             {
-                String idClienteAModificar = dataGridView_Cliente.Rows[e.RowIndex].Cells["id"].Value.ToString();
+                String idClienteAModificar = dataGridView_Cliente.Rows[e.RowIndex].Cells["cli_id"].Value.ToString();
                 new EditarCliente(idClienteAModificar).ShowDialog();
                 CargarClientes();
                 return;
             }
             if (e.ColumnIndex == dataGridView_Cliente.Columns["Eliminar"].Index && e.RowIndex >= 0)
             {
-                String idClienteAEliminar = dataGridView_Cliente.Rows[e.RowIndex].Cells["id"].Value.ToString();
-                Boolean resultado = comunicador.Eliminar(Convert.ToDecimal(idClienteAEliminar), "Clientes");
+                String idClienteAEliminar = dataGridView_Cliente.Rows[e.RowIndex].Cells["cli_id"].Value.ToString();
+                Boolean resultado = comunicador.EliminarCliente(Convert.ToInt32(idClienteAEliminar), "Clientes");
                 if (resultado) MessageBox.Show("Se elimino correctamente");
                 CargarClientes();
                 return;

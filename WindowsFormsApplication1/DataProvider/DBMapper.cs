@@ -49,7 +49,7 @@ namespace MercadoEnvio
 
         public Boolean AsignarUsuarioACliente(Decimal idCliente, Decimal idUsuario)
         {
-            query = "UPDATE NET_A_CERO.Clientes SET usr_id = @idUsuario WHERE cli_id = @idCliente";
+            query = "UPDATE NET_A_CERO.Clientes SET cli_usr_id = @idUsuario WHERE cli_id = @idCliente";
             parametros.Clear();
             parametros.Add(new SqlParameter("@idUsuario", idUsuario));
             parametros.Add(new SqlParameter("@idCliente", idCliente));
@@ -60,7 +60,7 @@ namespace MercadoEnvio
         }
         public Boolean AsignarUsuarioAEmpresa(Decimal idEmpresa, Decimal idUsuario)
         {
-            query = "UPDATE NET_A_CERO.Empresas SET usr_id = @idUsuario WHERE emp_id = @idEmpresa";
+            query = "UPDATE NET_A_CERO.Empresas SET emp_usr_id = @idUsuario WHERE emp_id = @idEmpresa";
             parametros.Clear();
             parametros.Add(new SqlParameter("@idUsuario", idUsuario));
             parametros.Add(new SqlParameter("@idEmpresa", idEmpresa));
@@ -73,8 +73,8 @@ namespace MercadoEnvio
 
         public Boolean AsignarRolAUsuario(Decimal idUsuario, String rol)
         {
-            Decimal idRol = Convert.ToDecimal(this.SelectFromWhere("id", "Rol", "nombre", rol));
-            query = "NET_A_CERO.agregar_rol_a_usuario";
+            Decimal idRol = Convert.ToDecimal(this.SelectFromWhere("rol_id", "Roles", "rol_nombre", rol));
+            query = "NET_A_CERO.pr_agregar_rol_a_usuario";
             parametros.Clear();
             parametros.Add(new SqlParameter("@usuario_id", idUsuario));
             parametros.Add(new SqlParameter("@rol_id", idRol));
@@ -125,9 +125,19 @@ namespace MercadoEnvio
             return objeto;
         }
 
-        public Boolean Eliminar(Decimal id, String enDonde)
+       public Boolean Eliminar(Decimal id, String enDonde)
         {
             query = "UPDATE NET_A_CERO." + enDonde + " SET dado_de_baja = 1 WHERE id = @id";
+            parametros.Clear();
+            parametros.Add(new SqlParameter("@id", id));
+            int filasAfectadas = QueryBuilder.Instance.build(query, parametros).ExecuteNonQuery();
+            if (filasAfectadas == 1) return true;
+            return false;
+        }
+
+        public Boolean EliminarCliente(int id, String enDonde)
+        {
+            query = "UPDATE NET_A_CERO." + enDonde + " SET cli_activo = 0 WHERE cli_id = @id";
             parametros.Clear();
             parametros.Add(new SqlParameter("@id", id));
             int filasAfectadas = QueryBuilder.Instance.build(query, parametros).ExecuteNonQuery();
@@ -149,9 +159,6 @@ namespace MercadoEnvio
         {
             if (!pasoControlDeRegistroDeCuit(empresa.GetCuit()))
                 throw new CuitYaExisteException();
-
-            //if (!pasoControlDeUnicidad(empresa.GetTelefono(), "telefono", "Empresa"))
-            //    throw new TelefonoYaExisteException();
 
             if (!pasoControlDeRegistroDeRazonSocial(empresa.GetRazonSocial()))
                 throw new RazonSocialYaExisteException();
@@ -267,13 +274,10 @@ namespace MercadoEnvio
 
         public DataTable SelectClientesParaFiltroConFiltro(String filtro)
         {
-            //return this.SelectDataTable("c.cli_id, u.usr_usuario Username, c.cli_nombre Nombre, c.cli_apellido Apellido, c.cli_tipo_dni 'Tipo de Documento', c.cli_dni Documento, c.cli_fecha_nac 'Fecha de Nacimiento', d.cont_mail Mail, d.cont_telefono Telefono, d.cont_calle Calle, d.cont_numero_calle Numero, d.cont_piso Piso, d.cont_depto Departamento, d.cont_codigo_postal 'Codigo postal', d.cont_localidad Localidad"
-            //    , "NET_A_CERO.Clientes c, NET_A_CERO.Contacto d, NET_A_CERO.Usuarios u"
-            //    , "c.cli_usr_id = u.usr_id AND u.usr_id = d.cont_id AND dado_de_baja = 0 " + filtro);
-
-            return this.SelectDataTable("cli.cli_id, usr.usr_usuario Username, cli.cli_nombre Nombre, cli.cli_apellido Apellido, cli.cli_dni Documento, cli.cli_tipo_dni 'Tipo de Documento', cli.cli_fecha_nac 'Fecha de Nacimiento', cont.cont_mail Mail, cont.cont_telefono Telefono, cont.cont_calle Calle, cont.cont_numero_calle 'Numero Calle', cont.cont_piso Piso, cont.cont_depto Departamento, cont.cont_localidad Localidad, cont.cont_codigo_posta 'Codigo Postal' "
+            
+            return this.SelectDataTable("cli.cli_id, usr.usr_usuario Username, cli.cli_nombre Nombre, cli.cli_apellido Apellido, cli.cli_dni Documento, cli.cli_tipo_dni 'Tipo de Documento', cli.cli_fecha_nac 'Fecha de Nacimiento', cont.cont_mail Mail, cont.cont_telefono Telefono, cont.cont_calle Calle, cont.cont_numero_calle 'Numero Calle', cont.cont_piso Piso, cont.cont_depto Departamento, cont.cont_localidad Localidad, cont.cont_codigo_postal 'Codigo Postal' "
                 , "NET_A_CERO.Clientes cli, NET_A_CERO.Contacto cont, NET_A_CERO.Usuarios usr"
-                , "cli.cli_usr_id = usr.usr_id AND usr.usr_id = cont.cont_usr_id " + filtro);
+                , "cli.cli_usr_id = usr.usr_id AND cli.cli_cont_id = cont.cont_id  AND cli.cli_activo = 1" + filtro);
         }
 
         public DataTable SelectClientesParaFiltro()
@@ -283,12 +287,9 @@ namespace MercadoEnvio
 
         public DataTable SelectEmpresasParaFiltroConFiltro(String filtro)
         {
-            //return this.SelectDataTable("e.emp_id, u.usr_apellido Username, e.emp_razon_social 'Razon Social', e.emp_nombre_contacto 'Nombre de contacto', e.emp_cuit 'CUIT', e.emp_fecha_alta 'Fecha de creacion', d.cont_mail 'Mail', d.cont_telefono 'Telefono', d.cont_localidad Ciudad, d.cont_calle Calle, d.cont_numero_calle Numero, d.cont_piso Piso, d.cont_depto Departamento, d.cont_codigo_postal 'Codigo Postal', d.cont_localidad Localidad"
-            //     , "NET_A_CERO.Empresas e, NET_A_CERO.Contacto d, NET_A_CERO.Usuarios u"
-            //     , "e.emp_usr_id = u.usr_id AND u.usr_id = d.cont_id AND dado_de_baja = 0 " + filtro); //fijarse si esta bien
-            return this.SelectDataTable("emp.emp_id, usr.usr_usuario Username, emp.emp_razon_social 'Razon Social', emp.emp_ciudad Ciudad, emp.emp_cuit 'CUIT', emp.emp_nombre_contacto 'Nombre Contacto', emp.emp_rubro Rubro, emp.emp_fecha_alta 'Fecha Alta', cont.cont_mail Mail, cont.cont_telefono Telefono, cont.cont_calle Calle, cont.cont_numero_calle 'Numero Calle', cont.cont_piso Piso, cont.cont_depto Departamento, cont.cont_localidad Localidad, cont.cont_codigo_posta 'Codigo Postal' "
+              return this.SelectDataTable("emp.emp_id, usr.usr_usuario Username, emp.emp_razon_social 'Razon Social', emp.emp_ciudad Ciudad, emp.emp_cuit 'CUIT', emp.emp_nombre_contacto 'Nombre Contacto', emp.emp_rubro Rubro, emp.emp_fecha_alta 'Fecha Alta', cont.cont_mail Mail, cont.cont_telefono Telefono, cont.cont_calle Calle, cont.cont_numero_calle 'Numero Calle', cont.cont_piso Piso, cont.cont_depto Departamento, cont.cont_localidad Localidad, cont.cont_codigo_postal 'Codigo Postal' "
                 , "NET_A_CERO.Empresas emp, NET_A_CERO.Contacto cont, NET_A_CERO.Usuarios usr"
-                , "emp.emp_usr_id = usr.usr_id AND usr.usr_id = cont.cont_usr_id");
+                , "emp.emp_usr_id = usr.usr_id AND emp.emp_cont_id = cont.cont_id");
         }
 
         public DataTable SelectEmpresasParaFiltro()

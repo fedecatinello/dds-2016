@@ -68,8 +68,6 @@ namespace MercadoEnvio.ABM_Cliente
             String codigoPostal = textBox_CodigoPostal.Text;
             String localidad = textBox_Localidad.Text;
 
-           // Decimal idTipoDeDocumento = (Decimal) comunicador.SelectFromWhere("id", "TipoDeDocumento", "nombre", tipoDeDocumento);
-
             // Crea una contacto y se guarda su id
             Contacto contacto = new Contacto();
             try
@@ -113,7 +111,7 @@ namespace MercadoEnvio.ABM_Cliente
                 cliente.SetFechaDeAlta(DateConfig.getInstance().getCurrentDate());
                 cliente.SetIdUsuario(idUsuario);
                 cliente.SetIdContacto(idContacto);
-                usuario.Setis_admin(true);
+                //usuario.SetActivo(true);
 
 
                 idCliente = comunicador.CrearCliente(cliente);
@@ -164,7 +162,7 @@ namespace MercadoEnvio.ABM_Cliente
             }
              */
 
-            comunicador.AsignarRolAUsuario(this.idUsuario, "Clientes");
+            comunicador.AsignarRolAUsuario(this.idUsuario, "Cliente");
 
             VolverAlMenuPrincial();
         }
