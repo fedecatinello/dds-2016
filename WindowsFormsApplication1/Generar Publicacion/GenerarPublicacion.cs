@@ -40,7 +40,7 @@ namespace MercadoEnvio.Generar_Publicacion
             DataTable estados = new DataTable();
             estados.Columns.Add("estados");
             estados.Rows.Add("Borrador");
-            estados.Rows.Add("Publicada");
+            estados.Rows.Add("Activa");
             comboBox_Estado.DataSource = estados;
             comboBox_Estado.ValueMember = "estados";
         }
@@ -71,8 +71,8 @@ namespace MercadoEnvio.Generar_Publicacion
             String precio = textBox_Precio.Text;
             String tipoPublicacion = comboBox_TiposDePublicacion.Text;
 
-            Decimal idRubro = (Decimal)comunicador.SelectFromWhere("rubro_id", "Rubros", "rubro_desc_larga", rubro);
-            Decimal idEstado = (Decimal)comunicador.SelectFromWhere("estado_id", "Estado", "estado_desc", estado);
+            Decimal idRubro = Convert.ToDecimal(comunicador.SelectFromWhere("rubro_id", "Rubros", "rubro_desc_larga", rubro));
+            Decimal idEstado = Convert.ToDecimal(comunicador.SelectFromWhere("estado_id", "Estado", "estado_desc", estado));
             Decimal idVisibilidad = Convert.ToDecimal(comunicador.SelectFromWhere("visib_id", "Visibilidad", "visib_desc", visibilidadDescripcion));
             
             
@@ -86,17 +86,18 @@ namespace MercadoEnvio.Generar_Publicacion
             {
                 Publicacion publicacion = new Publicacion();
                 publicacion.SetTipo(tipoPublicacion);
-                publicacion.SetEstado(idEstado);
                 publicacion.SetDescripcion(descripcion);
-                publicacion.SetFechaDeInicio(fechaDeInicio);
-                publicacion.SetFechaDeVencimiento(fechaDeVencimiento);
                 publicacion.SetStock(stock);
+                publicacion.SetFechaDeVencimiento(fechaDeVencimiento);
+                publicacion.SetFechaDeInicio(fechaDeInicio);
                 publicacion.SetPrecio(precio);
-                publicacion.SetIdRubro(idRubro);
-                publicacion.SetIdVisibilidad(idVisibilidad);
-                publicacion.SetIdUsuario(UsuarioSesion.Usuario.id);
+                publicacion.SetCostoPagado(true);
                 publicacion.SetPregunta(pregunta);
-                publicacion.SetHabilitado(true);
+                publicacion.SetIdUsuario(UsuarioSesion.Usuario.id);
+                publicacion.SetIdVisibilidad(idVisibilidad);
+                publicacion.SetEstado(idEstado);
+                publicacion.SetIdRubro(idRubro);
+                //publicacion.SetHabilitado(true);
                 Decimal idPublicacion = comunicador.CrearPublicacion(publicacion);
                 if (idPublicacion > 0) MessageBox.Show("Se agrego la publicacion correctamente");
             }

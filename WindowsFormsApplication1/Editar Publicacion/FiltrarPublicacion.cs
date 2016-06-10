@@ -17,7 +17,7 @@ namespace MercadoEnvio.Editar_Publicacion
         public Object SelectedItem { get; set; }
         decimal idUsuarioActual = UsuarioSesion.Usuario.id;
         private DBMapper comunicador = new DBMapper();
-        
+   
         public FiltrarPublicacion()
         {
             InitializeComponent();
@@ -70,9 +70,9 @@ namespace MercadoEnvio.Editar_Publicacion
             SqlDataAdapter adapter = new SqlDataAdapter();
             parametros = new List<SqlParameter>();
             parametros.Clear();
-            parametros.Add(new SqlParameter("@usuario", 90/*idUsuarioActual*/));
+            parametros.Add(new SqlParameter("@usuario", idUsuarioActual));
             DataTable busquedaTemporal = new DataTable();
-            String filtro = "and publicaciones.publi_usr_id != @usuario";
+            String filtro = " and publicaciones.publi_usr_id != @usuario ";
 
             if (textBoxDescripcion.Text != "")
             {
@@ -83,7 +83,14 @@ namespace MercadoEnvio.Editar_Publicacion
             {
                 String idRubro1 = Convert.ToString(comunicador.SelectFromWhere("rubro_id", "Rubros", "rubro_desc_larga", comboBoxRubro1.Text));
                 parametros.Add(new SqlParameter("@idRubro1", idRubro1));
-                filtro += " and ( rxp.rubro_id = @idRubro1 ";
+                if (comboBoxRubro2.Text != "")
+                {
+                    filtro += " and ( rxp.rubro_id = @idRubro1 ";
+                }
+                else
+                {
+                    filtro += " and rxp.rubro_id = @idRubro1 ";
+                }
             }
 
             if (comboBoxRubro2.Text != "")
@@ -100,10 +107,7 @@ namespace MercadoEnvio.Editar_Publicacion
                 }
 
             }
-            else
-            {
-                filtro += ") ";
-            }
+          
 
             MessageBox.Show("Falta completar campo: " + filtro);
             //String filtro = CalcularFiltro();

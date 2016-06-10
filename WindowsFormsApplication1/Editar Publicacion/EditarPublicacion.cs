@@ -49,7 +49,7 @@ namespace MercadoEnvio.Editar_Publicacion
             estadoInicial = (String)mapper.SelectFromWhere("estado_desc", "Estado", "estado_id", idEstadoInicial);
 
             if (estadoInicial == "Borrador") CargarSegunBorrador(estados);
-            if (estadoInicial == "Publicada") CargarSegunPublicada(estados);
+            if (estadoInicial == "Activa") CargarSegunPublicada(estados);
             if (estadoInicial == "Pausada") CargarSegunPausada(estados);
             if (estadoInicial == "Finalizada") CargarSegunFinalizada(estados);
 
@@ -60,12 +60,12 @@ namespace MercadoEnvio.Editar_Publicacion
         private void CargarSegunBorrador(DataTable estados)
         {
             estados.Rows.Add("Borrador");
-            estados.Rows.Add("Publicada");
+            estados.Rows.Add("Activa");
         }
 
         private void CargarSegunPublicada(DataTable estados)
         {
-            estados.Rows.Add("Publicada");
+            estados.Rows.Add("Activa");
             estados.Rows.Add("Pausada");
             estados.Rows.Add("Finalizada");
             DesactivarCamposDeCaracteristicasComunes();
@@ -76,7 +76,7 @@ namespace MercadoEnvio.Editar_Publicacion
 
         private void CargarSegunPausada(DataTable estados)
         {
-            estados.Rows.Add("Publicada");
+            estados.Rows.Add("Activa");
             estados.Rows.Add("Pausada");
             estados.Rows.Add("Finalizada");
             DesactivarCamposDeCaracteristicasComunes();
@@ -114,7 +114,7 @@ namespace MercadoEnvio.Editar_Publicacion
         private void CargarVisibilidades()
         {
             comboBox_Visibilidad.DataSource = mapper.SelectDataTable("visib_desc", "NET_A_CERO.Visibilidad");
-            comboBox_Visibilidad.ValueMember = "_visib_desc";
+            comboBox_Visibilidad.ValueMember = "visib_desc";
         }
 
         private void CargarDatos()
@@ -171,15 +171,18 @@ namespace MercadoEnvio.Editar_Publicacion
             {
                 Publicacion publicacion = new Publicacion();
                 publicacion.SetTipo(tipoPublicacion);
-                publicacion.SetEstado(idEstado);
                 publicacion.SetDescripcion(descripcion);
-                publicacion.SetFechaDeInicio(fechaDeInicio);
-                publicacion.SetFechaDeVencimiento(fechaDeVencimiento);
-                publicacion.SetPregunta(pregunta);
                 publicacion.SetStock(stock);
+                publicacion.SetFechaDeVencimiento(fechaDeVencimiento);
+                publicacion.SetFechaDeInicio(fechaDeInicio);
                 publicacion.SetPrecio(precio);
-                publicacion.SetIdRubro(idRubro);
+                publicacion.SetCostoPagado(true);
+                publicacion.SetPregunta(pregunta);
+                
                 publicacion.SetIdVisibilidad(idVisibilidad);
+                publicacion.SetEstado(idEstado);
+                publicacion.SetIdRubro(idRubro);
+                
                 //---------------VER ESTO---------------------------/
                 //publicacion.SetHabilitado(habilitado);
                 Boolean pudoModificar = mapper.Modificar(idPublicacion, publicacion);

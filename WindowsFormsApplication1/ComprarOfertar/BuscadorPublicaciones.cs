@@ -34,7 +34,13 @@ namespace MercadoEnvio.Comprar_Ofertar
                 
         private void BuscardorPublicaciones_Load(object sender, EventArgs e)
         {            
-            CargarRubros();            
+            CargarRubros();
+            OcultarColumnasQueNoDebenVerse();
+        }
+
+        private void OcultarColumnasQueNoDebenVerse()
+        {
+            dataGridViewBuscadorPubli.Columns["visib_precio"].Visible = false;
         }
 
         private void CargarRubros()
@@ -92,11 +98,11 @@ namespace MercadoEnvio.Comprar_Ofertar
             }
           
 
-            String query = "SELECT DISTINCT(publicaciones.publi_id) ,visibilidad.visib_precio,publicaciones.publi_descripcion Descripcion , " +
+            String query = "SELECT DISTINCT(publicaciones.publi_id) ,visibilidad.visib_precio, publicaciones.publi_descripcion Descripcion , " +
                     "(CASE WHEN (publicaciones.publi_tipo = 'Subasta' AND (SELECT COUNT(*) FROM NET_A_CERO.VistaOfertaMaxima vista WHERE vista.vista_publi_id = publicaciones.publi_id) = 1)" +
                         "THEN (SELECT vista.vista_precioMax FROM NET_A_CERO.VistaOfertaMaxima vista WHERE vista.vista_publi_id = publicaciones.publi_id) " +
-                            "ELSE publicaciones.publi_precio END) precio, " +
-                        "publicaciones.publi_tipo " +
+                            "ELSE publicaciones.publi_precio END) Precio, " +
+                        "publicaciones.publi_tipo 'Tipo Publicacion' " +
                     "FROM NET_A_CERO.Publicaciones publicaciones, NET_A_CERO.Visibilidad visibilidad, NET_A_CERO.Rubro_x_Publicacion rxp " +
                     "WHERE publicaciones.publi_visib_id = visibilidad.visib_id AND (publicaciones.publi_estado_id = (SELECT estado_id FROM NET_A_CERO.Estado WHERE estado_desc='Finalizada') " +
                             "or publicaciones.publi_estado_id = (SELECT estado_id FROM NET_A_CERO.Estado WHERE estado_desc='Pausada')) " +
@@ -128,10 +134,11 @@ namespace MercadoEnvio.Comprar_Ofertar
                     fin = totalPublicaciones;
                 }
                 calcularPaginas();
-                dataGridView1.DataSource = paginarDataGridView(ini, fin);
-                dataGridView1.Columns[0].Visible = false;
+                dataGridViewBuscadorPubli.DataSource = paginarDataGridView(ini, fin);
+                dataGridViewBuscadorPubli.Columns[0].Visible = false;
                 mostrarNrosPaginas(ini);
             }
+            OcultarColumnasQueNoDebenVerse();
             AgregarBotonVerPublicacion();
         }
 
@@ -201,7 +208,7 @@ namespace MercadoEnvio.Comprar_Ofertar
             {
                 ini = 0;
                 fin = 9;
-                dataGridView1.DataSource = paginarDataGridView(ini, fin);
+                dataGridViewBuscadorPubli.DataSource = paginarDataGridView(ini, fin);
                 mostrarNrosPaginas(ini);
             }
         }
@@ -220,7 +227,7 @@ namespace MercadoEnvio.Comprar_Ofertar
                     fin = ini + 9;
                 }
 
-                dataGridView1.DataSource = paginarDataGridView(ini, fin);
+                dataGridViewBuscadorPubli.DataSource = paginarDataGridView(ini, fin);
                 mostrarNrosPaginas(ini);
             }
         }
@@ -259,7 +266,7 @@ namespace MercadoEnvio.Comprar_Ofertar
                 {
                     fin = totalPublicaciones;
                 }                
-                dataGridView1.DataSource = paginarDataGridView(ini, fin);
+                dataGridViewBuscadorPubli.DataSource = paginarDataGridView(ini, fin);
                 mostrarNrosPaginas(ini);
             }
         }
@@ -271,15 +278,15 @@ namespace MercadoEnvio.Comprar_Ofertar
             {
                 ini = (totalPaginas - 1) * publicacionesPorPagina;
                 fin = totalPublicaciones;
-                dataGridView1.DataSource = paginarDataGridView(ini, fin);
+                dataGridViewBuscadorPubli.DataSource = paginarDataGridView(ini, fin);
                 mostrarNrosPaginas(ini);
             }
         }
 
         private void AgregarBotonVerPublicacion()
         {
-            if (dataGridView1.Columns.Contains("Ver Publicacion"))
-                dataGridView1.Columns.Remove("Ver Publicacion");
+            if (dataGridViewBuscadorPubli.Columns.Contains("Ver Publicacion"))
+                dataGridViewBuscadorPubli.Columns.Remove("Ver Publicacion");
             DataGridViewButtonColumn buttons = new DataGridViewButtonColumn();
             {
                 buttons.HeaderText = "Ver Publicacion";
@@ -290,20 +297,20 @@ namespace MercadoEnvio.Comprar_Ofertar
                     DataGridViewAutoSizeColumnMode.AllCells;
                 buttons.FlatStyle = FlatStyle.Standard;
                 buttons.CellTemplate.Style.BackColor = Color.Honeydew;
-                dataGridView1.CellClick +=
+                dataGridViewBuscadorPubli.CellClick +=
                     new DataGridViewCellEventHandler(dataGridView1_CellClick);
             }
 
-            dataGridView1.Columns.Add(buttons);
+            dataGridViewBuscadorPubli.Columns.Add(buttons);
 
 
         }        
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.ColumnIndex == dataGridView1.Columns["Ver Publicacion"].Index)
+            if (e.ColumnIndex == dataGridViewBuscadorPubli.Columns["Ver Publicacion"].Index)
             {
-                int idPublicacionElegida = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells["id"].Value);
+                int idPublicacionElegida = Convert.ToInt32(dataGridViewBuscadorPubli.Rows[e.RowIndex].Cells["publi_id"].Value);
                 this.Hide();
                 new VerPublicacion(idPublicacionElegida).ShowDialog();
                 this.Close();
@@ -313,12 +320,13 @@ namespace MercadoEnvio.Comprar_Ofertar
         private void botonLimpiar_Click(object sender, EventArgs e)
         {
             textBoxDescripcion.Clear();
+            OcultarColumnasQueNoDebenVerse();
             comboBoxRubro1.SelectedIndex = -1;
             comboBoxRubro2.SelectedIndex = -1;
             labelNrosPagina.Text = "";
-            dataGridView1.DataSource = null;
-            if (dataGridView1.Columns.Contains("Ver Publicacion"))
-                dataGridView1.Columns.Remove("Ver Publicacion");
+            dataGridViewBuscadorPubli.DataSource = null;
+            if (dataGridViewBuscadorPubli.Columns.Contains("Ver Publicacion"))
+                dataGridViewBuscadorPubli.Columns.Remove("Ver Publicacion");
         }
 
         private void botonVolver_Click(object sender, EventArgs e)

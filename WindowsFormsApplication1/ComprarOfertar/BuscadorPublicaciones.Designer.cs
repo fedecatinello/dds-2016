@@ -28,7 +28,7 @@ namespace MercadoEnvio.Comprar_Ofertar
         /// </summary>
         private void InitializeComponent()
         {
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dataGridViewBuscadorPubli = new System.Windows.Forms.DataGridView();
             this.botonLimpiar = new System.Windows.Forms.Button();
             this.botonBuscar = new System.Windows.Forms.Button();
             this.botonPrimeraPagina = new System.Windows.Forms.Button();
@@ -43,18 +43,18 @@ namespace MercadoEnvio.Comprar_Ofertar
             this.botonVolver = new System.Windows.Forms.Button();
             this.comboBoxRubro2 = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBuscadorPubli)).BeginInit();
             this.SuspendLayout();
             // 
-            // dataGridView1
+            // dataGridViewBuscadorPubli
             // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(17, 134);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(444, 278);
-            this.dataGridView1.TabIndex = 0;
+            this.dataGridViewBuscadorPubli.AllowUserToAddRows = false;
+            this.dataGridViewBuscadorPubli.AllowUserToDeleteRows = false;
+            this.dataGridViewBuscadorPubli.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewBuscadorPubli.Location = new System.Drawing.Point(17, 134);
+            this.dataGridViewBuscadorPubli.Name = "dataGridViewBuscadorPubli";
+            this.dataGridViewBuscadorPubli.Size = new System.Drawing.Size(444, 278);
+            this.dataGridViewBuscadorPubli.TabIndex = 0;
             // 
             // botonLimpiar
             // 
@@ -203,11 +203,11 @@ namespace MercadoEnvio.Comprar_Ofertar
             this.Controls.Add(this.botonPrimeraPagina);
             this.Controls.Add(this.botonBuscar);
             this.Controls.Add(this.botonLimpiar);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.dataGridViewBuscadorPubli);
             this.Name = "BuscadorPublicaciones";
             this.Text = "BuscardorPublicaciones";
             this.Load += new System.EventHandler(this.BuscardorPublicaciones_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBuscadorPubli)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -215,7 +215,7 @@ namespace MercadoEnvio.Comprar_Ofertar
 
         #endregion
 
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dataGridViewBuscadorPubli;
         private System.Windows.Forms.Button botonLimpiar;
         private System.Windows.Forms.Button botonBuscar;
         private System.Windows.Forms.Button botonPrimeraPagina;

@@ -301,6 +301,10 @@ ALTER TABLE [NET_A_CERO].[Preguntas] ADD CONSTRAINT pregunta_publicacion FOREIGN
 
 /** VALIDACION DE FUNCIONES, PROCEDURES Y VISTAS**/
 
+IF OBJECT_ID('NET_A_CERO.pr_crear_publicacion') IS NOT NULL
+	DROP PROCEDURE NET_A_CERO.pr_crear_publicacion
+GO
+
 IF (OBJECT_ID('NET_A_CERO.pr_crear_usuario') IS NOT NULL)
     DROP PROCEDURE NET_A_CERO.pr_crear_usuario
 GO
@@ -362,6 +366,35 @@ GO
 
 
 /** CREACION DE FUNCIONES Y PROCEDURES **/
+CREATE PROCEDURE NET_A_CERO.pr_crear_publicacion
+	@publi_tipo nvarchar(255),
+	@publi_descripcion nvarchar(255),
+	@publi_stock NUMERIC(18,0),
+	@publi_fec_vencimiento DATETIME,
+	@publi_fec_inicio DATETIME,
+	@publi_precio NUMERIC(18,2),
+	@publi_costo_pagado BIT,
+	@publi_preguntas BIT,
+	@publi_usr_id INT,
+	@publi_visib_id numeric(18,0),
+	@publi_estado_id INT,
+	@rubro_id numeric(18,0),
+	@id numeric(18,0) OUTPUT
+	
+AS
+BEGIN
+	INSERT INTO NET_A_CERO.Publicaciones
+		(publi_tipo, publi_descripcion, publi_stock, publi_fec_vencimiento, publi_fec_inicio, publi_precio, publi_costo_pagado, publi_preguntas, publi_usr_id, publi_visib_id, publi_estado_id)
+	VALUES
+		(@publi_tipo, @publi_descripcion, @publi_stock, @publi_fec_vencimiento, @publi_fec_inicio, @publi_precio, @publi_costo_pagado, @publi_preguntas, @publi_usr_id, @publi_visib_id, @publi_estado_id);
+	SET @id = SCOPE_IDENTITY();
+
+	INSERT INTO NET_A_CERO.Rubro_x_Publicacion
+		(rubro_id, publi_id)
+	VALUES
+		(@rubro_id, SCOPE_IDENTITY())
+END
+GO
 
 CREATE PROCEDURE NET_A_CERO.pr_crear_usuario
     @usr_id int OUTPUT

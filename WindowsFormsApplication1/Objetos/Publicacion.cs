@@ -22,6 +22,7 @@ namespace MercadoEnvio.Objetos
         private String precio;
         private Boolean pregunta;
         private Boolean habilitado;
+        private Boolean costoPagado;
 
         public void SetId(Decimal id)
         {
@@ -31,6 +32,16 @@ namespace MercadoEnvio.Objetos
         public Decimal GetId()
         {
             return this.id;
+        }
+
+        public void SetCostoPagado(Boolean costoPagado)
+        {
+            this.costoPagado = costoPagado;
+        }
+
+        public Boolean GetCostoPagado()
+        {
+            return this.costoPagado;
         }
 
         public void SetTipo(String tipoDePublicacion)
@@ -178,12 +189,12 @@ namespace MercadoEnvio.Objetos
 
         string Comunicable.GetQueryCrear()
         {
-            return "NET_A_CERO.crear_publicacion";
+            return "NET_A_CERO.pr_crear_publicacion";
         }
 
         string Comunicable.GetQueryModificar()
         {
-            return "UPDATE NET_A_CERO.Publicaciones SET publi_tipo = @tipo_id, publi_estado_id = @estado_id, publi_descripcion = @descripcion, publi_fec_inicio = @fecha_inicio, publi_fec_vencimiento = @fecha_vencimiento, publi_rubro_id = @rubro_id, publi_visib_id = @visibilidad_id, publi_stock = @stock, publi_precio = @precio, publi_preguntas = @se_realizan_preguntas WHERE publi_id = @id";
+            return "UPDATE NET_A_CERO.Publicaciones SET publi_tipo = @tipo_id, publi_estado_id = @estado_id, publi_descripcion = @descripcion, publi_fec_inicio = @fecha_inicio, publi_fec_vencimiento = @fecha_vencimiento, publi_rubro_id = @rubro_id, publi_visib_id = @visibilidad_id, publi_stock = @stock, publi_precio = @precio, publi_costo_pagado = @costoPagado, publi_preguntas = @se_realizan_preguntas WHERE publi_id = @id";
         }
 
         string Comunicable.GetQueryObtener()
@@ -194,18 +205,19 @@ namespace MercadoEnvio.Objetos
         IList<System.Data.SqlClient.SqlParameter> Comunicable.GetParametros()
         {
             IList<SqlParameter> parametros = new List<SqlParameter>();
-            parametros.Add(new SqlParameter("@tipo_id", this.tipoDePublicacion));
-            parametros.Add(new SqlParameter("@estado_id", this.idEstado));
-            parametros.Add(new SqlParameter("@descripcion", this.descripcion));
-            parametros.Add(new SqlParameter("@fecha_inicio", this.fechaDeInicio));
-            parametros.Add(new SqlParameter("@fecha_vencimiento", this.fechaDeVencimiento));
-            parametros.Add(new SqlParameter("@stock", this.stock));
-            parametros.Add(new SqlParameter("@precio", this.precio));
+            parametros.Add(new SqlParameter("@publi_tipo", this.tipoDePublicacion));
+            parametros.Add(new SqlParameter("@publi_descripcion", this.descripcion));
+            parametros.Add(new SqlParameter("@publi_stock", this.stock));
+            parametros.Add(new SqlParameter("@publi_fec_vencimiento", this.fechaDeVencimiento));
+            parametros.Add(new SqlParameter("@publi_fec_inicio", this.fechaDeInicio));
+            parametros.Add(new SqlParameter("@publi_precio", this.precio));
+            parametros.Add(new SqlParameter("@publi_costo_pagado", this.costoPagado));
+            parametros.Add(new SqlParameter("@publi_preguntas", this.pregunta));
+            parametros.Add(new SqlParameter("@publi_usr_id", this.idUsuario));
+            parametros.Add(new SqlParameter("@publi_visib_id", this.idVisibilidad));
+            parametros.Add(new SqlParameter("@publi_estado_id", this.idEstado));
             parametros.Add(new SqlParameter("@rubro_id", this.idRubro));
-            parametros.Add(new SqlParameter("@visibilidad_id", this.idVisibilidad));
-            parametros.Add(new SqlParameter("@usuario_id", this.idUsuario));
-            parametros.Add(new SqlParameter("@se_realizan_preguntas", this.pregunta));
-            //parametros.Add(new SqlParameter("@habilitado", this.habilitado));
+            //parametros.Add(new SqlParameter("@publi_id", this.id));
             return parametros;
         }
 
@@ -218,6 +230,7 @@ namespace MercadoEnvio.Objetos
             this.fechaDeVencimiento = Convert.ToDateTime(reader["publi_fec_vencimiento"]);
             this.stock = Convert.ToString(reader["publi_stock"]);
             this.precio = Convert.ToString(reader["publi_precio"]);
+            this.costoPagado = Convert.ToBoolean(reader["publi_costo_pagado"]);
             this.idRubro = Convert.ToDecimal(reader["publi_rubro_id"]);
             this.idVisibilidad = Convert.ToDecimal(reader["publi_visib_id"]);
             this.idUsuario = Convert.ToDecimal(reader["publi_usr_id"]);
