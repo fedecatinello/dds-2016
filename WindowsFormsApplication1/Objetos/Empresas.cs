@@ -18,6 +18,7 @@ namespace MercadoEnvio.Objetos
         private String nombreDeContacto;
         private int rubro;
         private DateTime fechaDeCreacion;
+        private Boolean activo;
         private int idUsuario;
         private int idContacto;
 
@@ -114,6 +115,16 @@ namespace MercadoEnvio.Objetos
             return this.fechaDeCreacion;
         }
 
+        public void SetActivo(Boolean emp_activo)
+        {
+            this.activo = emp_activo;
+        }
+
+        public Boolean GetActivo()
+        {
+            return this.activo;
+        }
+
         public void SetIdUsuario(int idUsuario)
         {
             this.idUsuario = idUsuario;
@@ -166,7 +177,7 @@ namespace MercadoEnvio.Objetos
 
         string Comunicable.GetQueryModificar()
         {
-            return "UPDATE NET_A_CERO.Empresas SET emp_razon_social = @razon_social, emp_ciudad = @ciudad, emp_cuit = @cuit, emp_nombre_contacto = @nombre_contacto, emp_rubro = (SELECT rubro_id FROM NET_A_CERO.Rubros WHERE rubro_desc_larga = @rubro), emp_fecha_alta = @fecha_alta WHERE emp_id = @id";
+            return "UPDATE NET_A_CERO.Empresas SET emp_razon_social = @razon_social, emp_ciudad = @ciudad, emp_cuit = @cuit, emp_nombre_contacto = @nombre_contacto, emp_rubro = (SELECT rubro_id FROM NET_A_CERO.Rubros WHERE rubro_desc_larga = @rubro), emp_fecha_alta = @fecha_alta, emp_activo = @activo WHERE emp_id = @id";
         }
 
         public string GetQueryObtener()
@@ -183,6 +194,7 @@ namespace MercadoEnvio.Objetos
             parametros.Add(new SqlParameter("@nombre_contacto", this.nombreDeContacto));
             parametros.Add(new SqlParameter("@rubro", this.rubro));
             parametros.Add(new SqlParameter("@fecha_alta", this.fechaDeCreacion));
+            parametros.Add(new SqlParameter("@activo", this.activo));
             return parametros;
         }
 
@@ -194,6 +206,7 @@ namespace MercadoEnvio.Objetos
             this.nombreDeContacto = Convert.ToString(reader["emp_nombre_contacto"]);
             this.rubro = Convert.ToInt32(reader["emp_rubro"]);
             this.fechaDeCreacion = Convert.ToDateTime(reader["emp_fecha_alta"]);
+            this.activo = Convert.ToBoolean(reader["emp_activo"]);
             this.idUsuario = Convert.ToInt32(reader["emp_usr_id"]);
             this.idContacto = Convert.ToInt32(reader["emp_cont_id"]);
         }

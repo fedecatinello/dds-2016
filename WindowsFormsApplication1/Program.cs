@@ -16,8 +16,7 @@ namespace MercadoEnvio
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Editar_Publicacion.FiltrarPublicacion());
-            //Application.Run(new Comprar_Ofertar.BuscadorPublicaciones());
+            Application.Run(new Login.LoginForm());
         }
     }
 }

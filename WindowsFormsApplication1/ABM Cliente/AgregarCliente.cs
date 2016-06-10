@@ -16,13 +16,11 @@ namespace MercadoEnvio.ABM_Cliente
 
     public partial class AgregarCliente : Form
     {
-        private String query;
+
         private IList<SqlParameter> parametros = new List<SqlParameter>();
-        private SqlParameter parametroOutput;
-        private SqlCommand command;
         private String username;
         private String contrasena;
-        private DBMapper comunicador = new DBMapper();
+        private DBMapper mapper = new DBMapper();
         private int idContacto;
         private int idUsuario;
         private int idCliente;
@@ -94,7 +92,7 @@ namespace MercadoEnvio.ABM_Cliente
             // Controla que no se haya creado ya el contacto
             if (this.idContacto == 0)
             {
-                this.idContacto = comunicador.CrearContacto(contacto);
+                this.idContacto = mapper.CrearContacto(contacto);
             } 
 
             // Crear cliente
@@ -111,10 +109,10 @@ namespace MercadoEnvio.ABM_Cliente
                 cliente.SetFechaDeAlta(DateConfig.getInstance().getCurrentDate());
                 cliente.SetIdUsuario(idUsuario);
                 cliente.SetIdContacto(idContacto);
-                //usuario.SetActivo(true);
+                cliente.SetActivo(true);
 
 
-                idCliente = comunicador.CrearCliente(cliente);
+                idCliente = mapper.CrearCliente(cliente);
                 if (idCliente > 0) MessageBox.Show("Se agrego el cliente correctamente");
             }
             catch (CampoVacioException exception)
@@ -146,9 +144,9 @@ namespace MercadoEnvio.ABM_Cliente
             // Si el cliente lo crea el admin, crea un nuevo usuario predeterminado. Si lo crea un nuevo registro de usuario, usa el que viene por parametro
             if (idUsuario == 0)
             {
-                idUsuario = CrearUsuario();
-                idUsuario = comunicador.CrearUsuarioConValores(username, contrasena);
-                Boolean seCreoBien = comunicador.AsignarUsuarioACliente(idCliente, idUsuario);
+                idUsuario = mapper.CrearUsuario();
+                idUsuario = mapper.CrearUsuarioConValores(username, contrasena);
+                Boolean seCreoBien = mapper.AsignarUsuarioACliente(idCliente, idUsuario);
                 if (seCreoBien) MessageBox.Show("Se creo el usuario correctamente");
             }
 
@@ -162,120 +160,9 @@ namespace MercadoEnvio.ABM_Cliente
             }
              */
 
-            comunicador.AsignarRolAUsuario(this.idUsuario, "Cliente");
+            mapper.AsignarRolAUsuario(this.idUsuario, "Cliente");
 
             VolverAlMenuPrincial();
-        }
-
-        public Boolean AsignarRolAUsuario(Decimal idUsuario, String rol)
-        {
-            Decimal idRol = Convert.ToDecimal(this.SelectFromWhere("id", "Rol", "nombre", rol));
-            query = "NET_A_CERO.agregar_rol_a_usuario";
-            parametros.Clear();
-            parametros.Add(new SqlParameter("@usuario_id", idUsuario));
-            parametros.Add(new SqlParameter("@rol_id", idRol));
-            command = QueryBuilder.Instance.build(query, parametros);
-            command.CommandType = CommandType.StoredProcedure;
-            int filasAfectadas = command.ExecuteNonQuery();
-            if (filasAfectadas == 1) return true;
-            return false;
-        }
-
-        public Object SelectFromWhere(String que, String deDonde, String param1, String param2)
-        {
-            query = "SELECT " + que + " FROM NET_A_CERO." + deDonde + " WHERE " + param1 + " = @" + param1;
-            parametros.Clear();
-            parametros.Add(new SqlParameter("@" + param1, param2));
-            return QueryBuilder.Instance.build(query, parametros).ExecuteScalar();
-        }
-
-        public Boolean AsignarUsuarioACliente(Decimal idCliente, Decimal idUsuario)
-        {
-            query = "UPDATE NET_A_CERO.Clientes SET usr_id = @idUsuario WHERE cli_id = @idCliente";
-            parametros.Clear();
-            parametros.Add(new SqlParameter("@idUsuario", idUsuario));
-            parametros.Add(new SqlParameter("@idCliente", idCliente));
-            command = QueryBuilder.Instance.build(query, parametros);
-            int filasAfectadas = command.ExecuteNonQuery();
-            if (filasAfectadas == 1) return true;
-            return false;
-        }
-
-        public int CrearUsuarioConValores(String username, String password)
-        {
-            query = "NET_A_CERO.pr_crear_usuario_con_valores";
-            parametros.Clear();
-            parametroOutput = new SqlParameter("@usuario_id", SqlDbType.Int);
-            parametroOutput.Direction = ParameterDirection.Output;
-            parametros.Add(new SqlParameter("@username", username));
-            parametros.Add(new SqlParameter("@password", HashSha256.getHash(password)));
-            parametros.Add(new SqlParameter("@is_admin", "0"));
-            parametros.Add(parametroOutput);
-            command = QueryBuilder.Instance.build(query, parametros);
-            command.CommandType = CommandType.StoredProcedure;
-            command.ExecuteNonQuery();
-            return (int)parametroOutput.Value;
-        }
-
-        private int CrearUsuario()
-        {
-            /*
-             ------------- SOLO LOS ADMINISTRADORES PUEDEN CREAR USUARIOS-----------------
-            if (username == "clienteCreadoPorAdmin")
-            {
-                return comunicador.CrearUsuario();
-            }
-            else
-            {*/
-                return comunicador.CrearUsuarioConValores(username, contrasena);
-            //}
-        }
-       
-        private   int CrearContacto(Contacto contacto)
-        {
-            return this.Crear(contacto);
-        }
-
-        private int Crear(Comunicable objeto)
-        {
-            query = objeto.GetQueryCrear();
-            parametros.Clear();
-            parametros = objeto.GetParametros();
-            parametroOutput = new SqlParameter("@id", SqlDbType.Int);
-            parametroOutput.Direction = ParameterDirection.Output;
-            parametros.Add(parametroOutput);
-            command = QueryBuilder.Instance.build(query, parametros);
-            command.CommandType = CommandType.StoredProcedure;
-            command.ExecuteNonQuery();
-            return (int)parametroOutput.Value;
-        }
-
-        private int CrearCliente(Clientes cliente)
-        {
-
-            if (!pasoControlDeRegistro(cliente.GetTipoDeDocumento(), cliente.GetNumeroDeDocumento()))
-                throw new ClienteYaExisteException();
-
-            return this.Crear(cliente);
-
-        }
-        private bool pasoControlDeRegistro(String tipoDeDocumento, String numeroDeDocumento)
-        {
-            query = "SELECT COUNT(*) FROM NET_A_CERO.Clientes WHERE cli_tipo_dni = @tipoDeDocumento AND cli_dni = @numeroDeDocumento";
-            parametros.Clear();
-            parametros.Add(new SqlParameter("@tipoDeDocumento", tipoDeDocumento));
-            parametros.Add(new SqlParameter("@numeroDeDocumento", Convert.ToDecimal(numeroDeDocumento)));
-            return ControlDeUnicidad(query, parametros);
-        }
-
-        private bool ControlDeUnicidad(String query, IList<SqlParameter> parametros)
-        {
-            int cantidad = (int)QueryBuilder.Instance.build(query, parametros).ExecuteScalar();
-            if (cantidad > 0)
-            {
-                return false;
-            }
-            return true;
         }
 
         private void button_Limpiar_Click(object sender, EventArgs e)

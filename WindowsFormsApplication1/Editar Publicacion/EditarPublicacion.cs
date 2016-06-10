@@ -17,7 +17,7 @@ namespace MercadoEnvio.Editar_Publicacion
         private Decimal idPublicacion;
         private Decimal idEstadoInicial;
         private String estadoInicial;
-        private DBMapper comunicador = new DBMapper();
+        private DBMapper mapper = new DBMapper();
 
         public EditarPublicacion(String idPublicacion)
         {
@@ -45,8 +45,8 @@ namespace MercadoEnvio.Editar_Publicacion
             DataTable estados = new DataTable();
             estados.Columns.Add("estados");
 
-            idEstadoInicial = (Decimal) comunicador.SelectFromWhere("publi_estado_id", "Publicaciones", "publi_id", idPublicacion);
-            estadoInicial = (String)comunicador.SelectFromWhere("estado_desc", "Estado", "estado_id", idEstadoInicial);
+            idEstadoInicial = (Decimal) mapper.SelectFromWhere("publi_estado_id", "Publicaciones", "publi_id", idPublicacion);
+            estadoInicial = (String)mapper.SelectFromWhere("estado_desc", "Estado", "estado_id", idEstadoInicial);
 
             if (estadoInicial == "Borrador") CargarSegunBorrador(estados);
             if (estadoInicial == "Publicada") CargarSegunPublicada(estados);
@@ -107,27 +107,27 @@ namespace MercadoEnvio.Editar_Publicacion
 
         private void CargarRubros()
         {
-            comboBox_Rubro.DataSource = comunicador.SelectDataTable("rubro_desc_larga", "NET_A_CERO.Rubros");
+            comboBox_Rubro.DataSource = mapper.SelectDataTable("rubro_desc_larga", "NET_A_CERO.Rubros");
             comboBox_Rubro.ValueMember = "rubro_desc_larga";
         }
 
         private void CargarVisibilidades()
         {
-            comboBox_Visibilidad.DataSource = comunicador.SelectDataTable("visib_desc", "NET_A_CERO.Visibilidad");
+            comboBox_Visibilidad.DataSource = mapper.SelectDataTable("visib_desc", "NET_A_CERO.Visibilidad");
             comboBox_Visibilidad.ValueMember = "_visib_desc";
         }
 
         private void CargarDatos()
         {
-            Publicacion publicacion = comunicador.ObtenerPublicacion(idPublicacion);
+            Publicacion publicacion = mapper.ObtenerPublicacion(idPublicacion);
             textBox_Descripcion.Text = publicacion.GetDescripcion();
             textBox_Precio.Text = publicacion.GetPrecio();
             textBox_Stock.Text = publicacion.GetStock();
-            comboBox_Rubro.SelectedValue = (String) comunicador.SelectFromWhere("rubro_desc_larga", "Rubros", "rubro_id", publicacion.GetIdRubro());
-            comboBox_Visibilidad.SelectedValue = (String) comunicador.SelectFromWhere("visib_desc", "Visibilidad", "visib_id", publicacion.GetIdVisibilidad()); ;
-            comboBox_TiposDePublicacion.SelectedValue = (String)comunicador.SelectFromWhere("publi_tipo", "Publicaciones", "publi_id", idPublicacion);
-            comboBox_Estado.SelectedValue = (String) comunicador.SelectFromWhere("estado_desc", "Estado", "estado_id", publicacion.GetEstado());
-            checkBox_Pregunta.Checked = Convert.ToBoolean(comunicador.SelectFromWhere("publi_preguntas", "Publicaciones", "publi_id", idPublicacion));
+            comboBox_Rubro.SelectedValue = (String) mapper.SelectFromWhere("rubro_desc_larga", "Rubros", "rubro_id", publicacion.GetIdRubro());
+            comboBox_Visibilidad.SelectedValue = (String) mapper.SelectFromWhere("visib_desc", "Visibilidad", "visib_id", publicacion.GetIdVisibilidad()); ;
+            comboBox_TiposDePublicacion.SelectedValue = (String)mapper.SelectFromWhere("publi_tipo", "Publicaciones", "publi_id", idPublicacion);
+            comboBox_Estado.SelectedValue = (String) mapper.SelectFromWhere("estado_desc", "Estado", "estado_id", publicacion.GetEstado());
+            checkBox_Pregunta.Checked = Convert.ToBoolean(mapper.SelectFromWhere("publi_preguntas", "Publicaciones", "publi_id", idPublicacion));
             
             //---------------------------------------CHEQUEAR ESTO--------------------------------------------------------//
             //checkBox_Habilitado.Checked = Convert.ToBoolean(comunicador.SelectFromWhere("habilitado", "Publicacion", "id", idPublicacion));
@@ -138,15 +138,15 @@ namespace MercadoEnvio.Editar_Publicacion
             String tipoPublicacion = comboBox_TiposDePublicacion.Text;
             //Decimal idTipoDePublicacion = (Decimal)comunicador.SelectFromWhere("id", "TipoDePublicacion", "descripcion", tipo);
             String estado = comboBox_Estado.Text;
-            Decimal idEstado = (Decimal)comunicador.SelectFromWhere("id", "Estado", "descripcion", estado);
+            Decimal idEstado = (Decimal)mapper.SelectFromWhere("id", "Estado", "descripcion", estado);
             String descripcion = textBox_Descripcion.Text;
             String rubro = comboBox_Rubro.Text;
             String visibilidad = comboBox_Visibilidad.Text;
             Boolean pregunta = checkBox_Pregunta.Checked;
             String stock = textBox_Stock.Text;
             String precio = textBox_Precio.Text;
-            Decimal idRubro = (Decimal) comunicador.SelectFromWhere("rubro_id", "Rubros", "rubro_desc_larga", rubro);
-            Decimal idVisibilidad = (Decimal)comunicador.SelectFromWhere("visib_id", "Visibilidad", "visib_desc", visibilidad);
+            Decimal idRubro = (Decimal) mapper.SelectFromWhere("rubro_id", "Rubros", "rubro_desc_larga", rubro);
+            Decimal idVisibilidad = (Decimal)mapper.SelectFromWhere("visib_id", "Visibilidad", "visib_desc", visibilidad);
             //-------------------------CHEQUEAR DURACION-------------------------------------//
             //Double duracion = Convert.ToDouble(comunicador.SelectFromWhere("duracion", "Visibilidad", "id", idVisibilidad));
             Double duracion = 30;
@@ -162,8 +162,8 @@ namespace MercadoEnvio.Editar_Publicacion
             }
             else
             {
-                fechaDeInicio = Convert.ToDateTime(comunicador.SelectFromWhere("publi_fec_inicio", "Publicaciones", "publi_id", idPublicacion));
-                fechaDeVencimiento = Convert.ToDateTime(comunicador.SelectFromWhere("publi_fec_vencimiento", "Publicaciones", "publi_id", idPublicacion));
+                fechaDeInicio = Convert.ToDateTime(mapper.SelectFromWhere("publi_fec_inicio", "Publicaciones", "publi_id", idPublicacion));
+                fechaDeVencimiento = Convert.ToDateTime(mapper.SelectFromWhere("publi_fec_vencimiento", "Publicaciones", "publi_id", idPublicacion));
             }
 
             // Update Publicacion
@@ -182,7 +182,7 @@ namespace MercadoEnvio.Editar_Publicacion
                 publicacion.SetIdVisibilidad(idVisibilidad);
                 //---------------VER ESTO---------------------------/
                 //publicacion.SetHabilitado(habilitado);
-                Boolean pudoModificar = comunicador.Modificar(idPublicacion, publicacion);
+                Boolean pudoModificar = mapper.Modificar(idPublicacion, publicacion);
                 if (pudoModificar) MessageBox.Show("La publicacion se modifico correctamente");
             }
             catch (CampoVacioException exception)

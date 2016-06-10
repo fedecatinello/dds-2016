@@ -15,7 +15,7 @@ namespace MercadoEnvio.ABM_Visibilidad
     public partial class EditarVisibilidad : Form
     {
         private Decimal idVisibilidad;
-        private DBMapper comunicador = new DBMapper();
+        private DBMapper mapper = new DBMapper();
 
         public EditarVisibilidad(String idVisibilidad)
         {
@@ -30,12 +30,13 @@ namespace MercadoEnvio.ABM_Visibilidad
 
         private void CargarDatos()
         {
-            Visibilidad visibilidad = comunicador.ObtenerVisibilidad(idVisibilidad);
+            Visibilidad visibilidad = mapper.ObtenerVisibilidad(idVisibilidad);
             textBox_Descripcion.Text = visibilidad.GetDescripcion();
             textBox_PrecioPorPublicar.Text = visibilidad.GetPrecioPorPublicar();
             textBox_PorcentajePorVenta.Text = visibilidad.GetPorcentajePorVenta();
-            textBox_Duracion.Text = visibilidad.GetDuracion();
-            checkBox_Habilitado.Checked = Convert.ToBoolean(comunicador.SelectFromWhere("habilitado", "Visibilidad", "id", idVisibilidad));
+            //textBox_Duracion.Text = visibilidad.GetDuracion();
+            comboBox_Grado.Text = visibilidad.GetGrado();
+            checkBox_Habilitado.Checked = Convert.ToBoolean(mapper.SelectFromWhere("visib_activo", "Visibilidad", "visib_id", idVisibilidad));
         }
 
         private void button_Guardar_Click(object sender, EventArgs e)
@@ -43,7 +44,8 @@ namespace MercadoEnvio.ABM_Visibilidad
             String descripcion = textBox_Descripcion.Text;
             String precioPorPublicar = textBox_PrecioPorPublicar.Text;
             String porcentajePorVenta = textBox_PorcentajePorVenta.Text;
-            String duracion = textBox_Duracion.Text;
+            //String duracion = textBox_Duracion.Text;
+            String grado = comboBox_Grado.Text;
 
             // Update Visibilidad
             try
@@ -52,8 +54,9 @@ namespace MercadoEnvio.ABM_Visibilidad
                 visibilidad.SetDescripcion(descripcion);
                 visibilidad.SetPrecioPorPublicar(precioPorPublicar);
                 visibilidad.SetPorcentajePorVenta(porcentajePorVenta);
-                visibilidad.SetDuracion(duracion);
-                Boolean pudoModificar = comunicador.Modificar(idVisibilidad, visibilidad);
+                //visibilidad.SetDuracion(duracion);
+                visibilidad.SetGrado(grado);
+                Boolean pudoModificar = mapper.Modificar(idVisibilidad, visibilidad);
                 if (pudoModificar) MessageBox.Show("La visibilidad se modifico correctamente");
             }
             catch (CampoVacioException exception)

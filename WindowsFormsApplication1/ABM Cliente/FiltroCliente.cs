@@ -14,8 +14,7 @@ namespace MercadoEnvio.ABM_Cliente
 {
     public partial class FiltroCliente : Form
     {
-        //private ComunicadorConBaseDeDatos comunicador = new ComunicadorConBaseDeDatos();     TP ANTERIOR
-        private DBMapper comunicador = new DBMapper();
+        private DBMapper mapper = new DBMapper();
 
         public FiltroCliente()
         {
@@ -44,7 +43,7 @@ namespace MercadoEnvio.ABM_Cliente
 
         private void CargarClientes()
         {
-            dataGridView_Cliente.DataSource = comunicador.SelectClientesParaFiltro();
+            dataGridView_Cliente.DataSource = mapper.SelectClientesParaFiltro();
             CargarColumnaModificacion();
             CargarColumnaEliminar();
         }
@@ -74,7 +73,7 @@ namespace MercadoEnvio.ABM_Cliente
         private void button_Buscar_Click(object sender, EventArgs e)
         {
             String filtro = CalcularFiltro();
-            dataGridView_Cliente.DataSource = comunicador.SelectClientesParaFiltroConFiltro(filtro);
+            dataGridView_Cliente.DataSource = mapper.SelectClientesParaFiltroConFiltro(filtro);
         }
 
         private String CalcularFiltro()
@@ -118,7 +117,7 @@ namespace MercadoEnvio.ABM_Cliente
             if (e.ColumnIndex == dataGridView_Cliente.Columns["Eliminar"].Index && e.RowIndex >= 0)
             {
                 String idClienteAEliminar = dataGridView_Cliente.Rows[e.RowIndex].Cells["cli_id"].Value.ToString();
-                Boolean resultado = comunicador.EliminarCliente(Convert.ToInt32(idClienteAEliminar), "Clientes");
+                Boolean resultado = mapper.EliminarCliente(Convert.ToInt32(idClienteAEliminar), "Clientes");
                 if (resultado) MessageBox.Show("Se elimino correctamente");
                 CargarClientes();
                 return;

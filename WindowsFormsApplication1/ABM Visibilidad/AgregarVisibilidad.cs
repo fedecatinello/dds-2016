@@ -23,7 +23,7 @@ namespace MercadoEnvio.ABM_Visibilidad
 
         private void AgregarVisibilidad_Load(object sender, EventArgs e)
         {
-
+            CargarGradoVisibilidad();
         }
 
         private void button_Guardar_Click(object sender, EventArgs e)
@@ -31,6 +31,7 @@ namespace MercadoEnvio.ABM_Visibilidad
             String descripcion = textBox_Descripcion.Text;
             String precioPorPublicar = textBox_PrecioPorPublicar.Text;
             String porcentajePorVenta = textBox_PorcentajePorVenta.Text;
+            String grado = comboBox_Grado.Text;
             //String duracion = textBox_Duracion.Text;
 
             // Inserto la Visibilidad en la DB
@@ -40,6 +41,7 @@ namespace MercadoEnvio.ABM_Visibilidad
                 visibilidad.SetDescripcion(descripcion);
                 visibilidad.SetPrecioPorPublicar(precioPorPublicar);
                 visibilidad.SetPorcentajePorVenta(porcentajePorVenta);
+                visibilidad.SetGrado(grado);
                 //visibilidad.SetDuracion(duracion);
                 Decimal idVisibilidad = mapper.CrearVisibilidad(visibilidad);
                 if (idVisibilidad > 0) MessageBox.Show("La visibilidad fue creada");
@@ -70,7 +72,7 @@ namespace MercadoEnvio.ABM_Visibilidad
             textBox_Descripcion.Text = "";
             textBox_PorcentajePorVenta.Text = "";
             textBox_PrecioPorPublicar.Text = "";
-            textBox_Duracion.Text = "";
+            comboBox_Grado.SelectedIndex = -1;
         }
 
         private void button_Cancelar_Click(object sender, EventArgs e)
@@ -78,6 +80,14 @@ namespace MercadoEnvio.ABM_Visibilidad
             this.Hide();
             new MenuPrincipal().ShowDialog();
             this.Close();
+        }
+
+        public void CargarGradoVisibilidad()
+        {
+            comboBox_Grado.Items.Add("Comisión por tipo de publicación");
+            comboBox_Grado.Items.Add("Comisión por producto vendido");
+            comboBox_Grado.Items.Add("Comisión por envío del producto");
+            comboBox_Grado.Items.Add("Comisión gratuita");
         }
     }
 }

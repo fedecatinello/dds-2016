@@ -13,7 +13,7 @@ namespace MercadoEnvio.ABM_Visibilidad
 {
     public partial class FiltroVisibilidad : Form
     {
-        private DBMapper comunicador = new DBMapper();
+        private DBMapper mapper = new DBMapper();
 
         public FiltroVisibilidad()
         {
@@ -28,12 +28,12 @@ namespace MercadoEnvio.ABM_Visibilidad
 
         private void OcultarColumnasQueNoDebenVerse()
         {
-            dataGridView_Visibilidad.Columns["id"].Visible = false;
+            dataGridView_Visibilidad.Columns["visib_id"].Visible = false;
         }
 
         private void CargarVisibilidad()
         {
-            dataGridView_Visibilidad.DataSource = comunicador.SelectVisibilidadesParaFiltro();
+            dataGridView_Visibilidad.DataSource = mapper.SelectVisibilidadesParaFiltro();
             CargarColumnaModificacion();
             CargarColumnaEliminar();
         }
@@ -63,13 +63,13 @@ namespace MercadoEnvio.ABM_Visibilidad
         private void button_Buscar_Click(object sender, EventArgs e)
         {
             String filtro = CalcularFiltro();
-            dataGridView_Visibilidad.DataSource = comunicador.SelectVisibilidadesParaFiltroConFiltro(filtro);
+            dataGridView_Visibilidad.DataSource = mapper.SelectVisibilidadesParaFiltroConFiltro(filtro);
         }
 
         private String CalcularFiltro()
         {
             String filtro = "";
-            if (textBox_Descripcion.Text != "") filtro += "descripcion like '" + textBox_Descripcion.Text + "%'";
+            if (textBox_Descripcion.Text != "") filtro += " AND visib_desc like '" + textBox_Descripcion.Text + "%'";
             return filtro;
         }
 
@@ -89,17 +89,17 @@ namespace MercadoEnvio.ABM_Visibilidad
         private void dataGridView_Visibilidad_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Controla que la celda que se clickeo fue la de modificar
-            if (e.ColumnIndex == dataGridView_Visibilidad.Columns["modificar"].Index && e.RowIndex >= 0)
+            if (e.ColumnIndex == dataGridView_Visibilidad.Columns["Modificar"].Index && e.RowIndex >= 0)
             {
-                String idVisibilidadAModificiar = dataGridView_Visibilidad.Rows[e.RowIndex].Cells["id"].Value.ToString();
+                String idVisibilidadAModificiar = dataGridView_Visibilidad.Rows[e.RowIndex].Cells["visib_id"].Value.ToString();
                 new EditarVisibilidad(idVisibilidadAModificiar).ShowDialog();
                 CargarVisibilidad();
                 return;
             }
             if (e.ColumnIndex == dataGridView_Visibilidad.Columns["Eliminar"].Index && e.RowIndex >= 0)
             {
-                String idVisibilidadAEliminar = dataGridView_Visibilidad.Rows[e.RowIndex].Cells["id"].Value.ToString();
-                Boolean resultado = comunicador.Eliminar(Convert.ToDecimal(idVisibilidadAEliminar), "Visibilidad");
+                String idVisibilidadAEliminar = dataGridView_Visibilidad.Rows[e.RowIndex].Cells["visib_id"].Value.ToString();
+                Boolean resultado = mapper.EliminarVisibilidad(Convert.ToDecimal(idVisibilidadAEliminar), "Visibilidad");
                 if (resultado) MessageBox.Show("Se elimino correctamente");
                 CargarVisibilidad();
                 return;

@@ -16,6 +16,7 @@ namespace MercadoEnvio.Objetos
         private String tipoDeDocumento;
         private DateTime fechaDeNacimiento;
         private DateTime fechaDeAlta;
+        private Boolean activo;
         private int idUsuario;
         private int idContacto;
 
@@ -125,6 +126,16 @@ namespace MercadoEnvio.Objetos
             return this.idContacto;
         }
 
+        public void SetActivo(Boolean cli_activo)
+        {
+            this.activo = cli_activo;
+        }
+
+        public Boolean GetActivo()
+        {
+            return this.activo;
+        }
+
 
         #region Miembros de Comunicable
 
@@ -135,7 +146,7 @@ namespace MercadoEnvio.Objetos
 
         string Comunicable.GetQueryModificar()
         {
-            return "UPDATE NET_A_CERO.Clientes SET cli_nombre = @nombre, cli_apellido = @apellido, cli_documento = @documento, cli_tipo_dni = @tipo_de_documento, cli_fecha_nac = @fecha_nacimiento, cli_fecha_alta = @fecha_alta WHERE cli_id = @id";
+            return "UPDATE NET_A_CERO.Clientes SET cli_nombre = @nombre, cli_apellido = @apellido, cli_documento = @documento, cli_tipo_dni = @tipo_de_documento, cli_fecha_nac = @fecha_nacimiento, cli_fecha_alta = @fecha_alta, cli_activo = @activo WHERE cli_id = @id";
         }
 
         string Comunicable.GetQueryObtener()
@@ -153,6 +164,7 @@ namespace MercadoEnvio.Objetos
             parametros.Add(new SqlParameter("@tipo_de_documento", this.tipoDeDocumento));
             parametros.Add(new SqlParameter("@fecha_nacimiento", this.fechaDeNacimiento));
             parametros.Add(new SqlParameter("@fecha_alta", this.fechaDeAlta));
+            parametros.Add(new SqlParameter("@activo", this.activo));
             parametros.Add(new SqlParameter("@cont_id", this.idContacto));
             return parametros;
         }
@@ -165,6 +177,7 @@ namespace MercadoEnvio.Objetos
             this.tipoDeDocumento = Convert.ToString(reader["cli_tipo_dni"]);
             this.fechaDeNacimiento = Convert.ToDateTime(reader["cli_fecha_nac"]);
             this.fechaDeAlta = Convert.ToDateTime(reader["cli_fecha_alta"]);
+            this.activo = Convert.ToBoolean(reader["cli_activo"]);
             this.idUsuario = Convert.ToInt32(reader["cli_usr_id"]);
             this.idContacto = Convert.ToInt32(reader["cli_cont_id"]);
         }

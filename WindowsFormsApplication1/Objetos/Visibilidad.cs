@@ -13,7 +13,10 @@ namespace MercadoEnvio.Objetos
         private String descripcion;
         private String precioPorPublicar;
         private String porcentajePorVenta;
-        private String duracion;
+        private String grado;
+        //private String duracion; No haria falta - Borrar si no hace falta
+        private Boolean activo;
+        private Boolean envios;
 
         public void SetId(Decimal id)
         {
@@ -69,7 +72,7 @@ namespace MercadoEnvio.Objetos
             return this.porcentajePorVenta;
         }
 
-        public void SetDuracion(String duracion)
+        /* public void SetDuracion(String duracion)
         {
             if (duracion == "")
                 throw new CampoVacioException("Duracion");
@@ -84,22 +87,55 @@ namespace MercadoEnvio.Objetos
         {
             return this.duracion;
         }
+         * */
+
+        public void SetGrado(String grado_visib)
+        {
+            if (grado_visib == "")
+                throw new CampoVacioException("Grado");
+            this.grado = grado_visib;
+        }
+
+        public String GetGrado()
+        {
+            return this.grado;
+        }
+
+        public void SetActivo(Boolean visib_activo)
+        {
+            this.activo = visib_activo;
+        }
+
+        public Boolean GetActivo()
+        {
+            return this.activo;
+        }
+
+        public void SetEnvios(Boolean visib_envios)
+        {
+            this.envios = visib_envios;
+        }
+
+        public Boolean GetEnvios()
+        {
+            return this.envios;
+        }
 
         #region Miembros de Comunicable
 
         string Comunicable.GetQueryCrear()
         {
-            return "LOS_SUPER_AMIGOS.crear_visibilidad";
+            return "NET_A_CERO.pr_crear_visibilidad";
         }
 
         string Comunicable.GetQueryModificar()
         {
-            return "UPDATE LOS_SUPER_AMIGOS.Visibilidad SET descripcion = @descripcion, precio = @precio, porcentaje = @porcentaje, duracion = @duracion WHERE id = @id";
+            return "UPDATE NET_A_CERO.Visibilidad SET visib_desc = @descripcion, visib_grado = @grado, visib_precio = @precio, visib_porcentaje = @porcentaje, visib_envios = @envios, visib_activo = @activo WHERE visib_id = @id";
         }
 
         string Comunicable.GetQueryObtener()
         {
-            return "SELECT * FROM LOS_SUPER_AMIGOS.Visibilidad WHERE id = @id";
+            return "SELECT * FROM NET_A_CERO.Visibilidad WHERE visib_id = @id";
         }
 
         IList<System.Data.SqlClient.SqlParameter> Comunicable.GetParametros()
@@ -107,17 +143,23 @@ namespace MercadoEnvio.Objetos
             IList<SqlParameter> parametros = new List<SqlParameter>();
             parametros.Add(new SqlParameter("@descripcion", this.descripcion));
             parametros.Add(new SqlParameter("@precio", Convert.ToDouble(this.precioPorPublicar)));
+            parametros.Add(new SqlParameter("@grado", this.grado));
             parametros.Add(new SqlParameter("@porcentaje", Convert.ToDouble(this.porcentajePorVenta)));
-            parametros.Add(new SqlParameter("@duracion", this.duracion));
+            parametros.Add(new SqlParameter("@envios", this.envios));
+            parametros.Add(new SqlParameter("@activo", this.activo));
+            //parametros.Add(new SqlParameter("@duracion", this.duracion));
             return parametros;
         }
 
         void Comunicable.CargarInformacion(SqlDataReader reader)
         {
-            this.descripcion = Convert.ToString(reader["descripcion"]);
-            this.precioPorPublicar = Convert.ToString(reader["precio"]);
-            this.porcentajePorVenta = Convert.ToString(reader["porcentaje"]);
-            this.duracion =  Convert.ToString(reader["duracion"]);
+            this.descripcion = Convert.ToString(reader["visib_desc"]);
+            this.precioPorPublicar = Convert.ToString(reader["visib_precio"]);
+            this.grado = Convert.ToString(reader["visib_grado"]);
+            this.porcentajePorVenta = Convert.ToString(reader["visib_porcentaje"]);
+            this.envios = Convert.ToBoolean(reader["visib_envios"]);
+            this.activo = Convert.ToBoolean(reader["visib_activo"]);
+            //this.duracion =  Convert.ToString(reader["duracion"]);
         }
 
         #endregion

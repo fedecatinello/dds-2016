@@ -149,8 +149,9 @@ CREATE TABLE [NET_A_CERO].[Visibilidad] (
     [visib_precio] [NUMERIC](18, 2) NOT NULL,
     [visib_porcentaje] [NUMERIC](18, 2) NOT NULL,
     [visib_envios] [bit] DEFAULT 1,
+	[visib_activo] [bit] DEFAULT 1,
     CONSTRAINT [descripcion_visibilidad] CHECK (visib_desc IN ('Oro', 'Plata', 'Bronce', 'Platino', 'Gratis')),
-    CONSTRAINT [grado_visibilidad] CHECK (visib_grado IN ('Comisión por tipo de publicación', 'Comisión por producto vendido', 'Comisión por envío del producto')) --Es necesario esto?
+    CONSTRAINT [grado_visibilidad] CHECK (visib_grado IN ('Comisión por tipo de publicación', 'Comisión por producto vendido', 'Comisión por envío del producto'))
 )
 
 CREATE TABLE [NET_A_CERO].[Funcionalidades] (
@@ -409,14 +410,15 @@ CREATE PROCEDURE NET_A_CERO.pr_crear_cliente
     @tipo_de_documento nvarchar(50),
     @fecha_nacimiento datetime,
     @fecha_alta datetime,
+	@activo bit,
     @cont_id int,
     @id int OUTPUT
 AS
 BEGIN
     INSERT INTO NET_A_CERO.Clientes 
-        (cli_nombre, cli_apellido, cli_dni, cli_tipo_dni, cli_fecha_nac, cli_fecha_alta, cli_cont_id) 
+        (cli_nombre, cli_apellido, cli_dni, cli_tipo_dni, cli_fecha_nac, cli_fecha_alta, cli_activo, cli_cont_id) 
     VALUES 
-        (@nombre, @apellido, @documento, @tipo_de_documento, @fecha_nacimiento, @fecha_alta, @cont_id);
+        (@nombre, @apellido, @documento, @tipo_de_documento, @fecha_nacimiento, @fecha_alta, @activo, @cont_id);
     SET @id = SCOPE_IDENTITY(); 
 END
 GO
@@ -428,14 +430,15 @@ CREATE PROCEDURE NET_A_CERO.pr_crear_empresa
     @nombre_contacto varchar(255),
     @rubro int,
     @fecha_alta datetime,
+	@activo bit,
     @cont_id int,
     @id int OUTPUT
 AS
 BEGIN
     INSERT INTO NET_A_CERO.Empresas 
-        (emp_razon_social, emp_ciudad, emp_cuit, emp_nombre_contacto, emp_rubro, emp_fecha_alta, emp_cont_id) 
+        (emp_razon_social, emp_ciudad, emp_cuit, emp_nombre_contacto, emp_rubro, emp_fecha_alta, emp_activo, emp_cont_id) 
     VALUES 
-        (@razon_social, @ciudad, @cuit, @nombre_contacto, @rubro, @fecha_alta, @cont_id)
+        (@razon_social, @ciudad, @cuit, @nombre_contacto, @rubro, @fecha_alta, @activo, @cont_id)
     SET @id = SCOPE_IDENTITY(); 
 END
 GO
@@ -478,13 +481,14 @@ CREATE PROCEDURE NET_A_CERO.pr_crear_visibilidad
     @precio numeric(18,2),
     @porcentaje numeric(18,2),
     @envios bit,
+	@activo bit,
     @id numeric(18,0) OUTPUT
 AS
 BEGIN
     INSERT INTO NET_A_CERO.Visibilidad
-        (visib_desc, visib_grado, visib_precio, visib_porcentaje, visib_envios)
+        (visib_desc, visib_grado, visib_precio, visib_porcentaje, visib_envios, visib_activo)
     VALUES
-        (@descripcion, @grado, @precio, @porcentaje, @envios);
+        (@descripcion, @grado, @precio, @porcentaje, @envios, @activo);
     SET @id = SCOPE_IDENTITY();
 END
 GO
@@ -752,9 +756,7 @@ INSERT INTO NET_A_CERO.Funcionalidades(func_nombre)
             ('Editar Visibilidad'),
             ('Listado Estadistico'),
             ('Ver Historial'),
-            ('Cambiar Contraseña'),
-            ('Agregar Rubro'),          --Ver que onda este
-            ('Editar Rubro')           --Ver que onda este
+            ('Cambiar Contraseña')
 
 -- Agrego al administrador todas las funcionalidades del sistema
 

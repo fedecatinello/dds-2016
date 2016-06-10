@@ -18,7 +18,7 @@ namespace MercadoEnvio.ABM_Cliente
         private int idCliente;
         private int idContacto = 0;
         //private int idUsuario;
-        private DBMapper comunicador = new DBMapper();
+        private DBMapper mapper = new DBMapper();
 
         public EditarCliente(String idCliente)
         {
@@ -42,8 +42,8 @@ namespace MercadoEnvio.ABM_Cliente
 
         private void CargarDatos()
         {
-            Clientes cliente = comunicador.ObtenerCliente(idCliente);
-            Contacto contacto = comunicador.ObtenerContacto(cliente.GetIdContacto());
+            Clientes cliente = mapper.ObtenerCliente(idCliente);
+            Contacto contacto = mapper.ObtenerContacto(cliente.GetIdContacto());
             //Usuarios usuario = comunicador.ObtenerUsuario(cliente.GetIdUsuario());
 
             //Me guardo el id contacto
@@ -63,7 +63,7 @@ namespace MercadoEnvio.ABM_Cliente
             textBox_Localidad.Text = contacto.GetLocalidad();
             textBox_CodigoPostal.Text = contacto.GetCodigoPostal();
 
-            checkBox_Habilitado.Checked = Convert.ToBoolean(comunicador.SelectFromWhere("usr_activo", "Usuarios", "usr_id", cliente.GetIdUsuario()));
+            checkBox_Habilitado.Checked = Convert.ToBoolean(mapper.SelectFromWhere("usr_activo", "Usuarios", "usr_id", cliente.GetIdUsuario()));
         }
 
         private void button_Guardar_Click(object sender, EventArgs e)
@@ -100,7 +100,7 @@ namespace MercadoEnvio.ABM_Cliente
                 contacto.SetDepartamento(departamento);
                 contacto.SetCodigoPostal(codigoPostal);
                 contacto.SetLocalidad(localidad);
-                comunicador.Modificar(idContacto, contacto);
+                mapper.Modificar(idContacto, contacto);
 
             }
             catch (CampoVacioException exception)
@@ -127,7 +127,7 @@ namespace MercadoEnvio.ABM_Cliente
                 cliente.SetFechaDeNacimiento(fechaDeNacimiento);
                 usuario.Setis_admin(activo);
 
-                pudoModificar = comunicador.Modificar(idCliente, cliente);
+                pudoModificar = mapper.Modificar(idCliente, cliente);
                 if (pudoModificar) MessageBox.Show("El cliente se modifico correctamente");
             }
             catch (CampoVacioException exception)

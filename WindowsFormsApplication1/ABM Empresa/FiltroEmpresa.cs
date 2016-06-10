@@ -12,7 +12,7 @@ namespace MercadoEnvio.ABM_Empresa
 {
     public partial class FiltroEmpresa : Form
     {
-        private DBMapper comunicador = new DBMapper();
+        private DBMapper mapper = new DBMapper();
 
         public FiltroEmpresa()
         {
@@ -27,12 +27,12 @@ namespace MercadoEnvio.ABM_Empresa
 
         private void OcultarColumnasQueNoDebenVerse()
         {
-            dataGridView_Empresa.Columns["id"].Visible = false;
+            dataGridView_Empresa.Columns["emp_id"].Visible = false;
         }
 
         private void CargarEmpresas()
         {
-            dataGridView_Empresa.DataSource = comunicador.SelectEmpresasParaFiltro();
+            dataGridView_Empresa.DataSource = mapper.SelectEmpresasParaFiltro();
             CargarColumnaModificacion();
             CargarColumnaEliminar();
         }
@@ -64,15 +64,15 @@ namespace MercadoEnvio.ABM_Empresa
         private void button_Buscar_Click(object sender, EventArgs e)
         {
             String filtro = CalcularFiltro();
-            dataGridView_Empresa.DataSource = comunicador.SelectEmpresasParaFiltroConFiltro(filtro);
+            dataGridView_Empresa.DataSource = mapper.SelectEmpresasParaFiltroConFiltro(filtro);
         }
 
         private String CalcularFiltro()
         {
             String filtro = "";
-            if (textBox_RazonSocial.Text != "") filtro += "AND " + "emp.empr_razon_social LIKE '" + textBox_RazonSocial.Text + "%'";
+            if (textBox_RazonSocial.Text != "") filtro += "AND " + "emp.emp_razon_social LIKE '" + textBox_RazonSocial.Text + "%'";
             if (textBox_Cuit.Text != "") filtro += "AND " + "emp.emp_cuit LIKE '" + textBox_Cuit.Text + "%'";
-            if (textBox_Mail.Text != "") filtro += "AND " + "emp.emp_mail LIKE '" + textBox_Mail.Text + "%'";
+            if (textBox_Mail.Text != "") filtro += "AND " + "cont.cont_mail LIKE '" + textBox_Mail.Text + "%'";
             return filtro;
         }
 
@@ -96,15 +96,15 @@ namespace MercadoEnvio.ABM_Empresa
             // Controla que la celda que se clickeo fue la de modificar
             if (e.ColumnIndex == dataGridView_Empresa.Columns["Modificar"].Index && e.RowIndex >= 0)
             {
-                String idEmpresaAModificar = dataGridView_Empresa.Rows[e.RowIndex].Cells["id"].Value.ToString();
+                String idEmpresaAModificar = dataGridView_Empresa.Rows[e.RowIndex].Cells["emp_id"].Value.ToString();
                 new EditarEmpresa(idEmpresaAModificar).ShowDialog();
                 CargarEmpresas();
                 return;
             }
             if (e.ColumnIndex == dataGridView_Empresa.Columns["Eliminar"].Index && e.RowIndex >= 0)
             {
-                String idEmpresaAEliminar = dataGridView_Empresa.Rows[e.RowIndex].Cells["id"].Value.ToString();
-                Boolean resultado = comunicador.Eliminar(Convert.ToDecimal(idEmpresaAEliminar), "Empresa");
+                String idEmpresaAEliminar = dataGridView_Empresa.Rows[e.RowIndex].Cells["emp_id"].Value.ToString();
+                Boolean resultado = mapper.EliminarEmpresa(Convert.ToInt32(idEmpresaAEliminar), "Empresas");
                 if (resultado) MessageBox.Show("Se elimino correctamente");
                 CargarEmpresas();
                 return;
