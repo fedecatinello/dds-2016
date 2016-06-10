@@ -299,7 +299,7 @@ ALTER TABLE [NET_A_CERO].[Preguntas] ADD CONSTRAINT pregunta_publicacion FOREIGN
 /** FIN CREACION DE TABLAS **/
 
 
-/** VALIDACION DE FUNCIONES Y PROCEDURES **/
+/** VALIDACION DE FUNCIONES, PROCEDURES Y VISTAS**/
 
 IF (OBJECT_ID('NET_A_CERO.pr_crear_usuario') IS NOT NULL)
     DROP PROCEDURE NET_A_CERO.pr_crear_usuario
@@ -349,8 +349,15 @@ IF (OBJECT_ID('NET_A_CERO.get_factura_cod') IS NOT NULL)
     DROP FUNCTION NET_A_CERO.get_factura_cod
 GO
 
+IF OBJECT_ID('NET_A_CERO.VistaOfertaMaxima') IS NOT NULL
+	DROP VIEW NET_A_CERO.VistaOfertaMaxima
+GO
 
-/** FIN VALIDACION DE FUNCIONES Y PROCEDURES **/
+IF OBJECT_ID('NET_A_CERO.VistaCantidadVendida') IS NOT NULL
+	DROP VIEW NET_A_CERO.VistaCantidadVendida
+GO
+
+/** FIN VALIDACION DE FUNCIONES, PROCEDURES Y VISTAS **/
 
 
 
@@ -903,6 +910,33 @@ INSERT INTO NET_A_CERO.Items(item_cantidad, item_monto, item_fact_id)
     FROM gd_esquema.Maestra 
     WHERE ISNULL(Factura_Nro,-1) != -1
 
+
+GO
+-- CREACION DE VISTAS
+
+CREATE VIEW NET_A_CERO.VistaOfertaMaxima
+(
+	vista_precioMax,
+	vista_publi_id
+)
+AS
+	SELECT MAX(o.sub_monto), o.sub_publi_id
+	FROM NET_A_CERO.Ofertas_x_Subasta o
+	GROUP BY o.sub_publi_id
+GO
+
+CREATE VIEW NET_A_CERO.VistaCantidadVendida
+(
+	vista_cant_vendida,
+	vista_publi_id
+)
+AS
+	SELECT SUM(c.comp_cantidad), c.comp_publi_id
+	FROM NET_A_CERO.Compras c
+	GROUP BY c.comp_publi_id
+GO
+
+-- FIN DE CREACION DE VISTAS
 
 /** Inserto usuario administrador para manejar la app (admin:w23e) **/
 

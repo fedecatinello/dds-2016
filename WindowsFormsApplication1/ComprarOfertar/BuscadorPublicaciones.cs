@@ -55,8 +55,8 @@ namespace MercadoEnvio.Comprar_Ofertar
             parametros.Clear();
             parametros.Add(new SqlParameter("@usuario", idUsuarioActual));
             DataTable busquedaTemporal = new DataTable();
-            String filtro = "and publicaciones.publi_usr_id != @usuario";            
-
+            String filtro = "and publicaciones.publi_usr_id != @usuario";
+           
             if (textBoxDescripcion.Text != "")
             {
                 filtro += " and publicaciones.publi_descripcion like '%" + textBoxDescripcion.Text + "%'";                
@@ -66,7 +66,14 @@ namespace MercadoEnvio.Comprar_Ofertar
             {
                 String idRubro1 = Convert.ToString(comunicador.SelectFromWhere("rubro_id", "Rubros", "rubro_desc_larga", comboBoxRubro1.Text));
                 parametros.Add(new SqlParameter("@idRubro1", idRubro1));
-                filtro += " and ( rxp.rubro_id = @idRubro1 ";                
+                if (comboBoxRubro2.Text != "")
+                {
+                    filtro += " and ( rxp.rubro_id = @idRubro1 ";
+                }
+                else
+                {
+                    filtro += " and rxp.rubro_id = @idRubro1 ";
+                }
             }
 
             if (comboBoxRubro2.Text != "")
@@ -83,47 +90,20 @@ namespace MercadoEnvio.Comprar_Ofertar
                 }
 
             }
-            else
-            {
-                filtro += ") ";
-            }
+          
 
-            String query = "SELECT DISTINCT(publicaciones.publi_id),visibilidad.visib_precio,publicaciones.publi_descripcion, " +
-                    "(CASE WHEN (publicaciones.publi_tipo = 'Subasta' AND (SELECT COUNT(*) FROM NET_A_CERO.VistaOfertaMax vista WHERE vista.vista_publi_id = publicaciones.publi_id) = 1)" +
-                        "THEN (SELECT vista.precioMax FROM NET_A_CERO.VistaOfertaMax vista WHERE vista.vista_publi_id = publicaciones.publi_id) " +
+            String query = "SELECT DISTINCT(publicaciones.publi_id) ,visibilidad.visib_precio,publicaciones.publi_descripcion Descripcion , " +
+                    "(CASE WHEN (publicaciones.publi_tipo = 'Subasta' AND (SELECT COUNT(*) FROM NET_A_CERO.VistaOfertaMaxima vista WHERE vista.vista_publi_id = publicaciones.publi_id) = 1)" +
+                        "THEN (SELECT vista.vista_precioMax FROM NET_A_CERO.VistaOfertaMaxima vista WHERE vista.vista_publi_id = publicaciones.publi_id) " +
                             "ELSE publicaciones.publi_precio END) precio, " +
                         "publicaciones.publi_tipo " +
                     "FROM NET_A_CERO.Publicaciones publicaciones, NET_A_CERO.Visibilidad visibilidad, NET_A_CERO.Rubro_x_Publicacion rxp " +
                     "WHERE publicaciones.publi_visib_id = visibilidad.visib_id AND (publicaciones.publi_estado_id = (SELECT estado_id FROM NET_A_CERO.Estado WHERE estado_desc='Finalizada') " +
                             "or publicaciones.publi_estado_id = (SELECT estado_id FROM NET_A_CERO.Estado WHERE estado_desc='Pausada')) " +
                               " and publicaciones.publi_id = rxp.publi_id "
-                                      + filtro + "ORDER BY visibilidad.visib_precio DESC";
+                                      + filtro + " ORDER BY visibilidad.visib_precio DESC";
             
             
-            /* query vieja
-            String query = "SELECT publicaciones.publi_id, " +
-                                  "publicaciones.publi_descripcion, "+
-                                "(CASE WHEN (publicaciones.publi_tipo = 'Subasta' AND (SELECT COUNT (*) from NET_A_CERO.Ofertas_x_Subasta OXS WHERE OXS.sub_publi_id = publicaciones.publi_id) = 1) " +
-                                        "THEN(SELECT sub_monto FROM NET_A_CERO.Ofertas_x_Subasta OXS WHERE OXS.sub_publi_id = publicaciones.publi_id)" +
-                                    "ELSE publicaciones.publi_precio " +
-                                        "END), " +
-                            "publicaciones.publi_tipo " +
-                         "FROM NET_A_CERO.Publicaciones publicaciones, NET_A_CERO.Visibilidad visibilidad, NET_A_CERO.Rubro_x_Publicacion rxp " +
-                         "WHERE publicaciones.publi_visib_id = visibilidad.visib_id AND (publicaciones.publi_estado_id = (SELECT estado_id FROM NET_A_CERO.Estado WHERE estado_desc='Activa')or publicaciones.publi_estado_id = (SELECT estado_id FROM NET_A_CERO.Estado WHERE estado_desc = 'Pausada'))"
-                + filtro + "ORDER BY visibilidad.visib_precio DESC";
-
-            
-            String query = "SELECT publicacion.id, " + 
-                                  "publicacion.descripcion, " +
-                                 "(CASE WHEN (tipo.descripcion = 'Subasta' AND (SELECT COUNT(*) FROM LOS_SUPER_AMIGOS.VistaOfertaMax vista WHERE vista.publicacion_id = publicacion.id) = 1) " + 
-                                             "THEN (SELECT vista.precioMax FROM LOS_SUPER_AMIGOS.VistaOfertaMax vista WHERE vista.publicacion_id = publicacion.id) " + 
-                                        "ELSE publicacion.precio " + 
-                                  "END), " + 
-                                 "tipo.descripcion " + 
-                           "FROM LOS_SUPER_AMIGOS.Publicacion publicacion, LOS_SUPER_AMIGOS.Visibilidad visibilidad, LOS_SUPER_AMIGOS.TipoDePublicacion tipo " + 
-                           "WHERE publicacion.tipo_id = tipo.id AND publicacion.visibilidad_id = visibilidad.id AND (publicacion.estado_id = (SELECT id FROM LOS_SUPER_AMIGOS.Estado WHERE descripcion = 'Publicada') or publicacion.estado_id = (SELECT id FROM LOS_SUPER_AMIGOS.Estado WHERE descripcion = 'Pausada')) " 
-                           + filtro + " ORDER BY visibilidad.precio DESC";
-            */
             command = QueryBuilder.Instance.build(query, parametros);
             adapter.SelectCommand = command;            
             adapter.Fill(busquedaTemporal);
