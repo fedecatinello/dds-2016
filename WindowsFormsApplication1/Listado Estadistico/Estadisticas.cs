@@ -72,12 +72,12 @@ namespace MercadoEnvio.Listado_Estadistico
             {
                 progressBar.Visible = true;
                 progressBar.Value = 50;
-                String borrar = "IF OBJECT_ID('LOS_SUPER_AMIGOS.usuarios_por_visibilidad', 'U') IS NOT NULL"
-                            + " DROP TABLE LOS_SUPER_AMIGOS.usuarios_por_visibilidad";
+                String borrar = "IF OBJECT_ID('NET_A_CERO.usuarios_por_visibilidad', 'U') IS NOT NULL"
+                            + " DROP TABLE NET_A_CERO.usuarios_por_visibilidad";
                 parametros.Clear();
                 QueryBuilder.Instance.build(borrar, parametros).ExecuteNonQuery();
 
-                String crearTabla = "CREATE TABLE LOS_SUPER_AMIGOS.usuarios_por_visibilidad"
+                String crearTabla = "CREATE TABLE NET_A_CERO.usuarios_por_visibilidad"
                                     + " (mes int,"
                                     + " visibilidad nvarchar(255),"
                                     + "	usuario nvarchar(50),"
@@ -86,18 +86,18 @@ namespace MercadoEnvio.Listado_Estadistico
                 parametros.Clear();
                 QueryBuilder.Instance.build(crearTabla, parametros).ExecuteNonQuery();
                 progressBar.Value = 500;
-                String llenarTabla = "DECLARE mi_cursor CURSOR FOR"
-                                + " SELECT DATEPART(month, fecha) Mes, visibilidad.descripcion "
-                                + " FROM (VALUES(@fechaini), (@fechamed), (@fechafin)) as F(fecha), LOS_SUPER_AMIGOS.Visibilidad visibilidad"
-                                + " ORDER BY Mes, visibilidad.id"
+                String fillTable = "DECLARE mi_cursor CURSOR FOR"
+                                + " SELECT DATEPART(month, fecha) Mes, visibilidad.visib_desc "
+                                + " FROM (VALUES(@fechaini), (@fechamed), (@fechafin)) as F(fecha), NET_A_CERO.Visibilidad visibilidad"
+                                + " ORDER BY Mes, visibilidad.visib_id"
                                 + " DECLARE @mes int, @visibilidad nvarchar(255)"
                                 + " OPEN mi_cursor"
                                 + " FETCH FROM mi_cursor INTO @mes, @visibilidad"
                                 + " WHILE  @@FETCH_STATUS = 0"
                                 + " BEGIN"
-                                + " INSERT INTO LOS_SUPER_AMIGOS.usuarios_por_visibilidad ([mes], [visibilidad], [usuario], [cantidad])"
-                                + " SELECT TOP 5 @mes, @visibilidad, usuario.username, LOS_SUPER_AMIGOS.calcular_productos_no_vendidos(usuario.id, (@visibilidad), (@fechaini), (@fechafin)) Cantidad"
-                                + " FROM LOS_SUPER_AMIGOS.Usuario usuario"
+                                + " INSERT INTO NET_A_CERO.usuarios_por_visibilidad ([mes], [visibilidad], [usuario], [cantidad])"
+                                + " SELECT TOP 5 @mes, @visibilidad, usuario.usr_usuario, NET_A_CERO.calcular_productos_no_vendidos(usuario.usr_id, (@visibilidad), (@fechaini), (@fechafin)) Cantidad"
+                                + " FROM NET_A_CERO.Usuario usuario"
                                 + " ORDER BY Cantidad DESC"
                                 + " FETCH FROM mi_cursor INTO @mes, @visibilidad"
                                 + " END"
@@ -107,12 +107,12 @@ namespace MercadoEnvio.Listado_Estadistico
                 parametros.Add(new SqlParameter("@fechaini", Convert.ToDateTime(fechaDeInicio)));
                 parametros.Add(new SqlParameter("@fechamed", Convert.ToDateTime(fechaMedia)));
                 parametros.Add(new SqlParameter("@fechafin", Convert.ToDateTime(fechaDeFin)));
-                command = QueryBuilder.Instance.build(llenarTabla, parametros);
+                command = QueryBuilder.Instance.build(fillTable, parametros);
                 command.CommandTimeout = 0;
                 command.ExecuteNonQuery();
                 progressBar.Value = 1000;
                 parametros.Clear();
-                command = QueryBuilder.Instance.build("SELECT  u.mes, u.visibilidad, u.usuario, u.cantidad  FROM LOS_SUPER_AMIGOS.usuarios_por_visibilidad u, LOS_SUPER_AMIGOS.Visibilidad visibilidad WHERE u.visibilidad = visibilidad.descripcion ORDER BY u.mes, visibilidad.precio DESC, u.cantidad DESC", parametros);
+                command = QueryBuilder.Instance.build("SELECT  u.mes, u.visibilidad, u.usuario, u.cantidad FROM NET_A_CERO.usuarios_por_visibilidad u, NET_A_CERO.Visibilidad visibilidad WHERE u.visibilidad = visibilidad.visib_desc ORDER BY u.mes, visibilidad.visib_precio DESC, u.cantidad DESC", parametros);
                 DataSet datos = new DataSet();
                 SqlDataAdapter adapter = new SqlDataAdapter();
                 adapter.SelectCommand = command;
@@ -146,7 +146,7 @@ namespace MercadoEnvio.Listado_Estadistico
                 case '4':
                     return "11";
             }
-            throw new Exception("No pudo obtener mes");
+            throw new Exception("No se pudo obtener el mes");
         }
 
         private String ObtenerFechaDeInicio(string anio, string trimestre)
@@ -161,15 +161,15 @@ namespace MercadoEnvio.Listado_Estadistico
             switch (trimestre[0])
             {
                 case '1':
-                    return "01";
+                    return "01"; //Enero
                 case '2':
-                    return "04";
+                    return "04"; //Abril
                 case '3':
-                    return "07";
+                    return "07"; //Julio
                 case '4':
-                    return "10";
+                    return "10"; //Octubre
             }
-            throw new Exception("No pudo obtener mes");
+            throw new Exception("No se pudo obtener el mes");
         }
 
         private String ObtenerFechaDeFin(string anio, string trimestre)
@@ -184,15 +184,15 @@ namespace MercadoEnvio.Listado_Estadistico
             switch (trimestre[0])
             {
                 case '1':
-                    return "03";
+                    return "03"; //Marzo
                 case '2':
-                    return "06";
+                    return "06"; //Junio
                 case '3':
-                    return "09";
+                    return "09"; //Septiembre
                 case '4':
-                    return "12";
+                    return "12"; //Diciembre
             }
-            throw new Exception("No pudo obtener mes");
+            throw new Exception("No se pudo obtener el mes");
         }
 
         private string GetQueryObtenerResultados(String tipoDeListado, String fechaDeInicio, String fechaMedia, String fechaDeFin)
@@ -200,13 +200,13 @@ namespace MercadoEnvio.Listado_Estadistico
             switch (tipoDeListado)
             {
               //  case "Vendedores con mayor cantidad de productos no vendidos":
-               //     return "LOS_SUPER_AMIGOS.vendedores_con_mayor_cantidad_de_publicaciones_sin_vender('" + fechaDeInicio + "', '" + fechaMedia + "' , '" + fechaDeFin + "')";
+               //     return "NET_A_CERO.vendedores_con_mayor_cantidad_de_publicaciones_sin_vender('" + fechaDeInicio + "', '" + fechaMedia + "' , '" + fechaDeFin + "')";
                 case "Vendedores con mayor facturacion":
-                    return "LOS_SUPER_AMIGOS.vendedores_con_mayor_facturacion('" + fechaDeInicio + "', '" + fechaDeFin + "')";
+                    return "NET_A_CERO.vendedores_con_mayor_facturacion('" + fechaDeInicio + "', '" + fechaDeFin + "')";
                 case "Vendedores con mayores calificaciones":
-                    return "LOS_SUPER_AMIGOS.vendedores_con_mayor_calificacion('" + fechaDeInicio + "', '" + fechaDeFin + "')";
+                    return "NET_A_CERO.vendedores_con_mayor_calificacion('" + fechaDeInicio + "', '" + fechaDeFin + "')";
                 case "Clientes con mayor cantidad de publicaciones sin calificar":
-                    return "LOS_SUPER_AMIGOS.clientes_con_publicaciones_sin_calificar('" + fechaDeInicio + "', '" + fechaDeFin + "')";
+                    return "NET_A_CERO.clientes_con_publicaciones_sin_calificar('" + fechaDeInicio + "', '" + fechaDeFin + "')";
             }
             throw new Exception("No se pudo obtener la funcion");
         }
@@ -229,7 +229,7 @@ namespace MercadoEnvio.Listado_Estadistico
         private void textBox_Anio_TextChanged(object sender, EventArgs e)
         {
             String anio = textBox_Anio.Text;
-            if (esNumero(anio) && tieneCuatroNumeros(anio))
+            if (esNumero(anio) && longitudValida(anio))
             {
                 comboBox_Trimestre.Enabled = true;
                 return;
@@ -244,7 +244,7 @@ namespace MercadoEnvio.Listado_Estadistico
             return UInt32.TryParse(anio, out num);  
         }
 
-        private Boolean tieneCuatroNumeros(String anio)
+        private Boolean longitudValida(String anio)
         {
             return anio.Length == 4;
         }
