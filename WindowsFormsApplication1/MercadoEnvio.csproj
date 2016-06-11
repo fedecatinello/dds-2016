@@ -111,36 +111,6 @@
     <Compile Include="ABM Rol\RolForm.Designer.cs">
       <DependentUpon>RolForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ABM Rubro\AgregarRubro.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ABM Rubro\AgregarRubro.Designer.cs">
-      <DependentUpon>AgregarRubro.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ABM Rubro\BajaRubro.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ABM Rubro\BajaRubro.Designer.cs">
-      <DependentUpon>BajaRubro.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ABM Rubro\EditarRubro.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ABM Rubro\EditarRubro.Designer.cs">
-      <DependentUpon>EditarRubro.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ABM Rubro\FiltroRubros.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ABM Rubro\FiltroRubros.Designer.cs">
-      <DependentUpon>FiltroRubros.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ABM Rubro\RubroForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ABM Rubro\RubroForm.Designer.cs">
-      <DependentUpon>RubroForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="ABM Visibilidad\AgregarVisibilidad.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -350,21 +320,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ABM Rol\RolForm.resx">
       <DependentUpon>RolForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ABM Rubro\AgregarRubro.resx">
-      <DependentUpon>AgregarRubro.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ABM Rubro\BajaRubro.resx">
-      <DependentUpon>BajaRubro.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ABM Rubro\EditarRubro.resx">
-      <DependentUpon>EditarRubro.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ABM Rubro\FiltroRubros.resx">
-      <DependentUpon>FiltroRubros.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ABM Rubro\RubroForm.resx">
-      <DependentUpon>RubroForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ABM Visibilidad\AgregarVisibilidad.resx">
       <DependentUpon>AgregarVisibilidad.cs</DependentUpon>
