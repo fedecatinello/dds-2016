@@ -24,6 +24,7 @@ namespace MercadoEnvio.Modelo
         private int idContacto;
 
         private IList<SqlParameter> parametros = new List<SqlParameter>();
+        private DBMapper mapper = new DBMapper();
         
 
         public void SetId(int id)
@@ -148,27 +149,12 @@ namespace MercadoEnvio.Modelo
 
         public string GetDescripcionRubroEmpresa()
         {
-            IList<SqlParameter> parametros = new List<SqlParameter>();
-            parametros.Add(new SqlParameter("@rubro", this.rubro));
-            string queryRubro = "SELECT * FROM NET_A_CERO.Rubros WHERE rubro_id = @rubro";
-
-            SqlDataReader reader = QueryHelper.Instance.exec(queryRubro, parametros);
-            return (string)reader["rubro_desc_larga"];
+            return Convert.ToString(mapper.SelectFromWhere("rubro_desc_larga", "Rubros", "rubro_id", this.rubro));
         }
 
         public void SetRubroEmpresa(string rubro)
         {
-            IList<SqlParameter> parametros = new List<SqlParameter>();
-            parametros.Add(new SqlParameter("@rubro_desc", rubro));
-
-            string queryRubro = "SELECT * FROM NET_A_CERO.Rubros WHERE rubro_desc_larga = '@rubro_desc'";
-
-            MessageBox.Show(rubro);
-
-            SqlDataReader reader = QueryBuilder.Instance.build(queryRubro, parametros).ExecuteReader();
-            this.rubro = Convert.ToInt32(reader["rubro_id"]);
-
-            //if(this.rubro == null) 
+            this.rubro = Convert.ToInt32(mapper.SelectFromWhere("rubro_id", "Rubros", "rubro_desc_larga", rubro));
         }
 
 
@@ -181,7 +167,7 @@ namespace MercadoEnvio.Modelo
 
         string Mapeable.GetQueryModificar()
         {
-            return "UPDATE NET_A_CERO.Empresas SET emp_razon_social = @razon_social, emp_ciudad = @ciudad, emp_cuit = @cuit, emp_nombre_contacto = @nombre_contacto, emp_rubro = (SELECT rubro_id FROM NET_A_CERO.Rubros WHERE rubro_desc_larga = @rubro), emp_fecha_alta = @fecha_alta, emp_activo = @activo WHERE emp_id = @id";
+            return "UPDATE NET_A_CERO.Empresas SET emp_razon_social = @razon_social, emp_ciudad = @ciudad, emp_cuit = @cuit, emp_nombre_contacto = @nombre_contacto, emp_rubro = @rubro, emp_fecha_alta = @fecha_alta, emp_activo = @activo WHERE emp_id = @id";
         }
 
         public string GetQueryObtener()
@@ -198,7 +184,8 @@ namespace MercadoEnvio.Modelo
             parametros.Add(new SqlParameter("@nombre_contacto", this.nombreDeContacto));
             parametros.Add(new SqlParameter("@rubro", this.rubro));
             parametros.Add(new SqlParameter("@fecha_alta", this.fechaDeCreacion));
-            parametros.Add(new SqlParameter("@activo", this.activo));
+            parametros.Add(new SqlParameter("@activo", true));
+            parametros.Add(new SqlParameter("@cont_id", this.idContacto));
             return parametros;
         }
 

@@ -82,7 +82,7 @@ namespace MercadoEnvio.ABM_Empresa
                 return;
             }
             
-            // Controla que no se haya creado ya la contacto
+            // Controla que no se haya creado ya el contacto
             if (this.idContacto == 0)
             {
                 this.idContacto = mapper.CrearContacto(contacto);

@@ -335,6 +335,14 @@ namespace MercadoEnvio
             return QueryBuilder.Instance.build(query, parametros).ExecuteScalar();
         }
 
+        public Object SelectFromWhere(String que, String deDonde, String param1, int param2)
+        {
+            query = "SELECT " + que + " FROM NET_A_CERO." + deDonde + " WHERE " + param1 + " = @" + param1;
+            parametros.Clear();
+            parametros.Add(new SqlParameter("@" + param1, param2));
+            return QueryBuilder.Instance.build(query, parametros).ExecuteScalar();
+        }
+
         public DataTable SelectDataTable(String que, String deDonde)
         {
             parametros.Clear();

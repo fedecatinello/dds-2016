@@ -46,10 +46,9 @@ namespace MercadoEnvio.ABM_Empresa
             botonColumnaModificar.Name = "Modificar";
             botonColumnaModificar.UseColumnTextForButtonValue = true;
             dataGridView_Empresa.Columns.Add(botonColumnaModificar);
-            dataGridView_Empresa.CellClick +=
-                new DataGridViewCellEventHandler(dataGridView_Empresa_CellClick);
+          
         }
-
+        
         private void CargarColumnaEliminar()
         {
             if (dataGridView_Empresa.Columns.Contains("Eliminar"))

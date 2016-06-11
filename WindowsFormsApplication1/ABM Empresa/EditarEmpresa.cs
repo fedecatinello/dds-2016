@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Data.SqlClient;
 using MercadoEnvio.Modelo;
 using MercadoEnvio.Exceptions;
+using MercadoEnvio.DataProvider;
 
 namespace MercadoEnvio.ABM_Empresa
 {
@@ -27,6 +28,7 @@ namespace MercadoEnvio.ABM_Empresa
 
         private void EditarEmpresa_Load(object sender, EventArgs e)
         {
+            CargarRubros();
             CargarDatos();
         }
 
@@ -34,7 +36,7 @@ namespace MercadoEnvio.ABM_Empresa
         {
             Empresas empresa = mapper.ObtenerEmpresa(idEmpresa);
             Contacto contacto = mapper.ObtenerContacto(empresa.GetIdContacto());
-            Usuarios usuario = mapper.ObtenerUsuario(empresa.GetIdUsuario());
+            //Usuarios usuario = mapper.ObtenerUsuario(empresa.GetIdUsuario());
 
             idContacto = empresa.GetIdContacto();
 
@@ -55,6 +57,22 @@ namespace MercadoEnvio.ABM_Empresa
             textBox_CodigoPostal.Text = contacto.GetCodigoPostal();
                               
             }
+
+        private void CargarRubros()
+        {
+            string query = "SELECT rubro_id, rubro_desc_larga from NET_A_CERO.Rubros";
+
+            SqlCommand cmd = new SqlCommand(query, ConnectionManager.Instance.getConnection());
+
+            SqlDataAdapter data_adapter = new SqlDataAdapter(cmd);
+            DataTable rubros = new DataTable();
+            data_adapter.Fill(rubros);
+
+            comboBox_Rubro.ValueMember = "rubro_id";
+            comboBox_Rubro.DisplayMember = "rubro_desc_larga";
+            comboBox_Rubro.DataSource = rubros;
+            comboBox_Rubro.SelectedIndex = -1;
+        }
 
         private void button_Guardar_Click(object sender, EventArgs e)
         {
