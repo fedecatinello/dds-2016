@@ -43,9 +43,9 @@ namespace MercadoEnvio.Historial_Cliente
         {
             String opcion = comboBox_opciones.Text;
 
-            if (opcion == "Compras") CargarInformacion("publicacion.descripcion Producto, compra.cantidad Cantidad, publicacion.precio Precio, compra.fecha Fecha, a_quien.username 'A quien'", "LOS_SUPER_AMIGOS.Compra compra, LOS_SUPER_AMIGOS.Publicacion publicacion, LOS_SUPER_AMIGOS.Usuario a_quien", "compra.publicacion_id = publicacion.id AND publicacion.usuario_id = a_quien.id AND compra.usuario_id = @idUsuario");
-            if (opcion == "Ofertas") CargarInformacion("user1.username 'De', user2.username 'A quien', oferta.monto 'Monto ofertado', oferta.fecha 'Cuando oferto', publicacion.descripcion 'Publicacion', LOS_SUPER_AMIGOS.gano_subasta(oferta.id) 'Gano la subasta'", "LOS_SUPER_AMIGOS.Oferta oferta, LOS_SUPER_AMIGOS.Publicacion publicacion, LOS_SUPER_AMIGOS.Usuario user1, LOS_SUPER_AMIGOS.Usuario user2", "oferta.publicacion_id = publicacion.id AND oferta.usuario_id = user1.id AND publicacion.usuario_id = user2.id AND (oferta.usuario_id = @idUsuario OR publicacion.usuario_id = @idUsuario)");
-            if (opcion == "Calificaciones") CargarInformacion("user1.username 'De', user2.username 'A quien', calificacion.cantidad_estrellas 'Estrellas', calificacion.descripcion 'Descripcion calificacion', publicacion.descripcion 'Publicacion', tipo.descripcion 'Tipo de publicacion', compra.fecha 'Cuando', compra.cantidad 'Cuantos productos', (compra.cantidad * publicacion.precio) 'Monto pagado'", "LOS_SUPER_AMIGOS.Compra compra, LOS_SUPER_AMIGOS.Calificacion calificacion, LOS_SUPER_AMIGOS.Publicacion publicacion, LOS_SUPER_AMIGOS.Usuario user1, LOS_SUPER_AMIGOS.Usuario user2, LOS_SUPER_AMIGOS.TipoDePublicacion tipo", "compra.calificacion_id = calificacion.id AND compra.usuario_id = user1.id AND publicacion.usuario_id = user2.id AND compra.publicacion_id = publicacion.id AND (publicacion.tipo_id = tipo.id) AND(compra.usuario_id = @idUsuario OR publicacion.usuario_id = @idUsuario)");
+            if (opcion == "Compras") CargarInformacion("publicaciones.publi_descripcion Producto, compras.comp_cantidad Cantidad, publicaciones.publi_precio Precio, compras.comp_fecha Fecha, a_quien.usr_usuario 'A quien'", "NET_A_CERO.Compras compras, NET_A_CERO.Publicaciones publicaciones, NET_A_CERO.Usuarios a_quien", "compras.comp_publi_id = publicaciones.publi_id AND publicaciones.publi_usr_id = a_quien.usr_id AND compras.comp_usr_id = @idUsuario");
+            if (opcion == "Ofertas") CargarInformacion("user1.usr_usuario 'De', user2.usr_usuario 'A quien', oferta.sub_monto 'Monto ofertado', oferta.sub_fecha 'Cuando oferto', publicacion.publi_descripcion 'Publicacion', oferta.sub_ganador 'Gano la subasta'", "NET_A_CERO.Ofertas_x_Subasta oferta, NET_A_CERO.Publicaciones publicacion, NET_A_CERO.Usuarios user1, NET_A_CERO.Usuarios user2", "oferta.sub_publi_id = publicacion.publi_id AND oferta.sub_usr_id = user1.usr_id AND publicacion.publi_usr_id = user2.usr_id AND (oferta.sub_usr_id = @idUsuario OR publicacion.publi_usr_id = @idUsuario)");
+            if (opcion == "Calificaciones") CargarInformacion("user1.usr_usuario 'De', user2.usr_usuario 'A quien', calificacion.calif_cant_estrellas 'Estrellas', calificacion.calif_desc 'Descripcion calificacion', publicacion.publi_descripcion 'Publicacion', publicacion.publi_tipo 'Tipo de publicacion', compra.comp_fecha 'Cuando', compra.comp_cantidad 'Cuantos productos', (compra.comp_cantidad * publicacion.publi_precio) 'Monto pagado'", "NET_A_CERO.Compras compra, NET_A_CERO.Calificacion calificacion, NET_A_CERO.Publicaciones publicacion, NET_A_CERO.Usuarios user1, NET_A_CERO.Usuarios user2", "compra.comp_calif_id = calificacion.calif_id AND compra.comp_usr_id = user1.usr_id AND publicacion.publi_usr_id = user2.usr_id AND compra.comp_publi_id = publicacion.publi_id AND(compra.comp_usr_id = @idUsuario OR publicacion.publi_usr_id = @idUsuario)");
         }
 
         public void CargarInformacion(String select, String from, String where)
@@ -60,7 +60,7 @@ namespace MercadoEnvio.Historial_Cliente
 
         private void button_Limpiar_Click(object sender, EventArgs e)
         {
-            comboBox_opciones.SelectedIndex = 0;
+            comboBox_opciones.SelectedIndex = -1;
             CargarDatos();
         }
 
