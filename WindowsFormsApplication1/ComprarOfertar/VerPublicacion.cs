@@ -47,18 +47,19 @@ namespace MercadoEnvio.Comprar_Ofertar
             
             SqlDataReader reader = QueryBuilder.Instance.build(query, parametros).ExecuteReader();
             reader.Read();
-            Decimal idEstado = (Decimal)reader["publi_estado_id"];
-            String estado = (String) comunicador.SelectFromWhere("estado_desc", "Estado", "estado_id", idEstado);
+            Decimal idEstado = Convert.ToInt32(reader["publi_estado_id"]);
+            String estado = Convert.ToString(comunicador.SelectFromWhere("estado_desc", "Estado", "estado_id", idEstado));
             if (estado == "Pausada")
             {
                 botonComprarOfertar.Enabled = false;
                 MessageBox.Show("La publicación se encuentra pausada y no se pueden realizar compras/ofertas");
             }
-            /*------------CHEQUEAR-----------------
-            labelProductoDatos.Text = (String)reader["descripcion"];
-            Decimal idTipoPublicacion = (Decimal)reader["tipo_id"];
-            tipoPublicacion = (String)comunicador.SelectFromWhere("descripcion", "TipoDePublicacion", "id", idTipoPublicacion);
-             */
+            
+
+            labelProductoDatos.Text = Convert.ToString(reader["publi_descripcion"]);
+            tipoPublicacion = Convert.ToString(reader["publi_tipo"]);
+            
+            
         }
 
         private void pedirVendedor()
@@ -70,20 +71,17 @@ namespace MercadoEnvio.Comprar_Ofertar
 
             SqlDataReader reader = QueryBuilder.Instance.build(query, parametros).ExecuteReader();
             reader.Read();
-            vendedorId = (Decimal)reader["usr_id"];
-            labelVendedorDatos.Text = (String)reader["usr_usuario"];            
+            vendedorId = Convert.ToInt32(reader["usr_id"]);
+            labelVendedorDatos.Text = Convert.ToString(reader["usr_usuario"]);            
         }
 
         private void pedirRubro()
         {
-            parametros.Clear();
-            parametros.Add(new SqlParameter("@id", publicacionId));
 
-            String query = "SELECT * FROM NET_A_CERO.Rubros WHERE rubro_id = (SELECT rubro_id FROM LOS_SUPER_AMIGOS.Publicaciones WHERE publi_id = @id)";
+            Decimal rubroId = Convert.ToInt32(comunicador.SelectFromWhere("rubro_id", "Rubro_x_Publicacion", "publi_id", publicacionId));
+            labelRubroDatos.Text = Convert.ToString(comunicador.SelectFromWhere("rubro_desc_larga", "Rubros", "rubro_id", rubroId));
 
-            SqlDataReader reader = QueryBuilder.Instance.build(query, parametros).ExecuteReader();
-            reader.Read();
-            labelRubroDatos.Text = (String)reader["rubro_desc_corta"];
+            
         }
 
         private void pedirVencimientoPreguntas()
@@ -95,7 +93,7 @@ namespace MercadoEnvio.Comprar_Ofertar
 
             SqlDataReader reader = QueryBuilder.Instance.build(query, parametros).ExecuteReader();
             reader.Read();
-            labelVencimientoDatos.Text = ( (DateTime)reader["publi_fec_vencimiento"] ).ToString();
+            labelVencimientoDatos.Text = ( Convert.ToDateTime(reader["publi_fec_vencimiento"] ).ToString());
             
             if ((int)reader["publi_preguntas"] == 0)
             {
@@ -105,31 +103,34 @@ namespace MercadoEnvio.Comprar_Ofertar
 
         private void pedirStock()
         {
+            labelStockDatos.Text = Convert.ToString(comunicador.SelectFromWhere("publi_stock", "Publicaciones", "publi_id", publicacionId));
+            
             parametros.Clear();
             parametros.Add(new SqlParameter("@id", publicacionId));
-
+            
+           
             if (tipoPublicacion == "Subasta")
             {
-                String querySubasta = "SELECT * FROM NET_A_CERO.Publicaciones WHERE publi_id = @id";
-                SqlDataReader readerSubasta = QueryBuilder.Instance.build(querySubasta, parametros).ExecuteReader();
-                readerSubasta.Read();
-                labelStockDatos.Text = ((Decimal)readerSubasta["publi_stock"]).ToString();
+                labelStockDatos.Text = Convert.ToString(comunicador.SelectFromWhere("publi_stock", "Publicaciones", "publi_id", publicacionId));
+                
             }
             else
             {
                 String queryCompra = "SELECT * FROM NET_A_CERO.Publicaciones WHERE publi_id = @id";
                 SqlDataReader readerCompra = QueryBuilder.Instance.build(queryCompra, parametros).ExecuteReader();
                 readerCompra.Read();
-                Decimal stockInicial = (Decimal)readerCompra["publi_stock"];
+              
+                Decimal stockInicial = (Convert.ToInt32(readerCompra["publi_stock"]));
 
                 parametros.Clear();
                 parametros.Add(new SqlParameter("@id", publicacionId));
-                String queryVista = "SELECT * FROM NET_A_CERO.VistaCantidadVendida WHERE publicacion_id = @id";  //CHEQUEAR POR LA VISTA
+                String queryVista = "SELECT * FROM NET_A_CERO.VistaCantidadVendida WHERE vista_publi_id = @id";  //CHEQUEAR POR LA VISTA
                 SqlDataReader readerVista = QueryBuilder.Instance.build(queryVista, parametros).ExecuteReader();//CHEQUEAR POR LA VISTA
 
                 if (readerVista.Read()) //CHEQUEAR POR LA VISTA                                         
                 {
-                    labelStockDatos.Text = (stockInicial - (Decimal)readerVista["cant_vendida"]).ToString();
+                    
+                    labelStockDatos.Text = (stockInicial - (Decimal)readerVista["vista_cant_vendida"]).ToString();
                 }
                 else
                 {                    
@@ -142,21 +143,25 @@ namespace MercadoEnvio.Comprar_Ofertar
         {
             parametros.Clear();
             parametros.Add(new SqlParameter("@id", publicacionId));
-
-            if (tipoPublicacion == "Compra Inmediata")
-            {
+            labelPrecioDatos.Text = Convert.ToString(comunicador.SelectFromWhere("publi_precio", "Publicaciones", "publi_id", publicacionId));
+            if (tipoPublicacion == "Compra inmediata")
+            {   /*
                 String queryCompra = "SELECT * FROM NET_A_CERO.Publicaciones WHERE publi_id = @id";
                 SqlDataReader readerCompra = QueryBuilder.Instance.build(queryCompra, parametros).ExecuteReader();
                 readerCompra.Read();
-                labelPrecioDatos.Text = ( (Decimal)readerCompra["publi_precio"] ).ToString();
+                labelPrecioDatos.Text = ( Convert.ToDecimal(readerCompra["publi_precio"] )).ToString();*/
+                labelPrecioDatos.Text = Convert.ToString(comunicador.SelectFromWhere("publi_precio", "Publicaciones", "publi_id", publicacionId));
             }
             else
             {
-                String queryVista = "SELECT * FROM NET_A_CERO.VistaOfertaMax WHERE publicacion_id = @id"; //CHEQUEAR POR LA VISTA
+                labelPrecioDatos.Text = Convert.ToString(comunicador.SelectFromWhere("publi_stock", "VistaOfertaMaxima", "publi_id", publicacionId));
+                labelPrecioDatos.Text = Convert.ToString(comunicador.SelectFromWhere("publi_precio", "Publicaciones", "publi_id", publicacionId));
+                /*
+                String queryVista = "SELECT * FROM NET_A_CERO.VistaOfertaMaxima WHERE vista_publi_id = @id"; //CHEQUEAR POR LA VISTA
                 SqlDataReader readerVista = QueryBuilder.Instance.build(queryVista, parametros).ExecuteReader();//CHEQUEAR POR LA VISTA
                 if (readerVista.Read())//CHEQUEAR POR LA VISTA
                 {
-                    labelPrecioDatos.Text = ((Decimal)readerVista["precioMax"]).ToString();
+                    labelPrecioDatos.Text = (Convert.ToDecimal(readerVista["vista_precioMax"])).ToString();
                 }
                 else
                 {
@@ -166,13 +171,13 @@ namespace MercadoEnvio.Comprar_Ofertar
                     SqlDataReader readerOferta = QueryBuilder.Instance.build(queryOferta, parametros).ExecuteReader();
                     readerOferta.Read();
                     labelPrecioDatos.Text = ((Decimal)readerOferta["publi_precio"]).ToString();
-                }
+                }*/
             }
         }
 
         private void pedirAccion()
         {
-            if (tipoPublicacion == "Compra Inmediata")
+            if (tipoPublicacion == "Compra inmediata")
             {
                 botonComprarOfertar.Text = "Comprar";
             }
