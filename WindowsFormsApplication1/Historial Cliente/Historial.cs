@@ -15,7 +15,7 @@ namespace MercadoEnvio.Historial_Cliente
         private String query;
         private SqlCommand command;
         private IList<SqlParameter> parametros = new List<SqlParameter>();
-        private DBMapper comunicador = new DBMapper();
+        private DBMapper mapper = new DBMapper();
 
         public Historial()
         {
@@ -37,6 +37,7 @@ namespace MercadoEnvio.Historial_Cliente
             opciones.Rows.Add("Calificaciones");
             comboBox_opciones.DataSource = opciones;
             comboBox_opciones.ValueMember = "opciones";
+            comboBox_opciones.SelectedIndex = -1;
         }
 
         private void CargarDatos()
@@ -50,7 +51,7 @@ namespace MercadoEnvio.Historial_Cliente
 
         public void CargarInformacion(String select, String from, String where)
         {
-            dataGridView_Historial.DataSource = comunicador.SelectDataTableConUsuario(select, from, where);
+            dataGridView_Historial.DataSource = mapper.SelectDataTableConUsuario(select, from, where);
         }
 
         private void button_Buscar_Click(object sender, EventArgs e)
@@ -62,6 +63,8 @@ namespace MercadoEnvio.Historial_Cliente
         {
             comboBox_opciones.SelectedIndex = -1;
             CargarDatos();
+            DataTable dt = (DataTable)dataGridView_Historial.DataSource;
+            dt.Clear();
         }
 
         private void button_Cancelar_Click(object sender, EventArgs e)

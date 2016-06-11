@@ -29,12 +29,12 @@ namespace MercadoEnvio.Historial_Cliente
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.comboBox_opciones = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.button_Buscar = new System.Windows.Forms.Button();
             this.button_Limpiar = new System.Windows.Forms.Button();
             this.button_Cancelar = new System.Windows.Forms.Button();
             this.dataGridView_Historial = new System.Windows.Forms.DataGridView();
-            this.comboBox_opciones = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_Historial)).BeginInit();
             this.SuspendLayout();
@@ -48,7 +48,15 @@ namespace MercadoEnvio.Historial_Cliente
             this.groupBox1.Size = new System.Drawing.Size(368, 101);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Filtro de busquedad";
+            this.groupBox1.Text = "Filtro de busquedas";
+            // 
+            // comboBox_opciones
+            // 
+            this.comboBox_opciones.FormattingEnabled = true;
+            this.comboBox_opciones.Location = new System.Drawing.Point(119, 19);
+            this.comboBox_opciones.Name = "comboBox_opciones";
+            this.comboBox_opciones.Size = new System.Drawing.Size(243, 21);
+            this.comboBox_opciones.TabIndex = 2;
             // 
             // label1
             // 
@@ -100,14 +108,6 @@ namespace MercadoEnvio.Historial_Cliente
             this.dataGridView_Historial.ReadOnly = true;
             this.dataGridView_Historial.Size = new System.Drawing.Size(1068, 199);
             this.dataGridView_Historial.TabIndex = 4;
-            // 
-            // comboBox_opciones
-            // 
-            this.comboBox_opciones.FormattingEnabled = true;
-            this.comboBox_opciones.Location = new System.Drawing.Point(119, 19);
-            this.comboBox_opciones.Name = "comboBox_opciones";
-            this.comboBox_opciones.Size = new System.Drawing.Size(243, 21);
-            this.comboBox_opciones.TabIndex = 2;
             // 
             // Historial
             // 
