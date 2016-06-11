@@ -36,9 +36,7 @@ namespace MercadoEnvio
             funcionalidades.Add("Editar Visibilidad", new ABM_Visibilidad.FiltroVisibilidad());
             funcionalidades.Add("Listado Estadistico", new Listado_Estadistico.Estadisticas());
             funcionalidades.Add("Ver Historial", new Historial_Cliente.Historial());
-            funcionalidades.Add("Cambiar Contraseña", new Login.CambiarContrasena());
-            funcionalidades.Add("Agregar Rubro", new ABM_Rubro.AgregarRubro());
-            funcionalidades.Add("Editar Rubro", new ABM_Rubro.FiltroRubros());            
+            funcionalidades.Add("Cambiar Contraseña", new Login.CambiarContrasena()); 
              
         }
 
