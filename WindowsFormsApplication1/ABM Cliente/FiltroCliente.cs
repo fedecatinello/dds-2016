@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
-using MercadoEnvio.Objetos;
+using MercadoEnvio.Modelo;
 using MercadoEnvio.DataProvider;
 
 namespace MercadoEnvio.ABM_Cliente

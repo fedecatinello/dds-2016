@@ -5,11 +5,11 @@ using System.Text;
 using System.Data.SqlClient;
 using System.Data;
 using MercadoEnvio.Exceptions;
-using MercadoEnvio.Objetos;
+using MercadoEnvio.Modelo;
 
 namespace MercadoEnvio
 {
-    class Contacto : Objeto, Comunicable
+    class Contacto : Objeto, Mapeable
     {
         private int id;
         private String mail;
@@ -134,22 +134,22 @@ namespace MercadoEnvio
 
         #region Miembros de Comunicable
 
-        string Comunicable.GetQueryCrear()
+        string Mapeable.GetQueryCrear()
         {
             return "NET_A_CERO.pr_crear_contacto";
         }
 
-        string Comunicable.GetQueryModificar()
+        string Mapeable.GetQueryModificar()
         {
             return "UPDATE NET_A_CERO.Contacto SET cont_mail = @mail, cont_telefono = @telefono, cont_calle = @calle, cont_numero_calle = @numeroCalle, cont_piso = @piso, cont_depto = @depto, cont_localidad = @localidad, cont_codigo_postal = @cod_postal WHERE cont_id = @id";
         }
 
-        string Comunicable.GetQueryObtener()
+        string Mapeable.GetQueryObtener()
         {
             return "SELECT * FROM NET_A_CERO.Contacto WHERE cont_id = @id";
         }
 
-        IList<SqlParameter> Comunicable.GetParametros()
+        IList<SqlParameter> Mapeable.GetParametros()
         {
             IList<SqlParameter> parametros = new List<SqlParameter>();
             parametros.Add(new SqlParameter("@mail", this.mail));
@@ -163,7 +163,7 @@ namespace MercadoEnvio
             return parametros;
         }
 
-        void Comunicable.CargarInformacion(SqlDataReader reader)
+        void Mapeable.CargarInformacion(SqlDataReader reader)
         {
             this.mail = Convert.ToString(reader["cont_mail"]);
             this.telefono = Convert.ToString(reader["cont_telefono"]);

@@ -5,9 +5,9 @@ using System.Text;
 using MercadoEnvio.Exceptions;
 using System.Data.SqlClient;
 
-namespace MercadoEnvio.Objetos
+namespace MercadoEnvio.Modelo
 {
-    class Publicacion : Objeto, Comunicable
+    class Publicacion : Objeto, Mapeable
     {
         private Decimal id;
         private String tipoDePublicacion;
@@ -187,22 +187,22 @@ namespace MercadoEnvio.Objetos
 
         #region Miembros de Comunicable
 
-        string Comunicable.GetQueryCrear()
+        string Mapeable.GetQueryCrear()
         {
             return "NET_A_CERO.pr_crear_publicacion";
         }
 
-        string Comunicable.GetQueryModificar()
+        string Mapeable.GetQueryModificar()
         {
             return "UPDATE NET_A_CERO.Publicaciones SET publi_tipo = @tipo_id, publi_estado_id = @estado_id, publi_descripcion = @descripcion, publi_fec_inicio = @fecha_inicio, publi_fec_vencimiento = @fecha_vencimiento, publi_rubro_id = @rubro_id, publi_visib_id = @visibilidad_id, publi_stock = @stock, publi_precio = @precio, publi_costo_pagado = @costoPagado, publi_preguntas = @se_realizan_preguntas WHERE publi_id = @id";
         }
 
-        string Comunicable.GetQueryObtener()
+        string Mapeable.GetQueryObtener()
         {
             return "SELECT * FROM NET_A_CERO.Publicaciones WHERE publi_id = @id";
         }
 
-        IList<System.Data.SqlClient.SqlParameter> Comunicable.GetParametros()
+        IList<System.Data.SqlClient.SqlParameter> Mapeable.GetParametros()
         {
             IList<SqlParameter> parametros = new List<SqlParameter>();
             parametros.Add(new SqlParameter("@publi_tipo", this.tipoDePublicacion));
@@ -221,7 +221,7 @@ namespace MercadoEnvio.Objetos
             return parametros;
         }
 
-        void Comunicable.CargarInformacion(SqlDataReader reader)
+        void Mapeable.CargarInformacion(SqlDataReader reader)
         {
             this.tipoDePublicacion = Convert.ToString(reader["publi_tipo"]);
             this.idEstado = Convert.ToDecimal(reader["publi_estado_id"]);

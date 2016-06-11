@@ -7,8 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
-using MercadoEnvio.Objetos;
+using MercadoEnvio.Modelo;
 using MercadoEnvio.Exceptions;
+using MercadoEnvio.DataProvider;
 
 namespace MercadoEnvio.ABM_Empresa
 {
@@ -16,7 +17,7 @@ namespace MercadoEnvio.ABM_Empresa
     {
         private String username;
         private String contrasena;
-        private DBMapper comunicador = new DBMapper();
+        private DBMapper mapper = new DBMapper();
         private int idContacto;
         private int idUsuario;
         private int idEmpresa;
@@ -32,7 +33,7 @@ namespace MercadoEnvio.ABM_Empresa
 
         private void AgregarEmpresa_Load(object sender, EventArgs e)
         {
-
+            CargarRubros();
         }
 
         private void button_Guardar_Click(object sender, EventArgs e)
@@ -42,7 +43,7 @@ namespace MercadoEnvio.ABM_Empresa
             String ciudad = textBox_Ciudad.Text;
             String cuit = textBox_CUIT.Text;
             String nombreDeContacto = textBox_NombreDeContacto.Text;
-            String rubro = textBox_Rubro.Text;
+            String rubro = comboBox_Rubro.Text;
             DateTime fechaDeCreacion;
             DateTime.TryParse(textBox_FechaDeCreacion.Text, out fechaDeCreacion);
 
@@ -84,7 +85,7 @@ namespace MercadoEnvio.ABM_Empresa
             // Controla que no se haya creado ya la contacto
             if (this.idContacto == 0)
             {
-                this.idContacto = comunicador.CrearContacto(contacto);
+                this.idContacto = mapper.CrearContacto(contacto);
             }
             
             // Crea empresa
@@ -103,7 +104,7 @@ namespace MercadoEnvio.ABM_Empresa
                 usuario.SetActivo(true);
                 empresa.SetIdContacto(idContacto);
                 
-                idEmpresa = comunicador.CrearEmpresa(empresa);
+                idEmpresa = mapper.CrearEmpresa(empresa);
                 if (idEmpresa > 0) MessageBox.Show("Se agrego la empresa correctamente");
             }
             catch (CampoVacioException exceptionCampoVacio)
@@ -141,35 +142,34 @@ namespace MercadoEnvio.ABM_Empresa
             if (idUsuario == 0)
             {
                 idUsuario = CrearUsuario();
-                Boolean resultado = comunicador.AsignarUsuarioAEmpresa(idEmpresa, idUsuario);
+                Boolean resultado = mapper.AsignarUsuarioAEmpresa(idEmpresa, idUsuario);
                 if (resultado) MessageBox.Show("El usuario fue creado correctamente");
             }
-            /*
-             ------------- SOLO LOS ADMINISTRADORES PUEDEN CREAR USUARIOS-----------------
-            if (UsuarioSesion.Usuario.rol != "Administrador")
-            {
-                UsuarioSesion.Usuario.rol = "Empresa";
-                UsuarioSesion.Usuario.nombre = username;
-                UsuarioSesion.Usuario.id = idUsuario;
-            }
-            */
-            comunicador.AsignarRolAUsuario(this.idUsuario, "Empresa");
+
+            mapper.AsignarRolAUsuario(this.idUsuario, "Empresa");
 
             VolverAlMenuPrincipal();
         }
 
         private int CrearUsuario()
         {
-            /*
-             ------------- SOLO LOS ADMINISTRADORES PUEDEN CREAR USUARIOS-----------------
-            if (username == "clienteCreadoPorAdmin")
-            {
-                return comunicador.CrearUsuario();
-            }
-            else
-            {*/
-                return comunicador.CrearUsuarioConValores(username, contrasena);
-            //}
+           return mapper.CrearUsuarioConValores(username, contrasena); 
+        }
+
+        private void CargarRubros()
+        {
+            string query = "SELECT rubro_id, rubro_desc_larga from NET_A_CERO.Rubros";
+
+            SqlCommand cmd = new SqlCommand(query, ConnectionManager.Instance.getConnection());
+
+            SqlDataAdapter data_adapter = new SqlDataAdapter(cmd);
+            DataTable rubros = new DataTable();
+            data_adapter.Fill(rubros);
+
+            comboBox_Rubro.ValueMember = "rubro_id";
+            comboBox_Rubro.DisplayMember = "rubro_desc_larga";
+            comboBox_Rubro.DataSource = rubros;
+            comboBox_Rubro.SelectedIndex = -1;
         }
 
         private void button_Limpiar_Click(object sender, EventArgs e)
@@ -178,7 +178,7 @@ namespace MercadoEnvio.ABM_Empresa
             textBox_Ciudad.Text = "";
             textBox_CUIT.Text = "";
             textBox_NombreDeContacto.Text = "";
-            textBox_Rubro.Text = "";
+            comboBox_Rubro.SelectedIndex = -1;
             textBox_FechaDeCreacion.Text = "";
             textBox_Mail.Text = "";
             textBox_Telefono.Text = "";
@@ -192,7 +192,7 @@ namespace MercadoEnvio.ABM_Empresa
 
         private void button_Cancelar_Click(object sender, EventArgs e)
         {
-            if (UsuarioSesion.Usuario.rol != "Administrador")
+            if (UsuarioSesion.Usuario.rol != "Administrativo")
             {
                 this.Hide();
                 new Registro_de_Usuario.RegistrarUsuario().ShowDialog();

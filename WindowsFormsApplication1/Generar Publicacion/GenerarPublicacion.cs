@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using MercadoEnvio.Exceptions;
-using MercadoEnvio.Objetos;
+using MercadoEnvio.Modelo;
 
 namespace MercadoEnvio.Generar_Publicacion
 {

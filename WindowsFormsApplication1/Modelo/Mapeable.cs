@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Data.SqlClient;
 
-namespace MercadoEnvio.Objetos
+namespace MercadoEnvio.Modelo
 {
-    interface Comunicable
+    interface Mapeable
     {
         String GetQueryCrear();
         String GetQueryModificar();

@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using MercadoEnvio.Exceptions;
 using MercadoEnvio.DataProvider;
+using System.Data;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 
-namespace MercadoEnvio.Objetos
+namespace MercadoEnvio.Modelo
 {
-    class Empresas : Objeto, Comunicable
+    class Empresas : Objeto, Mapeable
     {
         private int id;
         private String razonSocial;
@@ -149,7 +150,7 @@ namespace MercadoEnvio.Objetos
         {
             IList<SqlParameter> parametros = new List<SqlParameter>();
             parametros.Add(new SqlParameter("@rubro", this.rubro));
-            string queryRubro = "SELECT rubro_desc_larga FROM NET_A_CERO.Rubros WHERE rubro_id = @rubro";
+            string queryRubro = "SELECT * FROM NET_A_CERO.Rubros WHERE rubro_id = @rubro";
 
             SqlDataReader reader = QueryHelper.Instance.exec(queryRubro, parametros);
             return (string)reader["rubro_desc_larga"];
@@ -158,11 +159,14 @@ namespace MercadoEnvio.Objetos
         public void SetRubroEmpresa(string rubro)
         {
             IList<SqlParameter> parametros = new List<SqlParameter>();
-            parametros.Add(new SqlParameter("@rubro", rubro));
-            string queryRubro = "SELECT rubro_id FROM NET_A_CERO.Rubros WHERE rubro_desc_larga = @rubro";
+            parametros.Add(new SqlParameter("@rubro_desc", rubro));
 
-            SqlDataReader reader = QueryHelper.Instance.exec(queryRubro, parametros);
-            this.rubro = (int)reader["rubro_id"];
+            string queryRubro = "SELECT * FROM NET_A_CERO.Rubros WHERE rubro_desc_larga = '@rubro_desc'";
+
+            MessageBox.Show(rubro);
+
+            SqlDataReader reader = QueryBuilder.Instance.build(queryRubro, parametros).ExecuteReader();
+            this.rubro = Convert.ToInt32(reader["rubro_id"]);
 
             //if(this.rubro == null) 
         }
@@ -170,12 +174,12 @@ namespace MercadoEnvio.Objetos
 
         #region Miembros de Comunicable
 
-        string Comunicable.GetQueryCrear()
+        string Mapeable.GetQueryCrear()
         {
             return "NET_A_CERO.pr_crear_empresa";
         }
 
-        string Comunicable.GetQueryModificar()
+        string Mapeable.GetQueryModificar()
         {
             return "UPDATE NET_A_CERO.Empresas SET emp_razon_social = @razon_social, emp_ciudad = @ciudad, emp_cuit = @cuit, emp_nombre_contacto = @nombre_contacto, emp_rubro = (SELECT rubro_id FROM NET_A_CERO.Rubros WHERE rubro_desc_larga = @rubro), emp_fecha_alta = @fecha_alta, emp_activo = @activo WHERE emp_id = @id";
         }
@@ -185,7 +189,7 @@ namespace MercadoEnvio.Objetos
             return "SELECT * FROM NET_A_CERO.Empresas WHERE emp_id = @id";
         }
 
-        IList<System.Data.SqlClient.SqlParameter> Comunicable.GetParametros()
+        IList<System.Data.SqlClient.SqlParameter> Mapeable.GetParametros()
         {
             IList<SqlParameter> parametros = new List<SqlParameter>();
             parametros.Add(new SqlParameter("@razon_social", this.razonSocial));

@@ -5,9 +5,9 @@ using System.Text;
 using MercadoEnvio.Exceptions;
 using System.Data.SqlClient;
 
-namespace MercadoEnvio.Objetos
+namespace MercadoEnvio.Modelo
 {
-    class Visibilidad : Objeto, Comunicable
+    class Visibilidad : Objeto, Mapeable
     {
         private Decimal id;
         private String descripcion;
@@ -123,22 +123,22 @@ namespace MercadoEnvio.Objetos
 
         #region Miembros de Comunicable
 
-        string Comunicable.GetQueryCrear()
+        string Mapeable.GetQueryCrear()
         {
             return "NET_A_CERO.pr_crear_visibilidad";
         }
 
-        string Comunicable.GetQueryModificar()
+        string Mapeable.GetQueryModificar()
         {
             return "UPDATE NET_A_CERO.Visibilidad SET visib_desc = @descripcion, visib_grado = @grado, visib_precio = @precio, visib_porcentaje = @porcentaje, visib_envios = @envios, visib_activo = @activo WHERE visib_id = @id";
         }
 
-        string Comunicable.GetQueryObtener()
+        string Mapeable.GetQueryObtener()
         {
             return "SELECT * FROM NET_A_CERO.Visibilidad WHERE visib_id = @id";
         }
 
-        IList<System.Data.SqlClient.SqlParameter> Comunicable.GetParametros()
+        IList<System.Data.SqlClient.SqlParameter> Mapeable.GetParametros()
         {
             IList<SqlParameter> parametros = new List<SqlParameter>();
             parametros.Add(new SqlParameter("@descripcion", this.descripcion));
@@ -151,7 +151,7 @@ namespace MercadoEnvio.Objetos
             return parametros;
         }
 
-        void Comunicable.CargarInformacion(SqlDataReader reader)
+        void Mapeable.CargarInformacion(SqlDataReader reader)
         {
             this.descripcion = Convert.ToString(reader["visib_desc"]);
             this.precioPorPublicar = Convert.ToString(reader["visib_precio"]);

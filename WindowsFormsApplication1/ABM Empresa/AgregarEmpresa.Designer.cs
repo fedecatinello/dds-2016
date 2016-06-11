@@ -29,15 +29,12 @@ namespace MercadoEnvio.ABM_Empresa
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.monthCalendar_FechaDeCreacion = new System.Windows.Forms.MonthCalendar();
             this.label13 = new System.Windows.Forms.Label();
             this.textBox_Ciudad = new System.Windows.Forms.TextBox();
-            this.monthCalendar_FechaDeCreacion = new System.Windows.Forms.MonthCalendar();
-            this.label2 = new System.Windows.Forms.Label();
-            this.textBox_Telefono = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.textBox_NombreDeContacto = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.textBox_Mail = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.button_FechaDeCreacion = new System.Windows.Forms.Button();
             this.textBox_FechaDeCreacion = new System.Windows.Forms.TextBox();
@@ -45,6 +42,10 @@ namespace MercadoEnvio.ABM_Empresa
             this.textBox_CUIT = new System.Windows.Forms.TextBox();
             this.textBox_RazonSocial = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.textBox_Telefono = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.textBox_Mail = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label12 = new System.Windows.Forms.Label();
             this.textBox_Localidad = new System.Windows.Forms.TextBox();
@@ -62,15 +63,14 @@ namespace MercadoEnvio.ABM_Empresa
             this.button_Cancelar = new System.Windows.Forms.Button();
             this.button_Limpiar = new System.Windows.Forms.Button();
             this.label14 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
-            this.textBox_Rubro = new System.Windows.Forms.TextBox();
+            this.comboBox_Rubro = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.textBox_Rubro);
+            this.groupBox1.Controls.Add(this.comboBox_Rubro);
             this.groupBox1.Controls.Add(this.label15);
             this.groupBox1.Controls.Add(this.monthCalendar_FechaDeCreacion);
             this.groupBox1.Controls.Add(this.label13);
@@ -91,6 +91,23 @@ namespace MercadoEnvio.ABM_Empresa
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Datos personales";
             // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(8, 128);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(36, 13);
+            this.label15.TabIndex = 17;
+            this.label15.Text = "Rubro";
+            // 
+            // monthCalendar_FechaDeCreacion
+            // 
+            this.monthCalendar_FechaDeCreacion.Location = new System.Drawing.Point(136, 12);
+            this.monthCalendar_FechaDeCreacion.Name = "monthCalendar_FechaDeCreacion";
+            this.monthCalendar_FechaDeCreacion.TabIndex = 5;
+            this.monthCalendar_FechaDeCreacion.Visible = false;
+            this.monthCalendar_FechaDeCreacion.DateSelected += new System.Windows.Forms.DateRangeEventHandler(this.monthCalendar_FechaDeCreacion_DateSelected);
+            // 
             // label13
             // 
             this.label13.AutoSize = true;
@@ -107,30 +124,6 @@ namespace MercadoEnvio.ABM_Empresa
             this.textBox_Ciudad.Size = new System.Drawing.Size(250, 20);
             this.textBox_Ciudad.TabIndex = 15;
             // 
-            // monthCalendar_FechaDeCreacion
-            // 
-            this.monthCalendar_FechaDeCreacion.Location = new System.Drawing.Point(136, 12);
-            this.monthCalendar_FechaDeCreacion.Name = "monthCalendar_FechaDeCreacion";
-            this.monthCalendar_FechaDeCreacion.TabIndex = 5;
-            this.monthCalendar_FechaDeCreacion.Visible = false;
-            this.monthCalendar_FechaDeCreacion.DateSelected += new System.Windows.Forms.DateRangeEventHandler(this.monthCalendar_FechaDeCreacion_DateSelected);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(7, 42);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(49, 13);
-            this.label2.TabIndex = 14;
-            this.label2.Text = "Telefono";
-            // 
-            // textBox_Telefono
-            // 
-            this.textBox_Telefono.Location = new System.Drawing.Point(113, 39);
-            this.textBox_Telefono.Name = "textBox_Telefono";
-            this.textBox_Telefono.Size = new System.Drawing.Size(250, 20);
-            this.textBox_Telefono.TabIndex = 13;
-            // 
             // label11
             // 
             this.label11.AutoSize = true;
@@ -146,22 +139,6 @@ namespace MercadoEnvio.ABM_Empresa
             this.textBox_NombreDeContacto.Name = "textBox_NombreDeContacto";
             this.textBox_NombreDeContacto.Size = new System.Drawing.Size(250, 20);
             this.textBox_NombreDeContacto.TabIndex = 11;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(7, 16);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(26, 13);
-            this.label5.TabIndex = 10;
-            this.label5.Text = "Mail";
-            // 
-            // textBox_Mail
-            // 
-            this.textBox_Mail.Location = new System.Drawing.Point(113, 13);
-            this.textBox_Mail.Name = "textBox_Mail";
-            this.textBox_Mail.Size = new System.Drawing.Size(250, 20);
-            this.textBox_Mail.TabIndex = 9;
             // 
             // label4
             // 
@@ -220,6 +197,38 @@ namespace MercadoEnvio.ABM_Empresa
             this.label1.Size = new System.Drawing.Size(70, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Razon Social";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(7, 42);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(49, 13);
+            this.label2.TabIndex = 14;
+            this.label2.Text = "Telefono";
+            // 
+            // textBox_Telefono
+            // 
+            this.textBox_Telefono.Location = new System.Drawing.Point(113, 39);
+            this.textBox_Telefono.Name = "textBox_Telefono";
+            this.textBox_Telefono.Size = new System.Drawing.Size(250, 20);
+            this.textBox_Telefono.TabIndex = 13;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(7, 16);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(26, 13);
+            this.label5.TabIndex = 10;
+            this.label5.Text = "Mail";
+            // 
+            // textBox_Mail
+            // 
+            this.textBox_Mail.Location = new System.Drawing.Point(113, 13);
+            this.textBox_Mail.Name = "textBox_Mail";
+            this.textBox_Mail.Size = new System.Drawing.Size(250, 20);
+            this.textBox_Mail.TabIndex = 9;
             // 
             // groupBox2
             // 
@@ -381,21 +390,13 @@ namespace MercadoEnvio.ABM_Empresa
             this.label14.TabIndex = 5;
             this.label14.Text = "* Debe completar todos los campos";
             // 
-            // label15
+            // comboBox_Rubro
             // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(8, 128);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(36, 13);
-            this.label15.TabIndex = 17;
-            this.label15.Text = "Rubro";
-            // 
-            // textBox_Rubro
-            // 
-            this.textBox_Rubro.Location = new System.Drawing.Point(112, 128);
-            this.textBox_Rubro.Name = "textBox_Rubro";
-            this.textBox_Rubro.Size = new System.Drawing.Size(250, 20);
-            this.textBox_Rubro.TabIndex = 18;
+            this.comboBox_Rubro.FormattingEnabled = true;
+            this.comboBox_Rubro.Location = new System.Drawing.Point(113, 128);
+            this.comboBox_Rubro.Name = "comboBox_Rubro";
+            this.comboBox_Rubro.Size = new System.Drawing.Size(249, 21);
+            this.comboBox_Rubro.TabIndex = 18;
             // 
             // AgregarEmpresa
             // 
@@ -456,7 +457,7 @@ namespace MercadoEnvio.ABM_Empresa
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TextBox textBox_Ciudad;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.TextBox textBox_Rubro;
         private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.ComboBox comboBox_Rubro;
     }
 }

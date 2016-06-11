@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
-using MercadoEnvio.Objetos;
+using MercadoEnvio.Modelo;
 using MercadoEnvio.Exceptions;
 using MercadoEnvio.Utils;
 using MercadoEnvio.DataProvider;
@@ -150,26 +150,16 @@ namespace MercadoEnvio.ABM_Cliente
                 if (seCreoBien) MessageBox.Show("Se creo el usuario correctamente");
             }
 
-            /*
-             ------------- SOLO LOS ADMINISTRADORES PUEDEN CREAR USUARIOS-----------------
-             if (UsuarioSesion.Usuario.rol != "Administrador")
-            {
-                UsuarioSesion.Usuario.rol = "Clientes";
-                UsuarioSesion.Usuario.nombre = username;
-                UsuarioSesion.Usuario.id = idUsuario;
-            }
-             */
-
             mapper.AsignarRolAUsuario(this.idUsuario, "Cliente");
 
-            VolverAlMenuPrincial();
+            VolverAlMenuPrincipal();
         }
 
         private void button_Limpiar_Click(object sender, EventArgs e)
         {
             textBox_Nombre.Text = "";
             textBox_Apellido.Text = "";
-            comboBox_TipoDeDocumento.SelectedIndex = 0;
+            comboBox_TipoDeDocumento.SelectedIndex = -1;
             textBox_NumeroDeDoc.Text = "";
             textBox_FechaDeNacimiento.Text = "";
             textBox_Mail.Text = "";
@@ -185,7 +175,7 @@ namespace MercadoEnvio.ABM_Cliente
         private void button_Cancelar_Click(object sender, EventArgs e)
         {
 
-            if (UsuarioSesion.Usuario.rol != "Administrador")
+            if (UsuarioSesion.Usuario.rol != "Administrativo")
             {
                 this.Hide();
                 new Registro_de_Usuario.RegistrarUsuario().ShowDialog();
@@ -193,12 +183,12 @@ namespace MercadoEnvio.ABM_Cliente
             }
             else
             {
-                VolverAlMenuPrincial();
+                VolverAlMenuPrincipal();
             }
             
         }
 
-        private void VolverAlMenuPrincial()
+        private void VolverAlMenuPrincipal()
         {
             this.Hide();
             new MenuPrincipal().ShowDialog();

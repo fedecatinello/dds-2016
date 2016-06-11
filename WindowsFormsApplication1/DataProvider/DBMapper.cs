@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data.SqlClient;
-using MercadoEnvio.Objetos;
+using MercadoEnvio.Modelo;
 using MercadoEnvio.Exceptions;
 using MercadoEnvio.DataProvider;
 using MercadoEnvio.Utils;
@@ -26,7 +26,7 @@ namespace MercadoEnvio
         */
 
 
-        public int Crear(Comunicable objeto)
+        public int Crear(Mapeable objeto)
         {
             query = objeto.GetQueryCrear();
             parametros.Clear();
@@ -40,7 +40,7 @@ namespace MercadoEnvio
             return (int)parametroOutput.Value;
         }
 
-        public Boolean Modificar(Decimal id, Comunicable objeto)
+        public Boolean Modificar(Decimal id, Mapeable objeto)
         {
             query = objeto.GetQueryModificar();
             parametros.Clear();
@@ -51,9 +51,9 @@ namespace MercadoEnvio
             return false;
         }
 
-        public Comunicable Obtener(Decimal id, Type clase)
+        public Mapeable Obtener(Decimal id, Type clase)
         {
-            Comunicable objeto = (Comunicable)Activator.CreateInstance(clase);
+            Mapeable objeto = (Mapeable)Activator.CreateInstance(clase);
             query = objeto.GetQueryObtener();
             parametros.Clear();
             parametros.Add(new SqlParameter("@id", id));

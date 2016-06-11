@@ -5,9 +5,9 @@ using System.Text;
 using MercadoEnvio.Exceptions;
 using System.Data.SqlClient;
 
-namespace MercadoEnvio.Objetos
+namespace MercadoEnvio.Modelo
 {
-    class Clientes : Objeto, Comunicable
+    class Clientes : Objeto, Mapeable
     {
         private int id;
         private String nombre;
@@ -139,22 +139,22 @@ namespace MercadoEnvio.Objetos
 
         #region Miembros de Comunicable
 
-        string Comunicable.GetQueryCrear()
+        string Mapeable.GetQueryCrear()
         {
             return "NET_A_CERO.pr_crear_cliente";
         }
 
-        string Comunicable.GetQueryModificar()
+        string Mapeable.GetQueryModificar()
         {
             return "UPDATE NET_A_CERO.Clientes SET cli_nombre = @nombre, cli_apellido = @apellido, cli_documento = @documento, cli_tipo_dni = @tipo_de_documento, cli_fecha_nac = @fecha_nacimiento, cli_fecha_alta = @fecha_alta, cli_activo = @activo WHERE cli_id = @id";
         }
 
-        string Comunicable.GetQueryObtener()
+        string Mapeable.GetQueryObtener()
         {
             return "SELECT * FROM NET_A_CERO.Clientes WHERE cli_id = @id";
         }
 
-        IList<System.Data.SqlClient.SqlParameter> Comunicable.GetParametros()
+        IList<System.Data.SqlClient.SqlParameter> Mapeable.GetParametros()
         {
             IList<SqlParameter> parametros = new List<SqlParameter>();
             parametros.Clear();
@@ -169,7 +169,7 @@ namespace MercadoEnvio.Objetos
             return parametros;
         }
 
-        void Comunicable.CargarInformacion(SqlDataReader reader)
+        void Mapeable.CargarInformacion(SqlDataReader reader)
         {
             this.nombre = Convert.ToString(reader["cli_nombre"]);
             this.apellido = Convert.ToString(reader["cli_apellido"]);

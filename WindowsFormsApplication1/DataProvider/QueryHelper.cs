@@ -27,16 +27,13 @@ namespace MercadoEnvio.DataProvider
             }
         }
 
-
-        private SqlDataReader reader;
-
         /// <summary>Execute a query with a return value (functions or selects)</summary>
         /// <param name="query">Query to be executed</param>
         /// <returns>Returns the reader with the results of the query</returns>
         public SqlDataReader exec(String query, IList<SqlParameter> parameters)
         {
             SqlCommand command = QueryBuilder.Instance.build(query, parameters);
-            reader = command.ExecuteReader();
+            SqlDataReader reader = command.ExecuteReader();
             return reader;
         }
 
@@ -46,7 +43,7 @@ namespace MercadoEnvio.DataProvider
         }
 
         /// <summary>Close the reader opened with the previous method (if the reader is not closed it will fail in the next execution)</summary>
-        public void closeReader()
+        public void closeReader(SqlDataReader reader)
         {
             reader.Close();
         }

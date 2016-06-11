@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
-using MercadoEnvio.Objetos;
+using MercadoEnvio.Modelo;
 using MercadoEnvio.Exceptions;
 
 namespace MercadoEnvio.ABM_Empresa
@@ -15,8 +15,8 @@ namespace MercadoEnvio.ABM_Empresa
     public partial class EditarEmpresa : Form
     {
         private int idEmpresa;
-        private int idContacto;
-        private int idUsuario;
+        private int idContacto = 0;
+        //private int idUsuario;
         private DBMapper mapper = new DBMapper();
 
         public EditarEmpresa(String idEmpresa)
@@ -33,18 +33,20 @@ namespace MercadoEnvio.ABM_Empresa
         private void CargarDatos()
         {
             Empresas empresa = mapper.ObtenerEmpresa(idEmpresa);
-            Contacto contacto = mapper.ObtenerContacto(idContacto);
-            Usuarios usuario = mapper.ObtenerUsuario(idUsuario);
+            Contacto contacto = mapper.ObtenerContacto(empresa.GetIdContacto());
+            Usuarios usuario = mapper.ObtenerUsuario(empresa.GetIdUsuario());
+
+            idContacto = empresa.GetIdContacto();
 
             textBox_RazonSocial.Text = empresa.GetRazonSocial();
             textBox_Ciudad.Text = empresa.GetCiudad();
             textBox_CUIT.Text = empresa.GetCuit();
             textBox_NombreDeContacto.Text = empresa.GetNombreDeContacto();
-            textBox_Rubro.Text = empresa.GetRubro();
+            comboBox_Rubro.Text = empresa.GetRubro();
             textBox_FechaDeCreacion.Text = Convert.ToString(empresa.GetFechaDeCreacion());
             textBox_Mail.Text = contacto.GetMail();
             textBox_Telefono.Text = contacto.GetTelefono();
-            checkBox_Habilitado.Checked = Convert.ToBoolean(mapper.SelectFromWhere("usr_activo", "Usuarios", "usr_id", idEmpresa));
+            checkBox_Habilitado.Checked = Convert.ToBoolean(mapper.SelectFromWhere("usr_activo", "Usuarios", "usr_id", empresa.GetIdUsuario()));
             textBox_Calle.Text = contacto.GetCalle();
             textBox_Numero.Text = contacto.GetNumeroCalle();
             textBox_Piso.Text = contacto.GetPiso();
@@ -61,7 +63,7 @@ namespace MercadoEnvio.ABM_Empresa
             String ciudad = textBox_Ciudad.Text;
             String cuit = textBox_CUIT.Text;
             String nombreDeContacto = textBox_NombreDeContacto.Text;
-            String rubro = textBox_Rubro.Text;
+            String rubro = comboBox_Rubro.Text;
             DateTime fechaDeCreacion;
             DateTime.TryParse(textBox_FechaDeCreacion.Text, out fechaDeCreacion);
             String mail = textBox_Mail.Text;
