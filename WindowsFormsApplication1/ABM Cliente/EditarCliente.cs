@@ -125,7 +125,8 @@ namespace MercadoEnvio.ABM_Cliente
                 cliente.SetNumeroDeDocumento(numeroDeDocumento);
                 cliente.SetTipoDeDocumento(tipoDeDocumento);
                 cliente.SetFechaDeNacimiento(fechaDeNacimiento);
-                usuario.Setis_admin(activo);
+          
+                usuario.SetActivo(activo);
 
                 pudoModificar = mapper.Modificar(idCliente, cliente);
                 if (pudoModificar) MessageBox.Show("El cliente se modifico correctamente");
