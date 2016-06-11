@@ -202,6 +202,7 @@
     <Compile Include="ComprarOfertar\VerPublicacion.Designer.cs">
       <DependentUpon>VerPublicacion.cs</DependentUpon>
     </Compile>
+    <Compile Include="Exceptions\IngresePrecioEnteroException.cs" />
     <Compile Include="Gestion de Preguntas\Respuesta.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -31,11 +31,9 @@ namespace MercadoEnvio.Editar_Publicacion
             this.button_Guardar = new System.Windows.Forms.Button();
             this.button_Cancelar = new System.Windows.Forms.Button();
             this.button_Limpiar = new System.Windows.Forms.Button();
-            this.checkBox_Habilitado = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label6 = new System.Windows.Forms.Label();
             this.comboBox_Estado = new System.Windows.Forms.ComboBox();
-            this.comboBox_TiposDePublicacion = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.checkBox_Pregunta = new System.Windows.Forms.CheckBox();
@@ -50,6 +48,7 @@ namespace MercadoEnvio.Editar_Publicacion
             this.textBox_Stock = new System.Windows.Forms.TextBox();
             this.label_precio = new System.Windows.Forms.Label();
             this.label_stock = new System.Windows.Forms.Label();
+            this.comboBox_TiposDePublicacion = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -85,21 +84,11 @@ namespace MercadoEnvio.Editar_Publicacion
             this.button_Limpiar.UseVisualStyleBackColor = true;
             this.button_Limpiar.Click += new System.EventHandler(this.button_Limpiar_Click);
             // 
-            // checkBox_Habilitado
-            // 
-            this.checkBox_Habilitado.AutoSize = true;
-            this.checkBox_Habilitado.Location = new System.Drawing.Point(21, 343);
-            this.checkBox_Habilitado.Name = "checkBox_Habilitado";
-            this.checkBox_Habilitado.Size = new System.Drawing.Size(73, 17);
-            this.checkBox_Habilitado.TabIndex = 5;
-            this.checkBox_Habilitado.Text = "Habilitado";
-            this.checkBox_Habilitado.UseVisualStyleBackColor = true;
-            // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.comboBox_TiposDePublicacion);
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.comboBox_Estado);
-            this.groupBox1.Controls.Add(this.comboBox_TiposDePublicacion);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
@@ -124,15 +113,6 @@ namespace MercadoEnvio.Editar_Publicacion
             this.comboBox_Estado.Name = "comboBox_Estado";
             this.comboBox_Estado.Size = new System.Drawing.Size(250, 21);
             this.comboBox_Estado.TabIndex = 2;
-            // 
-            // comboBox_TiposDePublicacion
-            // 
-            this.comboBox_TiposDePublicacion.Enabled = false;
-            this.comboBox_TiposDePublicacion.FormattingEnabled = true;
-            this.comboBox_TiposDePublicacion.Location = new System.Drawing.Point(112, 13);
-            this.comboBox_TiposDePublicacion.Name = "comboBox_TiposDePublicacion";
-            this.comboBox_TiposDePublicacion.Size = new System.Drawing.Size(250, 21);
-            this.comboBox_TiposDePublicacion.TabIndex = 1;
             // 
             // label1
             // 
@@ -264,6 +244,14 @@ namespace MercadoEnvio.Editar_Publicacion
             this.label_stock.TabIndex = 0;
             this.label_stock.Text = "Stock";
             // 
+            // comboBox_TiposDePublicacion
+            // 
+            this.comboBox_TiposDePublicacion.FormattingEnabled = true;
+            this.comboBox_TiposDePublicacion.Location = new System.Drawing.Point(112, 8);
+            this.comboBox_TiposDePublicacion.Name = "comboBox_TiposDePublicacion";
+            this.comboBox_TiposDePublicacion.Size = new System.Drawing.Size(250, 21);
+            this.comboBox_TiposDePublicacion.TabIndex = 4;
+            // 
             // EditarPublicacion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -272,7 +260,6 @@ namespace MercadoEnvio.Editar_Publicacion
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.checkBox_Habilitado);
             this.Controls.Add(this.button_Limpiar);
             this.Controls.Add(this.button_Cancelar);
             this.Controls.Add(this.button_Guardar);
@@ -286,7 +273,6 @@ namespace MercadoEnvio.Editar_Publicacion
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -295,11 +281,9 @@ namespace MercadoEnvio.Editar_Publicacion
         private System.Windows.Forms.Button button_Guardar;
         private System.Windows.Forms.Button button_Cancelar;
         private System.Windows.Forms.Button button_Limpiar;
-        private System.Windows.Forms.CheckBox checkBox_Habilitado;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.ComboBox comboBox_Estado;
-        private System.Windows.Forms.ComboBox comboBox_TiposDePublicacion;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.ComboBox comboBox_Rubro;
@@ -314,5 +298,6 @@ namespace MercadoEnvio.Editar_Publicacion
         private System.Windows.Forms.Label label_precio;
         private System.Windows.Forms.Label label_stock;
         private System.Windows.Forms.CheckBox checkBox_Pregunta;
+        private System.Windows.Forms.ComboBox comboBox_TiposDePublicacion;
     }
 }

@@ -219,7 +219,7 @@ namespace MercadoEnvio
 
         /** Publicaciones **/
 
-        public Publicacion ObtenerPublicacion(Decimal idPublicacion)
+        public Publicacion ObtenerPublicacion(int idPublicacion)
         {
             Publicacion objeto = new Publicacion();
             Type clase = objeto.GetType();

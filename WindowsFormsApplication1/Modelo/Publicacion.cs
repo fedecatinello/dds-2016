@@ -154,7 +154,7 @@ namespace MercadoEnvio.Modelo
                 throw new CampoVacioException("Precio");
 
             if (!esNumero(precio))
-                throw new FechaPasadaException();
+                throw new IngresePrecioEnteroException("Precio");
 
             this.precio = precio;
         }
@@ -194,7 +194,9 @@ namespace MercadoEnvio.Modelo
 
         string Mapeable.GetQueryModificar()
         {
-            return "UPDATE NET_A_CERO.Publicaciones SET publi_tipo = @tipo_id, publi_estado_id = @estado_id, publi_descripcion = @descripcion, publi_fec_inicio = @fecha_inicio, publi_fec_vencimiento = @fecha_vencimiento, publi_rubro_id = @rubro_id, publi_visib_id = @visibilidad_id, publi_stock = @stock, publi_precio = @precio, publi_costo_pagado = @costoPagado, publi_preguntas = @se_realizan_preguntas WHERE publi_id = @id";
+            return " UPDATE NET_A_CERO.Publicaciones SET publi_tipo = @publi_tipo, publi_descripcion = @publi_descripcion, publi_stock = @publi_stock, publi_fec_vencimiento = @publi_fec_vencimiento, publi_fec_inicio = @publi_fec_inicio, publi_precio = @publi_precio, publi_costo_pagado = @publi_costo_pagado, publi_preguntas = @publi_preguntas, publi_visib_id = @publi_visib_id, publi_estado_id = @publi_estado_id WHERE publi_id = @id " 
+                /*" DELETE NET_A_CERO.Rubro_x_Publicacion WHERE publi_id = @id " +    
+                " INSERT INTO NET_A_CERO.Rubro_x_Publicacion (rubro_id, publi_id) VALUES (@rubro_id, @id) "*/;
         }
 
         string Mapeable.GetQueryObtener()
@@ -224,17 +226,17 @@ namespace MercadoEnvio.Modelo
         void Mapeable.CargarInformacion(SqlDataReader reader)
         {
             this.tipoDePublicacion = Convert.ToString(reader["publi_tipo"]);
-            this.idEstado = Convert.ToDecimal(reader["publi_estado_id"]);
             this.descripcion = Convert.ToString(reader["publi_descripcion"]);
-            this.fechaDeInicio = Convert.ToDateTime(reader["publi_fec_inicio"]);
-            this.fechaDeVencimiento = Convert.ToDateTime(reader["publi_fec_vencimiento"]);
             this.stock = Convert.ToString(reader["publi_stock"]);
+            this.fechaDeVencimiento = Convert.ToDateTime(reader["publi_fec_vencimiento"]);
+            this.fechaDeInicio = Convert.ToDateTime(reader["publi_fec_inicio"]);
             this.precio = Convert.ToString(reader["publi_precio"]);
             this.costoPagado = Convert.ToBoolean(reader["publi_costo_pagado"]);
-            this.idRubro = Convert.ToDecimal(reader["publi_rubro_id"]);
-            this.idVisibilidad = Convert.ToDecimal(reader["publi_visib_id"]);
-            this.idUsuario = Convert.ToDecimal(reader["publi_usr_id"]);
             this.pregunta = Convert.ToBoolean(reader["publi_preguntas"]);
+            this.idUsuario = Convert.ToDecimal(reader["publi_usr_id"]);
+            this.idVisibilidad = Convert.ToDecimal(reader["publi_visib_id"]);
+            this.idEstado = Convert.ToDecimal(reader["publi_estado_id"]);
+            //this.idRubro = Convert.ToDecimal(reader["publi_rubro_id"]);
         }
 
         #endregion
