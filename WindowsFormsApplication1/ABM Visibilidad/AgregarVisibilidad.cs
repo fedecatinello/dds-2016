@@ -43,8 +43,8 @@ namespace MercadoEnvio.ABM_Visibilidad
                 visibilidad.SetPorcentajePorVenta(porcentajePorVenta);
                 visibilidad.SetGrado(grado);
                 //visibilidad.SetDuracion(duracion);
-                Decimal idVisibilidad = mapper.CrearVisibilidad(visibilidad);
-                if (idVisibilidad > 0) MessageBox.Show("La visibilidad fue creada");
+                bool isPersisted = mapper.CrearVisibilidad(visibilidad);
+                if (isPersisted) MessageBox.Show("La visibilidad fue creada");
             }
             catch (CampoVacioException exception)
             {

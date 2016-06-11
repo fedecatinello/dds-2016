@@ -150,7 +150,6 @@ CREATE TABLE [NET_A_CERO].[Visibilidad] (
     [visib_porcentaje] [NUMERIC](18, 2) NOT NULL,
     [visib_envios] [bit] DEFAULT 1,
 	[visib_activo] [bit] DEFAULT 1,
-    CONSTRAINT [descripcion_visibilidad] CHECK (visib_desc IN ('Oro', 'Plata', 'Bronce', 'Platino', 'Gratis')),
     CONSTRAINT [grado_visibilidad] CHECK (visib_grado IN ('Comisión por tipo de publicación', 'Comisión por producto vendido', 'Comisión por envío del producto'))
 )
 
@@ -516,20 +515,19 @@ END
 GO
 
 CREATE PROCEDURE NET_A_CERO.pr_crear_visibilidad
-    @descripcion varchar(255),
+    @id numeric(18, 0),
+	@descripcion varchar(255),
     @grado varchar(50),
     @precio numeric(18,2),
     @porcentaje numeric(18,2),
     @envios bit,
-	@activo bit,
-    @id numeric(18,0) OUTPUT
+	@activo bit
 AS
 BEGIN
     INSERT INTO NET_A_CERO.Visibilidad
-        (visib_desc, visib_grado, visib_precio, visib_porcentaje, visib_envios, visib_activo)
+        (visib_id, visib_desc, visib_grado, visib_precio, visib_porcentaje, visib_envios, visib_activo)
     VALUES
-        (@descripcion, @grado, @precio, @porcentaje, @envios, @activo);
-    SET @id = SCOPE_IDENTITY();
+        (@id, @descripcion, @grado, @precio, @porcentaje, @envios, @activo);
 END
 GO
 
@@ -836,14 +834,12 @@ INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(func_id, rol_id)
 
 
 
-/** Migración de Visibilidad **/  --Falta ver que onda el grado de la visibilidad
+/** Migración de Visibilidad **/
 
 INSERT INTO NET_A_CERO.Visibilidad(visib_id, visib_desc, visib_precio, visib_porcentaje)
         SELECT DISTINCT Publicacion_Visibilidad_Cod, Publicacion_Visibilidad_Desc, Publicacion_Visibilidad_Precio, Publicacion_Visibilidad_Porcentaje 
     FROM gd_esquema.Maestra
 GO
-
--- RECORDAR:   CONSTRAINT [grado_visibilidad] CHECK (visib_grado IN ('Comisión por tipo de publicación', 'Comisión por producto vendido', 'Comisión por envío del producto'))
 
 
 /** Migracion de estado de publicacion **/

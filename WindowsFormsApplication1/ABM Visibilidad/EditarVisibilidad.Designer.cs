@@ -38,9 +38,9 @@ namespace MercadoEnvio.ABM_Visibilidad
             this.textBox_PorcentajePorVenta = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.checkBox_Habilitado = new System.Windows.Forms.CheckBox();
             this.comboBox_Grado = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.checkBox_Envios = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -139,6 +139,14 @@ namespace MercadoEnvio.ABM_Visibilidad
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Datos personales";
             // 
+            // comboBox_Grado
+            // 
+            this.comboBox_Grado.FormattingEnabled = true;
+            this.comboBox_Grado.Location = new System.Drawing.Point(112, 97);
+            this.comboBox_Grado.Name = "comboBox_Grado";
+            this.comboBox_Grado.Size = new System.Drawing.Size(250, 21);
+            this.comboBox_Grado.TabIndex = 8;
+            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -148,30 +156,22 @@ namespace MercadoEnvio.ABM_Visibilidad
             this.label4.TabIndex = 7;
             this.label4.Text = "Grado";
             // 
-            // checkBox_Habilitado
+            // checkBox_Envios
             // 
-            this.checkBox_Habilitado.AutoSize = true;
-            this.checkBox_Habilitado.Location = new System.Drawing.Point(21, 143);
-            this.checkBox_Habilitado.Name = "checkBox_Habilitado";
-            this.checkBox_Habilitado.Size = new System.Drawing.Size(73, 17);
-            this.checkBox_Habilitado.TabIndex = 5;
-            this.checkBox_Habilitado.Text = "Habilitado";
-            this.checkBox_Habilitado.UseVisualStyleBackColor = true;
-            // 
-            // comboBox_Grado
-            // 
-            this.comboBox_Grado.FormattingEnabled = true;
-            this.comboBox_Grado.Location = new System.Drawing.Point(112, 97);
-            this.comboBox_Grado.Name = "comboBox_Grado";
-            this.comboBox_Grado.Size = new System.Drawing.Size(250, 21);
-            this.comboBox_Grado.TabIndex = 8;
+            this.checkBox_Envios.AutoSize = true;
+            this.checkBox_Envios.Location = new System.Drawing.Point(21, 143);
+            this.checkBox_Envios.Name = "checkBox_Envios";
+            this.checkBox_Envios.Size = new System.Drawing.Size(58, 17);
+            this.checkBox_Envios.TabIndex = 5;
+            this.checkBox_Envios.Text = "Envios";
+            this.checkBox_Envios.UseVisualStyleBackColor = true;
             // 
             // EditarVisibilidad
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(392, 396);
-            this.Controls.Add(this.checkBox_Habilitado);
+            this.Controls.Add(this.checkBox_Envios);
             this.Controls.Add(this.button_Limpiar);
             this.Controls.Add(this.button_Cancelar);
             this.Controls.Add(this.button_Guardar);
@@ -198,7 +198,7 @@ namespace MercadoEnvio.ABM_Visibilidad
         private System.Windows.Forms.TextBox textBox_PorcentajePorVenta;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.CheckBox checkBox_Habilitado;
+        private System.Windows.Forms.CheckBox checkBox_Envios;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox comboBox_Grado;
     }

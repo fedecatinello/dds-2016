@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using MercadoEnvio.Exceptions;
 using System.Data.SqlClient;
+using MercadoEnvio.DataProvider;
+using System.Windows.Forms;
 
 namespace MercadoEnvio.Modelo
 {
@@ -121,6 +123,33 @@ namespace MercadoEnvio.Modelo
             return this.envios;
         }
 
+        public Decimal CalcularIdAInsertar()
+        {
+            string query = "SELECT TOP 1 visib_id FROM NET_A_CERO.Visibilidad ORDER BY visib_id DESC";
+            Decimal id = Convert.ToDecimal(QueryBuilder.Instance.build(query, null).ExecuteScalar()) + 1; //Inserto despues del ultimo registro
+            MessageBox.Show("id: " + id);
+            return id;  
+        }
+
+        public bool Persist()
+        {
+            string query = "NET_A_CERO.pr_crear_visibilidad";
+            
+            IList<SqlParameter> parametros = new List<SqlParameter>();
+            parametros.Add(new SqlParameter("@id", CalcularIdAInsertar()));
+            parametros.Add(new SqlParameter("@descripcion", this.descripcion));
+            parametros.Add(new SqlParameter("@grado", this.grado));
+            parametros.Add(new SqlParameter("@precio", Convert.ToDouble(this.precioPorPublicar)));
+            parametros.Add(new SqlParameter("@porcentaje", Convert.ToDouble(this.porcentajePorVenta)));
+            parametros.Add(new SqlParameter("@envios", this.envios));
+            parametros.Add(new SqlParameter("@activo", this.activo));
+
+            int filas = QueryBuilder.Instance.build(query, parametros).ExecuteNonQuery();
+            if (filas > 0) 
+                return true;
+            return false;
+        }
+
         #region Miembros de Comunicable
 
         string Mapeable.GetQueryCrear()
@@ -141,9 +170,10 @@ namespace MercadoEnvio.Modelo
         IList<System.Data.SqlClient.SqlParameter> Mapeable.GetParametros()
         {
             IList<SqlParameter> parametros = new List<SqlParameter>();
+            parametros.Add(new SqlParameter("@id", CalcularIdAInsertar()));
             parametros.Add(new SqlParameter("@descripcion", this.descripcion));
-            parametros.Add(new SqlParameter("@precio", Convert.ToDouble(this.precioPorPublicar)));
             parametros.Add(new SqlParameter("@grado", this.grado));
+            parametros.Add(new SqlParameter("@precio", Convert.ToDouble(this.precioPorPublicar)));
             parametros.Add(new SqlParameter("@porcentaje", Convert.ToDouble(this.porcentajePorVenta)));
             parametros.Add(new SqlParameter("@envios", this.envios));
             parametros.Add(new SqlParameter("@activo", this.activo));
@@ -154,8 +184,8 @@ namespace MercadoEnvio.Modelo
         void Mapeable.CargarInformacion(SqlDataReader reader)
         {
             this.descripcion = Convert.ToString(reader["visib_desc"]);
-            this.precioPorPublicar = Convert.ToString(reader["visib_precio"]);
             this.grado = Convert.ToString(reader["visib_grado"]);
+            this.precioPorPublicar = Convert.ToString(reader["visib_precio"]);
             this.porcentajePorVenta = Convert.ToString(reader["visib_porcentaje"]);
             this.envios = Convert.ToBoolean(reader["visib_envios"]);
             this.activo = Convert.ToBoolean(reader["visib_activo"]);
