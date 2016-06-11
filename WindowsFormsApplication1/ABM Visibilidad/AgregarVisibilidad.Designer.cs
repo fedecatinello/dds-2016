@@ -40,11 +40,13 @@ namespace MercadoEnvio.ABM_Visibilidad
             this.button_Guardar = new System.Windows.Forms.Button();
             this.button_Cancelar = new System.Windows.Forms.Button();
             this.button_Limpiar = new System.Windows.Forms.Button();
+            this.checkBox_Envios = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.checkBox_Envios);
             this.groupBox1.Controls.Add(this.comboBox_Grado);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.label3);
@@ -55,7 +57,7 @@ namespace MercadoEnvio.ABM_Visibilidad
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(368, 126);
+            this.groupBox1.Size = new System.Drawing.Size(368, 154);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Datos personales";
@@ -155,6 +157,16 @@ namespace MercadoEnvio.ABM_Visibilidad
             this.button_Limpiar.UseVisualStyleBackColor = true;
             this.button_Limpiar.Click += new System.EventHandler(this.button_Limpiar_Click);
             // 
+            // checkBox_Envios
+            // 
+            this.checkBox_Envios.AutoSize = true;
+            this.checkBox_Envios.Location = new System.Drawing.Point(10, 128);
+            this.checkBox_Envios.Name = "checkBox_Envios";
+            this.checkBox_Envios.Size = new System.Drawing.Size(58, 17);
+            this.checkBox_Envios.TabIndex = 9;
+            this.checkBox_Envios.Text = "Envios";
+            this.checkBox_Envios.UseVisualStyleBackColor = true;
+            // 
             // AgregarVisibilidad
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -187,5 +199,6 @@ namespace MercadoEnvio.ABM_Visibilidad
         private System.Windows.Forms.Button button_Limpiar;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox comboBox_Grado;
+        private System.Windows.Forms.CheckBox checkBox_Envios;
     }
 }

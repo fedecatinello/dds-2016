@@ -63,7 +63,7 @@ namespace MercadoEnvio.ABM_Cliente
             textBox_Localidad.Text = contacto.GetLocalidad();
             textBox_CodigoPostal.Text = contacto.GetCodigoPostal();
 
-            checkBox_Habilitado.Checked = Convert.ToBoolean(mapper.SelectFromWhere("usr_activo", "Usuarios", "usr_id", cliente.GetIdUsuario()));
+            checkBox_Habilitado.Checked = Convert.ToBoolean(mapper.SelectFromWhere("cli_activo", "Clientes", "cli_usr_id", cliente.GetIdUsuario()));
         }
 
         private void button_Guardar_Click(object sender, EventArgs e)
@@ -126,7 +126,7 @@ namespace MercadoEnvio.ABM_Cliente
                 cliente.SetTipoDeDocumento(tipoDeDocumento);
                 cliente.SetFechaDeNacimiento(fechaDeNacimiento);
           
-                usuario.SetActivo(activo);
+                cliente.SetActivo(activo);
 
                 pudoModificar = mapper.Modificar(idCliente, cliente);
                 if (pudoModificar) MessageBox.Show("El cliente se modifico correctamente");

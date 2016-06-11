@@ -48,7 +48,7 @@ namespace MercadoEnvio.ABM_Empresa
             textBox_FechaDeCreacion.Text = Convert.ToString(empresa.GetFechaDeCreacion());
             textBox_Mail.Text = contacto.GetMail();
             textBox_Telefono.Text = contacto.GetTelefono();
-            checkBox_Habilitado.Checked = Convert.ToBoolean(mapper.SelectFromWhere("usr_activo", "Usuarios", "usr_id", empresa.GetIdUsuario()));
+            checkBox_Habilitado.Checked = Convert.ToBoolean(mapper.SelectFromWhere("emp_activo", "Empresas", "emp_usr_id", empresa.GetIdUsuario()));
             textBox_Calle.Text = contacto.GetCalle();
             textBox_Numero.Text = contacto.GetNumeroCalle();
             textBox_Piso.Text = contacto.GetPiso();
@@ -124,7 +124,7 @@ namespace MercadoEnvio.ABM_Empresa
             try
             {
                 Empresas empresa = new Empresas();
-                Usuarios usuario = new Usuarios();
+                //Usuarios usuario = new Usuarios();
 
                 empresa.SetRazonSocial(razonSocial);
                 empresa.SetCiudad(ciudad);
@@ -133,7 +133,7 @@ namespace MercadoEnvio.ABM_Empresa
                 empresa.SetRubro(rubro);
                 empresa.SetFechaDeCreacion(fechaDeCreacion);
                 empresa.SetIdContacto(idContacto);
-                usuario.SetActivo(activo);
+                empresa.SetActivo(activo);
                 //usuario.Setis_admin(activo);
                 pudoModificar = mapper.Modificar(idEmpresa, empresa);
                 if (pudoModificar) MessageBox.Show("La empresa se modifico correctamente");

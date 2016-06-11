@@ -32,6 +32,7 @@ namespace MercadoEnvio.ABM_Visibilidad
             String precioPorPublicar = textBox_PrecioPorPublicar.Text;
             String porcentajePorVenta = textBox_PorcentajePorVenta.Text;
             String grado = comboBox_Grado.Text;
+            Boolean envios = checkBox_Envios.Checked;
             //String duracion = textBox_Duracion.Text;
 
             // Inserto la Visibilidad en la DB
@@ -42,6 +43,8 @@ namespace MercadoEnvio.ABM_Visibilidad
                 visibilidad.SetPrecioPorPublicar(precioPorPublicar);
                 visibilidad.SetPorcentajePorVenta(porcentajePorVenta);
                 visibilidad.SetGrado(grado);
+                visibilidad.SetEnvios(envios);
+                visibilidad.SetActivo(true);
                 //visibilidad.SetDuracion(duracion);
                 bool isPersisted = mapper.CrearVisibilidad(visibilidad);
                 if (isPersisted) MessageBox.Show("La visibilidad fue creada");
@@ -73,6 +76,7 @@ namespace MercadoEnvio.ABM_Visibilidad
             textBox_PorcentajePorVenta.Text = "";
             textBox_PrecioPorPublicar.Text = "";
             comboBox_Grado.SelectedIndex = -1;
+            checkBox_Envios.Checked = false;
         }
 
         private void button_Cancelar_Click(object sender, EventArgs e)

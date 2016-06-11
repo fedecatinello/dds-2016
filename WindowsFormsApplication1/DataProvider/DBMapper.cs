@@ -390,7 +390,7 @@ namespace MercadoEnvio
 
             return this.SelectDataTable("cli.cli_id, usr.usr_usuario Username, cli.cli_nombre Nombre, cli.cli_apellido Apellido, cli.cli_dni Documento, cli.cli_tipo_dni 'Tipo de Documento', cli.cli_fecha_nac 'Fecha de Nacimiento', cli.cli_activo 'Habilitado', cont.cont_mail Mail, cont.cont_telefono Telefono, cont.cont_calle Calle, cont.cont_numero_calle 'Numero Calle', cont.cont_piso Piso, cont.cont_depto Departamento, cont.cont_localidad Localidad, cont.cont_codigo_postal 'Codigo Postal' "
                 , "NET_A_CERO.Clientes cli, NET_A_CERO.Contacto cont, NET_A_CERO.Usuarios usr"
-                , "cli.cli_usr_id = usr.usr_id AND cli.cli_cont_id = cont.cont_id" + filtro);
+                , "cli.cli_usr_id = usr.usr_id AND cli.cli_cont_id = cont.cont_id " + filtro);
         }
 
         /** Empresas **/
@@ -404,7 +404,7 @@ namespace MercadoEnvio
         {
               return this.SelectDataTable("emp.emp_id, usr.usr_usuario Username, emp.emp_razon_social 'Razon Social', emp.emp_ciudad Ciudad, emp.emp_cuit 'CUIT', emp.emp_nombre_contacto 'Nombre Contacto', (SELECT rubro_desc_larga FROM NET_A_CERO.Rubros WHERE rubro_id = emp.emp_rubro) 'Rubro', emp.emp_fecha_alta 'Fecha Alta', emp.emp_activo 'Habilitado', cont.cont_mail Mail, cont.cont_telefono Telefono, cont.cont_calle Calle, cont.cont_numero_calle 'Numero Calle', cont.cont_piso Piso, cont.cont_depto Departamento, cont.cont_localidad Localidad, cont.cont_codigo_postal 'Codigo Postal' "
                 , "NET_A_CERO.Empresas emp, NET_A_CERO.Contacto cont, NET_A_CERO.Usuarios usr"
-                , "emp.emp_usr_id = usr.usr_id AND emp.emp_cont_id = cont.cont_id" + filtro);
+                , "emp.emp_usr_id = usr.usr_id AND emp.emp_cont_id = cont.cont_id " + filtro);
         }
 
         /** Visibilidad **/
@@ -418,7 +418,7 @@ namespace MercadoEnvio
         {
             return this.SelectDataTable("v.visib_id, v.visib_desc Descripcion, v.visib_grado Grado, v.visib_precio Precio, v.visib_porcentaje Porcentaje, v.visib_envios 'Soporta Envios', v.visib_activo 'Habilitado'"
                 , "NET_A_CERO.Visibilidad v"
-                , "v.visib_desc IS NOT NULL" + filtro);
+                , "v.visib_desc IS NOT NULL " + filtro);
         }
 
         /** Publicaciones **/
@@ -432,7 +432,7 @@ namespace MercadoEnvio
         {
             return this.SelectDataTableConUsuario("p.publi_id, u.usr_usuario Usuario, p.publi_descripcion Descripcion, p.publi_fec_inicio 'Fecha de inicio', p.publi_fec_vencimiento 'Fecha de vencimiento', r.rubro_desc_larga Rubro, v.visib_desc Visibilidad, p.publi_preguntas 'Permite preguntas', p.publi_stock Stock, p.publi_precio Precio"
                 , "NET_A_CERO.Publicaciones p, NET_A_CERO.Rubros r, NET_A_CERO.Visibilidad v, NET_A_CERO.Usuarios u, NET_A_CERO.Rubro_x_Publicacion rxp"
-                , "rxp.rubro_id = r.rubro_id AND rxp.publi_id=p.publi_id AND p.publi_visib_id = v.visib_id AND p.publi_usr_id = u.usr_id AND p.publi_usr_id = @idUsuario" + filtro);
+                , "rxp.rubro_id = r.rubro_id AND rxp.publi_id=p.publi_id AND p.publi_visib_id = v.visib_id AND p.publi_usr_id = u.usr_id AND p.publi_usr_id = @idUsuario " + filtro);
         }
 
         

@@ -123,12 +123,10 @@ namespace MercadoEnvio.Modelo
             return this.envios;
         }
 
-        public Decimal CalcularIdAInsertar()
+        public void CalcularIdAInsertar()
         {
             string query = "SELECT TOP 1 visib_id FROM NET_A_CERO.Visibilidad ORDER BY visib_id DESC";
-            Decimal id = Convert.ToDecimal(QueryBuilder.Instance.build(query, null).ExecuteScalar()) + 1; //Inserto despues del ultimo registro
-            MessageBox.Show("id: " + id);
-            return id;  
+            SetId(Convert.ToDecimal(QueryBuilder.Instance.build(query, null).ExecuteScalar()) + 1); //Inserto despues del ultimo registro  
         }
 
         public bool Persist()
@@ -136,7 +134,7 @@ namespace MercadoEnvio.Modelo
             string query = "NET_A_CERO.pr_crear_visibilidad";
             
             IList<SqlParameter> parametros = new List<SqlParameter>();
-            parametros.Add(new SqlParameter("@id", CalcularIdAInsertar()));
+            parametros.Add(new SqlParameter("@id", GetId()));
             parametros.Add(new SqlParameter("@descripcion", this.descripcion));
             parametros.Add(new SqlParameter("@grado", this.grado));
             parametros.Add(new SqlParameter("@precio", Convert.ToDouble(this.precioPorPublicar)));
@@ -170,7 +168,6 @@ namespace MercadoEnvio.Modelo
         IList<System.Data.SqlClient.SqlParameter> Mapeable.GetParametros()
         {
             IList<SqlParameter> parametros = new List<SqlParameter>();
-            parametros.Add(new SqlParameter("@id", CalcularIdAInsertar()));
             parametros.Add(new SqlParameter("@descripcion", this.descripcion));
             parametros.Add(new SqlParameter("@grado", this.grado));
             parametros.Add(new SqlParameter("@precio", Convert.ToDouble(this.precioPorPublicar)));
@@ -183,6 +180,7 @@ namespace MercadoEnvio.Modelo
 
         void Mapeable.CargarInformacion(SqlDataReader reader)
         {
+            this.id = Convert.ToDecimal(reader["visib_id"]);
             this.descripcion = Convert.ToString(reader["visib_desc"]);
             this.grado = Convert.ToString(reader["visib_grado"]);
             this.precioPorPublicar = Convert.ToString(reader["visib_precio"]);

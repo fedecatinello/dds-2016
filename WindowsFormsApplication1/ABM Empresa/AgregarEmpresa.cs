@@ -92,7 +92,7 @@ namespace MercadoEnvio.ABM_Empresa
             try
             {
                 Empresas empresa = new Empresas();
-                Usuarios usuario = new Usuarios();
+               // Usuarios usuario = new Usuarios();
 
                 empresa.SetRazonSocial(razonSocial);
                 empresa.SetCiudad(ciudad);
@@ -101,7 +101,7 @@ namespace MercadoEnvio.ABM_Empresa
                 empresa.SetRubro(rubro);
                 empresa.SetFechaDeCreacion(fechaDeCreacion);
                 empresa.SetIdUsuario(idUsuario);
-                usuario.SetActivo(true);
+                empresa.SetActivo(true);
                 empresa.SetIdContacto(idContacto);
                 
                 idEmpresa = mapper.CrearEmpresa(empresa);
