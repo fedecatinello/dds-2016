@@ -32,7 +32,7 @@ namespace MercadoEnvio.Calificar_Vendedor
 
         private void CargarCompras()
         {
-            dataGridViewCompras.DataSource = comunicar.SelectDataTableConUsuario("c.id id, u.username Vendedor, p.descripcion Publicacion, c.cantidad Cantidad, tipo.descripcion Tipo, convert(varchar, c.fecha, 102) Fecha", "LOS_SUPER_AMIGOS.Compra c, LOS_SUPER_AMIGOS.Publicacion p, LOS_SUPER_AMIGOS.Usuario u, LOS_SUPER_AMIGOS.TipoDePublicacion tipo", "tipo.id = p.tipo_id AND isnull(c.calificacion_id,0) = 0 AND c.publicacion_id = p.id and p.usuario_id = u.id AND c.usuario_id = @idUsuario");
+            dataGridViewCompras.DataSource = comunicar.SelectDataTableConUsuario("c.comp_id id, u.usr_usuario Vendedor, p.publi_descripcion Publicacion, c.comp_cantidad Cantidad, p.publi_tipo Tipo, convert(varchar, c.comp_fecha, 102) Fecha", "NET_A_CERO.Compras c, NET_A_CERO.Publicaciones p, NET_A_CERO.Usuarios u", "isnull(c.comp_calif_id,0) = 0 AND c.comp_publi_id = p.publi_id and p.publi_usr_id = u.usr_id AND c.comp_usr_id = @idUsuario");
             CargarColumnaCalificacion();
         }
 

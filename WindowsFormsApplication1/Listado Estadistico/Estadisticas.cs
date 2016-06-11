@@ -97,7 +97,7 @@ namespace MercadoEnvio.Listado_Estadistico
                                 + " BEGIN"
                                 + " INSERT INTO NET_A_CERO.usuarios_por_visibilidad ([mes], [visibilidad], [usuario], [cantidad])"
                                 + " SELECT TOP 5 @mes, @visibilidad, usuario.usr_usuario, NET_A_CERO.calcular_productos_no_vendidos(usuario.usr_id, (@visibilidad), (@fechaini), (@fechafin)) Cantidad"
-                                + " FROM NET_A_CERO.Usuario usuario"
+                                + " FROM NET_A_CERO.Usuarios usuario"
                                 + " ORDER BY Cantidad DESC"
                                 + " FETCH FROM mi_cursor INTO @mes, @visibilidad"
                                 + " END"
