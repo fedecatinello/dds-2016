@@ -16,7 +16,6 @@ namespace MercadoEnvio.Comprar_Ofertar
         private SqlCommand command { get; set; }
         private IList<SqlParameter> parametros = new List<SqlParameter>();
         decimal idUsuarioActual = UsuarioSesion.Usuario.id;
-        decimal idUsuarioActual = 4;
         private Decimal vendedorId;
         private int publicacionId;
         private int stockActual;
@@ -32,11 +31,11 @@ namespace MercadoEnvio.Comprar_Ofertar
 
         private void Comprar_Load(object sender, EventArgs e)
         {
-            pedirContacto();
-            pedirDireccion();            
+            /* pedirContacto();
+            pedirDireccion();   */         
         }
 
-        private void pedirContacto()
+        /* private void pedirContacto()
         {
             parametros.Clear();
             parametros.Add(new SqlParameter("@usuario", vendedorId));
@@ -88,11 +87,11 @@ namespace MercadoEnvio.Comprar_Ofertar
             labelPostal.Text = ((String)readerContacto["cont_codigo_postal"]).ToString();
             labelLocalidad.Text = (String)readerContacto["cont_localidad"];
 
-        }
+        } */
 
         private void buttonConfirmarCompra_Click(object sender, EventArgs e)
         {
-            uint val = 0;
+           /* uint val = 0;
             if (!UInt32.TryParse(textBoxCant.Text, out val))
             {
                 MessageBox.Show("Solo puede ingresar un número entero positivo");
@@ -146,9 +145,10 @@ namespace MercadoEnvio.Comprar_Ofertar
                 new BuscadorPublicaciones().ShowDialog();
                 this.Close();
             }
+             */
         }
 
-        private bool pedirEstado()
+        /* private bool pedirEstado()
         {
             parametros.Clear();
             parametros.Add(new SqlParameter("@id", publicacionId));
@@ -167,13 +167,13 @@ namespace MercadoEnvio.Comprar_Ofertar
             {
                 return true;
             }
-        }
+        } */
 
         private void botonCancelar_Click(object sender, EventArgs e)
         {
-            this.Hide();
+            /* this.Hide();
             new VerPublicacion(publicacionId).ShowDialog();
-            this.Close();
+            this.Close(); */
         }
     }
 }

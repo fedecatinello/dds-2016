@@ -223,7 +223,6 @@ namespace MercadoEnvio.Comprar_Ofertar
             this.labelPiso.Size = new System.Drawing.Size(35, 13);
             this.labelPiso.TabIndex = 9;
             this.labelPiso.Text = "label8";
-            this.labelPiso.Click += new System.EventHandler(this.label1_Click);
             // 
             // Comprar
             // 
