@@ -17,7 +17,7 @@ namespace MercadoEnvio.ABM_Empresa
     {
         private int idEmpresa;
         private int idContacto = 0;
-        //private int idUsuario;
+        private int idUsuario = 0;
         private DBMapper mapper = new DBMapper();
 
         public EditarEmpresa(String idEmpresa)
@@ -36,8 +36,8 @@ namespace MercadoEnvio.ABM_Empresa
         {
             Empresas empresa = mapper.ObtenerEmpresa(idEmpresa);
             Contacto contacto = mapper.ObtenerContacto(empresa.GetIdContacto());
-            //Usuarios usuario = mapper.ObtenerUsuario(empresa.GetIdUsuario());
-
+            
+            idUsuario = empresa.GetIdUsuario();
             idContacto = empresa.GetIdContacto();
 
             textBox_RazonSocial.Text = empresa.GetRazonSocial();
@@ -48,7 +48,7 @@ namespace MercadoEnvio.ABM_Empresa
             textBox_FechaDeCreacion.Text = Convert.ToString(empresa.GetFechaDeCreacion());
             textBox_Mail.Text = contacto.GetMail();
             textBox_Telefono.Text = contacto.GetTelefono();
-            checkBox_Habilitado.Checked = Convert.ToBoolean(mapper.SelectFromWhere("emp_activo", "Empresas", "emp_usr_id", empresa.GetIdUsuario()));
+            checkBox_Habilitado.Checked = Convert.ToBoolean(mapper.SelectFromWhere("usr_activo", "Usuarios", "usr_id", empresa.GetIdUsuario()));
             textBox_Calle.Text = contacto.GetCalle();
             textBox_Numero.Text = contacto.GetNumeroCalle();
             textBox_Piso.Text = contacto.GetPiso();
@@ -133,8 +133,9 @@ namespace MercadoEnvio.ABM_Empresa
                 empresa.SetRubro(rubro);
                 empresa.SetFechaDeCreacion(fechaDeCreacion);
                 empresa.SetIdContacto(idContacto);
-                empresa.SetActivo(activo);
-                //usuario.Setis_admin(activo);
+
+                mapper.ActualizarEstadoUsuario(idUsuario, activo);
+
                 pudoModificar = mapper.Modificar(idEmpresa, empresa);
                 if (pudoModificar) MessageBox.Show("La empresa se modifico correctamente");
             }

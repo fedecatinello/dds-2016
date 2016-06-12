@@ -17,7 +17,7 @@ namespace MercadoEnvio.ABM_Cliente
     {
         private int idCliente;
         private int idContacto = 0;
-        //private int idUsuario;
+        private int idUsuario = 0;
         private DBMapper mapper = new DBMapper();
 
         public EditarCliente(String idCliente)
@@ -44,9 +44,9 @@ namespace MercadoEnvio.ABM_Cliente
         {
             Clientes cliente = mapper.ObtenerCliente(idCliente);
             Contacto contacto = mapper.ObtenerContacto(cliente.GetIdContacto());
-            //Usuarios usuario = comunicador.ObtenerUsuario(cliente.GetIdUsuario());
 
-            //Me guardo el id contacto
+            //Me guardo el id contacto y usuario
+            idUsuario = cliente.GetIdUsuario();
             idContacto = cliente.GetIdContacto();
 
             textBox_Nombre.Text = cliente.GetNombre();
@@ -63,7 +63,7 @@ namespace MercadoEnvio.ABM_Cliente
             textBox_Localidad.Text = contacto.GetLocalidad();
             textBox_CodigoPostal.Text = contacto.GetCodigoPostal();
 
-            checkBox_Habilitado.Checked = Convert.ToBoolean(mapper.SelectFromWhere("cli_activo", "Clientes", "cli_usr_id", cliente.GetIdUsuario()));
+            checkBox_Habilitado.Checked = Convert.ToBoolean(mapper.SelectFromWhere("usr_activo", "Usuarios", "usr_id", cliente.GetIdUsuario()));
         }
 
         private void button_Guardar_Click(object sender, EventArgs e)
@@ -118,15 +118,15 @@ namespace MercadoEnvio.ABM_Cliente
             try
             {
                 Clientes cliente = new Clientes();
-                Usuarios usuario = new Usuarios();
+                //Usuarios usuario = new Usuarios();
 
                 cliente.SetNombre(nombre);
                 cliente.SetApellido(apellido);
                 cliente.SetNumeroDeDocumento(numeroDeDocumento);
                 cliente.SetTipoDeDocumento(tipoDeDocumento);
                 cliente.SetFechaDeNacimiento(fechaDeNacimiento);
-          
-                cliente.SetActivo(activo);
+
+                mapper.ActualizarEstadoUsuario(idUsuario, activo);
 
                 pudoModificar = mapper.Modificar(idCliente, cliente);
                 if (pudoModificar) MessageBox.Show("El cliente se modifico correctamente");

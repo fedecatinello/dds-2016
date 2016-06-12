@@ -266,6 +266,26 @@ namespace MercadoEnvio
             return false;
         }
 
+
+        /*
+         * 
+         *  ENABLE/DISABLE QUERYS
+         *  
+         */
+
+        public Boolean ActualizarEstadoUsuario(Decimal id, bool activo)
+        {
+            if(activo)
+                query = "UPDATE NET_A_CERO.Usuarios SET usr_activo = 1 WHERE usr_id = @id";
+            else
+                query = "UPDATE NET_A_CERO.Usuarios SET usr_activo = 0 WHERE usr_id = @id";
+            parametros.Clear();
+            parametros.Add(new SqlParameter("@id", id));
+            int filasAfectadas = QueryBuilder.Instance.build(query, parametros).ExecuteNonQuery();
+            if (filasAfectadas == 1) return true;
+            return false;
+        }
+
         
         /* 
         * 
@@ -388,7 +408,7 @@ namespace MercadoEnvio
         public DataTable SelectClientesParaFiltroConFiltro(String filtro)
         {
 
-            return this.SelectDataTable("cli.cli_id, usr.usr_usuario Username, cli.cli_nombre Nombre, cli.cli_apellido Apellido, cli.cli_dni Documento, cli.cli_tipo_dni 'Tipo de Documento', cli.cli_fecha_nac 'Fecha de Nacimiento', cli.cli_activo 'Habilitado', cont.cont_mail Mail, cont.cont_telefono Telefono, cont.cont_calle Calle, cont.cont_numero_calle 'Numero Calle', cont.cont_piso Piso, cont.cont_depto Departamento, cont.cont_localidad Localidad, cont.cont_codigo_postal 'Codigo Postal' "
+            return this.SelectDataTable("cli.cli_id, usr.usr_usuario Username, cli.cli_nombre Nombre, cli.cli_apellido Apellido, cli.cli_dni Documento, cli.cli_tipo_dni 'Tipo de Documento', cli.cli_fecha_nac 'Fecha de Nacimiento', usr.usr_activo 'Habilitado', cont.cont_mail Mail, cont.cont_telefono Telefono, cont.cont_calle Calle, cont.cont_numero_calle 'Numero Calle', cont.cont_piso Piso, cont.cont_depto Departamento, cont.cont_localidad Localidad, cont.cont_codigo_postal 'Codigo Postal' "
                 , "NET_A_CERO.Clientes cli, NET_A_CERO.Contacto cont, NET_A_CERO.Usuarios usr"
                 , "cli.cli_usr_id = usr.usr_id AND cli.cli_cont_id = cont.cont_id " + filtro);
         }
@@ -402,7 +422,7 @@ namespace MercadoEnvio
 
         public DataTable SelectEmpresasParaFiltroConFiltro(String filtro)
         {
-              return this.SelectDataTable("emp.emp_id, usr.usr_usuario Username, emp.emp_razon_social 'Razon Social', emp.emp_ciudad Ciudad, emp.emp_cuit 'CUIT', emp.emp_nombre_contacto 'Nombre Contacto', (SELECT rubro_desc_larga FROM NET_A_CERO.Rubros WHERE rubro_id = emp.emp_rubro) 'Rubro', emp.emp_fecha_alta 'Fecha Alta', emp.emp_activo 'Habilitado', cont.cont_mail Mail, cont.cont_telefono Telefono, cont.cont_calle Calle, cont.cont_numero_calle 'Numero Calle', cont.cont_piso Piso, cont.cont_depto Departamento, cont.cont_localidad Localidad, cont.cont_codigo_postal 'Codigo Postal' "
+              return this.SelectDataTable("emp.emp_id, usr.usr_usuario Username, emp.emp_razon_social 'Razon Social', emp.emp_ciudad Ciudad, emp.emp_cuit 'CUIT', emp.emp_nombre_contacto 'Nombre Contacto', (SELECT rubro_desc_larga FROM NET_A_CERO.Rubros WHERE rubro_id = emp.emp_rubro) 'Rubro', emp.emp_fecha_alta 'Fecha Alta', usr.usr_activo 'Habilitado', cont.cont_mail Mail, cont.cont_telefono Telefono, cont.cont_calle Calle, cont.cont_numero_calle 'Numero Calle', cont.cont_piso Piso, cont.cont_depto Departamento, cont.cont_localidad Localidad, cont.cont_codigo_postal 'Codigo Postal' "
                 , "NET_A_CERO.Empresas emp, NET_A_CERO.Contacto cont, NET_A_CERO.Usuarios usr"
                 , "emp.emp_usr_id = usr.usr_id AND emp.emp_cont_id = cont.cont_id " + filtro);
         }
