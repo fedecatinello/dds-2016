@@ -39,6 +39,7 @@ namespace MercadoEnvio.Registro_de_Usuario
             adapter.Fill(roles, "Rol");
             comboBoxRol.DataSource = roles.Tables[0].DefaultView;
             comboBoxRol.ValueMember = "rol_nombre";
+            comboBoxRol.SelectedIndex = -1;
         }
 
         private void botonSiguiente_Click(object sender, EventArgs e)

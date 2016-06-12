@@ -31,6 +31,7 @@ namespace MercadoEnvio.Calificar_Vendedor
             this.dataGridViewCompras = new System.Windows.Forms.DataGridView();
             this.labelTitulo = new System.Windows.Forms.Label();
             this.buttonVolver = new System.Windows.Forms.Button();
+            this.buttonHistorial = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCompras)).BeginInit();
             this.SuspendLayout();
             // 
@@ -65,11 +66,23 @@ namespace MercadoEnvio.Calificar_Vendedor
             this.buttonVolver.UseVisualStyleBackColor = true;
             this.buttonVolver.Click += new System.EventHandler(this.buttonVolver_Click);
             // 
+            // buttonHistorial
+            // 
+            this.buttonHistorial.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonHistorial.Location = new System.Drawing.Point(347, 272);
+            this.buttonHistorial.Name = "buttonHistorial";
+            this.buttonHistorial.Size = new System.Drawing.Size(216, 34);
+            this.buttonHistorial.TabIndex = 3;
+            this.buttonHistorial.Text = "Ver Historial >";
+            this.buttonHistorial.UseVisualStyleBackColor = true;
+            this.buttonHistorial.Click += new System.EventHandler(this.buttonHistorial_Click);
+            // 
             // Listado
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(575, 318);
+            this.Controls.Add(this.buttonHistorial);
             this.Controls.Add(this.buttonVolver);
             this.Controls.Add(this.labelTitulo);
             this.Controls.Add(this.dataGridViewCompras);
@@ -87,5 +100,6 @@ namespace MercadoEnvio.Calificar_Vendedor
         private System.Windows.Forms.DataGridView dataGridViewCompras;
         private System.Windows.Forms.Label labelTitulo;
         private System.Windows.Forms.Button buttonVolver;
+        private System.Windows.Forms.Button buttonHistorial;
     }
 }

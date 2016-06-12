@@ -135,6 +135,12 @@
     <Compile Include="Calificar\Calificar.Designer.cs">
       <DependentUpon>Calificar.cs</DependentUpon>
     </Compile>
+    <Compile Include="Calificar\HistorialCalificaciones.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Calificar\HistorialCalificaciones.Designer.cs">
+      <DependentUpon>HistorialCalificaciones.cs</DependentUpon>
+    </Compile>
     <Compile Include="Calificar\Listado.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -296,6 +302,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Calificar\Calificar.resx">
       <DependentUpon>Calificar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Calificar\HistorialCalificaciones.resx">
+      <DependentUpon>HistorialCalificaciones.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Calificar\Listado.resx">
       <DependentUpon>Listado.cs</DependentUpon>
