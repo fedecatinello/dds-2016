@@ -31,11 +31,10 @@ namespace MercadoEnvio.Comprar_Ofertar
         private void ComprarOfertar_Load(object sender, EventArgs e)
         {
             pedirVendedor();
-            pedirRubro();
+            pedirRubroYPrecio();
             pedirVencimientoPreguntas();
             pedirStock();                        
-            pedirPrecio();
-            pedirAccion();            
+                       
         }
 
         private void pedirTipoEstadoDescripcion()
@@ -48,6 +47,7 @@ namespace MercadoEnvio.Comprar_Ofertar
             SqlDataReader reader = QueryBuilder.Instance.build(query, parametros).ExecuteReader();
             reader.Read();
             Decimal idEstado = Convert.ToInt32(reader["publi_estado_id"]);
+
             String estado = Convert.ToString(comunicador.SelectFromWhere("estado_desc", "Estado", "estado_id", idEstado));
             if (estado == "Pausada")
             {
@@ -58,6 +58,7 @@ namespace MercadoEnvio.Comprar_Ofertar
 
             labelProductoDatos.Text = Convert.ToString(reader["publi_descripcion"]);
             tipoPublicacion = Convert.ToString(reader["publi_tipo"]);
+            labelTipoDatos.Text = tipoPublicacion;
             
             
         }
@@ -75,27 +76,44 @@ namespace MercadoEnvio.Comprar_Ofertar
             labelVendedorDatos.Text = Convert.ToString(reader["usr_usuario"]);            
         }
 
-        private void pedirRubro()
+        private void pedirRubroYPrecio()
         {
-
+            //Cargo Rubro
             Decimal rubroId = Convert.ToInt32(comunicador.SelectFromWhere("rubro_id", "Rubro_x_Publicacion", "publi_id", publicacionId));
             labelRubroDatos.Text = Convert.ToString(comunicador.SelectFromWhere("rubro_desc_larga", "Rubros", "rubro_id", rubroId));
 
-            
+            //Cargo Precio
+            if (tipoPublicacion == "Compra inmediata")
+            {
+                labelPrecioDatos.Text = Convert.ToString(comunicador.SelectFromWhere("publi_precio", "Publicaciones", "publi_id", publicacionId));
+                botonComprarOfertar.Text = "Comprar";
+
+
+            }
+            else
+            {
+                String precioSub = Convert.ToString(comunicador.SelectFromWhere("vista_precioMax", "VistaOfertaMaxima", "vista_publi_id", publicacionId));
+                botonComprarOfertar.Text = "Ofertar";
+                if (precioSub == "")
+                {
+                   labelPrecioDatos.Text = Convert.ToString(comunicador.SelectFromWhere("publi_precio", "Publicaciones", "publi_id", publicacionId));
+                }
+                else
+                {
+                    labelPrecioDatos.Text = precioSub;
+                }
+            }
+
+
+
         }
 
         private void pedirVencimientoPreguntas()
         {
-            parametros.Clear();
-            parametros.Add(new SqlParameter("@id", publicacionId));
-
-            String query = "SELECT * FROM NET_A_CERO.Publicaciones WHERE publi_id = @id";
-
-            SqlDataReader reader = QueryBuilder.Instance.build(query, parametros).ExecuteReader();
-            reader.Read();
-            labelVencimientoDatos.Text = ( Convert.ToDateTime(reader["publi_fec_vencimiento"] ).ToString());
             
-            if ((int)reader["publi_preguntas"] == 0)
+            labelVencimientoDatos.Text = Convert.ToString(comunicador.SelectFromWhere("publi_fec_vencimiento", "Publicaciones", "publi_id", publicacionId));
+            
+            if ((Convert.ToInt32(comunicador.SelectFromWhere("publi_preguntas", "Publicaciones", "publi_id", publicacionId))) == 0)
             {
                 botonPreguntar.Enabled = false;
             }            
@@ -103,96 +121,36 @@ namespace MercadoEnvio.Comprar_Ofertar
 
         private void pedirStock()
         {
-            labelStockDatos.Text = Convert.ToString(comunicador.SelectFromWhere("publi_stock", "Publicaciones", "publi_id", publicacionId));
-            
-            parametros.Clear();
-            parametros.Add(new SqlParameter("@id", publicacionId));
-            
-           
-            if (tipoPublicacion == "Subasta")
+                     
+           if (tipoPublicacion == "Subasta")
             {
                 labelStockDatos.Text = Convert.ToString(comunicador.SelectFromWhere("publi_stock", "Publicaciones", "publi_id", publicacionId));
                 
             }
             else
             {
-                String queryCompra = "SELECT * FROM NET_A_CERO.Publicaciones WHERE publi_id = @id";
-                SqlDataReader readerCompra = QueryBuilder.Instance.build(queryCompra, parametros).ExecuteReader();
-                readerCompra.Read();
-              
-                Decimal stockInicial = (Convert.ToInt32(readerCompra["publi_stock"]));
+                Decimal stockInicial = Convert.ToInt32(comunicador.SelectFromWhere("publi_stock", "Publicaciones", "publi_id", publicacionId));
+                Decimal cantidadVendida = Convert.ToInt32(comunicador.SelectFromWhere("vista_cant_vendida", "VistaCantidadVendida", "vista_publi_id", publicacionId));
 
-                parametros.Clear();
-                parametros.Add(new SqlParameter("@id", publicacionId));
-                String queryVista = "SELECT * FROM NET_A_CERO.VistaCantidadVendida WHERE vista_publi_id = @id";  //CHEQUEAR POR LA VISTA
-                SqlDataReader readerVista = QueryBuilder.Instance.build(queryVista, parametros).ExecuteReader();//CHEQUEAR POR LA VISTA
-
-                if (readerVista.Read()) //CHEQUEAR POR LA VISTA                                         
+                if (cantidadVendida == 0)
                 {
-                    
-                    labelStockDatos.Text = (stockInicial - (Decimal)readerVista["vista_cant_vendida"]).ToString();
-                }
-                else
-                {                    
-                    labelStockDatos.Text = stockInicial.ToString();
-                }
-            }
-        }
-
-        private void pedirPrecio()
-        {
-            parametros.Clear();
-            parametros.Add(new SqlParameter("@id", publicacionId));
-            labelPrecioDatos.Text = Convert.ToString(comunicador.SelectFromWhere("publi_precio", "Publicaciones", "publi_id", publicacionId));
-            if (tipoPublicacion == "Compra inmediata")
-            {   /*
-                String queryCompra = "SELECT * FROM NET_A_CERO.Publicaciones WHERE publi_id = @id";
-                SqlDataReader readerCompra = QueryBuilder.Instance.build(queryCompra, parametros).ExecuteReader();
-                readerCompra.Read();
-                labelPrecioDatos.Text = ( Convert.ToDecimal(readerCompra["publi_precio"] )).ToString();*/
-                labelPrecioDatos.Text = Convert.ToString(comunicador.SelectFromWhere("publi_precio", "Publicaciones", "publi_id", publicacionId));
-            }
-            else
-            {
-                labelPrecioDatos.Text = Convert.ToString(comunicador.SelectFromWhere("publi_stock", "VistaOfertaMaxima", "publi_id", publicacionId));
-                labelPrecioDatos.Text = Convert.ToString(comunicador.SelectFromWhere("publi_precio", "Publicaciones", "publi_id", publicacionId));
-                /*
-                String queryVista = "SELECT * FROM NET_A_CERO.VistaOfertaMaxima WHERE vista_publi_id = @id"; //CHEQUEAR POR LA VISTA
-                SqlDataReader readerVista = QueryBuilder.Instance.build(queryVista, parametros).ExecuteReader();//CHEQUEAR POR LA VISTA
-                if (readerVista.Read())//CHEQUEAR POR LA VISTA
-                {
-                    labelPrecioDatos.Text = (Convert.ToDecimal(readerVista["vista_precioMax"])).ToString();
+                    labelStockDatos.Text = Convert.ToString(stockInicial);
                 }
                 else
                 {
-                    parametros.Clear();
-                    parametros.Add(new SqlParameter("@id", publicacionId));
-                    String queryOferta = "SELECT * FROM NET_A_CERO.Publicaciones WHERE publi_id = @id";
-                    SqlDataReader readerOferta = QueryBuilder.Instance.build(queryOferta, parametros).ExecuteReader();
-                    readerOferta.Read();
-                    labelPrecioDatos.Text = ((Decimal)readerOferta["publi_precio"]).ToString();
-                }*/
+                    labelStockDatos.Text = Convert.ToString(stockInicial-cantidadVendida);
+                }
+
             }
         }
-
-        private void pedirAccion()
-        {
-            if (tipoPublicacion == "Compra inmediata")
-            {
-                botonComprarOfertar.Text = "Comprar";
-            }
-            else
-            {
-                botonComprarOfertar.Text = "Ofertar";
-            }
-        }               
 
         private void botonComprarOfertar_Click(object sender, EventArgs e)
         {
             parametros.Clear();
             parametros.Add(new SqlParameter("@user", UsuarioSesion.Usuario.id));
-            String query = "select COUNT(*) from NET_A_CERO.Compras c "
-                + "where isnull(c.comp_calif_id,0)=0 and c.comp_usr_id = @user";
+            String query = "SELECT COUNT(*) from NET_A_CERO.Compras c "
+                + " WHERE ISNULL(c.comp_calif_id,0)=0 and c.comp_usr_id = @user";
+
             Decimal cantidad = Convert.ToDecimal(QueryBuilder.Instance.build(query, parametros).ExecuteScalar());
 
             if (cantidad >= 5)
@@ -201,7 +159,7 @@ namespace MercadoEnvio.Comprar_Ofertar
                 return;
             }
 
-            if (tipoPublicacion == "Compra Inmediata")
+            if (tipoPublicacion == "Compra inmediata")
             {                
                 this.Hide();
                 new Comprar(vendedorId, publicacionId, Convert.ToInt32(labelStockDatos.Text)).ShowDialog();
@@ -210,7 +168,8 @@ namespace MercadoEnvio.Comprar_Ofertar
             else
             {
                 this.Hide();
-                new Ofertar(Convert.ToInt32(labelPrecioDatos.Text),publicacionId).ShowDialog();
+                int precio = Convert.ToInt32(Convert.ToDecimal(labelPrecioDatos.Text)); 
+                new Ofertar(precio, publicacionId).ShowDialog();
                 this.Close();
             }
         }

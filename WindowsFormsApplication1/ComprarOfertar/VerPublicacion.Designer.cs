@@ -43,12 +43,14 @@ namespace MercadoEnvio.Comprar_Ofertar
             this.labelProductoDatos = new System.Windows.Forms.Label();
             this.labelStockDatos = new System.Windows.Forms.Label();
             this.labelPrecioDatos = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.labelTipoDatos = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // labelVendedor
             // 
             this.labelVendedor.AutoSize = true;
-            this.labelVendedor.Location = new System.Drawing.Point(18, 23);
+            this.labelVendedor.Location = new System.Drawing.Point(26, 36);
             this.labelVendedor.Name = "labelVendedor";
             this.labelVendedor.Size = new System.Drawing.Size(53, 13);
             this.labelVendedor.TabIndex = 0;
@@ -57,7 +59,7 @@ namespace MercadoEnvio.Comprar_Ofertar
             // labelRubro
             // 
             this.labelRubro.AutoSize = true;
-            this.labelRubro.Location = new System.Drawing.Point(19, 43);
+            this.labelRubro.Location = new System.Drawing.Point(27, 56);
             this.labelRubro.Name = "labelRubro";
             this.labelRubro.Size = new System.Drawing.Size(36, 13);
             this.labelRubro.TabIndex = 1;
@@ -66,7 +68,7 @@ namespace MercadoEnvio.Comprar_Ofertar
             // labelProducto
             // 
             this.labelProducto.AutoSize = true;
-            this.labelProducto.Location = new System.Drawing.Point(19, 93);
+            this.labelProducto.Location = new System.Drawing.Point(27, 106);
             this.labelProducto.Name = "labelProducto";
             this.labelProducto.Size = new System.Drawing.Size(50, 13);
             this.labelProducto.TabIndex = 2;
@@ -75,7 +77,7 @@ namespace MercadoEnvio.Comprar_Ofertar
             // labelStock
             // 
             this.labelStock.AutoSize = true;
-            this.labelStock.Location = new System.Drawing.Point(19, 122);
+            this.labelStock.Location = new System.Drawing.Point(27, 135);
             this.labelStock.Name = "labelStock";
             this.labelStock.Size = new System.Drawing.Size(35, 13);
             this.labelStock.TabIndex = 3;
@@ -84,7 +86,7 @@ namespace MercadoEnvio.Comprar_Ofertar
             // labelPrecio
             // 
             this.labelPrecio.AutoSize = true;
-            this.labelPrecio.Location = new System.Drawing.Point(20, 153);
+            this.labelPrecio.Location = new System.Drawing.Point(28, 166);
             this.labelPrecio.Name = "labelPrecio";
             this.labelPrecio.Size = new System.Drawing.Size(69, 13);
             this.labelPrecio.TabIndex = 4;
@@ -112,7 +114,7 @@ namespace MercadoEnvio.Comprar_Ofertar
             // labelVencimiento
             // 
             this.labelVencimiento.AutoSize = true;
-            this.labelVencimiento.Location = new System.Drawing.Point(18, 67);
+            this.labelVencimiento.Location = new System.Drawing.Point(26, 80);
             this.labelVencimiento.Name = "labelVencimiento";
             this.labelVencimiento.Size = new System.Drawing.Size(65, 13);
             this.labelVencimiento.TabIndex = 8;
@@ -131,7 +133,7 @@ namespace MercadoEnvio.Comprar_Ofertar
             // labelVendedorDatos
             // 
             this.labelVendedorDatos.AutoSize = true;
-            this.labelVendedorDatos.Location = new System.Drawing.Point(133, 23);
+            this.labelVendedorDatos.Location = new System.Drawing.Point(141, 36);
             this.labelVendedorDatos.Name = "labelVendedorDatos";
             this.labelVendedorDatos.Size = new System.Drawing.Size(35, 13);
             this.labelVendedorDatos.TabIndex = 10;
@@ -140,7 +142,7 @@ namespace MercadoEnvio.Comprar_Ofertar
             // labelRubroDatos
             // 
             this.labelRubroDatos.AutoSize = true;
-            this.labelRubroDatos.Location = new System.Drawing.Point(133, 43);
+            this.labelRubroDatos.Location = new System.Drawing.Point(141, 56);
             this.labelRubroDatos.Name = "labelRubroDatos";
             this.labelRubroDatos.Size = new System.Drawing.Size(35, 13);
             this.labelRubroDatos.TabIndex = 11;
@@ -149,7 +151,7 @@ namespace MercadoEnvio.Comprar_Ofertar
             // labelVencimientoDatos
             // 
             this.labelVencimientoDatos.AutoSize = true;
-            this.labelVencimientoDatos.Location = new System.Drawing.Point(133, 67);
+            this.labelVencimientoDatos.Location = new System.Drawing.Point(141, 80);
             this.labelVencimientoDatos.Name = "labelVencimientoDatos";
             this.labelVencimientoDatos.Size = new System.Drawing.Size(35, 13);
             this.labelVencimientoDatos.TabIndex = 12;
@@ -158,7 +160,7 @@ namespace MercadoEnvio.Comprar_Ofertar
             // labelProductoDatos
             // 
             this.labelProductoDatos.AutoSize = true;
-            this.labelProductoDatos.Location = new System.Drawing.Point(133, 93);
+            this.labelProductoDatos.Location = new System.Drawing.Point(141, 106);
             this.labelProductoDatos.Name = "labelProductoDatos";
             this.labelProductoDatos.Size = new System.Drawing.Size(35, 13);
             this.labelProductoDatos.TabIndex = 13;
@@ -167,7 +169,7 @@ namespace MercadoEnvio.Comprar_Ofertar
             // labelStockDatos
             // 
             this.labelStockDatos.AutoSize = true;
-            this.labelStockDatos.Location = new System.Drawing.Point(133, 122);
+            this.labelStockDatos.Location = new System.Drawing.Point(141, 135);
             this.labelStockDatos.Name = "labelStockDatos";
             this.labelStockDatos.Size = new System.Drawing.Size(35, 13);
             this.labelStockDatos.TabIndex = 14;
@@ -176,17 +178,37 @@ namespace MercadoEnvio.Comprar_Ofertar
             // labelPrecioDatos
             // 
             this.labelPrecioDatos.AutoSize = true;
-            this.labelPrecioDatos.Location = new System.Drawing.Point(133, 153);
+            this.labelPrecioDatos.Location = new System.Drawing.Point(141, 166);
             this.labelPrecioDatos.Name = "labelPrecioDatos";
             this.labelPrecioDatos.Size = new System.Drawing.Size(35, 13);
             this.labelPrecioDatos.TabIndex = 15;
             this.labelPrecioDatos.Text = "label6";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(25, 15);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(86, 13);
+            this.label1.TabIndex = 16;
+            this.label1.Text = "Tipo Publicacion";
+            // 
+            // labelTipoDatos
+            // 
+            this.labelTipoDatos.AutoSize = true;
+            this.labelTipoDatos.Location = new System.Drawing.Point(141, 15);
+            this.labelTipoDatos.Name = "labelTipoDatos";
+            this.labelTipoDatos.Size = new System.Drawing.Size(35, 13);
+            this.labelTipoDatos.TabIndex = 17;
+            this.labelTipoDatos.Text = "label0";
             // 
             // VerPublicacion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(292, 270);
+            this.Controls.Add(this.labelTipoDatos);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.labelPrecioDatos);
             this.Controls.Add(this.labelStockDatos);
             this.Controls.Add(this.labelProductoDatos);
@@ -227,5 +249,7 @@ namespace MercadoEnvio.Comprar_Ofertar
         private System.Windows.Forms.Label labelProductoDatos;
         private System.Windows.Forms.Label labelStockDatos;
         private System.Windows.Forms.Label labelPrecioDatos;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelTipoDatos;
     }
 }
