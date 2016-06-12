@@ -194,9 +194,9 @@ namespace MercadoEnvio.Modelo
 
         string Mapeable.GetQueryModificar()
         {
-            return " UPDATE NET_A_CERO.Publicaciones SET publi_tipo = @publi_tipo, publi_descripcion = @publi_descripcion, publi_stock = @publi_stock, publi_fec_vencimiento = @publi_fec_vencimiento, publi_fec_inicio = @publi_fec_inicio, publi_precio = @publi_precio, publi_costo_pagado = @publi_costo_pagado, publi_preguntas = @publi_preguntas, publi_visib_id = @publi_visib_id, publi_estado_id = @publi_estado_id WHERE publi_id = @id " 
-                /*" DELETE NET_A_CERO.Rubro_x_Publicacion WHERE publi_id = @id " +    
-                " INSERT INTO NET_A_CERO.Rubro_x_Publicacion (rubro_id, publi_id) VALUES (@rubro_id, @id) "*/;
+            return " UPDATE NET_A_CERO.Publicaciones SET publi_tipo = @publi_tipo, publi_descripcion = @publi_descripcion, publi_stock = @publi_stock, publi_fec_vencimiento = @publi_fec_vencimiento, publi_fec_inicio = @publi_fec_inicio, publi_precio = @publi_precio, publi_costo_pagado = @publi_costo_pagado, publi_preguntas = @publi_preguntas, publi_visib_id = @publi_visib_id, publi_estado_id = @publi_estado_id WHERE publi_id = @id " +
+                " DELETE NET_A_CERO.Rubro_x_Publicacion WHERE publi_id = @id " +    
+                " INSERT INTO NET_A_CERO.Rubro_x_Publicacion (rubro_id, publi_id) VALUES (@rubro_id, @id) ";
         }
 
         string Mapeable.GetQueryObtener()

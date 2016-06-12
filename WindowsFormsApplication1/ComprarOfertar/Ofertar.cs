@@ -16,6 +16,7 @@ namespace MercadoEnvio.Comprar_Ofertar
         private SqlCommand command { get; set; }
         private IList<SqlParameter> parametros = new List<SqlParameter>();
         decimal idUsuarioActual = UsuarioSesion.Usuario.id;
+        //decimal idUsuarioActual = 10;
         private int ofertaMax;
         private int publicacionId;
 
@@ -50,23 +51,24 @@ namespace MercadoEnvio.Comprar_Ofertar
             
             if (Convert.ToInt32(this.textBoxMonto.Text) > ofertaMax)
             {
-                String sql = "INSERT INTO NET_A_CERO.Ofertas_x_Subasta(sub_monto, sub_fecha, sub_usr_id, sub_publi_id, sub_ganador) VALUES (@monto, @fecha, @usuario, @publicacion, @ganador)";
+                String sql = "INSERT INTO NET_A_CERO.Ofertas_x_Subasta(sub_usr_id, sub_monto, sub_fecha, sub_ganador, sub_publi_id) VALUES (@sub_usr_id, @sub_monto, @sub_fecha, @sub_ganador, @sub_publi_id)";
                 //DateTime fecha = Convert.ToDateTime(System.Configuration.ConfigurationManager.AppSettings["DateKey"]);
                 DateTime fecha = DateConfig.getInstance().getCurrentDate();
                 parametros.Clear();
-                parametros.Add(new SqlParameter("@monto", this.textBoxMonto.Text));
-                parametros.Add(new SqlParameter("@fecha", fecha));
-                parametros.Add(new SqlParameter("@usuario", idUsuarioActual));
-                parametros.Add(new SqlParameter("@publicacion", publicacionId));
-                parametros.Add(new SqlParameter("@ganador", 1)); //es el ganador actual por tener la oferta mayor a la ofertaMax
+                parametros.Add(new SqlParameter("@sub_usr_id", idUsuarioActual));
+                parametros.Add(new SqlParameter("@sub_monto", this.textBoxMonto.Text));
+                parametros.Add(new SqlParameter("@sub_fecha", fecha));
+                parametros.Add(new SqlParameter("@sub_ganador", 1)); //es el ganador actual por tener la oferta mayor a la ofertaMax
+                parametros.Add(new SqlParameter("@sub_publi_id", publicacionId));
+                
                 QueryBuilder.Instance.build(sql, parametros).ExecuteNonQuery();                
                 MessageBox.Show("Su oferta fue registrada");
 
                 //Actualizamos los perdedores
                 parametros.Clear();
-                parametros.Add(new SqlParameter("@publicacion", publicacionId));
-                parametros.Add(new SqlParameter("@usuarioGanador", idUsuarioActual));
-                String sqlUpdatePerdedores = "UPDATE NET_A_CERO.Ofertas_x_Subasta SET sub_ganador = 0 WHERE sub_publi_id = @publicacion AND sub_usr_id <> @usuarioGanador";
+                parametros.Add(new SqlParameter("@sub_publi_id", publicacionId));
+                parametros.Add(new SqlParameter("@sub_usr_id", idUsuarioActual));
+                String sqlUpdatePerdedores = "UPDATE NET_A_CERO.Ofertas_x_Subasta SET sub_ganador = 0 WHERE sub_publi_id = @sub_publi_id AND sub_usr_id <> @sub_usr_id";
                 QueryBuilder.Instance.build(sqlUpdatePerdedores, parametros).ExecuteNonQuery();
 
 

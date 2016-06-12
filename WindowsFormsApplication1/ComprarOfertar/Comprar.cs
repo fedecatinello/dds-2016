@@ -37,13 +37,16 @@ namespace MercadoEnvio.Comprar_Ofertar
 
         private void pedirContacto()
         {
+          //  String nombre = Convert.ToString(comunicador.SelectFromWhere("cli_nombre", "Clientes", "cli_usr_id", vendedorId));
+          //  String apellido = Convert.ToString(comunicador.SelectFromWhere("cli_apellido", "Clientes", "cli_usr_id", vendedorId));
+
             parametros.Clear();
             parametros.Add(new SqlParameter("@usuario", vendedorId));
 
             String queryCliente = "SELECT * FROM NET_A_CERO.Clientes WHERE cli_usr_id= @usuario and (SELECT usr_activo FROM NET_A_CERO.Usuarios WHERE usr_id = @usuario) = 1";
             SqlDataReader readerCliente = QueryBuilder.Instance.build(queryCliente, parametros).ExecuteReader();
 
-            
+                     
 
             if (readerCliente.Read())
             {
