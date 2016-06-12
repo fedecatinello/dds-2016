@@ -18,9 +18,6 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'NET_A_CERO.Ro
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'NET_A_CERO.Usuarios_x_Rol'))
     DROP TABLE NET_A_CERO.Usuarios_x_Rol
         
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'NET_A_CERO.Preguntas'))
-    DROP TABLE NET_A_CERO.Preguntas
-
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'NET_A_CERO.Ofertas_x_Subasta'))
     DROP TABLE NET_A_CERO.Ofertas_x_Subasta
 
@@ -232,15 +229,6 @@ CREATE TABLE [NET_A_CERO].[Items] (
     [item_fact_id] [NUMERIC](18, 0)
 )
 
-CREATE TABLE [NET_A_CERO].[Preguntas] (
-    [preg_id] INT IDENTITY(1,1) PRIMARY KEY,
-    [preg_desc] [nvarchar](255),
-    [preg_resp] [nvarchar](255),
-    [preg_resp_fecha] datetime,
-    [preg_usr_id] INT,
-    [preg_publi_id] [NUMERIC](18, 0)
-)
-
 /* FKs */
  
 ALTER TABLE [NET_A_CERO].[Clientes] ADD CONSTRAINT cliente_usuario FOREIGN KEY (cli_usr_id) REFERENCES [NET_A_CERO].[Usuarios](usr_id)
@@ -290,10 +278,6 @@ ALTER TABLE [NET_A_CERO].[Rubro_x_Publicacion] ADD CONSTRAINT unique_publicacion
 ALTER TABLE [NET_A_CERO].[Facturas] ADD CONSTRAINT factura_publicacion FOREIGN KEY (fact_publi_id) REFERENCES [NET_A_CERO].[Publicaciones](publi_id)
 
 ALTER TABLE [NET_A_CERO].[Items] ADD CONSTRAINT item_factura FOREIGN KEY (item_fact_id) REFERENCES [NET_A_CERO].[Facturas](fact_id)
-
-ALTER TABLE [NET_A_CERO].[Preguntas] ADD CONSTRAINT pregunta_usuario FOREIGN KEY (preg_usr_id) REFERENCES [NET_A_CERO].[Usuarios](usr_id)
-
-ALTER TABLE [NET_A_CERO].[Preguntas] ADD CONSTRAINT pregunta_publicacion FOREIGN KEY (preg_publi_id) REFERENCES [NET_A_CERO].[Publicaciones](publi_id)
 
 /** FIN CREACION DE TABLAS **/
 
@@ -782,8 +766,6 @@ INSERT INTO NET_A_CERO.Funcionalidades(func_nombre)
             ('Generar Publicacion'),
             ('Editar Publicacion'),
             ('Calificar Vendedor'),
-            ('Responder Preguntas'),
-            ('Ver Respuestas'),
             ('ABM Rol'),
             ('Generar Factura'),
             ('Crear Empresa'),
@@ -819,18 +801,15 @@ INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(func_id, rol_id)
             (2,2),
             (3,2),
             (4,2),
-            (5,2),
             (6,2),
-            (8,2),
-            (15,2),
-            (16,2),
+            (13,2),
+            (14,2),
+			(15,2),
             (2,3),
             (3,3),
-            (5,3),
-            (8,3),
-            (15,3),
-            (17,2),
-            (17,3)
+            (6,3),
+            (13,3),
+            (15,3)
 
 
 

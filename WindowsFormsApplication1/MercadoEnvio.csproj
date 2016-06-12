@@ -160,12 +160,6 @@
     <Compile Include="ComprarOfertar\Ofertar.Designer.cs">
       <DependentUpon>Ofertar.cs</DependentUpon>
     </Compile>
-    <Compile Include="ComprarOfertar\Preguntar.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ComprarOfertar\Preguntar.designer.cs">
-      <DependentUpon>Preguntar.cs</DependentUpon>
-    </Compile>
     <Compile Include="ComprarOfertar\VerPublicacion.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -173,36 +167,6 @@
       <DependentUpon>VerPublicacion.cs</DependentUpon>
     </Compile>
     <Compile Include="Exceptions\IngresePrecioEnteroException.cs" />
-    <Compile Include="Gestion de Preguntas\Respuesta.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Gestion de Preguntas\Respuesta.Designer.cs">
-      <DependentUpon>Respuesta.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Gestion de Preguntas\DatosPublicacion.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Gestion de Preguntas\DatosPublicacion.designer.cs">
-      <DependentUpon>DatosPublicacion.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Gestion de Preguntas\ResponderPregunta.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Gestion de Preguntas\ResponderPregunta.designer.cs">
-      <DependentUpon>ResponderPregunta.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Gestion de Preguntas\VerPreguntas.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Gestion de Preguntas\VerPreguntas.designer.cs">
-      <DependentUpon>VerPreguntas.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Gestion de Preguntas\VerRespuestas.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Gestion de Preguntas\VerRespuestas.designer.cs">
-      <DependentUpon>VerRespuestas.cs</DependentUpon>
-    </Compile>
     <Compile Include="Editar Publicacion\EditarPublicacion.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -345,9 +309,6 @@
     <EmbeddedResource Include="ComprarOfertar\Ofertar.resx">
       <DependentUpon>Ofertar.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ComprarOfertar\Preguntar.resx">
-      <DependentUpon>Preguntar.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="ComprarOfertar\VerPublicacion.resx">
       <DependentUpon>VerPublicacion.cs</DependentUpon>
     </EmbeddedResource>
@@ -363,23 +324,11 @@
     <EmbeddedResource Include="Generar Publicacion\GenerarPublicacion.resx">
       <DependentUpon>GenerarPublicacion.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Gestion de Preguntas\Respuesta.resx">
-      <DependentUpon>Respuesta.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Gestion de Preguntas\VerRespuestas.resx">
-      <DependentUpon>VerRespuestas.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Historial Cliente\Historial.resx">
       <DependentUpon>Historial.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Listado Estadistico\Estadisticas.resx">
       <DependentUpon>Estadisticas.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Gestion de Preguntas\ResponderPregunta.resx">
-      <DependentUpon>ResponderPregunta.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Gestion de Preguntas\VerPreguntas.resx">
-      <DependentUpon>VerPreguntas.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login\CambiarContrasena.resx">
       <DependentUpon>CambiarContrasena.cs</DependentUpon>
