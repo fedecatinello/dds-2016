@@ -38,6 +38,7 @@ namespace MercadoEnvio.Editar_Publicacion
         {
             comboBox_TiposDePublicacion.Items.Add("Compra inmediata");
             comboBox_TiposDePublicacion.Items.Add("Subasta");
+            comboBox_TiposDePublicacion.SelectedIndex = -1;
         }
 
         private void CargarEstados()
@@ -56,6 +57,7 @@ namespace MercadoEnvio.Editar_Publicacion
           
             comboBox_Estado.DataSource = estados;
             comboBox_Estado.ValueMember = "estados";
+            comboBox_Estado.SelectedIndex = -1;
          }
 
         private void CargarSegunBorrador(DataTable estados)
@@ -110,12 +112,14 @@ namespace MercadoEnvio.Editar_Publicacion
         {
             comboBox_Rubro.DataSource = mapper.SelectDataTable("rubro_desc_larga", "NET_A_CERO.Rubros");
             comboBox_Rubro.ValueMember = "rubro_desc_larga";
+            comboBox_Rubro.SelectedIndex = -1;
         }
 
         private void CargarVisibilidades()
         {
             comboBox_Visibilidad.DataSource = mapper.SelectDataTable("visib_desc", "NET_A_CERO.Visibilidad");
             comboBox_Visibilidad.ValueMember = "visib_desc";
+            comboBox_Visibilidad.SelectedIndex = -1;
         }
 
         private void CargarDatos()
@@ -129,7 +133,7 @@ namespace MercadoEnvio.Editar_Publicacion
             comboBox_Rubro.SelectedValue = Convert.ToString(mapper.SelectFromWhere("rubro_desc_larga", "Rubros", "rubro_id", rubroId));
             comboBox_Visibilidad.SelectedValue = Convert.ToString(mapper.SelectFromWhere("visib_desc", "Visibilidad", "visib_id", publicacion.GetIdVisibilidad()));
 
-            comboBox_TiposDePublicacion.SelectedValue = publicacion.GetTipo();
+            comboBox_TiposDePublicacion.Text = publicacion.GetTipo();
 
             comboBox_Estado.SelectedValue = Convert.ToString(mapper.SelectFromWhere("estado_desc", "Estado", "estado_id", publicacion.GetEstado()));
             checkBox_Pregunta.Checked = Convert.ToBoolean(mapper.SelectFromWhere("publi_preguntas", "Publicaciones", "publi_id", idPublicacion));
@@ -197,7 +201,7 @@ namespace MercadoEnvio.Editar_Publicacion
             }
             catch (IngresePrecioEnteroException exception)
             {
-                MessageBox.Show("Ingrese un precio enetero");
+                MessageBox.Show("Ingrese un precio entero");
                 return;
             }
 

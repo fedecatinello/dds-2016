@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using MercadoEnvio.DataProvider;
 
 namespace MercadoEnvio.Editar_Publicacion
 {
@@ -16,7 +17,7 @@ namespace MercadoEnvio.Editar_Publicacion
         private IList<SqlParameter> parametros = new List<SqlParameter>();
         public Object SelectedItem { get; set; }
         decimal idUsuarioActual = UsuarioSesion.Usuario.id;
-        private DBMapper comunicador = new DBMapper();
+        private DBMapper mapper = new DBMapper();
    
         public FiltrarPublicacion()
         {
@@ -32,11 +33,11 @@ namespace MercadoEnvio.Editar_Publicacion
 
         private void CargarRubros()
         {
-            comboBoxRubro1.DataSource = comunicador.SelectDataTable("rubro_desc_larga", "NET_A_CERO.Rubros");
+            comboBoxRubro1.DataSource = mapper.SelectDataTable("rubro_desc_larga", "NET_A_CERO.Rubros");
             comboBoxRubro1.ValueMember = "rubro_desc_larga";
             comboBoxRubro1.SelectedIndex = -1;
 
-            comboBoxRubro2.DataSource = comunicador.SelectDataTable("rubro_desc_larga", "NET_A_CERO.Rubros");
+            comboBoxRubro2.DataSource = mapper.SelectDataTable("rubro_desc_larga", "NET_A_CERO.Rubros");
             comboBoxRubro2.ValueMember = "rubro_desc_larga";
             comboBoxRubro2.SelectedIndex = -1;
         }
@@ -48,7 +49,7 @@ namespace MercadoEnvio.Editar_Publicacion
 
         private void CargarPublicacion()
         {
-            dataGridView_Publicacion.DataSource = comunicador.SelectPublicacionesParaFiltro();
+            dataGridView_Publicacion.DataSource = mapper.SelectPublicacionesParaFiltro();
             CargarColumnaModificacion();
         }
 
@@ -67,64 +68,77 @@ namespace MercadoEnvio.Editar_Publicacion
 
         private void button_Buscar_Click(object sender, EventArgs e)
         {
-            SqlDataAdapter adapter = new SqlDataAdapter();
+            String filtro = CalcularFiltro();
+            dataGridView_Publicacion.DataSource = FiltrarPublicaciones(filtro);
+        }
+
+        private String CalcularFiltro()
+        {
             parametros = new List<SqlParameter>();
             parametros.Clear();
-            parametros.Add(new SqlParameter("@usuario", idUsuarioActual));
-            DataTable busquedaTemporal = new DataTable();
-            String filtro = " and publicaciones.publi_usr_id != @usuario ";
+            parametros.Add(new SqlParameter("@idUsuario", idUsuarioActual));
+
+            String filtro = "";
 
             if (textBoxDescripcion.Text != "")
             {
-                filtro += " and publicaciones.publi_descripcion like '%" + textBoxDescripcion.Text + "%'";
+                filtro += " AND p.publi_descripcion like '%" + textBoxDescripcion.Text + "%'";
             }
 
             if (comboBoxRubro1.Text != "")
             {
-                String idRubro1 = Convert.ToString(comunicador.SelectFromWhere("rubro_id", "Rubros", "rubro_desc_larga", comboBoxRubro1.Text));
+                String idRubro1 = Convert.ToString(mapper.SelectFromWhere("rubro_id", "Rubros", "rubro_desc_larga", comboBoxRubro1.Text));
                 parametros.Add(new SqlParameter("@idRubro1", idRubro1));
                 if (comboBoxRubro2.Text != "")
                 {
-                    filtro += " and ( rxp.rubro_id = @idRubro1 ";
+                    filtro += " AND ( rxp.rubro_id = @idRubro1 ";
                 }
                 else
                 {
-                    filtro += " and rxp.rubro_id = @idRubro1 ";
+                    filtro += " AND rxp.rubro_id = @idRubro1 ";
                 }
             }
 
             if (comboBoxRubro2.Text != "")
             {
-                String idRubro2 = Convert.ToString(comunicador.SelectFromWhere("rubro_id", "Rubros", "rubro_desc_larga", comboBoxRubro2.Text));
+                String idRubro2 = Convert.ToString(mapper.SelectFromWhere("rubro_id", "Rubros", "rubro_desc_larga", comboBoxRubro2.Text));
                 parametros.Add(new SqlParameter("@idRubro2", idRubro2));
                 if (comboBoxRubro1.Text != "")
                 {
-                    filtro += " or rxp.rubro_id = @idRubro2 ) ";
+                    filtro += " OR rxp.rubro_id = @idRubro2 ) ";
                 }
                 else
                 {
-                    filtro += " and rxp.rubro_id = @idRubro2 ";
+                    filtro += " AND rxp.rubro_id = @idRubro2 ";
                 }
 
             }
-          
-
-            MessageBox.Show("Falta completar campo: " + filtro);
-            //String filtro = CalcularFiltro();
-            dataGridView_Publicacion.DataSource = comunicador.SelectPublicacionesParaFiltroConFiltro(filtro);
+            return filtro;
         }
 
-        private String CalcularFiltro()
+        public DataTable FiltrarPublicaciones(String filtro)
         {
-            String filtro = "";
-            return filtro;
+           SqlCommand command = new SqlCommand();
+           command = QueryBuilder.Instance.build("SELECT " + 
+               "p.publi_id, u.usr_usuario Usuario, p.publi_descripcion Descripcion, p.publi_fec_inicio 'Fecha de inicio', p.publi_fec_vencimiento 'Fecha de vencimiento', r.rubro_desc_larga Rubro, v.visib_desc Visibilidad, p.publi_preguntas 'Permite preguntas', p.publi_stock Stock, p.publi_precio Precio" 
+               + " FROM " 
+               + "NET_A_CERO.Publicaciones p, NET_A_CERO.Rubros r, NET_A_CERO.Visibilidad v, NET_A_CERO.Usuarios u, NET_A_CERO.Rubro_x_Publicacion rxp" 
+               + " WHERE " 
+               + "rxp.rubro_id = r.rubro_id AND rxp.publi_id = p.publi_id AND p.publi_visib_id = v.visib_id AND p.publi_usr_id = u.usr_id " + filtro, parametros);
+            command.CommandTimeout = 0;  
+            DataSet datos = new DataSet();
+            SqlDataAdapter adapter = new SqlDataAdapter();
+            adapter.SelectCommand = command;
+            adapter.Fill(datos);
+            return datos.Tables[0];
         }
 
         private void button_Limpiar_Click(object sender, EventArgs e)
         {
             CargarPublicacion();
             OcultarColumnasQueNoDebenVerse();
-            CargarRubros(); 
+            CargarRubros();
+            textBoxDescripcion.Text = "";
         }
 
         private void button_Cancelar_Click(object sender, EventArgs e)

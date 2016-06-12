@@ -515,7 +515,7 @@ END
 GO
 
 CREATE PROCEDURE NET_A_CERO.pr_crear_visibilidad
-    @id numeric(18, 0),
+    @cod numeric(18, 0),
 	@descripcion varchar(255),
     @grado varchar(50),
     @precio numeric(18,2),
@@ -527,7 +527,7 @@ BEGIN
     INSERT INTO NET_A_CERO.Visibilidad
         (visib_id, visib_desc, visib_grado, visib_precio, visib_porcentaje, visib_envios, visib_activo)
     VALUES
-        (@id, @descripcion, @grado, @precio, @porcentaje, @envios, @activo);
+        (@cod, @descripcion, @grado, @precio, @porcentaje, @envios, @activo);
 END
 GO
 

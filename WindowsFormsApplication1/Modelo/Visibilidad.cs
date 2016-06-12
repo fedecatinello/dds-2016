@@ -123,18 +123,18 @@ namespace MercadoEnvio.Modelo
             return this.envios;
         }
 
-        public void CalcularIdAInsertar()
+        public Decimal CalcularIdAInsertar()
         {
             string query = "SELECT TOP 1 visib_id FROM NET_A_CERO.Visibilidad ORDER BY visib_id DESC";
-            SetId(Convert.ToDecimal(QueryBuilder.Instance.build(query, null).ExecuteScalar()) + 1); //Inserto despues del ultimo registro  
+            return Convert.ToDecimal(QueryBuilder.Instance.build(query, null).ExecuteScalar()) + 1; //Inserto despues del ultimo registro  
         }
 
         public bool Persist()
         {
-            string query = "NET_A_CERO.pr_crear_visibilidad";
+            string query = "EXEC NET_A_CERO.pr_crear_visibilidad @cod, @descripcion, @grado, @precio, @porcentaje, @envios, @activo";
             
             IList<SqlParameter> parametros = new List<SqlParameter>();
-            parametros.Add(new SqlParameter("@id", GetId()));
+            parametros.Add(new SqlParameter("@cod", CalcularIdAInsertar()));
             parametros.Add(new SqlParameter("@descripcion", this.descripcion));
             parametros.Add(new SqlParameter("@grado", this.grado));
             parametros.Add(new SqlParameter("@precio", Convert.ToDouble(this.precioPorPublicar)));
@@ -157,7 +157,7 @@ namespace MercadoEnvio.Modelo
 
         string Mapeable.GetQueryModificar()
         {
-            return "UPDATE NET_A_CERO.Visibilidad SET visib_desc = @descripcion, visib_grado = @grado, visib_precio = @precio, visib_porcentaje = @porcentaje, visib_envios = @envios, visib_activo = @activo WHERE visib_id = @id";
+            return "UPDATE NET_A_CERO.Visibilidad SET visib_desc = @descripcion, visib_grado = @grado, visib_precio = @precio, visib_porcentaje = @porcentaje, visib_envios = @envios WHERE visib_id = @id";
         }
 
         string Mapeable.GetQueryObtener()
