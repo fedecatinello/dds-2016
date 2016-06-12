@@ -146,7 +146,7 @@ namespace MercadoEnvio.Facturar_Publicaciones
             {
             // Creo la nueva factura
                 String creoFactura = "insert NET_A_CERO.Facturas"
-                                + "(fecha) values(@fecha)";
+                                + "(fact_fecha) values(@fecha)";
             parametros.Clear();
             //parametros.Add(new SqlParameter("@fecha", Convert.ToDateTime(System.Configuration.ConfigurationManager.AppSettings["DateKey"]))); TP ANTERIOR
             parametros.Add(new SqlParameter("@fecha", DateConfig.getInstance().getCurrentDate()));
