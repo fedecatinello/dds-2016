@@ -35,6 +35,11 @@ namespace MercadoEnvio.Historial_Cliente
             this.button_Limpiar = new System.Windows.Forms.Button();
             this.button_Cancelar = new System.Windows.Forms.Button();
             this.dataGridView_Historial = new System.Windows.Forms.DataGridView();
+            this.botonPrimeraPagina = new System.Windows.Forms.Button();
+            this.botonPaginaAnterior = new System.Windows.Forms.Button();
+            this.botonPaginaSiguiente = new System.Windows.Forms.Button();
+            this.botonUltimaPagina = new System.Windows.Forms.Button();
+            this.labelNrosPagina = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_Historial)).BeginInit();
             this.SuspendLayout();
@@ -109,11 +114,65 @@ namespace MercadoEnvio.Historial_Cliente
             this.dataGridView_Historial.Size = new System.Drawing.Size(1068, 199);
             this.dataGridView_Historial.TabIndex = 4;
             // 
+            // botonPrimeraPagina
+            // 
+            this.botonPrimeraPagina.Location = new System.Drawing.Point(254, 360);
+            this.botonPrimeraPagina.Name = "botonPrimeraPagina";
+            this.botonPrimeraPagina.Size = new System.Drawing.Size(92, 23);
+            this.botonPrimeraPagina.TabIndex = 5;
+            this.botonPrimeraPagina.Text = "Primera";
+            this.botonPrimeraPagina.UseVisualStyleBackColor = true;
+            this.botonPrimeraPagina.Click += new System.EventHandler(this.botonPrimeraPagina_Click);
+            // 
+            // botonPaginaAnterior
+            // 
+            this.botonPaginaAnterior.Location = new System.Drawing.Point(463, 360);
+            this.botonPaginaAnterior.Name = "botonPaginaAnterior";
+            this.botonPaginaAnterior.Size = new System.Drawing.Size(75, 23);
+            this.botonPaginaAnterior.TabIndex = 6;
+            this.botonPaginaAnterior.Text = "Anterior";
+            this.botonPaginaAnterior.UseVisualStyleBackColor = true;
+            this.botonPaginaAnterior.Click += new System.EventHandler(this.botonPaginaAnterior_Click);
+            // 
+            // botonPaginaSiguiente
+            // 
+            this.botonPaginaSiguiente.Location = new System.Drawing.Point(577, 360);
+            this.botonPaginaSiguiente.Name = "botonPaginaSiguiente";
+            this.botonPaginaSiguiente.Size = new System.Drawing.Size(75, 23);
+            this.botonPaginaSiguiente.TabIndex = 7;
+            this.botonPaginaSiguiente.Text = "Siguiente";
+            this.botonPaginaSiguiente.UseVisualStyleBackColor = true;
+            this.botonPaginaSiguiente.Click += new System.EventHandler(this.botonPaginaSiguiente_Click);
+            // 
+            // botonUltimaPagina
+            // 
+            this.botonUltimaPagina.Location = new System.Drawing.Point(784, 360);
+            this.botonUltimaPagina.Name = "botonUltimaPagina";
+            this.botonUltimaPagina.Size = new System.Drawing.Size(75, 23);
+            this.botonUltimaPagina.TabIndex = 8;
+            this.botonUltimaPagina.Text = "Ultima";
+            this.botonUltimaPagina.UseVisualStyleBackColor = true;
+            this.botonUltimaPagina.Click += new System.EventHandler(this.botonUltimaPagina_Click);
+            // 
+            // labelNrosPagina
+            // 
+            this.labelNrosPagina.AutoSize = true;
+            this.labelNrosPagina.Location = new System.Drawing.Point(944, 365);
+            this.labelNrosPagina.Name = "labelNrosPagina";
+            this.labelNrosPagina.Size = new System.Drawing.Size(40, 13);
+            this.labelNrosPagina.TabIndex = 9;
+            this.labelNrosPagina.Text = "Pagina";
+            // 
             // Historial
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1092, 366);
+            this.ClientSize = new System.Drawing.Size(1092, 394);
+            this.Controls.Add(this.labelNrosPagina);
+            this.Controls.Add(this.botonUltimaPagina);
+            this.Controls.Add(this.botonPaginaSiguiente);
+            this.Controls.Add(this.botonPaginaAnterior);
+            this.Controls.Add(this.botonPrimeraPagina);
             this.Controls.Add(this.dataGridView_Historial);
             this.Controls.Add(this.button_Cancelar);
             this.Controls.Add(this.button_Limpiar);
@@ -126,6 +185,7 @@ namespace MercadoEnvio.Historial_Cliente
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_Historial)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -138,5 +198,10 @@ namespace MercadoEnvio.Historial_Cliente
         private System.Windows.Forms.Button button_Cancelar;
         private System.Windows.Forms.DataGridView dataGridView_Historial;
         private System.Windows.Forms.ComboBox comboBox_opciones;
+        private System.Windows.Forms.Button botonPrimeraPagina;
+        private System.Windows.Forms.Button botonPaginaAnterior;
+        private System.Windows.Forms.Button botonPaginaSiguiente;
+        private System.Windows.Forms.Button botonUltimaPagina;
+        private System.Windows.Forms.Label labelNrosPagina;
     }
 }

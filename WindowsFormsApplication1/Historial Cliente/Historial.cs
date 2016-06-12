@@ -17,6 +17,15 @@ namespace MercadoEnvio.Historial_Cliente
         private IList<SqlParameter> parametros = new List<SqlParameter>();
         private DBMapper mapper = new DBMapper();
 
+        /** Paginacion variables **/
+        DataTable tablaTemporal;
+        int totalPaginas;
+        int totalPublicaciones;
+        int publicacionesPorPagina = 10;
+        int paginaActual;
+        int ini;
+        int fin;
+
         public Historial()
         {
             InitializeComponent();
@@ -52,6 +61,24 @@ namespace MercadoEnvio.Historial_Cliente
         public void CargarInformacion(String select, String from, String where)
         {
             dataGridView_Historial.DataSource = mapper.SelectDataTableConUsuario(select, from, where);
+            tablaTemporal = (DataTable)dataGridView_Historial.DataSource;
+            
+            calcularPaginas();
+            ini = 0;
+            
+            if (totalPublicaciones > 9)
+            {
+                fin = 9;
+            }
+            else
+            {
+                fin = totalPublicaciones;
+            }
+            calcularPaginas();
+            dataGridView_Historial.DataSource = paginarDataGridView(ini, fin);
+            dataGridView_Historial.Columns[0].Visible = false;
+            mostrarNrosPaginas(ini);
+            
         }
 
         private void button_Buscar_Click(object sender, EventArgs e)
@@ -62,9 +89,17 @@ namespace MercadoEnvio.Historial_Cliente
         private void button_Limpiar_Click(object sender, EventArgs e)
         {
             comboBox_opciones.SelectedIndex = -1;
+            labelNrosPagina.Text = "";
+
+            //Limpio grilla siempre y cuando haya arrojado resultados
+            if (dataGridView_Historial.DataSource != null)
+            {
+                DataTable dt = (DataTable)dataGridView_Historial.DataSource;
+                dt.Clear();
+                dataGridView_Historial.DataSource = null;
+            }
+
             CargarDatos();
-            DataTable dt = (DataTable)dataGridView_Historial.DataSource;
-            dt.Clear();
         }
 
         private void button_Cancelar_Click(object sender, EventArgs e)
@@ -73,5 +108,147 @@ namespace MercadoEnvio.Historial_Cliente
             new MenuPrincipal().ShowDialog();
             this.Close();
         }
+
+        /** Paginacion Events **/
+        private void botonPrimeraPagina_Click(object sender, EventArgs e)
+        {
+            if (sePuedeRetrocederPaginas())
+            {
+                ini = 0;
+                fin = 9;
+                dataGridView_Historial.DataSource = paginarDataGridView(ini, fin);
+                mostrarNrosPaginas(ini);
+            }
+        }
+
+        private void botonPaginaAnterior_Click(object sender, EventArgs e)
+        {
+            if (sePuedeRetrocederPaginas())
+            {
+                ini -= publicacionesPorPagina;
+                if (fin != totalPublicaciones)
+                {
+                    fin -= publicacionesPorPagina;
+                }
+                else
+                {
+                    fin = ini + 9;
+                }
+
+                dataGridView_Historial.DataSource = paginarDataGridView(ini, fin);
+                mostrarNrosPaginas(ini);
+            }
+        }
+
+        private void botonPaginaSiguiente_Click(object sender, EventArgs e)
+        {
+            if (sePuedeAvanzarPaginas())
+            {
+                ini += publicacionesPorPagina;
+                if ((fin + publicacionesPorPagina) < totalPublicaciones)
+                {
+                    fin += publicacionesPorPagina;
+                }
+                else
+                {
+                    fin = totalPublicaciones;
+                }
+                dataGridView_Historial.DataSource = paginarDataGridView(ini, fin);
+                mostrarNrosPaginas(ini);
+            }
+        }
+
+        private void botonUltimaPagina_Click(object sender, EventArgs e)
+        {
+            if (sePuedeAvanzarPaginas())
+            {
+                ini = (totalPaginas - 1) * publicacionesPorPagina;
+                fin = totalPublicaciones;
+                dataGridView_Historial.DataSource = paginarDataGridView(ini, fin);
+                mostrarNrosPaginas(ini);
+            }
+        }
+
+        /** Paginacion funciones **/
+        private void calcularPaginas()
+        {
+            totalPublicaciones = tablaTemporal.Rows.Count - 1;
+            totalPaginas = totalPublicaciones / publicacionesPorPagina;
+            if ((totalPublicaciones / publicacionesPorPagina) > 0)
+            {
+                totalPaginas += 1;
+            }
+        }
+
+        private DataTable paginarDataGridView(int ini, int fin)
+        {
+            DataTable datosDeUnaPagina = new DataTable();
+            datosDeUnaPagina = tablaTemporal.Clone();
+            for (int i = ini; i <= fin; i++)
+            {
+                datosDeUnaPagina.ImportRow(tablaTemporal.Rows[i]);
+            }
+            return datosDeUnaPagina;
+        }
+
+        private void mostrarNrosPaginas(int ini)
+        {
+            paginaActual = (ini / publicacionesPorPagina) + 1;
+            labelNrosPagina.Text = "Pagina " + paginaActual + "/" + totalPaginas;
+        }        
+
+        private bool VerificarSiSeBusco()
+        {
+            if (totalPaginas == 0)
+            {
+                MessageBox.Show("Aun no buscaste nada");
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        private bool sePuedeRetrocederPaginas()
+        {
+            if (VerificarSiSeBusco() == false)
+            {
+                return false;
+            }
+            else
+            {
+                if (paginaActual == 1)
+                {
+                    MessageBox.Show("Ya estas en la 1º pagina");
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
+
+        private bool sePuedeAvanzarPaginas()
+        {
+            if (VerificarSiSeBusco() == false)
+            {
+                return false;
+            }
+            else
+            {
+                if (paginaActual == totalPaginas)
+                {
+                    MessageBox.Show("Ya estas en la ultima pagina");
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
+
     }
 }
