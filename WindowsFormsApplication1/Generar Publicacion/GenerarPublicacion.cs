@@ -14,7 +14,7 @@ namespace MercadoEnvio.Generar_Publicacion
 {
     public partial class GenerarPublicacion : Form
     {
-        private DBMapper comunicador = new DBMapper();
+        private DBMapper mapper = new DBMapper();
 
         public GenerarPublicacion()
         {
@@ -43,18 +43,21 @@ namespace MercadoEnvio.Generar_Publicacion
             estados.Rows.Add("Activa");
             comboBox_Estado.DataSource = estados;
             comboBox_Estado.ValueMember = "estados";
+            comboBox_Estado.SelectedIndex = -1;
         }
 
         private void CargarRubros()
         {
-            comboBox_Rubro.DataSource = comunicador.SelectDataTable("rubro_desc_larga", "NET_A_CERO.Rubros");
+            comboBox_Rubro.DataSource = mapper.SelectDataTable("rubro_desc_larga", "NET_A_CERO.Rubros");
             comboBox_Rubro.ValueMember = "rubro_desc_larga";
+            comboBox_Rubro.SelectedIndex = -1;
         }
 
         private void CargarVisibilidades()
         {
-            comboBox_Visibilidad.DataSource = comunicador.SelectDataTable("visib_desc", "NET_A_CERO.Visibilidad");
+            comboBox_Visibilidad.DataSource = mapper.SelectDataTable("visib_desc", "NET_A_CERO.Visibilidad");
             comboBox_Visibilidad.ValueMember = "visib_desc";
+            comboBox_Visibilidad.SelectedIndex = -1;
         }
 
         private void button_generar_Click(object sender, EventArgs e)
@@ -62,7 +65,6 @@ namespace MercadoEnvio.Generar_Publicacion
             String tipo = comboBox_TiposDePublicacion.Text;
             String estado = comboBox_Estado.Text;
             String descripcion = textBox_Descripcion.Text;
-            //DateTime fechaDeInicio = Convert.ToDateTime(System.Configuration.ConfigurationManager.AppSettings["DateKey"]);
             DateTime fechaDeInicio = DateConfig.getInstance().getCurrentDate();
             String rubro = comboBox_Rubro.Text;
             String visibilidadDescripcion = comboBox_Visibilidad.Text;
@@ -71,13 +73,12 @@ namespace MercadoEnvio.Generar_Publicacion
             String precio = textBox_Precio.Text;
             String tipoPublicacion = comboBox_TiposDePublicacion.Text;
 
-            Decimal idRubro = Convert.ToDecimal(comunicador.SelectFromWhere("rubro_id", "Rubros", "rubro_desc_larga", rubro));
-            Decimal idEstado = Convert.ToDecimal(comunicador.SelectFromWhere("estado_id", "Estado", "estado_desc", estado));
-            Decimal idVisibilidad = Convert.ToDecimal(comunicador.SelectFromWhere("visib_id", "Visibilidad", "visib_desc", visibilidadDescripcion));
+            Decimal idRubro = Convert.ToDecimal(mapper.SelectFromWhere("rubro_id", "Rubros", "rubro_desc_larga", rubro));
+            Decimal idEstado = Convert.ToDecimal(mapper.SelectFromWhere("estado_id", "Estado", "estado_desc", estado));
+            Decimal idVisibilidad = Convert.ToDecimal(mapper.SelectFromWhere("visib_id", "Visibilidad", "visib_desc", visibilidadDescripcion));
             
             
-            //-------------------------CHEQUEAR DURACION-------------------------------------
-            //Double duracion = Convert.ToDouble(comunicador.SelectFromWhere("duracion", "Visibilidad", "descripcion", visibilidadDescripcion)); 
+            //La desicion es que la duracion default de las publicaciones sea de un mes (30 dias)
             Double duracion = 30;
             DateTime fechaDeVencimiento = Convert.ToDateTime(Convert.ToString(Convert.ToDateTime(fechaDeInicio).AddDays(duracion)));
 
@@ -98,7 +99,7 @@ namespace MercadoEnvio.Generar_Publicacion
                 publicacion.SetEstado(idEstado);
                 publicacion.SetIdRubro(idRubro);
                 //publicacion.SetHabilitado(true);
-                Decimal idPublicacion = comunicador.CrearPublicacion(publicacion);
+                Decimal idPublicacion = mapper.CrearPublicacion(publicacion);
                 if (idPublicacion > 0) MessageBox.Show("Se agrego la publicacion correctamente");
             }
             catch (CampoVacioException exception)
@@ -125,11 +126,13 @@ namespace MercadoEnvio.Generar_Publicacion
             textBox_Descripcion.Text = "";
             textBox_Precio.Text = "";
             textBox_Stock.Text = "";
-            comboBox_Rubro.SelectedIndex = 0;
-            comboBox_TiposDePublicacion.SelectedIndex = 0;
-            comboBox_Estado.SelectedIndex = 0;
-            comboBox_Visibilidad.SelectedIndex = 0;
-            radioButton_Pregunta.Checked = true;
+            comboBox_Rubro.SelectedIndex = -1;
+            comboBox_TiposDePublicacion.SelectedIndex = -1;
+            comboBox_Estado.SelectedIndex = -1;
+            comboBox_Visibilidad.SelectedIndex = -1;
+            radioButton_Pregunta.Checked = false;
+            label_stock.Text = "Stock";
+            label_precio.Text = "Precio";
         }
 
         private void button_Cancelar_Click(object sender, EventArgs e)

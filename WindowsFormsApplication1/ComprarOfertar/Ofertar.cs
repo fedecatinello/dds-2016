@@ -16,7 +16,6 @@ namespace MercadoEnvio.Comprar_Ofertar
         private SqlCommand command { get; set; }
         private IList<SqlParameter> parametros = new List<SqlParameter>();
         decimal idUsuarioActual = UsuarioSesion.Usuario.id;
-        //decimal idUsuarioActual = 10;
         private int ofertaMax;
         private int publicacionId;
 
@@ -52,7 +51,6 @@ namespace MercadoEnvio.Comprar_Ofertar
             if (Convert.ToInt32(this.textBoxMonto.Text) > ofertaMax)
             {
                 String sql = "INSERT INTO NET_A_CERO.Ofertas_x_Subasta(sub_usr_id, sub_monto, sub_fecha, sub_ganador, sub_publi_id) VALUES (@sub_usr_id, @sub_monto, @sub_fecha, @sub_ganador, @sub_publi_id)";
-                //DateTime fecha = Convert.ToDateTime(System.Configuration.ConfigurationManager.AppSettings["DateKey"]);
                 DateTime fecha = DateConfig.getInstance().getCurrentDate();
                 parametros.Clear();
                 parametros.Add(new SqlParameter("@sub_usr_id", idUsuarioActual));

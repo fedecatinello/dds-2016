@@ -17,7 +17,7 @@ namespace MercadoEnvio.Comprar_Ofertar
         private IList<SqlParameter> parametros = new List<SqlParameter>();
         public Object SelectedItem { get; set; }
         decimal idUsuarioActual = UsuarioSesion.Usuario.id;
-        private DBMapper comunicador = new DBMapper();
+        private DBMapper mapper = new DBMapper();
 
         DataTable tablaTemporal;
         int totalPaginas;
@@ -45,11 +45,11 @@ namespace MercadoEnvio.Comprar_Ofertar
 
         private void CargarRubros()
         {
-            comboBoxRubro1.DataSource = comunicador.SelectDataTable("rubro_desc_larga", "NET_A_CERO.Rubros");
+            comboBoxRubro1.DataSource = mapper.SelectDataTable("rubro_desc_larga", "NET_A_CERO.Rubros");
             comboBoxRubro1.ValueMember = "rubro_desc_larga";
             comboBoxRubro1.SelectedIndex = -1;
 
-            comboBoxRubro2.DataSource = comunicador.SelectDataTable("rubro_desc_larga", "NET_A_CERO.Rubros");
+            comboBoxRubro2.DataSource = mapper.SelectDataTable("rubro_desc_larga", "NET_A_CERO.Rubros");
             comboBoxRubro2.ValueMember = "rubro_desc_larga";
             comboBoxRubro2.SelectedIndex = -1;
         }
@@ -61,38 +61,38 @@ namespace MercadoEnvio.Comprar_Ofertar
             parametros.Clear();
             parametros.Add(new SqlParameter("@usuario", idUsuarioActual));
             DataTable busquedaTemporal = new DataTable();
-            String filtro = "and publicaciones.publi_usr_id != @usuario";
+            String filtro = " AND publicaciones.publi_usr_id != @usuario";
            
             if (textBoxDescripcion.Text != "")
             {
-                filtro += " and publicaciones.publi_descripcion like '%" + textBoxDescripcion.Text + "%'";                
+                filtro += " AND publicaciones.publi_descripcion LIKE '%" + textBoxDescripcion.Text + "%'";                
             }            
 
             if (comboBoxRubro1.Text != "")
             {
-                String idRubro1 = Convert.ToString(comunicador.SelectFromWhere("rubro_id", "Rubros", "rubro_desc_larga", comboBoxRubro1.Text));
+                String idRubro1 = Convert.ToString(mapper.SelectFromWhere("rubro_id", "Rubros", "rubro_desc_larga", comboBoxRubro1.Text));
                 parametros.Add(new SqlParameter("@idRubro1", idRubro1));
                 if (comboBoxRubro2.Text != "")
                 {
-                    filtro += " and ( rxp.rubro_id = @idRubro1 ";
+                    filtro += " AND ( rxp.rubro_id = @idRubro1 ";
                 }
                 else
                 {
-                    filtro += " and rxp.rubro_id = @idRubro1 ";
+                    filtro += " AND rxp.rubro_id = @idRubro1 ";
                 }
             }
 
             if (comboBoxRubro2.Text != "")
             {
-                String idRubro2 = Convert.ToString(comunicador.SelectFromWhere("rubro_id", "Rubros", "rubro_desc_larga", comboBoxRubro2.Text));
+                String idRubro2 = Convert.ToString(mapper.SelectFromWhere("rubro_id", "Rubros", "rubro_desc_larga", comboBoxRubro2.Text));
                 parametros.Add(new SqlParameter("@idRubro2", idRubro2));
                 if (comboBoxRubro1.Text != "")
                 {
-                    filtro += " or rxp.rubro_id = @idRubro2 ) ";
+                    filtro += " OR rxp.rubro_id = @idRubro2 ) ";
                 }
                 else
                 {
-                    filtro += " and rxp.rubro_id = @idRubro2 ";
+                    filtro += " AND rxp.rubro_id = @idRubro2 ";
                 }
 
             }
@@ -321,13 +321,20 @@ namespace MercadoEnvio.Comprar_Ofertar
         private void botonLimpiar_Click(object sender, EventArgs e)
         {
             textBoxDescripcion.Clear();
-            OcultarColumnasQueNoDebenVerse();
+
+            //Limpio grilla siempre y cuando haya arrojado resultados
+            if (dataGridViewBuscadorPubli.DataSource != null)
+            {
+                OcultarColumnasQueNoDebenVerse();
+                if (dataGridViewBuscadorPubli.Columns.Contains("Ver Publicacion"))
+                    dataGridViewBuscadorPubli.Columns.Remove("Ver Publicacion");
+                dataGridViewBuscadorPubli.DataSource = null;
+            }
+
             comboBoxRubro1.SelectedIndex = -1;
             comboBoxRubro2.SelectedIndex = -1;
             labelNrosPagina.Text = "";
-            dataGridViewBuscadorPubli.DataSource = null;
-            if (dataGridViewBuscadorPubli.Columns.Contains("Ver Publicacion"))
-                dataGridViewBuscadorPubli.Columns.Remove("Ver Publicacion");
+            
         }
 
         private void botonVolver_Click(object sender, EventArgs e)
