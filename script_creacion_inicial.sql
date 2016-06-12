@@ -312,8 +312,24 @@ IF (OBJECT_ID('NET_A_CERO.pr_crear_visibilidad') IS NOT NULL)
     DROP PROCEDURE NET_A_CERO.pr_crear_visibilidad
 GO
 
+IF (OBJECT_ID('NET_A_CERO.pr_vendedores_con_mayor_facturacion') IS NOT NULL)
+    DROP FUNCTION NET_A_CERO.pr_vendedores_con_mayor_facturacion
+GO
+
+IF (OBJECT_ID('NET_A_CERO.pr_vendedores_con_mayor_calificacion') IS NOT NULL)
+    DROP FUNCTION NET_A_CERO.pr_vendedores_con_mayor_Calificacion
+GO
+
 IF (OBJECT_ID('NET_A_CERO.pr_agregar_rol_a_usuario') IS NOT NULL)
     DROP PROCEDURE NET_A_CERO.pr_agregar_rol_a_usuario
+GO
+
+IF (OBJECT_ID('NET_A_CERO.pr_clientes_con_publicaciones_sin_calificar') IS NOT NULL)
+    DROP FUNCTION NET_A_CERO.pr_clientes_con_publicaciones_sin_calificar
+GO
+
+IF OBJECT_ID('NET_A_CERO.pr_calcular_productos_no_vendidos ') IS NOT NULL
+    DROP FUNCTION NET_A_CERO.pr_calcular_productos_no_vendidos
 GO
 
 IF (OBJECT_ID('NET_A_CERO.generar_id_publicacion') IS NOT NULL)
@@ -512,6 +528,108 @@ BEGIN
         (visib_id, visib_desc, visib_grado, visib_precio, visib_porcentaje, visib_envios, visib_activo)
     VALUES
         (@id, @descripcion, @grado, @precio, @porcentaje, @envios, @activo);
+END
+GO
+
+CREATE FUNCTION NET_A_CERO.pr_vendedores_con_mayor_facturacion
+(
+    @fecha_inicio datetime,
+    @fecha_fin datetime
+)
+RETURNS @mi_tabla TABLE (
+                            Usuario nvarchar(50),
+                            Facturacion numeric(18,0)
+                        )
+AS
+BEGIN
+    INSERT @mi_tabla
+        SELECT TOP 5 usuario.usr_usuario, SUM(item.item_cantidad * item.item_monto) Facturacion
+        FROM NET_A_CERO.Usuarios usuario, NET_A_CERO.Publicaciones publicacion, NET_A_CERO.Items item, NET_A_CERO.Facturas factura
+        WHERE usuario.usr_id = publicacion.publi_usr_id 
+            AND publicacion.publi_id = factura.fact_publi_id
+            AND factura.fact_id = item.item_fact_id
+            AND factura.fact_fecha BETWEEN @fecha_inicio AND @fecha_fin  
+        GROUP BY usuario.usr_usuario
+        ORDER BY Facturacion DESC
+    RETURN
+END
+GO
+
+CREATE FUNCTION NET_A_CERO.pr_vendedores_con_mayor_Calificacion
+(
+    @fecha_inicio datetime,
+    @fecha_fin datetime
+)
+RETURNS @mi_tabla TABLE (
+                            Usuario nvarchar(50),
+                            Mayor_Calificacion numeric(18,2)
+                        )
+AS
+BEGIN
+    INSERT @mi_tabla
+        SELECT TOP 5 usuario.usr_usuario, SUM(Calificacion.calif_cant_estrellas) / COUNT(*) 
+        FROM NET_A_CERO.Usuarios usuario, NET_A_CERO.Publicaciones publicacion, NET_A_CERO.Compras compra, NET_A_CERO.Calificacion Calificacion
+        WHERE usuario.usr_id = publicacion.publi_usr_id
+            AND compra.comp_publi_id = publicacion.publi_id
+            AND compra.comp_calif_id = Calificacion.calif_id
+            AND compra.comp_fecha BETWEEN @fecha_inicio AND @fecha_fin  
+        GROUP BY usuario.usr_usuario
+        ORDER BY 2 DESC
+    RETURN
+END
+GO
+
+CREATE FUNCTION NET_A_CERO.pr_clientes_con_publicaciones_sin_calificar
+(
+    @fecha_inicio datetime,
+    @fecha_fin datetime
+)
+RETURNS @mi_tabla TABLE (
+                            Usuario nvarchar(50),
+                            Publicaciones_sin_calificar numeric(18,0)
+                        )
+AS
+BEGIN
+    INSERT @mi_tabla
+        SELECT TOP 5 usuario.usr_usuario, COUNT(*) 'Cantidad de no calificadas'
+        FROM NET_A_CERO.Clientes cliente, NET_A_CERO.Compras compra, NET_A_CERO.Publicaciones publicacion, NET_A_CERO.Usuarios usuario
+        WHERE cliente.cli_usr_id = compra.comp_usr_id
+            AND publicacion.publi_id = compra.comp_publi_id
+            AND cliente.cli_usr_id = usuario.usr_id
+            AND ISNULL(compra.comp_calif_id, -1) = -1
+            AND compra.comp_fecha BETWEEN @fecha_inicio AND @fecha_fin  
+        GROUP BY usuario.usr_usuario
+        ORDER BY 2 DESC
+    RETURN
+END
+GO
+
+CREATE FUNCTION NET_A_CERO.pr_calcular_productos_no_vendidos 
+(@usuario_id INT, @visibilidad_descripcion varchar(255), @fecha_inicio datetime, @fecha_fin datetime) 
+RETURNS numeric(18,0) 
+AS 
+BEGIN 
+    DECLARE @stock_total numeric(18,0), @stock_vendido numeric(18,0) 
+    
+    SELECT @stock_total = SUM(publicacion.publi_stock) 
+    FROM NET_A_CERO.Publicaciones publicacion, NET_A_CERO.Visibilidad visibilidad
+    WHERE publicacion.publi_usr_id = @usuario_id 
+    AND publicacion.publi_visib_id = visibilidad.visib_id
+    AND visibilidad.visib_desc = @visibilidad_descripcion 
+    AND publicacion.publi_fec_vencimiento >= @fecha_inicio
+    AND publicacion.publi_fec_inicio < @fecha_fin 
+
+    SELECT @stock_vendido = SUM(compra.cantidad) 
+    FROM LOS_SUPER_AMIGOS.Publicacion publicacion, LOS_SUPER_AMIGOS.Compra compra, LOS_SUPER_AMIGOS.Visibilidad visibilidad
+    WHERE publicacion.usuario_id = @usuario_id 
+    AND publicacion.visibilidad_id = visibilidad.id 
+    AND visibilidad.descripcion = @visibilidad_descripcion
+    AND compra.publicacion_id = publicacion.id 
+    AND publicacion.fecha_vencimiento >= @fecha_inicio 
+    AND publicacion.fecha_inicio < @fecha_fin
+    AND compra.fecha BETWEEN @fecha_inicio AND @fecha_fin
+    
+    RETURN @stock_total - @stock_vendido
 END
 GO
 

@@ -96,7 +96,7 @@ namespace MercadoEnvio.Listado_Estadistico
                                 + " WHILE  @@FETCH_STATUS = 0"
                                 + " BEGIN"
                                 + " INSERT INTO NET_A_CERO.usuarios_por_visibilidad ([mes], [visibilidad], [usuario], [cantidad])"
-                                + " SELECT TOP 5 @mes, @visibilidad, usuario.usr_usuario, NET_A_CERO.calcular_productos_no_vendidos(usuario.usr_id, (@visibilidad), (@fechaini), (@fechafin)) Cantidad"
+                                + " SELECT TOP 5 @mes, @visibilidad, usuario.usr_usuario, NET_A_CERO.pr_calcular_productos_no_vendidos(usuario.usr_id, (@visibilidad), (@fechaini), (@fechafin)) Cantidad"
                                 + " FROM NET_A_CERO.Usuarios usuario"
                                 + " ORDER BY Cantidad DESC"
                                 + " FETCH FROM mi_cursor INTO @mes, @visibilidad"
@@ -202,11 +202,11 @@ namespace MercadoEnvio.Listado_Estadistico
               //  case "Vendedores con mayor cantidad de productos no vendidos":
                //     return "NET_A_CERO.vendedores_con_mayor_cantidad_de_publicaciones_sin_vender('" + fechaDeInicio + "', '" + fechaMedia + "' , '" + fechaDeFin + "')";
                 case "Vendedores con mayor facturacion":
-                    return "NET_A_CERO.vendedores_con_mayor_facturacion('" + fechaDeInicio + "', '" + fechaDeFin + "')";
+                    return "NET_A_CERO.pr_vendedores_con_mayor_facturacion('" + fechaDeInicio + "', '" + fechaDeFin + "')";
                 case "Vendedores con mayores calificaciones":
-                    return "NET_A_CERO.vendedores_con_mayor_calificacion('" + fechaDeInicio + "', '" + fechaDeFin + "')";
+                    return "NET_A_CERO.pr_vendedores_con_mayor_calificacion('" + fechaDeInicio + "', '" + fechaDeFin + "')";
                 case "Clientes con mayor cantidad de publicaciones sin calificar":
-                    return "NET_A_CERO.clientes_con_publicaciones_sin_calificar('" + fechaDeInicio + "', '" + fechaDeFin + "')";
+                    return "NET_A_CERO.pr_clientes_con_publicaciones_sin_calificar('" + fechaDeInicio + "', '" + fechaDeFin + "')";
             }
             throw new Exception("No se pudo obtener la funcion");
         }
