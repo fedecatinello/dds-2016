@@ -16,6 +16,7 @@ namespace MercadoEnvio.Comprar_Ofertar
         private SqlCommand command { get; set; }
         private IList<SqlParameter> parametros = new List<SqlParameter>();
         decimal idUsuarioActual = UsuarioSesion.Usuario.id;
+        decimal idUsuarioActual = 4;
         private Decimal vendedorId;
         private int publicacionId;
         private int stockActual;
@@ -37,9 +38,6 @@ namespace MercadoEnvio.Comprar_Ofertar
 
         private void pedirContacto()
         {
-          //  String nombre = Convert.ToString(mapper.SelectFromWhere("cli_nombre", "Clientes", "cli_usr_id", vendedorId));
-          //  String apellido = Convert.ToString(mapper.SelectFromWhere("cli_apellido", "Clientes", "cli_usr_id", vendedorId));
-
             parametros.Clear();
             parametros.Add(new SqlParameter("@usuario", vendedorId));
 
@@ -114,7 +112,8 @@ namespace MercadoEnvio.Comprar_Ofertar
                 return;
             }
 
-            String sql = "INSERT INTO NET_A_CERO.Compras(comp_cantidad, comp_fecha, comp_usr_id, comp_publi_id, comp_calif_id, comp_monto) VALUES (@cant, @fecha, @usuario, @publicacion, NULL, @monto)";
+
+            String sql = "INSERT INTO NET_A_CERO.Compras(com_usr_id, comp_publi_id, comp_fecha, comp_cantidad, comp_monto, comp_calif_id) VALUES (@com_usr_id, @comp_publi_id, @comp_fecha, @comp_cantidad, @comp_monto, NULL)";
             DateTime fecha = DateConfig.getInstance().getCurrentDate();
 
             //CHEQUAR ESTA QUERY
@@ -126,11 +125,11 @@ namespace MercadoEnvio.Comprar_Ofertar
             Decimal precioPublicacion = Convert.ToDecimal(readerMontoPublicacion["publi_precio"]);
 
             parametros.Clear();
-            parametros.Add(new SqlParameter("@cant", this.textBoxCant.Text));
-            parametros.Add(new SqlParameter("@fecha", fecha));
-            parametros.Add(new SqlParameter("@usuario", idUsuarioActual));
-            parametros.Add(new SqlParameter("@publicacion", publicacionId));
-            parametros.Add(new SqlParameter("@monto", (precioPublicacion * Convert.ToInt32(textBoxCant.Text))));
+            parametros.Add(new SqlParameter("@com_usr_id", idUsuarioActual));
+            parametros.Add(new SqlParameter("@comp_publi_id", publicacionId));
+            parametros.Add(new SqlParameter("@comp_fecha", fecha));
+            parametros.Add(new SqlParameter("@comp_cantidad", this.textBoxCant.Text));
+            parametros.Add(new SqlParameter("@comp_monto", (precioPublicacion * Convert.ToInt32(textBoxCant.Text))));
             QueryBuilder.Instance.build(sql, parametros).ExecuteNonQuery();
 
             MessageBox.Show("Contactese con el vendedor para finalizar la compra");
