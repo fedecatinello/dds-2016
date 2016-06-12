@@ -19,7 +19,7 @@ namespace MercadoEnvio
             //Application.Run(new Comprar_Ofertar.VerPublicacion(71080));
             //Application.Run(new Comprar_Ofertar.VerPublicacion(71079));
             //Application.Run(new Comprar_Ofertar.Ofertar(100,71080));
-            Application.Run(new Login.LoginForm());
+            Application.Run(new Comprar_Ofertar.Comprar(2,71079,123));
             
         }
     }

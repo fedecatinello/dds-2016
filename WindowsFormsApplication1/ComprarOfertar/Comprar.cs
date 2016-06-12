@@ -15,7 +15,8 @@ namespace MercadoEnvio.Comprar_Ofertar
     {
         private SqlCommand command { get; set; }
         private IList<SqlParameter> parametros = new List<SqlParameter>();
-        decimal idUsuarioActual = UsuarioSesion.Usuario.id;
+//        decimal idUsuarioActual = UsuarioSesion.Usuario.id;
+        decimal idUsuarioActual = 4;
         private Decimal vendedorId;
         private int publicacionId;
         private int stockActual;
@@ -31,74 +32,54 @@ namespace MercadoEnvio.Comprar_Ofertar
 
         private void Comprar_Load(object sender, EventArgs e)
         {
-            pedirContacto();
-            pedirDireccion();            
+            pedirContacto();      
         }
 
         private void pedirContacto()
         {
-          //  String nombre = Convert.ToString(comunicador.SelectFromWhere("cli_nombre", "Clientes", "cli_usr_id", vendedorId));
-          //  String apellido = Convert.ToString(comunicador.SelectFromWhere("cli_apellido", "Clientes", "cli_usr_id", vendedorId));
-
+            
             parametros.Clear();
             parametros.Add(new SqlParameter("@usuario", vendedorId));
-
-            String queryCliente = "SELECT * FROM NET_A_CERO.Clientes WHERE cli_usr_id= @usuario and (SELECT usr_activo FROM NET_A_CERO.Usuarios WHERE usr_id = @usuario) = 1";
+            
+            String queryCliente = "SELECT * FROM NET_A_CERO.Clientes WHERE cli_usr_id= @usuario and cli_activo= 1";
             SqlDataReader readerCliente = QueryBuilder.Instance.build(queryCliente, parametros).ExecuteReader();
 
-                     
+            int contId;
 
-            if (readerCliente.Read())
+            if (readerCliente.Read()) //cliente
             {
-                labelNombre.Text = (String)readerCliente["cli_nombre"] + " " + (String)readerCliente["cli_apellido"];
-               
+                labelNombre.Text = Convert.ToString(readerCliente["cli_nombre"]) + " " + Convert.ToString(readerCliente["cli_apellido"]);
+                labelDniCuit.Text = Convert.ToString(comunicador.SelectFromWhere("cli_tipo_dni", "Clientes", "cli_usr_id", vendedorId));
+                labelNumDniCuit.Text = Convert.ToString(comunicador.SelectFromWhere("cli_dni", "Clientes", "cli_usr_id", vendedorId));
+                contId = Convert.ToInt32(readerCliente["cli_cont_id"]);
+                               
             }
-            else
+            else        //empresa
             {
                 parametros.Clear();
                 parametros.Add(new SqlParameter("@usuario", vendedorId));
-                String queryEmpresa = "SELECT * FROM NET_A_CERO.Empresas WHERE usr_id = @usuario and (SELECT usr_activo FROM NET_A_CERO.Usuarios WHERE usr_id = @usuario) = 1";
+                String queryEmpresa = "SELECT * FROM NET_A_CERO.Empresas WHERE emp_usr_id = @usuario AND emp_activo = 1";
                 SqlDataReader readerEmpresa = QueryBuilder.Instance.build(queryEmpresa, parametros).ExecuteReader();
                 readerEmpresa.Read();
-                labelNombre.Text = (String)readerEmpresa["emp_razon_social"];
-               
+                labelNombre.Text = Convert.ToString(readerEmpresa["emp_razon_social"]);
+                contId = Convert.ToInt32(readerEmpresa["emp_cont_id"]);
+
+                labelDniCuit.Text = "CUIT";
+                labelNumDniCuit.Text = Convert.ToString(comunicador.SelectFromWhere("emp_cuit", "Empresas", "emp_usr_id", vendedorId));
+
+
             }
+            labelMail.Text = Convert.ToString(comunicador.SelectFromWhere("cont_mail", "Contacto", "cont_id", contId));
+            labelTel.Text = Convert.ToString(comunicador.SelectFromWhere("cont_telefono", "Contacto", "cont_id", contId));
+            labelCalle.Text = Convert.ToString(comunicador.SelectFromWhere("cont_calle", "Contacto", "cont_id", contId));
+            labelNumCalle.Text = Convert.ToString(comunicador.SelectFromWhere("cont_numero_calle", "Contacto", "cont_id", contId));
+            labelPiso.Text = Convert.ToString(comunicador.SelectFromWhere("cont_piso", "Contacto", "cont_id", contId));
+            labelDepartamento.Text = Convert.ToString(comunicador.SelectFromWhere("cont_depto", "Contacto", "cont_id", contId));
+            labelLocalidad.Text = Convert.ToString(comunicador.SelectFromWhere("cont_localidad", "Contacto", "cont_id", contId));
+            labelPostal.Text = Convert.ToString(comunicador.SelectFromWhere("cont_codigo_postal", "Contacto", "cont_id", contId));
         }
 
-        private void pedirDireccion()
-        {
-            parametros.Clear();
-            parametros.Add(new SqlParameter("@usuario", vendedorId));
 
-
-            String queryContacto = "SELECT * FROM NET_A_CERO.Contacto WHERE cont_id = (SELECT cli_cont_id FROM NET_A_CERO.Clientes WHERE cli_id = @usuario)";
-            SqlDataReader readerContacto = QueryBuilder.Instance.build(queryContacto, parametros).ExecuteReader();
-            readerContacto.Read();
-
-            labelMail.Text = (String)readerContacto["cont_mail"];
-            if ((Decimal)readerContacto["cont_telefono"] == 0)
-            {
-                labelLocalidad.Text = "";
-            }
-            else
-            {
-                labelLocalidad.Text = ((Decimal)readerContacto["cont_telefono"]).ToString();
-            }
-
-            labelCalle.Text = (String)readerContacto["cont_calle"] + " " + (Decimal)readerContacto["cont_numero_calle"];
-            labelDepartamento.Text = "Departamento " + (Decimal)readerContacto["cont_piso"] + "-" + (String)readerContacto["cont_depto"];
-            labelPostal.Text = ((String)readerContacto["cont_codigo_postal"]).ToString();
-
-            /*CHEQUEAR POR QUE EN LA MAESTRA NO HAY LOCALIDAD
-            if ((String)readerContacto["cont_localidad"] == "localidadMigrada") 
-            {
-                labelLocalidad.Text = "";
-            }
-            else
-            {*/
-                labelLocalidad.Text = (String)readerContacto["cont_localidad"];
-            //}
-        }
 
         private void buttonConfirmarCompra_Click(object sender, EventArgs e)
         {
@@ -184,6 +165,11 @@ namespace MercadoEnvio.Comprar_Ofertar
             this.Hide();
             new VerPublicacion(publicacionId).ShowDialog();
             this.Close();
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
