@@ -33,7 +33,6 @@ namespace MercadoEnvio.Comprar_Ofertar
             this.labelProducto = new System.Windows.Forms.Label();
             this.labelStock = new System.Windows.Forms.Label();
             this.labelPrecio = new System.Windows.Forms.Label();
-            this.botonPreguntar = new System.Windows.Forms.Button();
             this.botonComprarOfertar = new System.Windows.Forms.Button();
             this.labelVencimiento = new System.Windows.Forms.Label();
             this.buttonVolver = new System.Windows.Forms.Button();
@@ -92,19 +91,9 @@ namespace MercadoEnvio.Comprar_Ofertar
             this.labelPrecio.TabIndex = 4;
             this.labelPrecio.Text = "Precio-Oferta";
             // 
-            // botonPreguntar
-            // 
-            this.botonPreguntar.Location = new System.Drawing.Point(16, 205);
-            this.botonPreguntar.Name = "botonPreguntar";
-            this.botonPreguntar.Size = new System.Drawing.Size(75, 28);
-            this.botonPreguntar.TabIndex = 5;
-            this.botonPreguntar.Text = "Preguntar";
-            this.botonPreguntar.UseVisualStyleBackColor = true;
-            this.botonPreguntar.Click += new System.EventHandler(this.botonPreguntar_Click);
-            // 
             // botonComprarOfertar
             // 
-            this.botonComprarOfertar.Location = new System.Drawing.Point(187, 207);
+            this.botonComprarOfertar.Location = new System.Drawing.Point(177, 207);
             this.botonComprarOfertar.Name = "botonComprarOfertar";
             this.botonComprarOfertar.Size = new System.Drawing.Size(58, 24);
             this.botonComprarOfertar.TabIndex = 6;
@@ -122,7 +111,7 @@ namespace MercadoEnvio.Comprar_Ofertar
             // 
             // buttonVolver
             // 
-            this.buttonVolver.Location = new System.Drawing.Point(16, 244);
+            this.buttonVolver.Location = new System.Drawing.Point(28, 211);
             this.buttonVolver.Name = "buttonVolver";
             this.buttonVolver.Size = new System.Drawing.Size(107, 20);
             this.buttonVolver.TabIndex = 9;
@@ -218,7 +207,6 @@ namespace MercadoEnvio.Comprar_Ofertar
             this.Controls.Add(this.buttonVolver);
             this.Controls.Add(this.labelVencimiento);
             this.Controls.Add(this.botonComprarOfertar);
-            this.Controls.Add(this.botonPreguntar);
             this.Controls.Add(this.labelPrecio);
             this.Controls.Add(this.labelStock);
             this.Controls.Add(this.labelProducto);
@@ -239,7 +227,6 @@ namespace MercadoEnvio.Comprar_Ofertar
         private System.Windows.Forms.Label labelProducto;
         private System.Windows.Forms.Label labelStock;
         private System.Windows.Forms.Label labelPrecio;
-        private System.Windows.Forms.Button botonPreguntar;
         private System.Windows.Forms.Button botonComprarOfertar;
         private System.Windows.Forms.Label labelVencimiento;
         private System.Windows.Forms.Button buttonVolver;

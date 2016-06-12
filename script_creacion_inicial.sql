@@ -918,8 +918,8 @@ INSERT INTO NET_A_CERO.Items(item_cantidad, item_monto, item_fact_id)
     FROM gd_esquema.Maestra 
     WHERE ISNULL(Factura_Nro,-1) != -1
 
-
 GO
+
 -- CREACION DE VISTAS
 
 CREATE VIEW NET_A_CERO.VistaOfertaMaxima
@@ -945,6 +945,7 @@ AS
 GO
 
 -- FIN DE CREACION DE VISTAS
+
 
 /** Inserto usuario administrador para manejar la app (admin:w23e) **/
 

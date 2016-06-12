@@ -15,7 +15,7 @@ namespace MercadoEnvio.Comprar_Ofertar
     {
         private SqlCommand command { get; set; }
         private IList<SqlParameter> parametros = new List<SqlParameter>();
-        private DBMapper comunicador = new DBMapper();
+        private DBMapper mapper = new DBMapper();
         public Object SelectedItem { get; set; }        
         private String tipoPublicacion;
         private int publicacionId;
@@ -48,7 +48,7 @@ namespace MercadoEnvio.Comprar_Ofertar
             reader.Read();
             Decimal idEstado = Convert.ToInt32(reader["publi_estado_id"]);
 
-            String estado = Convert.ToString(comunicador.SelectFromWhere("estado_desc", "Estado", "estado_id", idEstado));
+            String estado = Convert.ToString(mapper.SelectFromWhere("estado_desc", "Estado", "estado_id", idEstado));
             if (estado == "Pausada")
             {
                 botonComprarOfertar.Enabled = false;
@@ -79,24 +79,24 @@ namespace MercadoEnvio.Comprar_Ofertar
         private void pedirRubroYPrecio()
         {
             //Cargo Rubro
-            Decimal rubroId = Convert.ToInt32(comunicador.SelectFromWhere("rubro_id", "Rubro_x_Publicacion", "publi_id", publicacionId));
-            labelRubroDatos.Text = Convert.ToString(comunicador.SelectFromWhere("rubro_desc_larga", "Rubros", "rubro_id", rubroId));
+            Decimal rubroId = Convert.ToInt32(mapper.SelectFromWhere("rubro_id", "Rubro_x_Publicacion", "publi_id", publicacionId));
+            labelRubroDatos.Text = Convert.ToString(mapper.SelectFromWhere("rubro_desc_larga", "Rubros", "rubro_id", rubroId));
 
             //Cargo Precio
             if (tipoPublicacion == "Compra inmediata")
             {
-                labelPrecioDatos.Text = Convert.ToString(comunicador.SelectFromWhere("publi_precio", "Publicaciones", "publi_id", publicacionId));
+                labelPrecioDatos.Text = Convert.ToString(mapper.SelectFromWhere("publi_precio", "Publicaciones", "publi_id", publicacionId));
                 botonComprarOfertar.Text = "Comprar";
 
 
             }
             else
             {
-                String precioSub = Convert.ToString(comunicador.SelectFromWhere("vista_precioMax", "VistaOfertaMaxima", "vista_publi_id", publicacionId));
+                String precioSub = Convert.ToString(mapper.SelectFromWhere("vista_precioMax", "VistaOfertaMaxima", "vista_publi_id", publicacionId));
                 botonComprarOfertar.Text = "Ofertar";
                 if (precioSub == "")
                 {
-                   labelPrecioDatos.Text = Convert.ToString(comunicador.SelectFromWhere("publi_precio", "Publicaciones", "publi_id", publicacionId));
+                   labelPrecioDatos.Text = Convert.ToString(mapper.SelectFromWhere("publi_precio", "Publicaciones", "publi_id", publicacionId));
                 }
                 else
                 {
@@ -111,12 +111,8 @@ namespace MercadoEnvio.Comprar_Ofertar
         private void pedirVencimientoPreguntas()
         {
             
-            labelVencimientoDatos.Text = Convert.ToString(comunicador.SelectFromWhere("publi_fec_vencimiento", "Publicaciones", "publi_id", publicacionId));
-            
-            if ((Convert.ToInt32(comunicador.SelectFromWhere("publi_preguntas", "Publicaciones", "publi_id", publicacionId))) == 0)
-            {
-                botonPreguntar.Enabled = false;
-            }            
+            labelVencimientoDatos.Text = Convert.ToString(mapper.SelectFromWhere("publi_fec_vencimiento", "Publicaciones", "publi_id", publicacionId));
+                    
         }
 
         private void pedirStock()
@@ -124,13 +120,13 @@ namespace MercadoEnvio.Comprar_Ofertar
                      
            if (tipoPublicacion == "Subasta")
             {
-                labelStockDatos.Text = Convert.ToString(comunicador.SelectFromWhere("publi_stock", "Publicaciones", "publi_id", publicacionId));
+                labelStockDatos.Text = Convert.ToString(mapper.SelectFromWhere("publi_stock", "Publicaciones", "publi_id", publicacionId));
                 
             }
             else
             {
-                Decimal stockInicial = Convert.ToInt32(comunicador.SelectFromWhere("publi_stock", "Publicaciones", "publi_id", publicacionId));
-                Decimal cantidadVendida = Convert.ToInt32(comunicador.SelectFromWhere("vista_cant_vendida", "VistaCantidadVendida", "vista_publi_id", publicacionId));
+                Decimal stockInicial = Convert.ToInt32(mapper.SelectFromWhere("publi_stock", "Publicaciones", "publi_id", publicacionId));
+                Decimal cantidadVendida = Convert.ToInt32(mapper.SelectFromWhere("vista_cant_vendida", "VistaCantidadVendida", "vista_publi_id", publicacionId));
 
                 if (cantidadVendida == 0)
                 {
@@ -181,9 +177,5 @@ namespace MercadoEnvio.Comprar_Ofertar
             this.Close();
         }
 
-        private void botonPreguntar_Click(object sender, EventArgs e)
-        {
-            new Preguntar(publicacionId).ShowDialog();
-        }
     }
 }

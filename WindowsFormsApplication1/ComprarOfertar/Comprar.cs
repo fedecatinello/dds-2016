@@ -19,7 +19,7 @@ namespace MercadoEnvio.Comprar_Ofertar
         private Decimal vendedorId;
         private int publicacionId;
         private int stockActual;
-        private DBMapper comunicador = new DBMapper();
+        private DBMapper mapper = new DBMapper();
 
         public Comprar(Decimal usuarioVendedor, int publicacion, int stock)
         {
@@ -37,8 +37,8 @@ namespace MercadoEnvio.Comprar_Ofertar
 
         private void pedirContacto()
         {
-          //  String nombre = Convert.ToString(comunicador.SelectFromWhere("cli_nombre", "Clientes", "cli_usr_id", vendedorId));
-          //  String apellido = Convert.ToString(comunicador.SelectFromWhere("cli_apellido", "Clientes", "cli_usr_id", vendedorId));
+          //  String nombre = Convert.ToString(mapper.SelectFromWhere("cli_nombre", "Clientes", "cli_usr_id", vendedorId));
+          //  String apellido = Convert.ToString(mapper.SelectFromWhere("cli_apellido", "Clientes", "cli_usr_id", vendedorId));
 
             parametros.Clear();
             parametros.Add(new SqlParameter("@usuario", vendedorId));
@@ -88,16 +88,8 @@ namespace MercadoEnvio.Comprar_Ofertar
             labelCalle.Text = (String)readerContacto["cont_calle"] + " " + (Decimal)readerContacto["cont_numero_calle"];
             labelDepartamento.Text = "Departamento " + (Decimal)readerContacto["cont_piso"] + "-" + (String)readerContacto["cont_depto"];
             labelPostal.Text = ((String)readerContacto["cont_codigo_postal"]).ToString();
+            labelLocalidad.Text = (String)readerContacto["cont_localidad"];
 
-            /*CHEQUEAR POR QUE EN LA MAESTRA NO HAY LOCALIDAD
-            if ((String)readerContacto["cont_localidad"] == "localidadMigrada") 
-            {
-                labelLocalidad.Text = "";
-            }
-            else
-            {*/
-                labelLocalidad.Text = (String)readerContacto["cont_localidad"];
-            //}
         }
 
         private void buttonConfirmarCompra_Click(object sender, EventArgs e)
@@ -122,17 +114,16 @@ namespace MercadoEnvio.Comprar_Ofertar
                 return;
             }
 
-            String sql = "INSERT INTO NET_A_CERO.Compras(comp_cantidad, comp_fecha, comp_usr_id, comp_publi_id, comp_calif_id, comp_monto) VALUES (@cant, @fecha, @usuario, @publicacion, NULL,@monto)";
-            //DateTime fecha = Convert.ToDateTime(System.Configuration.ConfigurationManager.AppSettings["DateKey"]);
+            String sql = "INSERT INTO NET_A_CERO.Compras(comp_cantidad, comp_fecha, comp_usr_id, comp_publi_id, comp_calif_id, comp_monto) VALUES (@cant, @fecha, @usuario, @publicacion, NULL, @monto)";
             DateTime fecha = DateConfig.getInstance().getCurrentDate();
 
             //CHEQUAR ESTA QUERY
-            String sqlMonto = "SELECT publi_precio FROM NET_A_CERO.Publicaiones WHERE publi_id = @publicacion";
+            String sqlMonto = "SELECT publi_precio FROM NET_A_CERO.Publicaciones WHERE publi_id = @publicacion";
             parametros.Clear();
-            parametros.Add(new SqlParameter("@cant",publicacionId));
+            parametros.Add(new SqlParameter("@publicacion", publicacionId));
             SqlDataReader readerMontoPublicacion = QueryBuilder.Instance.build(sqlMonto, parametros).ExecuteReader();
             readerMontoPublicacion.Read();
-            Decimal precioPublicacion = ((Decimal)readerMontoPublicacion["publi_precio"]);
+            Decimal precioPublicacion = Convert.ToDecimal(readerMontoPublicacion["publi_precio"]);
 
             parametros.Clear();
             parametros.Add(new SqlParameter("@cant", this.textBoxCant.Text));
@@ -167,8 +158,8 @@ namespace MercadoEnvio.Comprar_Ofertar
             SqlDataReader reader = QueryBuilder.Instance.build(query, parametros).ExecuteReader();
             reader.Read();
 
-            Decimal idEstado = (Decimal)reader["publi_estado_id"];
-            String estado = (String)comunicador.SelectFromWhere("estado_desc", "Estado", "estado_id", idEstado);
+            Decimal idEstado = Convert.ToDecimal(reader["publi_estado_id"]);
+            String estado = Convert.ToString(mapper.SelectFromWhere("estado_desc", "Estado", "estado_id", idEstado));
             if (estado == "Finalizada")
             {
                 return false;
