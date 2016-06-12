@@ -619,15 +619,15 @@ BEGIN
     AND publicacion.publi_fec_vencimiento >= @fecha_inicio
     AND publicacion.publi_fec_inicio < @fecha_fin 
 
-    SELECT @stock_vendido = SUM(compra.cantidad) 
-    FROM LOS_SUPER_AMIGOS.Publicacion publicacion, LOS_SUPER_AMIGOS.Compra compra, LOS_SUPER_AMIGOS.Visibilidad visibilidad
-    WHERE publicacion.usuario_id = @usuario_id 
-    AND publicacion.visibilidad_id = visibilidad.id 
-    AND visibilidad.descripcion = @visibilidad_descripcion
-    AND compra.publicacion_id = publicacion.id 
-    AND publicacion.fecha_vencimiento >= @fecha_inicio 
-    AND publicacion.fecha_inicio < @fecha_fin
-    AND compra.fecha BETWEEN @fecha_inicio AND @fecha_fin
+    SELECT @stock_vendido = SUM(compra.comp_cantidad) 
+    FROM NET_A_CERO.Publicaciones publicacion, NET_A_CERO.Compras compra, NET_A_CERO.Visibilidad visibilidad
+    WHERE publicacion.publi_usr_id = @usuario_id 
+    AND publicacion.publi_visib_id = visibilidad.visib_id 
+    AND visibilidad.visib_desc = @visibilidad_descripcion
+    AND compra.comp_publi_id = publicacion.publi_id 
+    AND publicacion.publi_fec_vencimiento >= @fecha_inicio 
+    AND publicacion.publi_fec_inicio < @fecha_fin
+    AND compra.comp_fecha BETWEEN @fecha_inicio AND @fecha_fin
     
     RETURN @stock_total - @stock_vendido
 END
