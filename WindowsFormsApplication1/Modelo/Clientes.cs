@@ -163,6 +163,7 @@ namespace MercadoEnvio.Modelo
             parametros.Add(new SqlParameter("@documento", this.numeroDeDocumento));
             parametros.Add(new SqlParameter("@tipo_de_documento", this.tipoDeDocumento));
             parametros.Add(new SqlParameter("@fecha_nacimiento", this.fechaDeNacimiento));
+            parametros.Add(new SqlParameter("@fecha_alta", this.fechaDeNacimiento));
             parametros.Add(new SqlParameter("@activo", this.activo));
             parametros.Add(new SqlParameter("@cont_id", this.idContacto));
             return parametros;
