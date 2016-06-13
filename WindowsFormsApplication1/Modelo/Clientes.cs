@@ -146,7 +146,18 @@ namespace MercadoEnvio.Modelo
 
         string Mapeable.GetQueryModificar()
         {
-            return "UPDATE NET_A_CERO.Clientes SET cli_nombre = @nombre, cli_apellido = @apellido, cli_dni = @documento, cli_tipo_dni = @tipo_de_documento, cli_fecha_nac = @fecha_nacimiento, cli_activo = @activo WHERE cli_id = @id";
+            if (activo == true)
+            {
+               
+                return "UPDATE NET_A_CERO.Clientes SET cli_nombre = @nombre, cli_apellido = @apellido, cli_dni = @documento, cli_tipo_dni = @tipo_de_documento, cli_fecha_nac = @fecha_nacimiento, cli_activo = @activo WHERE cli_id = @id " +
+                " UPDATE NET_A_CERO.Usuarios SET usr_intentos = 0 WHERE usr_id = (SELECT cli_usr_id FROM NET_A_CERO.Clientes WHERE cli_id = @id) ";
+            }
+            else
+            {
+                return "UPDATE NET_A_CERO.Clientes SET cli_nombre = @nombre, cli_apellido = @apellido, cli_dni = @documento, cli_tipo_dni = @tipo_de_documento, cli_fecha_nac = @fecha_nacimiento, cli_activo = @activo WHERE cli_id = @id";
+            }
+
+            
         }
 
         string Mapeable.GetQueryObtener()
@@ -163,7 +174,7 @@ namespace MercadoEnvio.Modelo
             parametros.Add(new SqlParameter("@documento", this.numeroDeDocumento));
             parametros.Add(new SqlParameter("@tipo_de_documento", this.tipoDeDocumento));
             parametros.Add(new SqlParameter("@fecha_nacimiento", this.fechaDeNacimiento));
-            parametros.Add(new SqlParameter("@fecha_alta", this.fechaDeNacimiento));
+            parametros.Add(new SqlParameter("@fecha_alta", this.fechaDeAlta));
             parametros.Add(new SqlParameter("@activo", this.activo));
             parametros.Add(new SqlParameter("@cont_id", this.idContacto));
             return parametros;

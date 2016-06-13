@@ -132,6 +132,7 @@ namespace MercadoEnvio.ABM_Empresa
                 empresa.SetRubro(rubro);
                 empresa.SetFechaDeCreacion(fechaDeCreacion);
                 empresa.SetIdContacto(idContacto);
+                empresa.SetActivo(activo);
 
                 mapper.ActualizarEstadoUsuario(idUsuario, activo);
 

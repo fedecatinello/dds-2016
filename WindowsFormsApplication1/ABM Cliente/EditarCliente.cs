@@ -10,6 +10,7 @@ using System.Data.SqlClient;
 using MercadoEnvio.Modelo;
 using MercadoEnvio.Exceptions;
 using MercadoEnvio.ABM_Cliente;
+using MercadoEnvio.DataProvider;
 
 namespace MercadoEnvio.ABM_Cliente
 {
@@ -19,7 +20,8 @@ namespace MercadoEnvio.ABM_Cliente
         private int idContacto = 0;
         private int idUsuario = 0;
         private DBMapper mapper = new DBMapper();
-
+        private IList<SqlParameter> parametros = new List<SqlParameter>();
+        
         public EditarCliente(String idCliente)
         {
             InitializeComponent();
@@ -124,6 +126,7 @@ namespace MercadoEnvio.ABM_Cliente
                 cliente.SetNumeroDeDocumento(numeroDeDocumento);
                 cliente.SetTipoDeDocumento(tipoDeDocumento);
                 cliente.SetFechaDeNacimiento(fechaDeNacimiento);
+                cliente.SetActivo(activo);
 
                 mapper.ActualizarEstadoUsuario(idUsuario, activo);
 

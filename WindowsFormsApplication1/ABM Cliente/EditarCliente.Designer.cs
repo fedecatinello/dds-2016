@@ -33,8 +33,8 @@ namespace MercadoEnvio.ABM_Cliente
             this.button_Limpiar = new System.Windows.Forms.Button();
             this.checkBox_Habilitado = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label11 = new System.Windows.Forms.Label();
             this.monthCalendar_FechaDeNacimiento = new System.Windows.Forms.MonthCalendar();
+            this.label11 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.button_FechaDeNacimiento = new System.Windows.Forms.Button();
             this.textBox_FechaDeNacimiento = new System.Windows.Forms.TextBox();
@@ -127,6 +127,14 @@ namespace MercadoEnvio.ABM_Cliente
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Datos personales";
             // 
+            // monthCalendar_FechaDeNacimiento
+            // 
+            this.monthCalendar_FechaDeNacimiento.Location = new System.Drawing.Point(141, 6);
+            this.monthCalendar_FechaDeNacimiento.Name = "monthCalendar_FechaDeNacimiento";
+            this.monthCalendar_FechaDeNacimiento.TabIndex = 13;
+            this.monthCalendar_FechaDeNacimiento.Visible = false;
+            this.monthCalendar_FechaDeNacimiento.DateSelected += new System.Windows.Forms.DateRangeEventHandler(this.monthCalendar_FechaDeNacimiento_DateSelected);
+            // 
             // label11
             // 
             this.label11.AutoSize = true;
@@ -135,14 +143,6 @@ namespace MercadoEnvio.ABM_Cliente
             this.label11.Size = new System.Drawing.Size(99, 13);
             this.label11.TabIndex = 12;
             this.label11.Text = "Tipo de documento";
-            // 
-            // monthCalendar_FechaDeNacimiento
-            // 
-            this.monthCalendar_FechaDeNacimiento.Location = new System.Drawing.Point(141, 6);
-            this.monthCalendar_FechaDeNacimiento.Name = "monthCalendar_FechaDeNacimiento";
-            this.monthCalendar_FechaDeNacimiento.TabIndex = 13;
-            this.monthCalendar_FechaDeNacimiento.Visible = false;
-            this.monthCalendar_FechaDeNacimiento.DateSelected += new System.Windows.Forms.DateRangeEventHandler(this.monthCalendar_FechaDeNacimiento_DateSelected);
             // 
             // label4
             // 

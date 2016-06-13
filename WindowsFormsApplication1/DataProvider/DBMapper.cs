@@ -47,7 +47,8 @@ namespace MercadoEnvio
             parametros = objeto.GetParametros();
             parametros.Add(new SqlParameter("@id", id));
             int filasAfectadas = QueryBuilder.Instance.build(query, parametros).ExecuteNonQuery();
-            if (filasAfectadas == 1) return true;
+            if (filasAfectadas == 1 ) return true;
+            if (filasAfectadas == 2) return true;
             return false;
         }
 
