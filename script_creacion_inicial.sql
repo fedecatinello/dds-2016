@@ -282,7 +282,7 @@ ALTER TABLE [NET_A_CERO].[Items] ADD CONSTRAINT item_factura FOREIGN KEY (item_f
 /** FIN CREACION DE TABLAS **/
 
 
-/** VALIDACION DE FUNCIONES, PROCEDURES Y VISTAS**/
+/** VALIDACION DE FUNCIONES, PROCEDURES, VISTAS Y TRIGGERS**/
 
 IF OBJECT_ID('NET_A_CERO.pr_crear_publicacion') IS NOT NULL
 	DROP PROCEDURE NET_A_CERO.pr_crear_publicacion
@@ -360,7 +360,11 @@ IF OBJECT_ID('NET_A_CERO.VistaCantidadVendida') IS NOT NULL
 	DROP VIEW NET_A_CERO.VistaCantidadVendida
 GO
 
-/** FIN VALIDACION DE FUNCIONES, PROCEDURES Y VISTAS **/
+IF OBJECT_ID('NET_A_CERO.finalizar_x_fin_stock') IS NOT NULL
+	DROP TRIGGER NET_A_CERO.finalizar_x_fin_stock
+GO
+
+/** FIN VALIDACION DE FUNCIONES, PROCEDURES, VISTAS Y TRIGGERS **/
 
 
 
@@ -1063,6 +1067,27 @@ AS
 GO
 
 -- FIN DE CREACION DE VISTAS
+
+-- CREACION DE TRIGGERS
+
+CREATE TRIGGER NET_A_CERO.finalizar_x_fin_stock ON NET_A_CERO.Compras
+FOR INSERT
+AS
+BEGIN
+	IF((
+			SELECT (p.publi_stock - v.vista_cant_vendida)
+			FROM INSERTED i, NET_A_CERO.Publicaciones p, NET_A_CERO.VistaCantidadVendida v
+			WHERE i.comp_publi_id = p.publi_id 
+				AND i.comp_publi_id = v.vista_publi_id
+		) = 0)
+	UPDATE NET_A_CERO.Publicaciones 
+		SET publi_estado_id = (SELECT estado_id FROM NET_A_CERO.Estado WHERE estado_desc = 'Finalizada')
+		FROM INSERTED i, NET_A_CERO.Publicaciones p
+		WHERE p.publi_id = i.comp_publi_id	
+END
+GO
+
+
 
 
 /** Inserto usuario administrador para manejar la app (admin:w23e) **/
