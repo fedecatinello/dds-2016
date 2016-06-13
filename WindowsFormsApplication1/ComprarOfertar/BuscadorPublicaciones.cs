@@ -104,9 +104,8 @@ namespace MercadoEnvio.Comprar_Ofertar
                             "ELSE publicaciones.publi_precio END) Precio, " +
                         "publicaciones.publi_tipo 'Tipo Publicacion' " +
                     "FROM NET_A_CERO.Publicaciones publicaciones, NET_A_CERO.Visibilidad visibilidad, NET_A_CERO.Rubro_x_Publicacion rxp " +
-                    "WHERE publicaciones.publi_visib_id = visibilidad.visib_id AND (publicaciones.publi_estado_id = (SELECT estado_id FROM NET_A_CERO.Estado WHERE estado_desc='Activa') " +
-                            "or publicaciones.publi_estado_id = (SELECT estado_id FROM NET_A_CERO.Estado WHERE estado_desc='Pausada')) " +
-                                " and publicaciones.publi_id = rxp.publi_id "
+                    "WHERE publicaciones.publi_visib_id = visibilidad.visib_id AND publicaciones.publi_estado_id = (SELECT estado_id FROM NET_A_CERO.Estado WHERE estado_desc='Activa') " +
+                            " and publicaciones.publi_id = rxp.publi_id "
                                       + filtro + " ORDER BY visibilidad.visib_precio DESC";
             
             
