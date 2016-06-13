@@ -31,67 +31,60 @@ namespace MercadoEnvio.Comprar_Ofertar
 
         private void Comprar_Load(object sender, EventArgs e)
         {
-            /* pedirContacto();
-            pedirDireccion();   */         
+            pedirContacto();
+            
         }
 
-        /* private void pedirContacto()
+         private void pedirContacto()
         {
             parametros.Clear();
             parametros.Add(new SqlParameter("@usuario", vendedorId));
 
-            String queryCliente = "SELECT * FROM NET_A_CERO.Clientes WHERE cli_usr_id= @usuario and (SELECT usr_activo FROM NET_A_CERO.Usuarios WHERE usr_id = @usuario) = 1";
+            String queryCliente = "SELECT * FROM NET_A_CERO.Clientes WHERE cli_usr_id = @usuario and cli_activo = 1";
             SqlDataReader readerCliente = QueryBuilder.Instance.build(queryCliente, parametros).ExecuteReader();
 
-                     
+            int contId;
 
-            if (readerCliente.Read())
+            if (readerCliente.Read()) //cliente
             {
-                labelNombre.Text = (String)readerCliente["cli_nombre"] + " " + (String)readerCliente["cli_apellido"];
+               labelNombre.Text = Convert.ToString(readerCliente["cli_nombre"]) + " " + Convert.ToString(readerCliente["cli_apellido"]);
+               labelDniCuit.Text = Convert.ToString(mapper.SelectFromWhere("cli_tipo_dni", "Clientes", "cli_usr_id", vendedorId));
+               labelNumDniCuit.Text = Convert.ToString(mapper.SelectFromWhere("cli_dni", "Clientes", "cli_usr_id", vendedorId));
+               contId = Convert.ToInt32(readerCliente["cli_cont_id"]);
                
             }
-            else
+            else //empresa
             {
                 parametros.Clear();
                 parametros.Add(new SqlParameter("@usuario", vendedorId));
-                String queryEmpresa = "SELECT * FROM NET_A_CERO.Empresas WHERE usr_id = @usuario and (SELECT usr_activo FROM NET_A_CERO.Usuarios WHERE usr_id = @usuario) = 1";
+                String queryEmpresa = "SELECT * FROM NET_A_CERO.Empresas WHERE emp_usr_id = @usuario AND emp_activo = 1";
                 SqlDataReader readerEmpresa = QueryBuilder.Instance.build(queryEmpresa, parametros).ExecuteReader();
                 readerEmpresa.Read();
-                labelNombre.Text = (String)readerEmpresa["emp_razon_social"];
-               
+                
+                labelNombre.Text = Convert.ToString(readerEmpresa["emp_razon_social"]);
+                contId = Convert.ToInt32(readerEmpresa["emp_cont_id"]);
+  
+                labelDniCuit.Text = "CUIT";
+                labelNumDniCuit.Text = Convert.ToString(mapper.SelectFromWhere("emp_cuit", "Empresas", "emp_usr_id", vendedorId));
+
+            
             }
+               labelMail.Text = Convert.ToString(mapper.SelectFromWhere("cont_mail", "Contacto", "cont_id", contId));
+               labelTel.Text = Convert.ToString(mapper.SelectFromWhere("cont_telefono", "Contacto", "cont_id", contId));
+               labelCalle.Text = Convert.ToString(mapper.SelectFromWhere("cont_calle", "Contacto", "cont_id", contId));
+               labelNumCalle.Text = Convert.ToString(mapper.SelectFromWhere("cont_numero_calle", "Contacto", "cont_id", contId));
+               labelPiso.Text = Convert.ToString(mapper.SelectFromWhere("cont_piso", "Contacto", "cont_id", contId));
+               labelDepartamento.Text = Convert.ToString(mapper.SelectFromWhere("cont_depto", "Contacto", "cont_id", contId));
+               labelLocalidad.Text = Convert.ToString(mapper.SelectFromWhere("cont_localidad", "Contacto", "cont_id", contId));
+               labelPostal.Text = Convert.ToString(mapper.SelectFromWhere("cont_codigo_postal", "Contacto", "cont_id", contId));
+         
+            
+
         }
-
-        private void pedirDireccion()
-        {
-            parametros.Clear();
-            parametros.Add(new SqlParameter("@usuario", vendedorId));
-
-
-            String queryContacto = "SELECT * FROM NET_A_CERO.Contacto WHERE cont_id = (SELECT cli_cont_id FROM NET_A_CERO.Clientes WHERE cli_id = @usuario)";
-            SqlDataReader readerContacto = QueryBuilder.Instance.build(queryContacto, parametros).ExecuteReader();
-            readerContacto.Read();
-
-            labelMail.Text = (String)readerContacto["cont_mail"];
-            if ((Decimal)readerContacto["cont_telefono"] == 0)
-            {
-                labelLocalidad.Text = "";
-            }
-            else
-            {
-                labelLocalidad.Text = ((Decimal)readerContacto["cont_telefono"]).ToString();
-            }
-
-            labelCalle.Text = (String)readerContacto["cont_calle"] + " " + (Decimal)readerContacto["cont_numero_calle"];
-            labelDepartamento.Text = "Departamento " + (Decimal)readerContacto["cont_piso"] + "-" + (String)readerContacto["cont_depto"];
-            labelPostal.Text = ((String)readerContacto["cont_codigo_postal"]).ToString();
-            labelLocalidad.Text = (String)readerContacto["cont_localidad"];
-
-        } */
 
         private void buttonConfirmarCompra_Click(object sender, EventArgs e)
         {
-           /* uint val = 0;
+            uint val = 0;
             if (!UInt32.TryParse(textBoxCant.Text, out val))
             {
                 MessageBox.Show("Solo puede ingresar un número entero positivo");
@@ -112,7 +105,7 @@ namespace MercadoEnvio.Comprar_Ofertar
             }
 
 
-            String sql = "INSERT INTO NET_A_CERO.Compras(com_usr_id, comp_publi_id, comp_fecha, comp_cantidad, comp_monto, comp_calif_id) VALUES (@com_usr_id, @comp_publi_id, @comp_fecha, @comp_cantidad, @comp_monto, NULL)";
+            String sql = "INSERT INTO NET_A_CERO.Compras(comp_usr_id, comp_publi_id, comp_fecha, comp_cantidad, comp_monto, comp_calif_id) VALUES (@comp_usr_id, @comp_publi_id, @comp_fecha, @comp_cantidad, @comp_monto, NULL)" ;
             DateTime fecha = DateConfig.getInstance().getCurrentDate();
 
             //CHEQUAR ESTA QUERY
@@ -124,7 +117,7 @@ namespace MercadoEnvio.Comprar_Ofertar
             Decimal precioPublicacion = Convert.ToDecimal(readerMontoPublicacion["publi_precio"]);
 
             parametros.Clear();
-            parametros.Add(new SqlParameter("@com_usr_id", idUsuarioActual));
+            parametros.Add(new SqlParameter("@comp_usr_id", idUsuarioActual));
             parametros.Add(new SqlParameter("@comp_publi_id", publicacionId));
             parametros.Add(new SqlParameter("@comp_fecha", fecha));
             parametros.Add(new SqlParameter("@comp_cantidad", this.textBoxCant.Text));
@@ -145,10 +138,10 @@ namespace MercadoEnvio.Comprar_Ofertar
                 new BuscadorPublicaciones().ShowDialog();
                 this.Close();
             }
-             */
+             
         }
 
-        /* private bool pedirEstado()
+         private bool pedirEstado()
         {
             parametros.Clear();
             parametros.Add(new SqlParameter("@id", publicacionId));
@@ -167,13 +160,13 @@ namespace MercadoEnvio.Comprar_Ofertar
             {
                 return true;
             }
-        } */
+        } 
 
         private void botonCancelar_Click(object sender, EventArgs e)
         {
-            /* this.Hide();
+             this.Hide();
             new VerPublicacion(publicacionId).ShowDialog();
-            this.Close(); */
+            this.Close();
         }
     }
 }

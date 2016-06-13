@@ -33,7 +33,12 @@ namespace MercadoEnvio.Comprar_Ofertar
             this.botonConfirmarCompra = new System.Windows.Forms.Button();
             this.botonCancelar = new System.Windows.Forms.Button();
             this.groupBoxVendedor = new System.Windows.Forms.GroupBox();
+            this.labelNumDniCuit = new System.Windows.Forms.Label();
             this.groupBoxDireccion = new System.Windows.Forms.GroupBox();
+            this.labelPiso = new System.Windows.Forms.Label();
+            this.labelNumCalle = new System.Windows.Forms.Label();
+            this.labelTel = new System.Windows.Forms.Label();
+            this.labelMail = new System.Windows.Forms.Label();
             this.labelLocalidad = new System.Windows.Forms.Label();
             this.labelPostal = new System.Windows.Forms.Label();
             this.labelDepartamento = new System.Windows.Forms.Label();
@@ -41,11 +46,14 @@ namespace MercadoEnvio.Comprar_Ofertar
             this.labelTelefono = new System.Windows.Forms.Label();
             this.labelDniCuit = new System.Windows.Forms.Label();
             this.labelNombre = new System.Windows.Forms.Label();
-            this.labelNumDniCuit = new System.Windows.Forms.Label();
-            this.labelMail = new System.Windows.Forms.Label();
-            this.labelTel = new System.Windows.Forms.Label();
-            this.labelNumCalle = new System.Windows.Forms.Label();
-            this.labelPiso = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
             this.groupBoxVendedor.SuspendLayout();
             this.groupBoxDireccion.SuspendLayout();
             this.SuspendLayout();
@@ -100,8 +108,25 @@ namespace MercadoEnvio.Comprar_Ofertar
             this.groupBoxVendedor.TabStop = false;
             this.groupBoxVendedor.Text = "Datos del Vendedor";
             // 
+            // labelNumDniCuit
+            // 
+            this.labelNumDniCuit.AutoSize = true;
+            this.labelNumDniCuit.Location = new System.Drawing.Point(23, 69);
+            this.labelNumDniCuit.Name = "labelNumDniCuit";
+            this.labelNumDniCuit.Size = new System.Drawing.Size(35, 13);
+            this.labelNumDniCuit.TabIndex = 5;
+            this.labelNumDniCuit.Text = "label3";
+            // 
             // groupBoxDireccion
             // 
+            this.groupBoxDireccion.Controls.Add(this.label1);
+            this.groupBoxDireccion.Controls.Add(this.label2);
+            this.groupBoxDireccion.Controls.Add(this.label3);
+            this.groupBoxDireccion.Controls.Add(this.label4);
+            this.groupBoxDireccion.Controls.Add(this.label5);
+            this.groupBoxDireccion.Controls.Add(this.label6);
+            this.groupBoxDireccion.Controls.Add(this.label7);
+            this.groupBoxDireccion.Controls.Add(this.label8);
             this.groupBoxDireccion.Controls.Add(this.labelPiso);
             this.groupBoxDireccion.Controls.Add(this.labelNumCalle);
             this.groupBoxDireccion.Controls.Add(this.labelTel);
@@ -110,17 +135,53 @@ namespace MercadoEnvio.Comprar_Ofertar
             this.groupBoxDireccion.Controls.Add(this.labelPostal);
             this.groupBoxDireccion.Controls.Add(this.labelDepartamento);
             this.groupBoxDireccion.Controls.Add(this.labelCalle);
-            this.groupBoxDireccion.Location = new System.Drawing.Point(26, 85);
+            this.groupBoxDireccion.Location = new System.Drawing.Point(6, 85);
             this.groupBoxDireccion.Name = "groupBoxDireccion";
-            this.groupBoxDireccion.Size = new System.Drawing.Size(230, 214);
+            this.groupBoxDireccion.Size = new System.Drawing.Size(270, 214);
             this.groupBoxDireccion.TabIndex = 4;
             this.groupBoxDireccion.TabStop = false;
             this.groupBoxDireccion.Text = "Contacto";
             // 
+            // labelPiso
+            // 
+            this.labelPiso.AutoSize = true;
+            this.labelPiso.Location = new System.Drawing.Point(74, 117);
+            this.labelPiso.Name = "labelPiso";
+            this.labelPiso.Size = new System.Drawing.Size(35, 13);
+            this.labelPiso.TabIndex = 9;
+            this.labelPiso.Text = "label8";
+            // 
+            // labelNumCalle
+            // 
+            this.labelNumCalle.AutoSize = true;
+            this.labelNumCalle.Location = new System.Drawing.Point(74, 94);
+            this.labelNumCalle.Name = "labelNumCalle";
+            this.labelNumCalle.Size = new System.Drawing.Size(35, 13);
+            this.labelNumCalle.TabIndex = 8;
+            this.labelNumCalle.Text = "label7";
+            // 
+            // labelTel
+            // 
+            this.labelTel.AutoSize = true;
+            this.labelTel.Location = new System.Drawing.Point(74, 51);
+            this.labelTel.Name = "labelTel";
+            this.labelTel.Size = new System.Drawing.Size(35, 13);
+            this.labelTel.TabIndex = 7;
+            this.labelTel.Text = "label5";
+            // 
+            // labelMail
+            // 
+            this.labelMail.AutoSize = true;
+            this.labelMail.Location = new System.Drawing.Point(74, 27);
+            this.labelMail.Name = "labelMail";
+            this.labelMail.Size = new System.Drawing.Size(35, 13);
+            this.labelMail.TabIndex = 6;
+            this.labelMail.Text = "label4";
+            // 
             // labelLocalidad
             // 
             this.labelLocalidad.AutoSize = true;
-            this.labelLocalidad.Location = new System.Drawing.Point(20, 161);
+            this.labelLocalidad.Location = new System.Drawing.Point(74, 160);
             this.labelLocalidad.Name = "labelLocalidad";
             this.labelLocalidad.Size = new System.Drawing.Size(41, 13);
             this.labelLocalidad.TabIndex = 3;
@@ -129,7 +190,7 @@ namespace MercadoEnvio.Comprar_Ofertar
             // labelPostal
             // 
             this.labelPostal.AutoSize = true;
-            this.labelPostal.Location = new System.Drawing.Point(20, 180);
+            this.labelPostal.Location = new System.Drawing.Point(74, 179);
             this.labelPostal.Name = "labelPostal";
             this.labelPostal.Size = new System.Drawing.Size(41, 13);
             this.labelPostal.TabIndex = 2;
@@ -138,7 +199,7 @@ namespace MercadoEnvio.Comprar_Ofertar
             // labelDepartamento
             // 
             this.labelDepartamento.AutoSize = true;
-            this.labelDepartamento.Location = new System.Drawing.Point(19, 140);
+            this.labelDepartamento.Location = new System.Drawing.Point(73, 139);
             this.labelDepartamento.Name = "labelDepartamento";
             this.labelDepartamento.Size = new System.Drawing.Size(35, 13);
             this.labelDepartamento.TabIndex = 1;
@@ -147,7 +208,7 @@ namespace MercadoEnvio.Comprar_Ofertar
             // labelCalle
             // 
             this.labelCalle.AutoSize = true;
-            this.labelCalle.Location = new System.Drawing.Point(19, 74);
+            this.labelCalle.Location = new System.Drawing.Point(73, 73);
             this.labelCalle.Name = "labelCalle";
             this.labelCalle.Size = new System.Drawing.Size(35, 13);
             this.labelCalle.TabIndex = 0;
@@ -179,50 +240,77 @@ namespace MercadoEnvio.Comprar_Ofertar
             this.labelNombre.TabIndex = 0;
             this.labelNombre.Text = "label1";
             // 
-            // labelNumDniCuit
+            // label1
             // 
-            this.labelNumDniCuit.AutoSize = true;
-            this.labelNumDniCuit.Location = new System.Drawing.Point(23, 69);
-            this.labelNumDniCuit.Name = "labelNumDniCuit";
-            this.labelNumDniCuit.Size = new System.Drawing.Size(35, 13);
-            this.labelNumDniCuit.TabIndex = 5;
-            this.labelNumDniCuit.Text = "label3";
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(17, 117);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(27, 13);
+            this.label1.TabIndex = 17;
+            this.label1.Text = "Piso";
             // 
-            // labelMail
+            // label2
             // 
-            this.labelMail.AutoSize = true;
-            this.labelMail.Location = new System.Drawing.Point(20, 28);
-            this.labelMail.Name = "labelMail";
-            this.labelMail.Size = new System.Drawing.Size(35, 13);
-            this.labelMail.TabIndex = 6;
-            this.labelMail.Text = "label4";
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(17, 94);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(44, 13);
+            this.label2.TabIndex = 16;
+            this.label2.Text = "Numero";
             // 
-            // labelTel
+            // label3
             // 
-            this.labelTel.AutoSize = true;
-            this.labelTel.Location = new System.Drawing.Point(20, 52);
-            this.labelTel.Name = "labelTel";
-            this.labelTel.Size = new System.Drawing.Size(35, 13);
-            this.labelTel.TabIndex = 7;
-            this.labelTel.Text = "label5";
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(17, 51);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(49, 13);
+            this.label3.TabIndex = 15;
+            this.label3.Text = "Telefono";
             // 
-            // labelNumCalle
+            // label4
             // 
-            this.labelNumCalle.AutoSize = true;
-            this.labelNumCalle.Location = new System.Drawing.Point(20, 95);
-            this.labelNumCalle.Name = "labelNumCalle";
-            this.labelNumCalle.Size = new System.Drawing.Size(35, 13);
-            this.labelNumCalle.TabIndex = 8;
-            this.labelNumCalle.Text = "label7";
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(17, 27);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(26, 13);
+            this.label4.TabIndex = 14;
+            this.label4.Text = "Mail";
             // 
-            // labelPiso
+            // label5
             // 
-            this.labelPiso.AutoSize = true;
-            this.labelPiso.Location = new System.Drawing.Point(20, 118);
-            this.labelPiso.Name = "labelPiso";
-            this.labelPiso.Size = new System.Drawing.Size(35, 13);
-            this.labelPiso.TabIndex = 9;
-            this.labelPiso.Text = "label8";
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(17, 160);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(53, 13);
+            this.label5.TabIndex = 13;
+            this.label5.Text = "Localidad";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(17, 179);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(21, 13);
+            this.label6.TabIndex = 12;
+            this.label6.Text = "CP";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(16, 139);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(36, 13);
+            this.label7.TabIndex = 11;
+            this.label7.Text = "Depto";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(16, 73);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(30, 13);
+            this.label8.TabIndex = 10;
+            this.label8.Text = "Calle";
             // 
             // Comprar
             // 
@@ -266,6 +354,14 @@ namespace MercadoEnvio.Comprar_Ofertar
         private System.Windows.Forms.Label labelTel;
         private System.Windows.Forms.Label labelNumCalle;
         private System.Windows.Forms.Label labelPiso;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label8;
 
     }
 }
