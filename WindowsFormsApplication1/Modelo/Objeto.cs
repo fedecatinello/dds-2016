@@ -19,6 +19,7 @@ namespace MercadoEnvio.Modelo
             return Double.TryParse(numString, out number1); // devuelve true si pudo convertirlo, es decir, es numeroCalle
         }
 
+ 
         public Boolean esFechaPasada(DateTime dateTime)
         {
             DateTime dateNow = DateConfig.getInstance().getCurrentDate();

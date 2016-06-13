@@ -32,6 +32,7 @@ namespace MercadoEnvio.Editar_Publicacion
             this.button_Cancelar = new System.Windows.Forms.Button();
             this.button_Limpiar = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.comboBox_TiposDePublicacion = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.comboBox_Estado = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -48,7 +49,6 @@ namespace MercadoEnvio.Editar_Publicacion
             this.textBox_Stock = new System.Windows.Forms.TextBox();
             this.label_precio = new System.Windows.Forms.Label();
             this.label_stock = new System.Windows.Forms.Label();
-            this.comboBox_TiposDePublicacion = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -96,6 +96,14 @@ namespace MercadoEnvio.Editar_Publicacion
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Tipo de publicacion";
+            // 
+            // comboBox_TiposDePublicacion
+            // 
+            this.comboBox_TiposDePublicacion.FormattingEnabled = true;
+            this.comboBox_TiposDePublicacion.Location = new System.Drawing.Point(112, 8);
+            this.comboBox_TiposDePublicacion.Name = "comboBox_TiposDePublicacion";
+            this.comboBox_TiposDePublicacion.Size = new System.Drawing.Size(250, 21);
+            this.comboBox_TiposDePublicacion.TabIndex = 4;
             // 
             // label6
             // 
@@ -243,14 +251,6 @@ namespace MercadoEnvio.Editar_Publicacion
             this.label_stock.Size = new System.Drawing.Size(35, 13);
             this.label_stock.TabIndex = 0;
             this.label_stock.Text = "Stock";
-            // 
-            // comboBox_TiposDePublicacion
-            // 
-            this.comboBox_TiposDePublicacion.FormattingEnabled = true;
-            this.comboBox_TiposDePublicacion.Location = new System.Drawing.Point(112, 8);
-            this.comboBox_TiposDePublicacion.Name = "comboBox_TiposDePublicacion";
-            this.comboBox_TiposDePublicacion.Size = new System.Drawing.Size(250, 21);
-            this.comboBox_TiposDePublicacion.TabIndex = 4;
             // 
             // EditarPublicacion
             // 

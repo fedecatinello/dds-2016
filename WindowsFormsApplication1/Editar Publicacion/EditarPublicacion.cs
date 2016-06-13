@@ -75,6 +75,7 @@ namespace MercadoEnvio.Editar_Publicacion
             DesactivarCamposDeCaracteristicasEspeciales();
             textBox_Descripcion.Enabled = true;
             textBox_Stock.Enabled = true;
+            comboBox_TiposDePublicacion.Enabled = false;
         }
 
         private void CargarSegunPausada(DataTable estados)
@@ -82,6 +83,7 @@ namespace MercadoEnvio.Editar_Publicacion
             estados.Rows.Add("Activa");
             estados.Rows.Add("Pausada");
             estados.Rows.Add("Finalizada");
+            comboBox_TiposDePublicacion.Enabled = false;
             DesactivarCamposDeCaracteristicasComunes();
             DesactivarCamposDeCaracteristicasEspeciales();
         }
@@ -90,6 +92,7 @@ namespace MercadoEnvio.Editar_Publicacion
         {
             estados.Rows.Add("Finalizada");
             comboBox_Estado.Enabled = false;
+            comboBox_TiposDePublicacion.Enabled = false;
             DesactivarCamposDeCaracteristicasComunes();
             DesactivarCamposDeCaracteristicasEspeciales();
         }

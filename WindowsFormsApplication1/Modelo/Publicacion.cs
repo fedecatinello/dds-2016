@@ -153,8 +153,8 @@ namespace MercadoEnvio.Modelo
             if (precio == "")
                 throw new CampoVacioException("Precio");
 
-            if (!esNumero(precio))
-                throw new IngresePrecioEnteroException("Precio");
+            if (!esDouble(precio))
+                throw new FormatoInvalidoException("Precio");
 
             this.precio = precio;
         }
@@ -212,7 +212,7 @@ namespace MercadoEnvio.Modelo
             parametros.Add(new SqlParameter("@publi_stock", this.stock));
             parametros.Add(new SqlParameter("@publi_fec_vencimiento", this.fechaDeVencimiento));
             parametros.Add(new SqlParameter("@publi_fec_inicio", this.fechaDeInicio));
-            parametros.Add(new SqlParameter("@publi_precio", this.precio));
+            parametros.Add(new SqlParameter("@publi_precio", Convert.ToDouble(this.precio)));
             parametros.Add(new SqlParameter("@publi_costo_pagado", this.costoPagado));
             parametros.Add(new SqlParameter("@publi_preguntas", this.pregunta));
             parametros.Add(new SqlParameter("@publi_usr_id", this.idUsuario));
@@ -236,7 +236,6 @@ namespace MercadoEnvio.Modelo
             this.idUsuario = Convert.ToDecimal(reader["publi_usr_id"]);
             this.idVisibilidad = Convert.ToDecimal(reader["publi_visib_id"]);
             this.idEstado = Convert.ToDecimal(reader["publi_estado_id"]);
-            //this.idRubro = Convert.ToDecimal(reader["publi_rubro_id"]);
         }
 
         #endregion
