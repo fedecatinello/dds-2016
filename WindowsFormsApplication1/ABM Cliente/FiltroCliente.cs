@@ -28,7 +28,7 @@ namespace MercadoEnvio.ABM_Cliente
             OcultarColumnasQueNoDebenVerse();
         }
 
-        private void CargarTiposDeDocumento()//Chequear como hacer para que se sincronice con el de agregarCliente
+        private void CargarTiposDeDocumento()
         {          
             comboBox_TipoDeDoc.Items.Add("DNI - Documento Nacional de Identidad");
             comboBox_TipoDeDoc.Items.Add("Pasaporte");

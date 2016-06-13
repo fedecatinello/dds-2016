@@ -219,7 +219,6 @@ namespace MercadoEnvio.Modelo
             parametros.Add(new SqlParameter("@publi_visib_id", this.idVisibilidad));
             parametros.Add(new SqlParameter("@publi_estado_id", this.idEstado));
             parametros.Add(new SqlParameter("@rubro_id", this.idRubro));
-            //parametros.Add(new SqlParameter("@publi_id", this.id));
             return parametros;
         }
 

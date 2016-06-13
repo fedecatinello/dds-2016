@@ -32,7 +32,7 @@ namespace MercadoEnvio.ABM_Cliente
             CargarDatos();
         }
 
-        private void CargarTipoDeDocumentos() //Chequear como hacer para que se sincronice con el de agregarCliente
+        private void CargarTipoDeDocumentos()
         {
             comboBox_TipoDeDocumento.Items.Add("DNI - Documento Nacional de Identidad");
             comboBox_TipoDeDocumento.Items.Add("Pasaporte");
@@ -118,8 +118,7 @@ namespace MercadoEnvio.ABM_Cliente
             try
             {
                 Clientes cliente = new Clientes();
-                //Usuarios usuario = new Usuarios();
-
+                
                 cliente.SetNombre(nombre);
                 cliente.SetApellido(apellido);
                 cliente.SetNumeroDeDocumento(numeroDeDocumento);

@@ -108,7 +108,6 @@ namespace MercadoEnvio.Comprar_Ofertar
             String sql = "INSERT INTO NET_A_CERO.Compras(comp_usr_id, comp_publi_id, comp_fecha, comp_cantidad, comp_monto, comp_calif_id) VALUES (@comp_usr_id, @comp_publi_id, @comp_fecha, @comp_cantidad, @comp_monto, NULL)" ;
             DateTime fecha = DateConfig.getInstance().getCurrentDate();
 
-            //CHEQUAR ESTA QUERY
             String sqlMonto = "SELECT publi_precio FROM NET_A_CERO.Publicaciones WHERE publi_id = @publicacion";
             parametros.Clear();
             parametros.Add(new SqlParameter("@publicacion", publicacionId));

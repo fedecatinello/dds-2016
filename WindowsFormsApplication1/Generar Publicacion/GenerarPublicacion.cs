@@ -98,7 +98,7 @@ namespace MercadoEnvio.Generar_Publicacion
                 publicacion.SetIdVisibilidad(idVisibilidad);
                 publicacion.SetEstado(idEstado);
                 publicacion.SetIdRubro(idRubro);
-                //publicacion.SetHabilitado(true);
+                
                 Decimal idPublicacion = mapper.CrearPublicacion(publicacion);
                 if (idPublicacion > 0) MessageBox.Show("Se agrego la publicacion correctamente");
             }

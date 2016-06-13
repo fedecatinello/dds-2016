@@ -92,8 +92,7 @@ namespace MercadoEnvio.ABM_Empresa
             try
             {
                 Empresas empresa = new Empresas();
-               // Usuarios usuario = new Usuarios();
-
+               
                 empresa.SetRazonSocial(razonSocial);
                 empresa.SetCiudad(ciudad);
                 empresa.SetCuit(cuit);

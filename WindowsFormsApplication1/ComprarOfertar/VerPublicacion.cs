@@ -104,8 +104,6 @@ namespace MercadoEnvio.Comprar_Ofertar
                 }
             }
 
-
-
         }
 
         private void pedirVencimientoPreguntas()
