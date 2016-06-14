@@ -125,6 +125,22 @@ namespace MercadoEnvio.Comprar_Ofertar
 
             MessageBox.Show("Contactese con el vendedor para finalizar la compra");
 
+            //Facturacion
+            String idFactura = "SELECT TOP 1 f.fact_id FROM NET_A_CERO.Facturas f ORDER BY f.fact_id DESC";
+            parametros.Clear();
+            int idFact = Convert.ToInt32(QueryBuilder.Instance.build(idFactura, parametros).ExecuteScalar());
+
+            String consulta = "NET_A_CERO.facturar_costos_publicacion";
+            parametros.Clear();
+            parametros.Add(new SqlParameter("@id", UsuarioSesion.Usuario.id));
+            parametros.Add(new SqlParameter("@idF", idFact))
+            command = QueryBuilder.Instance.build(consulta, parametros);
+            command.CommandType = CommandType.StoredProcedure;
+            command.ExecuteNonQuery();
+
+
+
+
             if (pedirEstado())
             {
                 this.Hide();

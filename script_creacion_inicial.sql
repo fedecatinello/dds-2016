@@ -125,7 +125,7 @@ CREATE TABLE [NET_A_CERO].[Publicaciones] (
     [publi_fec_vencimiento] [datetime],
     [publi_fec_inicio] [datetime] NOT NULL,
     [publi_precio] [NUMERIC](18, 2) NOT NULL,
-    [publi_costo_pagado] BIT DEFAULT 1,                                --Saber si fue pagado el costo por publicar
+    [publi_costo_pagado] BIT DEFAULT 0,                                --Saber si fue pagado el costo por publicar
     [publi_preguntas] [bit] DEFAULT 1,
     [publi_usr_id] INT,
     [publi_visib_id] NUMERIC(18, 0),
@@ -368,6 +368,10 @@ IF OBJECT_ID('NET_A_CERO.facturar_ventas', 'P') IS NOT NULL
 	DROP PROCEDURE NET_A_CERO.facturar_ventas
 GO
 
+IF OBJECT_ID('NET_A_CERO.facturar_costos_publicacion', 'P') IS NOT NULL
+	DROP PROCEDURE NET_A_CERO.facturar_costos_publicacion
+GO
+
 /** FIN VALIDACION DE FUNCIONES, PROCEDURES, VISTAS Y TRIGGERS **/
 
 
@@ -564,6 +568,44 @@ BEGIN
 		(@compra_cantidad, NULL, @compra_cantidad * @precio * @porcentaje, @idF)
 	
 	FETCH NEXT FROM comision_cursor INTO @compra_publicacion, @compra_cantidad, @precio, @porcentaje, @vid
+END
+CLOSE comision_cursor
+DEALLOCATE comision_cursor
+END
+GO
+
+CREATE PROCEDURE NET_A_CERO.facturar_costos_publicacion
+	@id numeric(18,0),
+	@idF numeric(18,0)
+AS
+BEGIN
+DECLARE @vid numeric(18,0)
+DECLARE @publicacion numeric(18,0) 
+DECLARE @precio numeric(18,0) 
+DECLARE comision_cursor CURSOR FOR
+(SELECT p.publi_id, v.visib_precio, v.visib_id
+	from NET_A_CERO.Publicaciones p, NET_A_CERO.Visibilidad v, NET_A_CERO.Usuarios u
+	where p.publi_costo_pagado = 0 and p.publi_visib_id = v.visib_id and p.publi_usr_id = u.usr_id and u.usr_id = @id
+	and p.publi_estado_id = (select estado_id from NET_A_CERO.Estado where estado_desc= 'Finalizada'))
+
+OPEN comision_cursor
+FETCH NEXT FROM comision_cursor INTO @publicacion, @precio, @vid
+
+WHILE @@FETCH_STATUS = 0
+BEGIN
+
+	BEGIN
+		INSERT NET_A_CERO.Items
+			(item_cantidad, item_tipo, item_monto, item_fact_id)
+		VALUES
+			(1, 'Costo Publicacion', @precio, @idF)
+
+		UPDATE NET_A_CERO.Publicaciones 
+			SET  publi_costo_pagado= 1
+			WHERE publi_id = (SELECT fact_publi_id FROM NET_A_CERO.Facturas WHERE fact_id = @idF)
+	END
+	
+	FETCH NEXT FROM comision_cursor INTO @publicacion, @precio, @vid
 END
 CLOSE comision_cursor
 DEALLOCATE comision_cursor

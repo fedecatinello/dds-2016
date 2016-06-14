@@ -46,11 +46,6 @@ namespace MercadoEnvio.Facturar_Publicaciones
             this.labelMonto = new System.Windows.Forms.Label();
             this.labelMontoCalculado = new System.Windows.Forms.Label();
             this.radioButtonEfectivo = new System.Windows.Forms.RadioButton();
-            this.radioButtonTarjeta = new System.Windows.Forms.RadioButton();
-            this.textBoxNumero = new System.Windows.Forms.TextBox();
-            this.labelNumero = new System.Windows.Forms.Label();
-            this.labelBanco = new System.Windows.Forms.Label();
-            this.textBoxBanco = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // labelComisiones
@@ -114,7 +109,7 @@ namespace MercadoEnvio.Facturar_Publicaciones
             this.labelMin.Size = new System.Drawing.Size(567, 13);
             this.labelMin.TabIndex = 5;
             this.labelMin.Text = "La cantidad minima de ventas a facturar corresponden a las ventas sin facturar de" +
-                " aquellas publicaciones ya vencidas.";
+    " aquellas publicaciones ya vencidas.";
             // 
             // labelMax
             // 
@@ -124,7 +119,7 @@ namespace MercadoEnvio.Facturar_Publicaciones
             this.labelMax.Size = new System.Drawing.Size(496, 13);
             this.labelMax.TabIndex = 6;
             this.labelMax.Text = "La cantidad maxima de ventas a facturar corresponden a la cantidad total de venta" +
-                "s aún no facturadas.";
+    "s aún no facturadas.";
             // 
             // labelCostos
             // 
@@ -145,7 +140,7 @@ namespace MercadoEnvio.Facturar_Publicaciones
             this.label3.Size = new System.Drawing.Size(456, 13);
             this.label3.TabIndex = 8;
             this.label3.Text = "La cantidad de costos de publicacion a facturar corresponden a las publicaciones " +
-                "ya vencidas.";
+    "ya vencidas.";
             // 
             // labelCantidadCostos
             // 
@@ -236,64 +231,11 @@ namespace MercadoEnvio.Facturar_Publicaciones
             this.radioButtonEfectivo.UseVisualStyleBackColor = true;
             this.radioButtonEfectivo.CheckedChanged += new System.EventHandler(this.radioButtonEfectivo_CheckedChanged);
             // 
-            // radioButtonTarjeta
-            // 
-            this.radioButtonTarjeta.AutoSize = true;
-            this.radioButtonTarjeta.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioButtonTarjeta.Location = new System.Drawing.Point(268, 179);
-            this.radioButtonTarjeta.Name = "radioButtonTarjeta";
-            this.radioButtonTarjeta.Size = new System.Drawing.Size(120, 19);
-            this.radioButtonTarjeta.TabIndex = 18;
-            this.radioButtonTarjeta.TabStop = true;
-            this.radioButtonTarjeta.Text = "Tarjeta de credito";
-            this.radioButtonTarjeta.UseVisualStyleBackColor = true;
-            this.radioButtonTarjeta.CheckedChanged += new System.EventHandler(this.radioButtonTarjeta_CheckedChanged);
-            // 
-            // textBoxNumero
-            // 
-            this.textBoxNumero.Location = new System.Drawing.Point(444, 179);
-            this.textBoxNumero.Name = "textBoxNumero";
-            this.textBoxNumero.Size = new System.Drawing.Size(100, 20);
-            this.textBoxNumero.TabIndex = 19;
-            this.textBoxNumero.TextChanged += new System.EventHandler(this.textBoxNumero_TextChanged);
-            // 
-            // labelNumero
-            // 
-            this.labelNumero.AutoSize = true;
-            this.labelNumero.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelNumero.Location = new System.Drawing.Point(396, 181);
-            this.labelNumero.Name = "labelNumero";
-            this.labelNumero.Size = new System.Drawing.Size(52, 15);
-            this.labelNumero.TabIndex = 20;
-            this.labelNumero.Text = "Numero";
-            // 
-            // labelBanco
-            // 
-            this.labelBanco.AutoSize = true;
-            this.labelBanco.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelBanco.Location = new System.Drawing.Point(399, 203);
-            this.labelBanco.Name = "labelBanco";
-            this.labelBanco.Size = new System.Drawing.Size(42, 15);
-            this.labelBanco.TabIndex = 21;
-            this.labelBanco.Text = "Banco";
-            // 
-            // textBoxBanco
-            // 
-            this.textBoxBanco.Location = new System.Drawing.Point(445, 202);
-            this.textBoxBanco.Name = "textBoxBanco";
-            this.textBoxBanco.Size = new System.Drawing.Size(100, 20);
-            this.textBoxBanco.TabIndex = 22;
-            // 
             // Facturar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(581, 348);
-            this.Controls.Add(this.textBoxBanco);
-            this.Controls.Add(this.labelBanco);
-            this.Controls.Add(this.labelNumero);
-            this.Controls.Add(this.textBoxNumero);
-            this.Controls.Add(this.radioButtonTarjeta);
             this.Controls.Add(this.radioButtonEfectivo);
             this.Controls.Add(this.labelMontoCalculado);
             this.Controls.Add(this.labelMonto);
@@ -340,10 +282,5 @@ namespace MercadoEnvio.Facturar_Publicaciones
         private System.Windows.Forms.Label labelMonto;
         private System.Windows.Forms.Label labelMontoCalculado;
         private System.Windows.Forms.RadioButton radioButtonEfectivo;
-        private System.Windows.Forms.RadioButton radioButtonTarjeta;
-        private System.Windows.Forms.TextBox textBoxNumero;
-        private System.Windows.Forms.Label labelNumero;
-        private System.Windows.Forms.Label labelBanco;
-        private System.Windows.Forms.TextBox textBoxBanco;
     }
 }

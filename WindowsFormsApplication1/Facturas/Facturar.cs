@@ -30,8 +30,7 @@ namespace MercadoEnvio.Facturar_Publicaciones
            CargarComisionesVentasPorFacturar();
            CalcularMonto();
            radioButtonEfectivo.Checked = true;
-           textBoxBanco.Enabled = false;
-           textBoxNumero.Enabled = false;
+
         }
 
         // Calculo el monto a pagar en la factura
@@ -126,22 +125,7 @@ namespace MercadoEnvio.Facturar_Publicaciones
 
         private void botonFacturar_Click(object sender, EventArgs e)
         {
-            if (radioButtonTarjeta.Checked)
-            {
-                if (textBoxNumero.Text == "" || textBoxBanco.Text == "")
-                {
-                    MessageBox.Show("Para pagar con tarjeta de credito debe completar el numeroCalle de tarjeta y el Banco");
-                    return;
-                }
-
-                long number1 = 0;
-                if (!long.TryParse(textBoxNumero.Text, out number1))
-                {
-                    MessageBox.Show("El campo numeroCalle de tarjeta solo permite numeros");
-                    return;
-                }
-            }
-
+           
             if (labelCantidadCostos.Text != "0" || dropDownFacturar.Text != "0")
             {
             // Creo la nueva factura
@@ -290,21 +274,6 @@ namespace MercadoEnvio.Facturar_Publicaciones
             this.Hide();
             new MenuPrincipal().ShowDialog();
             this.Close();
-        }
-
-        private void radioButtonTarjeta_CheckedChanged(object sender, EventArgs e)
-        {
-            if (radioButtonTarjeta.Checked)
-            {
-                textBoxNumero.Enabled = true;
-                textBoxBanco.Enabled = true;
-                formaDePago = "Tarjeta de credito";
-            }
-            else
-            {
-                textBoxNumero.Enabled = false;
-                textBoxBanco.Enabled = false;
-            }
         }
 
         private void radioButtonEfectivo_CheckedChanged(object sender, EventArgs e)
