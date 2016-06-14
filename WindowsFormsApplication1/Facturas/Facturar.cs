@@ -224,7 +224,7 @@ namespace MercadoEnvio.Facturar_Publicaciones
             QueryBuilder.Instance.build(totalidadVentasFacturar, parametros).ExecuteNonQuery();
 
             // Inserto los items factura de ventas
-            String consulta2 = "NET_A_CERO.Items";
+            String consulta2 = "NET_A_CERO.facturar_ventas";
             parametros.Clear();
             parametros.Add(new SqlParameter("@id", UsuarioSesion.Usuario.id));
             parametros.Add(new SqlParameter("@idF", idFact));
@@ -243,9 +243,6 @@ namespace MercadoEnvio.Facturar_Publicaciones
                                 + " fetch next from compra_cursor into @cid"
                                 + " while @@FETCH_STATUS = 0"
                                 + " Begin"
-                                + " update NET_A_CERO.Compras"
-                               // + " set facturada = 1"
-                                + " where id = @cid"
                                 + " fetch next from compra_cursor into @cid"
                                 + " End"
                                 + " close compra_cursor"
