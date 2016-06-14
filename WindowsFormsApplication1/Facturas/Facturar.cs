@@ -158,7 +158,7 @@ namespace MercadoEnvio.Facturar_Publicaciones
             Decimal idFact = (Decimal)QueryBuilder.Instance.build(idFactura,parametros).ExecuteScalar();
 
             // Inserto los items factura de costos por publicacion 
-            String consulta = "NET_A_CERO.items";
+            String consulta = "NET_A_CERO.facturar_costos_publicacion";
             parametros.Clear();
             parametros.Add(new SqlParameter("@id", UsuarioSesion.Usuario.id));
             parametros.Add(new SqlParameter("@idF", idFact));
