@@ -1035,7 +1035,7 @@ INSERT INTO NET_A_CERO.Facturas(fact_id, fact_fecha, fact_monto, fact_destinatar
 /** Migración de Items **/ 
 
 INSERT INTO NET_A_CERO.Items(item_cantidad, item_monto, item_fact_id)
-    SELECT DISTINCT Item_Factura_Monto, Item_Factura_Cantidad, NET_A_CERO.get_factura_cod(Factura_Nro)
+    SELECT DISTINCT Item_Factura_Cantidad, Item_Factura_Monto, NET_A_CERO.get_factura_cod(Factura_Nro)
     FROM gd_esquema.Maestra 
     WHERE ISNULL(Factura_Nro,-1) != -1
 
