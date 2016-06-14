@@ -935,7 +935,7 @@ INSERT INTO NET_A_CERO.Funcionalidades(func_nombre)
             ('Listado Estadistico'),
             ('Ver Historial'),
             ('Cambiar Contraseña'),
-            ('Consulta de facturas')
+            ('Consulta de facturas') --Consulta de facturas realizadas al vendedor
 
 -- Agrego al administrador todas las funcionalidades del sistema
 

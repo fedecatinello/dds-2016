@@ -32,10 +32,11 @@ namespace MercadoEnvio
             funcionalidades.Add("Editar Cliente", new ABM_Cliente.FiltroCliente());
             funcionalidades.Add("Agregar Visibilidad", new ABM_Visibilidad.AgregarVisibilidad());
             funcionalidades.Add("Editar Visibilidad", new ABM_Visibilidad.FiltroVisibilidad());
+            funcionalidades.Add("Consulta de facturas", new Consulta_Facturas_Vendedor.ListadoFacturas()); 
             funcionalidades.Add("Listado Estadistico", new Listado_Estadistico.Estadisticas());
             funcionalidades.Add("Ver Historial", new Historial_Cliente.Historial());
-            funcionalidades.Add("Cambiar Contraseña", new Login.CambiarContrasena()); 
-             
+            funcionalidades.Add("Cambiar Contraseña", new Login.CambiarContrasena());
+                         
         }
 
         private void MenuPrincipal_Load(object sender, EventArgs e)
