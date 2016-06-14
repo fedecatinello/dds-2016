@@ -34,9 +34,9 @@ namespace MercadoEnvio.Registro_de_Usuario
             DataSet roles = new DataSet();
             SqlDataAdapter adapter = new SqlDataAdapter();
             parametros = new List<SqlParameter>();
-            command = QueryBuilder.Instance.build("SELECT DISTINCT rol_nombre FROM NET_A_CERO.Roles WHERE rol_activo = 1 AND rol_nombre != 'Administrador'", parametros);
+            command = QueryBuilder.Instance.build("SELECT DISTINCT rol_nombre FROM NET_A_CERO.Roles WHERE rol_activo = 1 AND rol_nombre != 'Administrativo'", parametros);
             adapter.SelectCommand = command;
-            adapter.Fill(roles, "Rol");
+            adapter.Fill(roles, "Roles");
             comboBoxRol.DataSource = roles.Tables[0].DefaultView;
             comboBoxRol.ValueMember = "rol_nombre";
             comboBoxRol.SelectedIndex = -1;
@@ -45,10 +45,10 @@ namespace MercadoEnvio.Registro_de_Usuario
         private void botonSiguiente_Click(object sender, EventArgs e)
         {
 
-            String rolElegido = this.comboBoxRol.Text;
-            String usuario = this.textBoxUsuario.Text;
-            String contraseña = this.textBoxPass.Text;
-            String repetirContraseña = this.textBoxPass2.Text;
+            String rolElegido = comboBoxRol.Text;
+            String usuario = textBoxUsuario.Text;
+            String contraseña = textBoxPass.Text;
+            String repetirContraseña = textBoxPass2.Text;
 
             if (usuario == "")
             {
@@ -99,34 +99,36 @@ namespace MercadoEnvio.Registro_de_Usuario
                 return;
             }
 
-            if (rolElegido == "Cliente")
+            if (rolElegido != "Administrativo" )
             {
                 this.Hide();
-                new ABM_Cliente.AgregarCliente(usuario,contraseña).ShowDialog();
+                
+               UsuarioSesion.Usuario.nombre = usuario;
 
-                if (UsuarioSesion.Usuario.rol != "Administrativo")
-                {
-                    UsuarioSesion.Usuario.rol = "Cliente";
-                    UsuarioSesion.Usuario.nombre = usuario;
-
-                    String idUsuario = "SELECT TOP 1 usr_id" 
+                String idUsuario = "SELECT TOP 1 usr_id" 
                                 + " FROM NET_A_CERO.Usuarios"
                                 + " ORDER BY usr_id DESC";
 
-                    // Limpio parametros
-                    parametros.Clear();
+                // Limpio parametros
+                parametros.Clear();
 
-                    int idCliente = (int)QueryBuilder.Instance.build(idUsuario, parametros).ExecuteScalar();
+                int id = (int)QueryBuilder.Instance.build(idUsuario, parametros).ExecuteScalar();
 
-                    UsuarioSesion.Usuario.id = idCliente;
+                UsuarioSesion.Usuario.id = id;
+
+                if (rolElegido == "Cliente")
+                {
+                    UsuarioSesion.Usuario.rol = "Cliente";
+                    new ABM_Cliente.AgregarCliente(usuario, contraseña).ShowDialog();
                 }
-   
-            }
-            else if (rolElegido == "Empresa")
-            {
-                new ABM_Empresa.AgregarEmpresa(usuario, contraseña).ShowDialog();
+                else if (rolElegido == "Empresa")
+                {
+                    UsuarioSesion.Usuario.rol = "Empresa";
+                    new ABM_Empresa.AgregarEmpresa(usuario, contraseña).ShowDialog();
+                }
 
             }
+           
             else
             {
                 Int32 idUsuario = mapper.CrearUsuarioConValores(usuario, contraseña);
@@ -137,6 +139,7 @@ namespace MercadoEnvio.Registro_de_Usuario
                 this.Hide();
                 new MenuPrincipal().ShowDialog();
             }
+
             this.Close();
             
 

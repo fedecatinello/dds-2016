@@ -92,7 +92,7 @@ namespace MercadoEnvio.ABM_Empresa
             String departamento = textBox_Departamento.Text;
             String localidad = textBox_Localidad.Text;
             String codigoPostal = textBox_CodigoPostal.Text;
-            Boolean activo = checkBox_Habilitado.Checked;
+            Boolean activo = checkBox_Habilitado.Checked; //La variable activo que esta en el checkbox es para saber si esta habilitado a nivel usuario
             Boolean pudoModificar;
 
             // Update contacto
@@ -132,7 +132,7 @@ namespace MercadoEnvio.ABM_Empresa
                 empresa.SetRubro(rubro);
                 empresa.SetFechaDeCreacion(fechaDeCreacion);
                 empresa.SetIdContacto(idContacto);
-                empresa.SetActivo(activo);
+                empresa.SetActivo(true);
 
                 mapper.ActualizarEstadoUsuario(idUsuario, activo);
 

@@ -452,7 +452,6 @@ CREATE PROCEDURE NET_A_CERO.pr_crear_cliente
     @documento numeric(18,0),
     @tipo_de_documento nvarchar(50),
     @fecha_nacimiento datetime,
-    @fecha_alta datetime,
 	@activo bit,
     @cont_id int,
     @id int OUTPUT
@@ -461,7 +460,7 @@ BEGIN
     INSERT INTO NET_A_CERO.Clientes 
         (cli_nombre, cli_apellido, cli_dni, cli_tipo_dni, cli_fecha_nac, cli_fecha_alta, cli_activo, cli_cont_id) 
     VALUES 
-        (@nombre, @apellido, @documento, @tipo_de_documento, @fecha_nacimiento, @fecha_alta, @activo, @cont_id);
+        (@nombre, @apellido, @documento, @tipo_de_documento, @fecha_nacimiento, GETDATE(), @activo, @cont_id);
     SET @id = SCOPE_IDENTITY(); 
 END
 GO

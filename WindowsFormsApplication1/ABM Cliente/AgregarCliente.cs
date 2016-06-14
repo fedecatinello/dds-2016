@@ -144,8 +144,7 @@ namespace MercadoEnvio.ABM_Cliente
             // Si el cliente lo crea el admin, crea un nuevo usuario predeterminado. Si lo crea un nuevo registro de usuario, usa el que viene por parametro
             if (idUsuario == 0)
             {
-                idUsuario = mapper.CrearUsuario();
-                idUsuario = mapper.CrearUsuarioConValores(username, contrasena);
+                idUsuario = CrearUsuario();
                 Boolean seCreoBien = mapper.AsignarUsuarioACliente(idCliente, idUsuario);
                 if (seCreoBien) MessageBox.Show("Se creo el usuario correctamente");
             }
@@ -153,6 +152,18 @@ namespace MercadoEnvio.ABM_Cliente
             mapper.AsignarRolAUsuario(this.idUsuario, "Cliente");
 
             VolverAlMenuPrincipal();
+        }
+
+        private int CrearUsuario()
+        {
+            if (username == "clienteCreadoPorAdmin") 
+            {
+                return mapper.CrearUsuario(); //Se crean con los parametros default
+            }
+            else
+            {
+                return mapper.CrearUsuarioConValores(username, contrasena); //Si es por registro de usuario, segun los parametros dados
+            }
         }
 
         private void button_Limpiar_Click(object sender, EventArgs e)

@@ -16,7 +16,7 @@ namespace MercadoEnvio.ABM_Cliente
 {
     public partial class EditarCliente : Form
     {
-        private int idCliente;
+        private int idCliente = 0;
         private int idContacto = 0;
         private int idUsuario = 0;
         private DBMapper mapper = new DBMapper();
@@ -85,7 +85,7 @@ namespace MercadoEnvio.ABM_Cliente
             String departamento = textBox_Departamento.Text;
             String codigoPostal = textBox_CodigoPostal.Text;
             String localidad = textBox_Localidad.Text;
-            Boolean activo = checkBox_Habilitado.Checked;
+            Boolean activo = checkBox_Habilitado.Checked; //La variable activo que esta en el checkbox es para saber si esta habilitado a nivel usuario
 
             Boolean pudoModificar;
 
@@ -126,7 +126,9 @@ namespace MercadoEnvio.ABM_Cliente
                 cliente.SetNumeroDeDocumento(numeroDeDocumento);
                 cliente.SetTipoDeDocumento(tipoDeDocumento);
                 cliente.SetFechaDeNacimiento(fechaDeNacimiento);
-                cliente.SetActivo(activo);
+                cliente.SetActivo(true); 
+
+                /** La fecha de alta no se actualiza en la DB **/
 
                 mapper.ActualizarEstadoUsuario(idUsuario, activo);
 

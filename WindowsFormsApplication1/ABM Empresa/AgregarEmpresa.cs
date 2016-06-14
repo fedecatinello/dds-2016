@@ -152,7 +152,14 @@ namespace MercadoEnvio.ABM_Empresa
 
         private int CrearUsuario()
         {
-           return mapper.CrearUsuarioConValores(username, contrasena); 
+            if (username == "empresaCreadaPorAdmin")
+            {
+                return mapper.CrearUsuario(); //Se crean con los parametros default
+            }
+            else
+            {
+                return mapper.CrearUsuarioConValores(username, contrasena); //Si es por registro de usuario, segun los parametros dados
+            }
         }
 
         private void CargarRubros()
