@@ -897,7 +897,8 @@ INSERT INTO NET_A_CERO.Funcionalidades(func_nombre)
             ('Editar Visibilidad'),
             ('Listado Estadistico'),
             ('Ver Historial'),
-            ('Cambiar Contraseña')
+            ('Cambiar Contraseña'),
+            ('Consulta de facturas')
 
 -- Agrego al administrador todas las funcionalidades del sistema
 
@@ -926,11 +927,13 @@ INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(func_id, rol_id)
             (13,2),
             (14,2),
 			(15,2),
+			(16,2),
             (2,3),
             (3,3),
             (6,3),
             (13,3),
-            (15,3)
+            (15,3),
+            (16,3)
 
 
 
