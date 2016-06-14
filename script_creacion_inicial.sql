@@ -364,6 +364,10 @@ IF OBJECT_ID('NET_A_CERO.finalizar_x_fin_stock') IS NOT NULL
 	DROP TRIGGER NET_A_CERO.finalizar_x_fin_stock
 GO
 
+IF OBJECT_ID('NET_A_CERO.facturar_ventas', 'P') IS NOT NULL
+	DROP PROCEDURE NET_A_CERO.facturar_ventas
+GO
+
 /** FIN VALIDACION DE FUNCIONES, PROCEDURES, VISTAS Y TRIGGERS **/
 
 
@@ -533,6 +537,39 @@ BEGIN
         (@cod, @descripcion, @grado, @precio, @porcentaje, @envios, @activo);
 END
 GO
+
+CREATE PROCEDURE NET_A_CERO.facturar_ventas
+	@id numeric(18,0),
+	@idF numeric(18,0)
+AS
+BEGIN
+DECLARE @vid numeric(18,0)
+DECLARE @compra_publicacion numeric(18,0) 
+DECLARE @compra_cantidad numeric(18,0) 
+DECLARE @precio numeric(18,0) 
+DECLARE @porcentaje numeric(18,2) 
+DECLARE comision_cursor CURSOR FOR
+(SELECT c.comp_publi_id, c.comp_cantidad, p.publi_precio, v.visib_porcentaje, v.visib_id
+	FROM  NET_A_CERO.Compras c, NET_A_CERO.Publicaciones p, NET_A_CERO.Visibilidad v
+	WHERE c.comp_publi_id = p.publi_id AND p.publi_visib_id = v.visib_id)
+OPEN comision_cursor
+FETCH NEXT FROM comision_cursor INTO @compra_publicacion, @compra_cantidad, @precio, @porcentaje, @vid
+
+WHILE @@FETCH_STATUS = 0
+BEGIN
+
+	INSERT NET_A_CERO.Items
+		(item_cantidad, item_tipo, item_monto, item_fact_id)
+	VALUES
+		(@compra_cantidad, NULL, @compra_cantidad * @precio * @porcentaje, @idF)
+	
+	FETCH NEXT FROM comision_cursor INTO @compra_publicacion, @compra_cantidad, @precio, @porcentaje, @vid
+END
+CLOSE comision_cursor
+DEALLOCATE comision_cursor
+END
+GO
+
 
 CREATE FUNCTION NET_A_CERO.pr_vendedores_con_mayor_facturacion
 (
