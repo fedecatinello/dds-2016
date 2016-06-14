@@ -183,7 +183,7 @@ namespace MercadoEnvio.Editar_Publicacion
                 publicacion.SetFechaDeVencimiento(fechaDeVencimiento);
                 publicacion.SetFechaDeInicio(fechaDeInicio);
                 publicacion.SetPrecio(precio);
-                publicacion.SetCostoPagado(true);
+                publicacion.SetCostoPagado(false);
                 publicacion.SetPregunta(pregunta);
                 publicacion.SetIdVisibilidad(idVisibilidad);
                 publicacion.SetEstado(idEstado);

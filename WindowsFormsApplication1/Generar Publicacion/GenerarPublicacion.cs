@@ -92,7 +92,7 @@ namespace MercadoEnvio.Generar_Publicacion
                 publicacion.SetFechaDeVencimiento(fechaDeVencimiento);
                 publicacion.SetFechaDeInicio(fechaDeInicio);
                 publicacion.SetPrecio(precio);
-                publicacion.SetCostoPagado(true);
+                publicacion.SetCostoPagado(false);
                 publicacion.SetPregunta(pregunta);
                 publicacion.SetIdUsuario(UsuarioSesion.Usuario.id);
                 publicacion.SetIdVisibilidad(idVisibilidad);
