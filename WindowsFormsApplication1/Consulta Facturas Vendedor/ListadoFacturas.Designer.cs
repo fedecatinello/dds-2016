@@ -43,18 +43,16 @@
             this.label3 = new System.Windows.Forms.Label();
             this.textBox_FechaHasta = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.monthCalendar_Fecha = new System.Windows.Forms.MonthCalendar();
-            this.button_Fecha = new System.Windows.Forms.Button();
+            this.monthCalendar_FechaHasta = new System.Windows.Forms.MonthCalendar();
+            this.button_FechaHasta = new System.Windows.Forms.Button();
             this.labelNrosPagina = new System.Windows.Forms.Label();
             this.textBox_ImporteHasta = new System.Windows.Forms.TextBox();
             this.textBox_ImporteDesde = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.monthCalendar1 = new System.Windows.Forms.MonthCalendar();
-            this.button1 = new System.Windows.Forms.Button();
+            this.monthCalendar_FechaDesde = new System.Windows.Forms.MonthCalendar();
+            this.button_FechaDesde = new System.Windows.Forms.Button();
             this.textBox_FechaDesde = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.comboBox_Publicacion = new System.Windows.Forms.ComboBox();
-            this.label6 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFacturas)).BeginInit();
             this.SuspendLayout();
             // 
@@ -105,7 +103,7 @@
             // 
             // botonUltimaPagina
             // 
-            this.botonUltimaPagina.Location = new System.Drawing.Point(447, 529);
+            this.botonUltimaPagina.Location = new System.Drawing.Point(491, 529);
             this.botonUltimaPagina.Name = "botonUltimaPagina";
             this.botonUltimaPagina.Size = new System.Drawing.Size(67, 25);
             this.botonUltimaPagina.TabIndex = 21;
@@ -115,7 +113,7 @@
             // 
             // botonPaginaSiguiente
             // 
-            this.botonPaginaSiguiente.Location = new System.Drawing.Point(372, 529);
+            this.botonPaginaSiguiente.Location = new System.Drawing.Point(404, 528);
             this.botonPaginaSiguiente.Name = "botonPaginaSiguiente";
             this.botonPaginaSiguiente.Size = new System.Drawing.Size(66, 25);
             this.botonPaginaSiguiente.TabIndex = 20;
@@ -125,7 +123,7 @@
             // 
             // botonPaginaAnterior
             // 
-            this.botonPaginaAnterior.Location = new System.Drawing.Point(154, 529);
+            this.botonPaginaAnterior.Location = new System.Drawing.Point(118, 528);
             this.botonPaginaAnterior.Name = "botonPaginaAnterior";
             this.botonPaginaAnterior.Size = new System.Drawing.Size(65, 25);
             this.botonPaginaAnterior.TabIndex = 19;
@@ -135,7 +133,7 @@
             // 
             // botonPrimeraPagina
             // 
-            this.botonPrimeraPagina.Location = new System.Drawing.Point(70, 529);
+            this.botonPrimeraPagina.Location = new System.Drawing.Point(27, 528);
             this.botonPrimeraPagina.Name = "botonPrimeraPagina";
             this.botonPrimeraPagina.Size = new System.Drawing.Size(64, 26);
             this.botonPrimeraPagina.TabIndex = 18;
@@ -168,9 +166,9 @@
             this.dataGridViewFacturas.AllowUserToAddRows = false;
             this.dataGridViewFacturas.AllowUserToDeleteRows = false;
             this.dataGridViewFacturas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewFacturas.Location = new System.Drawing.Point(70, 245);
+            this.dataGridViewFacturas.Location = new System.Drawing.Point(13, 245);
             this.dataGridViewFacturas.Name = "dataGridViewFacturas";
-            this.dataGridViewFacturas.Size = new System.Drawing.Size(444, 278);
+            this.dataGridViewFacturas.Size = new System.Drawing.Size(551, 278);
             this.dataGridViewFacturas.TabIndex = 15;
             // 
             // label3
@@ -198,21 +196,23 @@
             this.label5.TabIndex = 33;
             this.label5.Text = "Fecha Hasta";
             // 
-            // monthCalendar_Fecha
+            // monthCalendar_FechaHasta
             // 
-            this.monthCalendar_Fecha.Location = new System.Drawing.Point(344, 77);
-            this.monthCalendar_Fecha.Name = "monthCalendar_Fecha";
-            this.monthCalendar_Fecha.TabIndex = 36;
-            this.monthCalendar_Fecha.Visible = false;
+            this.monthCalendar_FechaHasta.Location = new System.Drawing.Point(337, 99);
+            this.monthCalendar_FechaHasta.Name = "monthCalendar_FechaHasta";
+            this.monthCalendar_FechaHasta.TabIndex = 36;
+            this.monthCalendar_FechaHasta.Visible = false;
+            this.monthCalendar_FechaHasta.DateSelected += new System.Windows.Forms.DateRangeEventHandler(this.monthCalendar_FechaHasta_DateSelected);
             // 
-            // button_Fecha
+            // button_FechaHasta
             // 
-            this.button_Fecha.Location = new System.Drawing.Point(491, 117);
-            this.button_Fecha.Name = "button_Fecha";
-            this.button_Fecha.Size = new System.Drawing.Size(80, 20);
-            this.button_Fecha.TabIndex = 37;
-            this.button_Fecha.Text = "Seleccionar";
-            this.button_Fecha.UseVisualStyleBackColor = true;
+            this.button_FechaHasta.Location = new System.Drawing.Point(491, 117);
+            this.button_FechaHasta.Name = "button_FechaHasta";
+            this.button_FechaHasta.Size = new System.Drawing.Size(80, 20);
+            this.button_FechaHasta.TabIndex = 37;
+            this.button_FechaHasta.Text = "Seleccionar";
+            this.button_FechaHasta.UseVisualStyleBackColor = true;
+            this.button_FechaHasta.Click += new System.EventHandler(this.button_FechaHasta_Click);
             // 
             // labelNrosPagina
             // 
@@ -246,21 +246,23 @@
             this.label2.TabIndex = 40;
             this.label2.Text = "Importe Desde";
             // 
-            // monthCalendar1
+            // monthCalendar_FechaDesde
             // 
-            this.monthCalendar1.Location = new System.Drawing.Point(18, 77);
-            this.monthCalendar1.Name = "monthCalendar1";
-            this.monthCalendar1.TabIndex = 44;
-            this.monthCalendar1.Visible = false;
+            this.monthCalendar_FechaDesde.Location = new System.Drawing.Point(13, 99);
+            this.monthCalendar_FechaDesde.Name = "monthCalendar_FechaDesde";
+            this.monthCalendar_FechaDesde.TabIndex = 44;
+            this.monthCalendar_FechaDesde.Visible = false;
+            this.monthCalendar_FechaDesde.DateSelected += new System.Windows.Forms.DateRangeEventHandler(this.monthCalendar_FechaDesde_DateSelected);
             // 
-            // button1
+            // button_FechaDesde
             // 
-            this.button1.Location = new System.Drawing.Point(211, 117);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(80, 20);
-            this.button1.TabIndex = 45;
-            this.button1.Text = "Seleccionar";
-            this.button1.UseVisualStyleBackColor = true;
+            this.button_FechaDesde.Location = new System.Drawing.Point(211, 117);
+            this.button_FechaDesde.Name = "button_FechaDesde";
+            this.button_FechaDesde.Size = new System.Drawing.Size(80, 20);
+            this.button_FechaDesde.TabIndex = 45;
+            this.button_FechaDesde.Text = "Seleccionar";
+            this.button_FechaDesde.UseVisualStyleBackColor = true;
+            this.button_FechaDesde.Click += new System.EventHandler(this.button_FechaDesde_Click);
             // 
             // textBox_FechaDesde
             // 
@@ -278,40 +280,21 @@
             this.label4.TabIndex = 42;
             this.label4.Text = "Fecha Desde";
             // 
-            // comboBox_Publicacion
-            // 
-            this.comboBox_Publicacion.FormattingEnabled = true;
-            this.comboBox_Publicacion.Location = new System.Drawing.Point(276, 165);
-            this.comboBox_Publicacion.Name = "comboBox_Publicacion";
-            this.comboBox_Publicacion.Size = new System.Drawing.Size(121, 21);
-            this.comboBox_Publicacion.TabIndex = 46;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(208, 168);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(62, 13);
-            this.label6.TabIndex = 47;
-            this.label6.Text = "Publicacion";
-            // 
             // ListadoFacturas
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(582, 619);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.comboBox_Publicacion);
-            this.Controls.Add(this.monthCalendar1);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.monthCalendar_FechaDesde);
+            this.Controls.Add(this.button_FechaDesde);
             this.Controls.Add(this.textBox_FechaDesde);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.textBox_ImporteDesde);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.textBox_ImporteHasta);
             this.Controls.Add(this.labelNrosPagina);
-            this.Controls.Add(this.monthCalendar_Fecha);
-            this.Controls.Add(this.button_Fecha);
+            this.Controls.Add(this.monthCalendar_FechaHasta);
+            this.Controls.Add(this.button_FechaHasta);
             this.Controls.Add(this.textBox_FechaHasta);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label3);
@@ -353,17 +336,15 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox textBox_FechaHasta;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.MonthCalendar monthCalendar_Fecha;
-        private System.Windows.Forms.Button button_Fecha;
+        private System.Windows.Forms.MonthCalendar monthCalendar_FechaHasta;
+        private System.Windows.Forms.Button button_FechaHasta;
         private System.Windows.Forms.Label labelNrosPagina;
         private System.Windows.Forms.TextBox textBox_ImporteHasta;
         private System.Windows.Forms.TextBox textBox_ImporteDesde;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.MonthCalendar monthCalendar1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.MonthCalendar monthCalendar_FechaDesde;
+        private System.Windows.Forms.Button button_FechaDesde;
         private System.Windows.Forms.TextBox textBox_FechaDesde;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.ComboBox comboBox_Publicacion;
-        private System.Windows.Forms.Label label6;
     }
 }
