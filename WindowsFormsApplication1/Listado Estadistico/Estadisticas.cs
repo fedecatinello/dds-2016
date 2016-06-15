@@ -73,12 +73,12 @@ namespace MercadoEnvio.Listado_Estadistico
             {
                 progressBar.Visible = true;
                 progressBar.Value = 50;
-                String borrar = "IF OBJECT_ID('NET_A_CERO.Usuarios_x_Visibilidad') IS NOT NULL"
-                            + " DROP TABLE NET_A_CERO.Usuarios_x_Visibilidad";
+                String borrar = "IF OBJECT_ID('NET_A_CERO.usuarios_por_visibilidad') IS NOT NULL"
+                            + " DROP TABLE NET_A_CERO.usuarios_por_visibilidad";
                 parametros.Clear();
                 QueryBuilder.Instance.build(borrar, parametros).ExecuteNonQuery();
 
-                String crearTabla = "CREATE TABLE NET_A_CERO.Usuarios_x_Visibilidad"
+                String crearTabla = "CREATE TABLE NET_A_CERO.usuarios_por_visibilidad"
                                     + " (mes int,"
                                     + " visibilidad nvarchar(255),"
                                     + "	usuario nvarchar(50),"
@@ -113,7 +113,7 @@ namespace MercadoEnvio.Listado_Estadistico
                 command.ExecuteNonQuery();
                 progressBar.Value = 1000;
                 parametros.Clear();
-                command = QueryBuilder.Instance.build("SELECT  u.mes, u.visibilidad, u.usuario, u.cantidad FROM NET_A_CERO.Usuarios_x_Visibilidad u, NET_A_CERO.Visibilidad visibilidad WHERE u.visibilidad = visibilidad.visib_desc ORDER BY u.mes, visibilidad.visib_precio DESC, u.cantidad DESC", parametros);
+                command = QueryBuilder.Instance.build("SELECT  u.mes, u.visibilidad, u.usuario, u.cantidad FROM NET_A_CERO.usuarios_por_visibilidad u, NET_A_CERO.Visibilidad visibilidad WHERE u.visibilidad = visibilidad.visib_desc ORDER BY u.mes, visibilidad.visib_precio DESC, u.cantidad DESC", parametros);
                 DataSet datos = new DataSet();
                 SqlDataAdapter adapter = new SqlDataAdapter();
                 adapter.SelectCommand = command;
