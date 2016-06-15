@@ -589,7 +589,7 @@ CREATE FUNCTION NET_A_CERO.pr_clientes_con_productos_comprados
 )
 RETURNS @mi_tabla TABLE (
                             Usuario nvarchar(50),
-                            Cantidad de productos comprados numeric(18,0)
+                            Productos numeric(18,0)
                         )
 AS
 BEGIN
