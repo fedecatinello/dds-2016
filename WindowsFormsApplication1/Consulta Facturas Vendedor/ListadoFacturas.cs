@@ -35,9 +35,8 @@ namespace MercadoEnvio.Consulta_Facturas_Vendedor
 
         private void ListadoFacturas_Load(object sender, EventArgs e)
         {
-            CargarPublicaciones();
-            labelNrosPagina.Text = "";
-            OcultarColumnasQueNoDebenVerse();
+           OcultarColumnasQueNoDebenVerse();
+           labelNrosPagina.Text = "";
         }
 
         private void OcultarColumnasQueNoDebenVerse()
@@ -45,12 +44,7 @@ namespace MercadoEnvio.Consulta_Facturas_Vendedor
             dataGridViewFacturas.Columns["fact_id"].Visible = false;
         }
 
-        private void CargarPublicaciones()
-        {
-            comboBox_Publicacion.DataSource = mapper.SelectFromWhere("publi_descripcion", "Publicaciones", "publi_usr_id", idUsuarioActual);
-            comboBox_Publicacion.ValueMember = "publi_descripcion";
-            comboBox_Publicacion.SelectedIndex = -1;
-        }
+
         
         private void botonBuscar_Click(object sender, EventArgs e)
         {
@@ -60,53 +54,39 @@ namespace MercadoEnvio.Consulta_Facturas_Vendedor
             parametros.Add(new SqlParameter("@usuario", idUsuarioActual));
             DataTable busquedaTemporal = new DataTable();
             String filtro = "";
-             /*String filtro = " AND publicaciones.publi_usr_id != @usuario";
-           
-            if (textBox_Contenido.Text != "")
+            
+            if (textBox_ImporteDesde.Text != "")
             {
-                filtro += " AND publicaciones.publi_descripcion LIKE '%" + textBox_Contenido.Text + "%'";                
-            }            
-
-            if (comboBoxRubro1.Text != "")
+                
+                if(textBox_ImporteHasta.Text != "") //Ambos importes fueron completados
+                    filtro += " AND f.fact_monto BETWEEN " + textBox_ImporteDesde.Text + " AND " + textBox_ImporteHasta.Text;
+                
+                else //Solo importe desde fue completado
+                    filtro += " AND f.fact_monto > " + textBox_ImporteDesde.Text;
+            }
+            
+            if(textBox_ImporteHasta.Text != "") //Solo importe hasta fue completado
             {
-                String idRubro1 = Convert.ToString(mapper.SelectFromWhere("rubro_id", "Rubros", "rubro_desc_larga", comboBoxRubro1.Text));
-                parametros.Add(new SqlParameter("@idRubro1", idRubro1));
-                if (comboBoxRubro2.Text != "")
-                {
-                    filtro += " AND ( rxp.rubro_id = @idRubro1 ";
-                }
-                else
-                {
-                    filtro += " AND rxp.rubro_id = @idRubro1 ";
-                }
+                filtro += " AND f.fact_monto < " + textBox_ImporteHasta.Text;
             }
 
-            if (comboBoxRubro2.Text != "")
+            if (textBox_FechaDesde.Text != "")
             {
-                String idRubro2 = Convert.ToString(mapper.SelectFromWhere("rubro_id", "Rubros", "rubro_desc_larga", comboBoxRubro2.Text));
-                parametros.Add(new SqlParameter("@idRubro2", idRubro2));
-                if (comboBoxRubro1.Text != "")
-                {
-                    filtro += " OR rxp.rubro_id = @idRubro2 ) ";
-                }
-                else
-                {
-                    filtro += " AND rxp.rubro_id = @idRubro2 ";
-                }
 
-            } */
-          
+                if (textBox_FechaHasta.Text != "") //Ambas fechas fueron completadas
+                    filtro += " AND f.fact_fecha BETWEEN '" + textBox_FechaDesde.Text + "' AND '" + textBox_FechaHasta.Text + "'";
 
-           /* String query = "SELECT DISTINCT(publicaciones.publi_id) ,visibilidad.visib_precio, publicaciones.publi_descripcion Descripcion , " +
-                    "(CASE WHEN (publicaciones.publi_tipo = 'Subasta' AND (SELECT COUNT(*) FROM NET_A_CERO.VistaOfertaMaxima vista WHERE vista.vista_publi_id = publicaciones.publi_id) = 1)" +
-                        "THEN (SELECT vista.vista_precioMax FROM NET_A_CERO.VistaOfertaMaxima vista WHERE vista.vista_publi_id = publicaciones.publi_id) " +
-                            "ELSE publicaciones.publi_precio END) Precio, " +
-                        "publicaciones.publi_tipo 'Tipo Publicacion' " +
-                    "FROM NET_A_CERO.Publicaciones publicaciones, NET_A_CERO.Visibilidad visibilidad, NET_A_CERO.Rubro_x_Publicacion rxp " +
-                    "WHERE publicaciones.publi_visib_id = visibilidad.visib_id AND publicaciones.publi_estado_id = (SELECT estado_id FROM NET_A_CERO.Estado WHERE estado_desc='Activa') " +
-                            " and publicaciones.publi_id = rxp.publi_id "
-                                      + filtro + " ORDER BY visibilidad.visib_precio DESC"; */
-            
+                else //Solo fecha desde fue completada
+                    filtro += " AND f.fact_fecha > '" + textBox_FechaDesde.Text + "'";
+            }
+
+            if (textBox_FechaHasta.Text != "") //Solo fecha hasta fue completada
+            {
+                filtro += " AND f.fact_fecha < '" + textBox_FechaHasta.Text + "'";
+            }
+
+            /** Query de las facturas del vendedor **/
+
             String query = "SELECT DISTINCT(f.fact_id), f.fact_fecha 'Fecha', f.fact_monto 'Monto', f.fact_destinatario 'Destinatario', f.fact_forma_pago 'Forma de Pago', p.publi_descripcion 'Publicacion' " +
                             "FROM NET_A_CERO.Facturas f, NET_A_CERO.Publicaciones p " +
                             "WHERE f.fact_destinatario = @usuario AND f.fact_publi_id = p.publi_id AND p.publi_usr_id = @usuario " + filtro;
@@ -321,7 +301,6 @@ namespace MercadoEnvio.Consulta_Facturas_Vendedor
             textBox_FechaHasta.Clear();
             textBox_ImporteDesde.Clear();
             textBox_ImporteHasta.Clear();
-            comboBox_Publicacion.SelectedIndex = -1;
 
             //Limpio grilla siempre y cuando haya arrojado resultados
             if (dataGridViewFacturas.DataSource != null)
@@ -342,6 +321,27 @@ namespace MercadoEnvio.Consulta_Facturas_Vendedor
             this.Close();
         }
 
+        private void button_FechaHasta_Click(object sender, EventArgs e)
+        {
+            monthCalendar_FechaHasta.Visible = true;
+        }
+
+        private void button_FechaDesde_Click(object sender, EventArgs e)
+        {
+            monthCalendar_FechaDesde.Visible = true;
+        }
+
+        private void monthCalendar_FechaDesde_DateSelected(object sender, System.Windows.Forms.DateRangeEventArgs e)
+        {
+            textBox_FechaDesde.Text = e.Start.ToShortDateString();
+            monthCalendar_FechaDesde.Visible = false;
+        }
+
+        private void monthCalendar_FechaHasta_DateSelected(object sender, System.Windows.Forms.DateRangeEventArgs e)
+        {
+            textBox_FechaHasta.Text = e.Start.ToShortDateString();
+            monthCalendar_FechaHasta.Visible = false;
+        }
 
 
     }
