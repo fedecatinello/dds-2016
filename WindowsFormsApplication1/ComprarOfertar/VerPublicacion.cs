@@ -147,9 +147,9 @@ namespace MercadoEnvio.Comprar_Ofertar
 
             Decimal cantidad = Convert.ToDecimal(QueryBuilder.Instance.build(query, parametros).ExecuteScalar());
 
-            if (cantidad >= 5)
+            if (cantidad >= 3)
             {
-                MessageBox.Show("Tiene 5 compras sin haber calificado al vendedor. No puede realizar más compras hasta que no califique.");
+                MessageBox.Show("Tiene 3 compras sin haber calificado al vendedor. No puede realizar más compras hasta que no califique.");
                 return;
             }
 
