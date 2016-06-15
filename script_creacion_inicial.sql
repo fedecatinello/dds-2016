@@ -316,16 +316,16 @@ IF (OBJECT_ID('NET_A_CERO.pr_vendedores_con_mayor_facturacion') IS NOT NULL)
     DROP FUNCTION NET_A_CERO.pr_vendedores_con_mayor_facturacion
 GO
 
-IF (OBJECT_ID('NET_A_CERO.pr_vendedores_con_mayor_calificacion') IS NOT NULL)
-    DROP FUNCTION NET_A_CERO.pr_vendedores_con_mayor_Calificacion
+IF (OBJECT_ID('NET_A_CERO.pr_vendedores_con_mayor_facturas') IS NOT NULL)
+    DROP FUNCTION NET_A_CERO.pr_vendedores_con_mayor_facturas
 GO
 
 IF (OBJECT_ID('NET_A_CERO.pr_agregar_rol_a_usuario') IS NOT NULL)
     DROP PROCEDURE NET_A_CERO.pr_agregar_rol_a_usuario
 GO
 
-IF (OBJECT_ID('NET_A_CERO.pr_clientes_con_publicaciones_sin_calificar') IS NOT NULL)
-    DROP FUNCTION NET_A_CERO.pr_clientes_con_publicaciones_sin_calificar
+IF (OBJECT_ID('NET_A_CERO.pr_clientes_con_productos_comprados') IS NOT NULL)
+    DROP FUNCTION NET_A_CERO.pr_clientes_con_productos_comprados
 GO
 
 IF OBJECT_ID('NET_A_CERO.pr_calcular_productos_no_vendidos ') IS NOT NULL
@@ -559,48 +559,46 @@ BEGIN
 END
 GO
 
-CREATE FUNCTION NET_A_CERO.pr_vendedores_con_mayor_Calificacion
+CREATE FUNCTION NET_A_CERO.pr_vendedores_con_mayor_facturas
 (
     @fecha_inicio datetime,
     @fecha_fin datetime
 )
 RETURNS @mi_tabla TABLE (
                             Usuario nvarchar(50),
-                            Mayor_Calificacion numeric(18,2)
+                            Facturas int
                         )
 AS
 BEGIN
     INSERT @mi_tabla
-        SELECT TOP 5 usuario.usr_usuario, SUM(Calificacion.calif_cant_estrellas) / COUNT(*) 
-        FROM NET_A_CERO.Usuarios usuario, NET_A_CERO.Publicaciones publicacion, NET_A_CERO.Compras compra, NET_A_CERO.Calificacion Calificacion
-        WHERE usuario.usr_id = publicacion.publi_usr_id
-            AND compra.comp_publi_id = publicacion.publi_id
-            AND compra.comp_calif_id = Calificacion.calif_id
-            AND compra.comp_fecha BETWEEN @fecha_inicio AND @fecha_fin  
+        SELECT TOP 5 usuario.usr_usuario, COUNT(*) Facturas
+        FROM NET_A_CERO.Usuarios usuario, NET_A_CERO.Publicaciones publicacion, NET_A_CERO.Facturas factura
+        WHERE usuario.usr_id = publicacion.publi_usr_id 
+            AND publicacion.publi_id = factura.fact_publi_id
+            AND factura.fact_fecha BETWEEN @fecha_inicio AND @fecha_fin  
         GROUP BY usuario.usr_usuario
-        ORDER BY 2 DESC
+        ORDER BY Facturas DESC
     RETURN
 END
 GO
 
-CREATE FUNCTION NET_A_CERO.pr_clientes_con_publicaciones_sin_calificar
+CREATE FUNCTION NET_A_CERO.pr_clientes_con_productos_comprados
 (
     @fecha_inicio datetime,
     @fecha_fin datetime
 )
 RETURNS @mi_tabla TABLE (
                             Usuario nvarchar(50),
-                            Publicaciones_sin_calificar numeric(18,0)
+                            Cantidad de productos comprados numeric(18,0)
                         )
 AS
 BEGIN
     INSERT @mi_tabla
-        SELECT TOP 5 usuario.usr_usuario, COUNT(*) 'Cantidad de no calificadas'
+        SELECT TOP 5 usuario.usr_usuario, COUNT(*) 'Cantidad de productos comprados'
         FROM NET_A_CERO.Clientes cliente, NET_A_CERO.Compras compra, NET_A_CERO.Publicaciones publicacion, NET_A_CERO.Usuarios usuario
         WHERE cliente.cli_usr_id = compra.comp_usr_id
             AND publicacion.publi_id = compra.comp_publi_id
             AND cliente.cli_usr_id = usuario.usr_id
-            AND ISNULL(compra.comp_calif_id, -1) = -1
             AND compra.comp_fecha BETWEEN @fecha_inicio AND @fecha_fin  
         GROUP BY usuario.usr_usuario
         ORDER BY 2 DESC

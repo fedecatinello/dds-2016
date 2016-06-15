@@ -48,9 +48,10 @@ namespace MercadoEnvio.Listado_Estadistico
             DataTable tiposDeListados = new DataTable();
             tiposDeListados.Columns.Add("tiposDeListados");
             tiposDeListados.Rows.Add("Vendedores con mayor cantidad de productos no vendidos");
-            tiposDeListados.Rows.Add("Vendedores con mayor facturacion");
-            tiposDeListados.Rows.Add("Vendedores con mayores calificaciones");
-            tiposDeListados.Rows.Add("Clientes con mayor cantidad de publicaciones sin calificar");
+            tiposDeListados.Rows.Add("Clientes con mayor cantidad de productos comprados");
+            tiposDeListados.Rows.Add("Vendedores con mayor cantidad de facturas");
+            tiposDeListados.Rows.Add("Vendedores con mayor monto facturado"); 
+            
             comboBox_TipoDeListado.DataSource = tiposDeListados;
             comboBox_TipoDeListado.ValueMember = "tiposDeListados";
             comboBox_TipoDeListado.SelectedIndex = -1;
@@ -72,12 +73,12 @@ namespace MercadoEnvio.Listado_Estadistico
             {
                 progressBar.Visible = true;
                 progressBar.Value = 50;
-                String borrar = "IF OBJECT_ID('NET_A_CERO.usuarios_por_visibilidad', 'U') IS NOT NULL"
-                            + " DROP TABLE NET_A_CERO.usuarios_por_visibilidad";
+                String borrar = "IF OBJECT_ID('NET_A_CERO.Usuarios_x_Visibilidad') IS NOT NULL"
+                            + " DROP TABLE NET_A_CERO.Usuarios_x_Visibilidad";
                 parametros.Clear();
                 QueryBuilder.Instance.build(borrar, parametros).ExecuteNonQuery();
 
-                String crearTabla = "CREATE TABLE NET_A_CERO.usuarios_por_visibilidad"
+                String crearTabla = "CREATE TABLE NET_A_CERO.Usuarios_x_Visibilidad"
                                     + " (mes int,"
                                     + " visibilidad nvarchar(255),"
                                     + "	usuario nvarchar(50),"
@@ -112,7 +113,7 @@ namespace MercadoEnvio.Listado_Estadistico
                 command.ExecuteNonQuery();
                 progressBar.Value = 1000;
                 parametros.Clear();
-                command = QueryBuilder.Instance.build("SELECT  u.mes, u.visibilidad, u.usuario, u.cantidad FROM NET_A_CERO.usuarios_por_visibilidad u, NET_A_CERO.Visibilidad visibilidad WHERE u.visibilidad = visibilidad.visib_desc ORDER BY u.mes, visibilidad.visib_precio DESC, u.cantidad DESC", parametros);
+                command = QueryBuilder.Instance.build("SELECT  u.mes, u.visibilidad, u.usuario, u.cantidad FROM NET_A_CERO.Usuarios_x_Visibilidad u, NET_A_CERO.Visibilidad visibilidad WHERE u.visibilidad = visibilidad.visib_desc ORDER BY u.mes, visibilidad.visib_precio DESC, u.cantidad DESC", parametros);
                 DataSet datos = new DataSet();
                 SqlDataAdapter adapter = new SqlDataAdapter();
                 adapter.SelectCommand = command;
@@ -199,15 +200,14 @@ namespace MercadoEnvio.Listado_Estadistico
         {
             switch (tipoDeListado)
             {
-              //  case "Vendedores con mayor cantidad de productos no vendidos":
-               //     return "NET_A_CERO.vendedores_con_mayor_cantidad_de_publicaciones_sin_vender('" + fechaDeInicio + "', '" + fechaMedia + "' , '" + fechaDeFin + "')";
-                case "Vendedores con mayor facturacion":
+                case "Vendedores con mayor monto facturado":
                     return "NET_A_CERO.pr_vendedores_con_mayor_facturacion('" + fechaDeInicio + "', '" + fechaDeFin + "')";
-                case "Vendedores con mayores calificaciones":
-                    return "NET_A_CERO.pr_vendedores_con_mayor_calificacion('" + fechaDeInicio + "', '" + fechaDeFin + "')";
-                case "Clientes con mayor cantidad de publicaciones sin calificar":
-                    return "NET_A_CERO.pr_clientes_con_publicaciones_sin_calificar('" + fechaDeInicio + "', '" + fechaDeFin + "')";
+                case "Vendedores con mayor cantidad de facturas":
+                    return "NET_A_CERO.pr_vendedores_con_mayor_facturas('" + fechaDeInicio + "', '" + fechaDeFin + "')";
+                case "Clientes con mayor cantidad de productos comprados":
+                    return "NET_A_CERO.pr_clientes_con_productos_comprados('" + fechaDeInicio + "', '" + fechaDeFin + "')";
             }
+
             throw new Exception("No se pudo obtener la funcion");
         }
 

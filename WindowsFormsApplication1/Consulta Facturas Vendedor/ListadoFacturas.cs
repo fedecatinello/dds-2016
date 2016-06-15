@@ -57,10 +57,17 @@ namespace MercadoEnvio.Consulta_Facturas_Vendedor
             
             if (textBox_ImporteDesde.Text != "")
             {
-                
-                if(textBox_ImporteHasta.Text != "") //Ambos importes fueron completados
-                    filtro += " AND f.fact_monto BETWEEN " + textBox_ImporteDesde.Text + " AND " + textBox_ImporteHasta.Text;
-                
+
+                if (textBox_ImporteHasta.Text != "") //Ambos importes fueron completados
+                {
+                    if (Convert.ToDecimal(textBox_ImporteHasta.Text) < Convert.ToDecimal(textBox_ImporteDesde.Text))
+                    {
+                        MessageBox.Show("El importe desde debe ser menor que el importe hasta");
+                        return;
+                    }
+                    else
+                        filtro += " AND f.fact_monto BETWEEN " + textBox_ImporteDesde.Text + " AND " + textBox_ImporteHasta.Text;
+                }
                 else //Solo importe desde fue completado
                     filtro += " AND f.fact_monto > " + textBox_ImporteDesde.Text;
             }
@@ -74,8 +81,15 @@ namespace MercadoEnvio.Consulta_Facturas_Vendedor
             {
 
                 if (textBox_FechaHasta.Text != "") //Ambas fechas fueron completadas
-                    filtro += " AND f.fact_fecha BETWEEN '" + textBox_FechaDesde.Text + "' AND '" + textBox_FechaHasta.Text + "'";
-
+                {
+                    if (DateTime.Compare(Convert.ToDateTime(textBox_FechaDesde.Text), Convert.ToDateTime(textBox_FechaHasta.Text)) > 0)
+                    {
+                        MessageBox.Show("La fecha desde debe ser anterior que la fecha hasta");
+                        return;
+                    }
+                    else
+                      filtro += " AND f.fact_fecha BETWEEN '" + textBox_FechaDesde.Text + "' AND '" + textBox_FechaHasta.Text + "'";
+                }
                 else //Solo fecha desde fue completada
                     filtro += " AND f.fact_fecha > '" + textBox_FechaDesde.Text + "'";
             }
