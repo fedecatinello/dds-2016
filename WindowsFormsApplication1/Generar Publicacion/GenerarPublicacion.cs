@@ -111,8 +111,8 @@ namespace MercadoEnvio.Generar_Publicacion
                     Decimal idFact = Convert.ToDecimal(QueryBuilder.Instance.build(idFactura, parametros).ExecuteScalar());
 
                     //Obtengo monto
-                    int porcentaje = Convert.ToInt32(mapper.SelectFromWhere("visib_porcentaje", "Visibilidad", "visib_desc", visibilidadDescripcion));
-
+                    Decimal porcentaje = Convert.ToDecimal(mapper.SelectFromWhere("visib_porcentaje", "Visibilidad", "visib_desc", visibilidadDescripcion));
+                    
                     //Inserto facutra
 
                     String insertarFactura = " INSERT INTO NET_A_CERO.Facturas (fact_id, fact_fecha, fact_monto, fact_destinatario, fact_forma_pago, fact_publi_id) " +
@@ -120,7 +120,7 @@ namespace MercadoEnvio.Generar_Publicacion
                     parametros.Clear();
                     parametros.Add(new SqlParameter("@fact_id", idFact+1));
                     parametros.Add(new SqlParameter("@fact_fecha", fechaDeInicio));
-                    parametros.Add(new SqlParameter("@fact_monto", (porcentaje * Convert.ToInt32(precio))));
+                    parametros.Add(new SqlParameter("@fact_monto", (porcentaje * Convert.ToDecimal(precio))));
                     parametros.Add(new SqlParameter("@fact_destinatario", UsuarioSesion.Usuario.id));
                     parametros.Add(new SqlParameter("@fact_forma_pago", "Efectivo"));
                     parametros.Add(new SqlParameter("@fact_publi_id", idPublicacion));

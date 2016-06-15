@@ -104,6 +104,7 @@ namespace MercadoEnvio.Comprar_Ofertar
                 return;
             }
 
+            Decimal cantidadVentas = Convert.ToDecimal(mapper.SelectFromWhere("COUNT(*)", "Compras", "comp_publi_id", publicacionId));
 
             String sql = "INSERT INTO NET_A_CERO.Compras(comp_usr_id, comp_publi_id, comp_fecha, comp_cantidad, comp_monto, comp_calif_id) VALUES (@comp_usr_id, @comp_publi_id, @comp_fecha, @comp_cantidad, @comp_monto, NULL)" ;
             DateTime fecha = DateConfig.getInstance().getCurrentDate();
@@ -122,6 +123,61 @@ namespace MercadoEnvio.Comprar_Ofertar
             parametros.Add(new SqlParameter("@comp_cantidad", this.textBoxCant.Text));
             parametros.Add(new SqlParameter("@comp_monto", (precioPublicacion * Convert.ToInt32(textBoxCant.Text))));
             QueryBuilder.Instance.build(sql, parametros).ExecuteNonQuery();
+
+            
+
+            Decimal precio = Convert.ToDecimal(mapper.SelectFromWhere("publi_precio", "Publicaciones", "publi_id", publicacionId));
+
+            if (cantidadVentas == 0)
+            {
+                //Obtener ultima factura
+                String idFactura = "select top 1 f.fact_id from NET_A_CERO.Facturas f order by f.fact_id DESC";
+                parametros.Clear();
+                Decimal idFact = Convert.ToDecimal(QueryBuilder.Instance.build(idFactura, parametros).ExecuteScalar());
+
+                //Inserto facutra
+
+                String insertarFactura = " INSERT INTO NET_A_CERO.Facturas (fact_id, fact_fecha, fact_monto, fact_destinatario, fact_forma_pago, fact_publi_id) " +
+                    " VALUES(@fact_id, @fact_fecha, @fact_monto, @fact_destinatario, @fact_forma_pago, @fact_publi_id ) ";
+                parametros.Clear();
+                parametros.Add(new SqlParameter("@fact_id", idFact + 1));
+                parametros.Add(new SqlParameter("@fact_fecha", DateConfig.getInstance().getCurrentDate()));
+                parametros.Add(new SqlParameter("@fact_monto", precio));
+                parametros.Add(new SqlParameter("@fact_destinatario", UsuarioSesion.Usuario.id));
+                parametros.Add(new SqlParameter("@fact_forma_pago", "Efectivo"));
+                parametros.Add(new SqlParameter("@fact_publi_id", publicacionId));
+                command = QueryBuilder.Instance.build(insertarFactura, parametros);
+                command.ExecuteNonQuery();
+
+                String insertarItems = "INSERT INTO NET_A_CERO.Items (item_cantidad, item_tipo, item_monto, item_fact_id)" +
+                        " VALUES (@item_cantidad, @item_tipo, @item_monto,@item_fact_id ) ";
+                parametros.Clear();
+                parametros.Add(new SqlParameter("@item_cantidad", Convert.ToInt32(textBoxCant.Text)));
+                parametros.Add(new SqlParameter("@item_tipo", "Compra"));
+                parametros.Add(new SqlParameter("@item_monto", precio));
+                parametros.Add(new SqlParameter("@item_fact_id", Convert.ToDecimal(idFact +1)));
+                command = QueryBuilder.Instance.build(insertarItems, parametros);
+                command.ExecuteNonQuery();
+
+            }
+            else
+            {
+                //Obtener misma factura de la Publicacion
+                Decimal facturaID = Convert.ToDecimal(mapper.SelectFromWhere("MAX(fact_id)", "Facturas", "fact_publi_id", publicacionId));
+
+                String insertarItems = "INSERT INTO NET_A_CERO.Items (item_cantidad, item_tipo, item_monto, item_fact_id)" +
+                        " VALUES (@item_cantidad, @item_tipo, @item_monto,@item_fact_id ) " +
+                        " UPDATE NET_A_CERO.Facturas SET fact_monto = fact_monto + @item_monto WHERE fact_id = @item_fact_id ";
+                parametros.Clear();
+                parametros.Add(new SqlParameter("@item_cantidad", Convert.ToInt32(textBoxCant.Text)));
+                parametros.Add(new SqlParameter("@item_tipo", "Compra"));
+                parametros.Add(new SqlParameter("@item_monto", precio));
+                parametros.Add(new SqlParameter("@item_fact_id", facturaID));
+                command = QueryBuilder.Instance.build(insertarItems, parametros);
+                command.ExecuteNonQuery();
+
+            }
+
 
             MessageBox.Show("Contactese con el vendedor para finalizar la compra");
             if (pedirEstado())

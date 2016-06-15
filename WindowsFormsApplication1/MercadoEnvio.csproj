@@ -197,12 +197,6 @@
     <Compile Include="Editar Publicacion\FiltrarPublicacion.Designer.cs">
       <DependentUpon>FiltrarPublicacion.cs</DependentUpon>
     </Compile>
-    <Compile Include="Facturas\Facturar.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Facturas\Facturar.Designer.cs">
-      <DependentUpon>Facturar.cs</DependentUpon>
-    </Compile>
     <Compile Include="Generar Publicacion\GenerarPublicacion.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -344,9 +338,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Editar Publicacion\FiltrarPublicacion.resx">
       <DependentUpon>FiltrarPublicacion.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Facturas\Facturar.resx">
-      <DependentUpon>Facturar.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Generar Publicacion\GenerarPublicacion.resx">
       <DependentUpon>GenerarPublicacion.cs</DependentUpon>

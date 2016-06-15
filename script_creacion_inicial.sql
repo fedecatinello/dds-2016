@@ -364,14 +364,6 @@ IF OBJECT_ID('NET_A_CERO.finalizar_x_fin_stock') IS NOT NULL
 	DROP TRIGGER NET_A_CERO.finalizar_x_fin_stock
 GO
 
-IF OBJECT_ID('NET_A_CERO.facturar_ventas', 'P') IS NOT NULL
-	DROP PROCEDURE NET_A_CERO.facturar_ventas
-GO
-
-IF OBJECT_ID('NET_A_CERO.facturar_costos_publicacion', 'P') IS NOT NULL
-	DROP PROCEDURE NET_A_CERO.facturar_costos_publicacion
-GO
-
 /** FIN VALIDACION DE FUNCIONES, PROCEDURES, VISTAS Y TRIGGERS **/
 
 
@@ -539,76 +531,6 @@ BEGIN
         (visib_id, visib_desc, visib_grado, visib_precio, visib_porcentaje, visib_envios, visib_activo)
     VALUES
         (@cod, @descripcion, @grado, @precio, @porcentaje, @envios, @activo);
-END
-GO
-
-CREATE PROCEDURE NET_A_CERO.facturar_ventas
-	@id numeric(18,0),
-	@idF numeric(18,0)
-AS
-BEGIN
-DECLARE @vid numeric(18,0)
-DECLARE @compra_publicacion numeric(18,0) 
-DECLARE @compra_cantidad numeric(18,0) 
-DECLARE @precio numeric(18,0) 
-DECLARE @porcentaje numeric(18,2) 
-DECLARE comision_cursor CURSOR FOR
-(SELECT c.comp_publi_id, c.comp_cantidad, p.publi_precio, v.visib_porcentaje, v.visib_id
-	FROM  NET_A_CERO.Compras c, NET_A_CERO.Publicaciones p, NET_A_CERO.Visibilidad v
-	WHERE c.comp_publi_id = p.publi_id AND p.publi_visib_id = v.visib_id)
-OPEN comision_cursor
-FETCH NEXT FROM comision_cursor INTO @compra_publicacion, @compra_cantidad, @precio, @porcentaje, @vid
-
-WHILE @@FETCH_STATUS = 0
-BEGIN
-
-	INSERT NET_A_CERO.Items
-		(item_cantidad, item_tipo, item_monto, item_fact_id)
-	VALUES
-		(@compra_cantidad, NULL, @compra_cantidad * @precio * @porcentaje, @idF)
-	
-	FETCH NEXT FROM comision_cursor INTO @compra_publicacion, @compra_cantidad, @precio, @porcentaje, @vid
-END
-CLOSE comision_cursor
-DEALLOCATE comision_cursor
-END
-GO
-
-CREATE PROCEDURE NET_A_CERO.facturar_costos_publicacion
-	@id numeric(18,0),
-	@idF numeric(18,0)
-AS
-BEGIN
-DECLARE @vid numeric(18,0)
-DECLARE @publicacion numeric(18,0) 
-DECLARE @precio numeric(18,0) 
-DECLARE comision_cursor CURSOR FOR
-(SELECT p.publi_id, v.visib_precio, v.visib_id
-	from NET_A_CERO.Publicaciones p, NET_A_CERO.Visibilidad v, NET_A_CERO.Usuarios u
-	where p.publi_costo_pagado = 0 and p.publi_visib_id = v.visib_id and p.publi_usr_id = u.usr_id and u.usr_id = @id
-	and p.publi_estado_id = (select estado_id from NET_A_CERO.Estado where estado_desc= 'Finalizada'))
-
-OPEN comision_cursor
-FETCH NEXT FROM comision_cursor INTO @publicacion, @precio, @vid
-
-WHILE @@FETCH_STATUS = 0
-BEGIN
-
-	BEGIN
-		INSERT NET_A_CERO.Items
-			(item_cantidad, item_tipo, item_monto, item_fact_id)
-		VALUES
-			(1, 'Costo Publicacion', @precio, @idF)
-
-		UPDATE NET_A_CERO.Publicaciones 
-			SET  publi_costo_pagado= 1
-			WHERE publi_id = (SELECT fact_publi_id FROM NET_A_CERO.Facturas WHERE fact_id = @idF)
-	END
-	
-	FETCH NEXT FROM comision_cursor INTO @publicacion, @precio, @vid
-END
-CLOSE comision_cursor
-DEALLOCATE comision_cursor
 END
 GO
 
