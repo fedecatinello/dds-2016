@@ -889,7 +889,6 @@ INSERT INTO NET_A_CERO.Funcionalidades(func_nombre)
             ('Editar Publicacion'),
             ('Calificar Vendedor'),
             ('ABM Rol'),
-            ('Generar Factura'),
             ('Crear Empresa'),
             ('Editar Empresa'),
             ('Crear Cliente'),
@@ -924,17 +923,15 @@ INSERT INTO NET_A_CERO.Rol_x_Funcionalidad(func_id, rol_id)
             (2,2),
             (3,2),
             (4,2),
-            (6,2),
+            (12,2),
             (13,2),
-            (14,2),
+			(14,2),
 			(15,2),
-			(16,2),
             (2,3),
             (3,3),
-            (6,3),
-            (13,3),
-            (15,3),
-            (16,3)
+            (12,3),
+            (14,3),
+            (15,3)
 
 
 

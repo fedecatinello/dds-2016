@@ -34,7 +34,6 @@ namespace MercadoEnvio.ABM_Visibilidad
             textBox_Descripcion.Text = visibilidad.GetDescripcion();
             textBox_PrecioPorPublicar.Text = visibilidad.GetPrecioPorPublicar();
             textBox_PorcentajePorVenta.Text = visibilidad.GetPorcentajePorVenta();
-            //textBox_Duracion.Text = visibilidad.GetDuracion();
             comboBox_Grado.Text = visibilidad.GetGrado();
             checkBox_Envios.Checked = Convert.ToBoolean(mapper.SelectFromWhere("visib_envios", "Visibilidad", "visib_id", idVisibilidad));
         }
@@ -44,7 +43,6 @@ namespace MercadoEnvio.ABM_Visibilidad
             String descripcion = textBox_Descripcion.Text;
             String precioPorPublicar = textBox_PrecioPorPublicar.Text;
             String porcentajePorVenta = textBox_PorcentajePorVenta.Text;
-            //String duracion = textBox_Duracion.Text;
             String grado = comboBox_Grado.Text;
             Boolean envios = checkBox_Envios.Checked;
 
@@ -55,7 +53,6 @@ namespace MercadoEnvio.ABM_Visibilidad
                 visibilidad.SetDescripcion(descripcion);
                 visibilidad.SetPrecioPorPublicar(precioPorPublicar);
                 visibilidad.SetPorcentajePorVenta(porcentajePorVenta);
-                //visibilidad.SetDuracion(duracion);
                 visibilidad.SetGrado(grado);
                 visibilidad.SetEnvios(envios);
                 Boolean pudoModificar = mapper.Modificar(idVisibilidad, visibilidad);

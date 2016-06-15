@@ -23,9 +23,8 @@ namespace MercadoEnvio
             funcionalidades.Add("Comprar/Ofertar", new Comprar_Ofertar.BuscadorPublicaciones());
             funcionalidades.Add("Generar Publicacion", new Generar_Publicacion.GenerarPublicacion());
             funcionalidades.Add("Editar Publicacion", new Editar_Publicacion.FiltrarPublicacion());
-            funcionalidades.Add("Calificar Vendedor", new Calificar_Vendedor.Listado());            
+            funcionalidades.Add("Calificar Vendedor", new Calificar_Vendedor.Listado());
             funcionalidades.Add("ABM Rol", new ABM_Rol.RolForm());
-            funcionalidades.Add("Generar Factura", new Facturar_Publicaciones.Facturar());
             funcionalidades.Add("Crear Empresa", new ABM_Empresa.AgregarEmpresa("empresaCreadaPorAdmin", "OK"));
             funcionalidades.Add("Editar Empresa", new ABM_Empresa.FiltroEmpresa());
             funcionalidades.Add("Crear Cliente", new ABM_Cliente.AgregarCliente("clienteCreadoPorAdmin", "OK"));

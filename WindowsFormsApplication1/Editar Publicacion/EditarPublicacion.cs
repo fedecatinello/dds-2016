@@ -156,8 +156,7 @@ namespace MercadoEnvio.Editar_Publicacion
             String precio = textBox_Precio.Text;
             Decimal idRubro = Convert.ToInt32(mapper.SelectFromWhere("rubro_id", "Rubros", "rubro_desc_larga", rubro));
             Decimal idVisibilidad = Convert.ToInt32(mapper.SelectFromWhere("visib_id", "Visibilidad", "visib_desc", visibilidad));
-            //-------------------------CHEQUEAR DURACION-------------------------------------//
-            //Double duracion = Convert.ToDouble(comunicador.SelectFromWhere("duracion", "Visibilidad", "id", idVisibilidad));
+            
             Double duracion = 30;
             DateTime fechaDeInicio;
             DateTime fechaDeVencimiento;

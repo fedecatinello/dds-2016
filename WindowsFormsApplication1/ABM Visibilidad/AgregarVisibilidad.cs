@@ -33,8 +33,7 @@ namespace MercadoEnvio.ABM_Visibilidad
             String porcentajePorVenta = textBox_PorcentajePorVenta.Text;
             String grado = comboBox_Grado.Text;
             Boolean envios = checkBox_Envios.Checked;
-            //String duracion = textBox_Duracion.Text;
-
+            
             // Inserto la Visibilidad en la DB
             try
             {
@@ -45,7 +44,7 @@ namespace MercadoEnvio.ABM_Visibilidad
                 visibilidad.SetGrado(grado);
                 visibilidad.SetEnvios(envios);
                 visibilidad.SetActivo(true);
-                //visibilidad.SetDuracion(duracion);
+                
                 bool isPersisted = mapper.CrearVisibilidad(visibilidad);
                 if (isPersisted) MessageBox.Show("La visibilidad fue creada");
             }
