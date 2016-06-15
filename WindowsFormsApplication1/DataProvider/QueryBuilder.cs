@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Data.SqlClient;
 
+
 namespace MercadoEnvio.DataProvider
 {
     class QueryBuilder

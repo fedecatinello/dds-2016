@@ -9,11 +9,14 @@ using System.Windows.Forms;
 using System.Data.SqlClient;
 using MercadoEnvio.Exceptions;
 using MercadoEnvio.Modelo;
+using MercadoEnvio.DataProvider;
 
 namespace MercadoEnvio.Generar_Publicacion
 {
     public partial class GenerarPublicacion : Form
     {
+        private IList<SqlParameter> parametros = new List<SqlParameter>();
+        private SqlCommand command;
         private DBMapper mapper = new DBMapper();
 
         public GenerarPublicacion()
@@ -100,7 +103,43 @@ namespace MercadoEnvio.Generar_Publicacion
                 publicacion.SetIdRubro(idRubro);
                 
                 Decimal idPublicacion = mapper.CrearPublicacion(publicacion);
-                if (idPublicacion > 0) MessageBox.Show("Se agrego la publicacion correctamente");
+                if (idPublicacion > 0)
+                {
+                    // Obtengo el id de la nueva factura
+                    String idFactura = "select top 1 f.fact_id from NET_A_CERO.Facturas f order by f.fact_id DESC";
+                    parametros.Clear();
+                    Decimal idFact = Convert.ToDecimal(QueryBuilder.Instance.build(idFactura, parametros).ExecuteScalar());
+
+                    //Obtengo monto
+                    int porcentaje = Convert.ToInt32(mapper.SelectFromWhere("visib_porcentaje", "Visibilidad", "visib_desc", visibilidadDescripcion));
+
+                    //Inserto facutra
+
+                    String insertarFactura = " INSERT INTO NET_A_CERO.Facturas (fact_id, fact_fecha, fact_monto, fact_destinatario, fact_forma_pago, fact_publi_id) " +
+                        " VALUES(@fact_id, @fact_fecha, @fact_monto, @fact_destinatario, @fact_forma_pago, @fact_publi_id ) ";
+                    parametros.Clear();
+                    parametros.Add(new SqlParameter("@fact_id", idFact+1));
+                    parametros.Add(new SqlParameter("@fact_fecha", fechaDeInicio));
+                    parametros.Add(new SqlParameter("@fact_monto", (porcentaje * Convert.ToInt32(precio))));
+                    parametros.Add(new SqlParameter("@fact_destinatario", UsuarioSesion.Usuario.id));
+                    parametros.Add(new SqlParameter("@fact_forma_pago", "Efectivo"));
+                    parametros.Add(new SqlParameter("@fact_publi_id", idPublicacion));
+                    command = QueryBuilder.Instance.build(insertarFactura, parametros);
+                    command.ExecuteNonQuery();
+
+                    // Inserto los items factura de costos por publicacion 
+                    String insertarItems = "INSERT INTO NET_A_CERO.Items (item_cantidad, item_tipo, item_monto, item_fact_id)"+
+                        " VALUES (@item_cantidad, @item_tipo, @item_monto,@item_fact_id ) ";
+                    parametros.Clear();
+                    parametros.Add(new SqlParameter("@item_cantidad", 1));
+                    parametros.Add(new SqlParameter("@item_tipo", "Costo Publicacion"));
+                    parametros.Add(new SqlParameter("@item_monto", (porcentaje * Convert.ToInt32(precio))));
+                    parametros.Add(new SqlParameter("@item_fact_id", idFact + 1));
+                    command = QueryBuilder.Instance.build(insertarItems, parametros);
+                    command.ExecuteNonQuery();
+
+                    MessageBox.Show("Se agrego la publicacion correctamente");
+                }
             }
             catch (CampoVacioException exception)
             {
