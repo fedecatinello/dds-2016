@@ -15,7 +15,7 @@ namespace MercadoEnvio.Consulta_Facturas_Vendedor
     public partial class ListadoFacturas : Form
     {
         private SqlCommand command { get; set; }
-        private IList<SqlParameter> parametros = new List<SqlParameter>();
+        private IList<SqlParameter> parametros;
         public Object SelectedItem { get; set; }
         decimal idUsuarioActual = UsuarioSesion.Usuario.id;
         private DBMapper mapper = new DBMapper();
@@ -35,23 +35,32 @@ namespace MercadoEnvio.Consulta_Facturas_Vendedor
 
         private void ListadoFacturas_Load(object sender, EventArgs e)
         {
+            CargarPublicaciones();
+            labelNrosPagina.Text = "";
             OcultarColumnasQueNoDebenVerse();
         }
 
         private void OcultarColumnasQueNoDebenVerse()
         {
             dataGridViewFacturas.Columns["fact_id"].Visible = false;
-            dataGridViewFacturas.Columns["fact_publi_id"].Visible = false;
         }
 
-        private void botonBuscar_Click(object sender, EventArgs e) /** Faltan codear los filtros **/
+        private void CargarPublicaciones()
+        {
+            comboBox_Publicacion.DataSource = mapper.SelectFromWhere("publi_descripcion", "Publicaciones", "publi_usr_id", idUsuarioActual);
+            comboBox_Publicacion.ValueMember = "publi_descripcion";
+            comboBox_Publicacion.SelectedIndex = -1;
+        }
+        
+        private void botonBuscar_Click(object sender, EventArgs e)
         {
             SqlDataAdapter adapter = new SqlDataAdapter();
             parametros = new List<SqlParameter>();
             parametros.Clear();
             parametros.Add(new SqlParameter("@usuario", idUsuarioActual));
             DataTable busquedaTemporal = new DataTable();
-            /*String filtro = " AND publicaciones.publi_usr_id != @usuario";
+            String filtro = "";
+             /*String filtro = " AND publicaciones.publi_usr_id != @usuario";
            
             if (textBox_Contenido.Text != "")
             {
@@ -98,7 +107,10 @@ namespace MercadoEnvio.Consulta_Facturas_Vendedor
                             " and publicaciones.publi_id = rxp.publi_id "
                                       + filtro + " ORDER BY visibilidad.visib_precio DESC"; */
             
-            String query = "";
+            String query = "SELECT DISTINCT(f.fact_id), f.fact_fecha 'Fecha', f.fact_monto 'Monto', f.fact_destinatario 'Destinatario', f.fact_forma_pago 'Forma de Pago', p.publi_descripcion 'Publicacion' " +
+                            "FROM NET_A_CERO.Facturas f, NET_A_CERO.Publicaciones p " +
+                            "WHERE f.fact_destinatario = @usuario AND f.fact_publi_id = p.publi_id AND p.publi_usr_id = @usuario " + filtro;
+            
             command = QueryBuilder.Instance.build(query, parametros);
             adapter.SelectCommand = command;            
             adapter.Fill(busquedaTemporal);
@@ -295,7 +307,7 @@ namespace MercadoEnvio.Consulta_Facturas_Vendedor
         {
             if (e.ColumnIndex == dataGridViewFacturas.Columns["Ver Factura"].Index)
             {
-                int idFacturaElegida = Convert.ToInt32(dataGridViewFacturas.Rows[e.RowIndex].Cells["publi_id"].Value);
+                int idFacturaElegida = Convert.ToInt32(dataGridViewFacturas.Rows[e.RowIndex].Cells["fact_id"].Value);
                 this.Hide();
                 new VerFactura(idFacturaElegida).ShowDialog();
                 this.Close();
@@ -305,10 +317,11 @@ namespace MercadoEnvio.Consulta_Facturas_Vendedor
         private void botonLimpiar_Click(object sender, EventArgs e)
         {
             //Limpio filtros de busqueda
-            textBox_Contenido.Clear();
-            textBox_Contenido.Clear();
-            textBox_Fecha.Clear();
-            textBox_Importe.Clear();
+            textBox_FechaDesde.Clear();
+            textBox_FechaHasta.Clear();
+            textBox_ImporteDesde.Clear();
+            textBox_ImporteHasta.Clear();
+            comboBox_Publicacion.SelectedIndex = -1;
 
             //Limpio grilla siempre y cuando haya arrojado resultados
             if (dataGridViewFacturas.DataSource != null)
